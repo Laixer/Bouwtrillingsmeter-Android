@@ -16,27 +16,48 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    Toolbar toolbar;
     ListView listViewMeasurements;
     ArrayList<Measurement> measurements;
+
+    // TODO Implement proper global variables
+    boolean firstVisit = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        // Toolbar
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        // Floating action button to start a new measurement
+        // #TODO Implement this to make a new measurement
+        FloatingActionButton fab = findViewById(R.id.fabNewMeasurement);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "This will start a new measurement soon!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
 
-        setupGUIElements();
+        // Setup measurements list and link adapter
+        listViewMeasurements = (ListView) findViewById(R.id.listViewMeasurements);
+        listViewMeasurements.setAdapter(new MeasurementAdapter(this, DebugMeasurementsList()));
+        listViewMeasurements.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intentShowMeasurementDetails = new Intent(getApplicationContext(), MeasurementDetails.class);
+                intentShowMeasurementDetails.putExtra("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX", position);
+                startActivity(intentShowMeasurementDetails);
+            }
+        });
+
+        checkForFirstVisit();
     }
 
     @Override
@@ -62,26 +83,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Gets our GUI pointers on point
-     * Also sets up clicking events and such
+     * This fires if the user visits for the first time.
+     * This will instantiate a first visit tutorial activity
      */
-    private void setupGUIElements() {
-
-        // Setup measurements list and link adapter
-        listViewMeasurements = (ListView) findViewById(R.id.listViewMeasurements);
-        listViewMeasurements.setAdapter(new MeasurementAdapter(this, DebugMeasurementsList()));
-
-        // Link measurement click to go to its details
-        listViewMeasurements.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("     Position clicked = " + position);
-                Intent intentShowMeasurementDetails = new Intent(getApplicationContext(), MeasurementDetails.class);
-                intentShowMeasurementDetails.putExtra("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX", position);
-                startActivity(intentShowMeasurementDetails);
-            }
-        });
+    private void checkForFirstVisit() {
+        if (firstVisit) {
+            Intent intentFirstVisitTutorial = new Intent(getApplicationContext(), FirstVisitTutorial.class);
+            startActivity(intentFirstVisitTutorial);
+        }
     }
 
     /**
