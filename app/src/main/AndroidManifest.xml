@@ -9,10 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".FirstVisitTutorial"
-            android:label="@string/title_activity_first_visit_tutorial"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".FirstVisitTutorial"></activity>
         <activity android:name=".MeasurementDetails" />
         <activity
             android:name=".MainActivity"

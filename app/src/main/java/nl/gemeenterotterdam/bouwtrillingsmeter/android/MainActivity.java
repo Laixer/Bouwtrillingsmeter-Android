@@ -20,9 +20,6 @@ public class MainActivity extends AppCompatActivity {
     ListView listViewMeasurements;
     ArrayList<Measurement> measurements;
 
-    // TODO Implement proper global variables
-    boolean firstVisit = true;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -85,9 +82,11 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This fires if the user visits for the first time.
      * This will instantiate a first visit tutorial activity
+     * The only way to skip the tutorial is to go trough it
+     * TODO Do we want to make some kind of skip tutorial option?
      */
     private void checkForFirstVisit() {
-        if (firstVisit) {
+        if (GlobalVariables.firstVisit) {
             Intent intentFirstVisitTutorial = new Intent(getApplicationContext(), FirstVisitTutorial.class);
             startActivity(intentFirstVisitTutorial);
         }
