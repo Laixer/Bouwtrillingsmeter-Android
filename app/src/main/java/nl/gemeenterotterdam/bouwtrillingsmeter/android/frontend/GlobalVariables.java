@@ -1,4 +1,4 @@
-package nl.gemeenterotterdam.bouwtrillingsmeter.android;
+package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 /**
  * This will be implemented in a more professional manner

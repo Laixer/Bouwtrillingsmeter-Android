@@ -1,9 +1,8 @@
-package nl.gemeenterotterdam.bouwtrillingsmeter.android;
+package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -13,6 +12,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,13 +33,11 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Floating action button to start a new measurement
-        // #TODO Implement this to make a new measurement
         FloatingActionButton fab = findViewById(R.id.fabNewMeasurement);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "This will start a new measurement soon!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                onStartMeasurement();
             }
         });
 
@@ -48,13 +48,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intentShowMeasurementDetails = new Intent(getApplicationContext(), MeasurementDetails.class);
-                intentShowMeasurementDetails.putExtra("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX", position);
-                startActivity(intentShowMeasurementDetails);
+                Intent intentShowMeasuremenstDetails = new Intent(getApplicationContext(), MeasurementDetails.class);
+                intentShowMeasuremenstDetails.putExtra("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX", position);
+                startActivity(intentShowMeasuremenstDetails);
             }
         });
-
-        checkForFirstVisit();
     }
 
     @Override
@@ -80,19 +78,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * This fires if the user visits for the first time.
-     * This will instantiate a first visit tutorial activity
-     * The only way to skip the tutorial is to go trough it
-     * TODO Do we want to make some kind of skip tutorial option?
-     */
-    private void checkForFirstVisit() {
-        if (GlobalVariables.firstVisit) {
-            Intent intentFirstVisitTutorial = new Intent(getApplicationContext(), FirstVisitTutorial.class);
-            startActivity(intentFirstVisitTutorial);
-        }
-    }
-
-    /**
      * Function used for debugging purposes
      * TODO Remove this (debug)
      */
@@ -115,6 +100,20 @@ public class MainActivity extends AppCompatActivity {
         measurements.add(new Measurement("Measurement 5", null));
 
         return measurements;
+    }
+
+    /**
+     * Gets fired when we click the start a new measurement button
+     * This also gets fired when the tutorial finishes
+     */
+    public void onStartMeasurement() {
+        if (GlobalVariables.firstVisit) {
+            Intent intentFirstVisitTutorial = new Intent(getApplicationContext(), FirstVisitTutorial.class);
+            startActivity(intentFirstVisitTutorial);
+        } else {
+            Intent intentStartMeasurement = new Intent(getApplicationContext(), Measuring.class);
+            startActivity(intentStartMeasurement);
+        }
     }
 
 }

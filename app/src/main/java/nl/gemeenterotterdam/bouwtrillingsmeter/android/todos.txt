@@ -1,0 +1,8 @@
+TODO Tutorial slides template maken + finish button
+TODO Listview empty -> Je hebt nog geen metingen
+TODO Meting details tab maken
+TODO Foto toevoegen
+TODO Plaats telefoon vlak ding maken
+TODO Meting wordt nu gedaan tab maken, inclusief "laat grafieken zien" knop
+TODO Hoe zit het met app data op de telefoon?
+TODO Hoe zit het met strings en vertalingen?

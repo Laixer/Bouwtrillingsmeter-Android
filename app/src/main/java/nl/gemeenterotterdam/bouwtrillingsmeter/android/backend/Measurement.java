@@ -1,4 +1,4 @@
-package nl.gemeenterotterdam.bouwtrillingsmeter.android;
+package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 import android.graphics.Bitmap;
 import android.icu.util.Measure;

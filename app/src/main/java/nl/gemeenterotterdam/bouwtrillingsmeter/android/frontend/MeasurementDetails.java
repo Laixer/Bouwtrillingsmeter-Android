@@ -1,10 +1,12 @@
-package nl.gemeenterotterdam.bouwtrillingsmeter.android;
+package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
 public class MeasurementDetails extends AppCompatActivity {
 
