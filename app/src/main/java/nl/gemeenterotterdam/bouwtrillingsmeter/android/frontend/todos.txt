@@ -1,7 +1,8 @@
 Frontend todos
 
-TODO Meting details tab maken
 TODO Foto toevoegen bij klikken op "foto mist" icon
+TODO Foto OPSLAAN bij klikken op "foto mist" icon
+TODO Meting details tab maken
 TODO Bug weghalen waarbij je altijd terug gaat naar de tutorial via de back button
 TODO Geen metingen en first visit? Pijltje naar de plus knop, rest donkerder ding
 TODO Plaats telefoon vlak ding maken inclusief wacht icoontje oid
@@ -9,3 +10,4 @@ TODO Meting wordt nu gedaan tab maken, inclusief "laat grafieken zien" knop
 TODO Hoe zit het met app data op de telefoon? --> Al wel soort van geïmplementeerd
 TODO Hoe zit het met strings en vertalingen?
 TODO Tutorial slides naar constraint layout, niet relative layout (slide 1 heeft dit al!)
+TODO Mooi "foto mist" icon implementeren

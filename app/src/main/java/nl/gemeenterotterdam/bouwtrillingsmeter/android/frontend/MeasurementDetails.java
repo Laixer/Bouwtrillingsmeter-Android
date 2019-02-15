@@ -1,8 +1,11 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,9 +39,27 @@ public class MeasurementDetails extends AppCompatActivity {
             textViewName.setText(Integer.toString(measurementIndex));
         }
 
-        // Image photo
-        imageViewMeasurementPhoto = (ImageView) findViewById(R.id.imageViewListMeasurementPhoto);
+        // Imageview holding our photo
+        // When we click the image and no image was present, we attempt to take a picture with the phones camera
+        imageViewMeasurementPhoto = (ImageView) findViewById(R.id.imageViewDetailsMeasurementPhoto);
+        imageViewMeasurementPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentTakePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intentTakePicture, 0);
+            }
+        });
+    }
 
+    /**
+     * This gets called when we succesfully take a picture
+     * TODO Save a pointer to the image in some way!
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+        imageViewMeasurementPhoto.setImageBitmap(bitmap);
     }
 
 
