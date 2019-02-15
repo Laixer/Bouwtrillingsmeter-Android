@@ -2,6 +2,7 @@ Frontend todos
 
 TODO Meting details tab maken
 TODO Foto toevoegen bij klikken op "foto mist" icon
+TODO Bug weghalen waarbij je altijd terug gaat naar de tutorial via de back button
 TODO Geen metingen en first visit? Pijltje naar de plus knop, rest donkerder ding
 TODO Plaats telefoon vlak ding maken inclusief wacht icoontje oid
 TODO Meting wordt nu gedaan tab maken, inclusief "laat grafieken zien" knop

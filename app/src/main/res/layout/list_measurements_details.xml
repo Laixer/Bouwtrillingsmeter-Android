@@ -45,5 +45,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewListMeasurementDateTime"
-        android:layout_marginTop="32dp" />
+        android:layout_marginTop="48dp" />
 </RelativeLayout>
