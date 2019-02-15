@@ -4,12 +4,16 @@
     <string name="title_activity_first_visit_tutorial">First visit tutorial!</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
+    <!--User saved variables-->
     <string name="pref_first_visit"></string>
 
+    <!--Everything regarding the measurements-->
+    <string name="measurement_list_empty">Je hebt nog geen opgeslagen metingen</string>
+
+    <!--Tutorial on first visit-->
     <string name="first_visit_slide_1_title">Tutorial slide 1</string>
     <string name="first_visit_slide_2_title">Tutorial slide 2</string>
     <string name="first_visit_slide_3_title">Tutorial slide 3</string>
-
     <string name="first_visit_slide_1_description">Dit is een stuk beschrijving voor stap 1</string>
     <string name="first_visit_slide_2_description">Deze tekst bevat meer beschrijvingen voor de gebruiker</string>
     <string name="first_visit_slide_3_description">Je raadt het nooit - Nog meer beschrijvingen! Jawel!</string>

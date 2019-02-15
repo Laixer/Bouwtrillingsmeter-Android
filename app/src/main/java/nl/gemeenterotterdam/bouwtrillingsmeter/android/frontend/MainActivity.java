@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup measurements list and link adapter
         listViewMeasurements = (ListView) findViewById(R.id.listViewMeasurements);
-        listViewMeasurements.setAdapter(new MeasurementAdapter(this, DebugMeasurementsList()));
+        listViewMeasurements.setEmptyView(findViewById(R.id.textViewNoMeasurements));
+        listViewMeasurements.setAdapter(new MeasurementAdapter(this, /*new ArrayList<Measurement>())); //*/DebugMeasurementsList()));
         listViewMeasurements.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override

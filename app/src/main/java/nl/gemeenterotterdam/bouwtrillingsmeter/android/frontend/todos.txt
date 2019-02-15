@@ -1,7 +1,7 @@
 Frontend todos
 
-TODO Tutorial slides template maken + finish button
-TODO Listview empty -> Je hebt nog geen metingen
+TODO Plusje nieuwe meting
+TODO Geen metingen? Pijltje naar de plus knop, rest donkerder ding
 TODO Meting details tab maken
 TODO Foto toevoegen
 TODO Plaats telefoon vlak ding maken
