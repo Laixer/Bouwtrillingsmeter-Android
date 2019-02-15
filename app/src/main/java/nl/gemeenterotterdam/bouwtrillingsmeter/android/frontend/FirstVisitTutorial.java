@@ -10,6 +10,8 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
 public class FirstVisitTutorial extends AppCompatActivity {
 
+    // Comment
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
