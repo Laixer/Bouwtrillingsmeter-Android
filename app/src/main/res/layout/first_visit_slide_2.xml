@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textViewTut2Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="345dp"
+        android:gravity="center"
+        android:text="@string/first_visit_slide_2_title"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/textViewTut2Description"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_below="@+id/textViewTut2Title"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="-300dp"
+        android:layout_marginBottom="229dp"
+        android:gravity="center"
+        android:text="@string/first_visit_slide_2_description" />
+</RelativeLayout>

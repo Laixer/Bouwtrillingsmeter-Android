@@ -1,6 +1,14 @@
 <resources>
-    <string name="app_name">Bouwtrillingsmeter Android</string>
+    <string name="app_name">Bouwtrillingsmeter Gemeente Rotterdam</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_first_visit_tutorial">FirstVisitTutorial</string>
+    <string name="title_activity_first_visit_tutorial">First visit tutorial!</string>
     <string name="section_format">Hello World from section: %1$d</string>
+
+    <string name="first_visit_slide_1_title">Tutorial slide 1</string>
+    <string name="first_visit_slide_2_title">Tutorial slide 2</string>
+    <string name="first_visit_slide_3_title">Tutorial slide 3</string>
+
+    <string name="first_visit_slide_1_description">Dit is een stuk beschrijving voor stap 1</string>
+    <string name="first_visit_slide_2_description">Deze tekst bevat meer beschrijvingen voor de gebruiker</string>
+    <string name="first_visit_slide_3_description">Je raadt het nooit - Nog meer beschrijvingen! Jawel!</string>
 </resources>
