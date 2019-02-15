@@ -10,7 +10,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
 public class FirstVisitTutorial extends AppCompatActivity {
 
-    // Comment
+    Button buttonFinishTutorial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,8 +19,8 @@ public class FirstVisitTutorial extends AppCompatActivity {
 
         // This finishes the tutorial
         // TODO Implement a way to skip the tutorial?
-        Button buttonFinishTutorail = (Button) findViewById(R.id.buttonTutorialFinish);
-        buttonFinishTutorail.setOnClickListener(new View.OnClickListener() {
+        buttonFinishTutorial = (Button) findViewById(R.id.buttonTutorialFinish);
+        buttonFinishTutorial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GlobalVariables.firstVisit = false;
