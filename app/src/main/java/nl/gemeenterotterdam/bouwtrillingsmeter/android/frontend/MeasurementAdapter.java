@@ -2,6 +2,8 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,10 @@ import java.util.ArrayList;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
+/**
+ * This class is used as an adapter for each measurement item in the main measurement listview
+ * This class does NOT control the page that opens when you click a measurement within said listview
+ */
 public class MeasurementAdapter extends BaseAdapter {
 
     LayoutInflater mLayoutInflater;
@@ -48,16 +54,21 @@ public class MeasurementAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = mLayoutInflater.inflate(R.layout.list_measurements_details, null);
 
-        TextView textViewName = (TextView) view.findViewById(R.id.textViewName);
-        ImageView imageViewPhoto = (ImageView) view.findViewById(R.id.imageViewPhoto);
+        TextView textViewName = (TextView) view.findViewById(R.id.textViewListMeasurementName);
+        ImageView imageViewPhoto = (ImageView) view.findViewById(R.id.imageViewListMeasurementPhoto);
 
+        // Set the name
         textViewName.setText(measurements.get(position).GetName());
+
+        // Set the photo
+        // Add an actionlistener to this to attempt to take a photo
+        // TODO Remove photo bar at all when none is present????
         Bitmap photo = measurements.get(position).GetPhoto();
         if (photo != null) {
             // TODO Implement scaling, else we crash our app
             imageViewPhoto.setImageBitmap(photo);
         } else {
-            imageViewPhoto.setMaxHeight(0);
+            imageViewPhoto.setImageResource(R.drawable.ic_image_not_present);
         }
 
         return view;
@@ -70,31 +81,6 @@ public class MeasurementAdapter extends BaseAdapter {
      * @return The corresponding resource index for the image
      */
     private int getImage(int measurementIndex) {
-        return R.drawable.image_not_present;
-    }
-
-    /**
-     * Scales an image for us to fit an imageview
-     * @param imageView The imageview on which we project our image
-     * @param imageIndex The resource based index of the image
-     */
-    private void scaleImage(ImageView imageView, int imageIndex) {
-//        Display screen = getWindowManager().getDefaultDisplay();
-//        BitmapFactory.Options options = new BitmapFactory.Options();
-//
-//        options.inJustDecodeBounds = true;
-//        BitmapFactory.decodeResource(getResources(), imageIndex, options);     // Decode the image to save performance
-//
-//        int widthImage = options.outWidth;
-//        int widthScreen = screen.getWidth();
-//        if (widthImage > widthScreen) {
-//            int ratio = Math.round( (float)widthImage / (float)widthScreen);
-//            options.inSampleSize = ratio;                               // Sets the scale factor for our bitmap that we are about to draw
-//        }
-//
-//        // Create a scaled image and put it in the image view
-//        options.inJustDecodeBounds = false;
-//        Bitmap bitmapScaled = BitmapFactory.decodeResource(getResources(), imageIndex, options);
-//        imageView.setImageBitmap(bitmapScaled);
+        return R.drawable.ic_image_not_present;
     }
 }

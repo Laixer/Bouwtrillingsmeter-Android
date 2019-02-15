@@ -8,10 +8,14 @@ import android.widget.TextView;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
+/**
+ * This class controls the page that opens when you click a certain measurement
+ * This does NOT control anything layout-wise within the measurement list
+ */
 public class MeasurementDetails extends AppCompatActivity {
 
     TextView textViewName;
-    ImageView imageViewPhoto;
+    ImageView imageViewMeasurementPhoto;
 
     /**
      * Gets called when this activity is launched
@@ -22,7 +26,7 @@ public class MeasurementDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measurement_details);
 
-        setupGUIElements();
+        textViewName = (TextView) findViewById(R.id.textViewListMeasurementName);
 
         // Get the information from our activity
         Intent intent = getIntent();
@@ -31,14 +35,10 @@ public class MeasurementDetails extends AppCompatActivity {
             int measurementIndex = intent.getExtras().getInt("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX");
             textViewName.setText(Integer.toString(measurementIndex));
         }
-    }
 
-    /**
-     * Gets our GUI element pointers on point
-     */
-    private void setupGUIElements() {
-        textViewName = (TextView) findViewById(R.id.textViewName);
-        imageViewPhoto = (ImageView) findViewById(R.id.imageViewPhoto);
+        // Image photo
+        imageViewMeasurementPhoto = (ImageView) findViewById(R.id.imageViewListMeasurementPhoto);
+
     }
 
 

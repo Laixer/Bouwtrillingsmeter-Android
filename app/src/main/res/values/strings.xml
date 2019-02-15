@@ -7,8 +7,12 @@
     <!--User saved variables-->
     <string name="pref_first_visit"></string>
 
-    <!--Everything regarding the measurements-->
+    <!--Everything regarding the measurements list-->
     <string name="measurement_list_empty">Je hebt nog geen opgeslagen metingen</string>
+
+    <!--Everything regarding the measurement details page-->
+    <string name="measurement_details_name_default">Naam van de meting</string>
+    <string name="measurement_details_datetime_default">Datum en tijd van de meting</string>
 
     <!--Tutorial on first visit-->
     <string name="first_visit_slide_1_title">Tutorial slide 1</string>

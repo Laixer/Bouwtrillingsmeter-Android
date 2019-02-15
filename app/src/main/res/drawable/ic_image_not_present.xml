@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--Background-->
+    <item android:gravity="center">
+        <shape android:shape="rectangle">
+            <solid android:color="#eeeeee"/>
+            <size
+                android:width="500dp"
+                android:height="200dp"/>
+        </shape>
+    </item>
+
+    <!--Square base-->
+    <item android:gravity="center">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/photo_not_found_indicator"/>
+            <size
+                android:width="100dp"
+                android:height="60dp"/>
+        </shape>
+    </item>
+
+    <!--Square base-->
+    <item android:gravity="center">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/photo_not_found_indicator"/>
+            <size
+                android:width="100dp"
+                android:height="60dp"/>
+        </shape>
+    </item>
+
+    <!--Circle for lens outer-->
+    <item android:gravity="center">
+        <shape android:shape="oval">
+            <solid android:color="#ffffff"/>
+            <size
+                android:width="50dp"
+                android:height="50dp"/>
+        </shape>
+    </item>
+
+    <!--Circle for lens inner-->
+    <item android:gravity="center">
+        <shape android:shape="oval">
+            <solid android:color="@color/photo_not_found_indicator"/>
+            <size
+                android:width="38dp"
+                android:height="38dp"/>
+        </shape>
+    </item>
+
+</layer-list>

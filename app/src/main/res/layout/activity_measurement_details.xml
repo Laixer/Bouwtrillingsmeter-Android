@@ -7,24 +7,27 @@
     tools:context=".frontend.MeasurementDetails">
 
     <TextView
-        android:id="@+id/textViewName"
+        android:id="@+id/textViewListMeasurementName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Name"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/measurement_details_name_default"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageViewDetailsMeasurementPhoto" />
 
     <ImageView
-        android:id="@+id/imageViewPhoto"
+        android:id="@+id/imageViewDetailsMeasurementPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:contentDescription="@string/measurement_details_name_default"
+        android:scaleType="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewName"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_image_not_present" />
 </android.support.constraint.ConstraintLayout>
