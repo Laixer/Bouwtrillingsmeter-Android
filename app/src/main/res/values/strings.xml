@@ -17,4 +17,5 @@
     <string name="first_visit_slide_1_description">Dit is een stuk beschrijving voor stap 1</string>
     <string name="first_visit_slide_2_description">Deze tekst bevat meer beschrijvingen voor de gebruiker</string>
     <string name="first_visit_slide_3_description">Je raadt het nooit - Nog meer beschrijvingen! Jawel!</string>
+    <string name="title_activity_alleen_constraints">AlleenConstraints</string>
 </resources>

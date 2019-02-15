@@ -10,7 +10,7 @@
 
     <color name="indicatorDotActive">#00AC5C</color>
     <color name="indicatorDotInactive">#061557</color>
-    <!--<color name="indicatorDotInactive">#83878b</color>-->
+    <color name="plus">#ffff</color>
 
 
 </resources>
