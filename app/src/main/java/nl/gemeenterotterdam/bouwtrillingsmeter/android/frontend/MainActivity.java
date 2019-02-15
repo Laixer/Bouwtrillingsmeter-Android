@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
@@ -28,6 +29,11 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Initialize the backend
+        Backend.Initialize();
+        // TODO Remove this debug statement
+        Backend.MeasurementControl.setDebugMeasurementsList();
 
         // Toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -45,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         // Setup measurements list and link adapter
         listViewMeasurements = (ListView) findViewById(R.id.listViewMeasurements);
         listViewMeasurements.setEmptyView(findViewById(R.id.textViewNoMeasurements));
-        listViewMeasurements.setAdapter(new MeasurementAdapter(this, /*new ArrayList<Measurement>())); //*/DebugMeasurementsList()));
+        listViewMeasurements.setAdapter(new MeasurementAdapter(this, Backend.MeasurementControl.getAllMeasurements()));
         listViewMeasurements.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -77,31 +83,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Function used for debugging purposes
-     * TODO Remove this (debug)
-     */
-    private void DebugFunction() {
-        //
-    }
-
-    /**
-     * Used to create a list of 5 measurements, used for debugging
-     * TODO Remove this (debug)
-     * @return
-     */
-    private ArrayList<Measurement> DebugMeasurementsList() {
-        ArrayList<Measurement> measurements = new ArrayList<Measurement>();
-
-        measurements.add(new Measurement("Measurement 1", null));
-        measurements.add(new Measurement("Measurement 2", null));
-        measurements.add(new Measurement("Measurement 3", null));
-        measurements.add(new Measurement("Measurement 4", null));
-        measurements.add(new Measurement("Measurement 5", null));
-
-        return measurements;
     }
 
     /**

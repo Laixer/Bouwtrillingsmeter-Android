@@ -10,9 +10,11 @@
     <!--Everything regarding the measurements list-->
     <string name="measurement_list_empty">Je hebt nog geen opgeslagen metingen</string>
 
-    <!--Everything regarding the measurement details page-->
-    <string name="measurement_details_name_default">Naam van de meting</string>
-    <string name="measurement_details_datetime_default">Datum en tijd van de meting</string>
+    <!--Everything regarding the measurement properties-->
+    <string name="measurement_name_default">Naam van de meting</string>
+    <string name="measurement_datetime_default">Datum en tijd van de meting</string>
+    <string name="measurement_location_default">Locatie van de meting</string>
+    <string name="measurement_description_default">Dit is een beschrijving van de meting. Hier kan van alles in staan, bijvoorbeeld wat de gebruiker heeft gehoord. Deze tekst is langer om te kijken hoe dit schaalt in de user interface.</string>
 
     <!--Tutorial on first visit-->
     <string name="first_visit_slide_1_title">Tutorial slide 1</string>
@@ -20,6 +22,6 @@
     <string name="first_visit_slide_3_title">Tutorial slide 3</string>
     <string name="first_visit_slide_1_description">Dit is een stuk beschrijving voor stap 1</string>
     <string name="first_visit_slide_2_description">Deze tekst bevat meer beschrijvingen voor de gebruiker</string>
-    <string name="first_visit_slide_3_description">Je raadt het nooit - Nog meer beschrijvingen! Jawel!</string>
+    <string name="first_visit_slide_3_description">Je raadt het nooit - Nog meer beschrijvingen!</string>
     <string name="title_activity_alleen_constraints">AlleenConstraints</string>
 </resources>

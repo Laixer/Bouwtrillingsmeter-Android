@@ -12,7 +12,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginRight="16dp"
-        android:text="@string/measurement_details_name_default"
+        android:text="@string/measurement_name_default"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -30,14 +30,14 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="18dp"
         android:layout_marginRight="16dp"
-        android:text="@string/measurement_details_datetime_default"
+        android:text="@string/measurement_datetime_default"
         android:textSize="18sp" />
 
     <ImageView
         android:id="@+id/imageViewListMeasurementPhoto"
         android:layout_width="match_parent"
         android:layout_height="144dp"
-        android:contentDescription="@string/measurement_details_name_default"
+        android:contentDescription="@string/measurement_name_default"
         android:scaleType="center"
         app:srcCompat="@drawable/ic_image_not_present" />
 

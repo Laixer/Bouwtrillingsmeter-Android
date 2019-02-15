@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 
 /**
  * This class controls the page that opens when you click a certain measurement
@@ -18,7 +20,11 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 public class MeasurementDetails extends AppCompatActivity {
 
     TextView textViewName;
+    TextView textViewDateTime;
+    TextView textViewLocation;
+    TextView textViewDescription;
     ImageView imageViewMeasurementPhoto;
+    Measurement measurement;
 
     /**
      * Gets called when this activity is launched
@@ -33,11 +39,23 @@ public class MeasurementDetails extends AppCompatActivity {
 
         // Get the information from our activity
         Intent intent = getIntent();
+        int measurementIndex = -1;
         if (intent.hasExtra("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX")) {
-            // TODO Get measurement and do stuff
-            int measurementIndex = intent.getExtras().getInt("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX");
-            textViewName.setText(Integer.toString(measurementIndex));
+            measurementIndex = intent.getExtras().getInt("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX");
         }
+
+        // Link our measurement
+        // TODO Handle a measurement getting error
+        measurement = Backend.MeasurementControl.getMeasurementByIndex(measurementIndex);
+
+        // Link the descriptive UI elements
+        textViewName = (TextView) findViewById(R.id.textViewDetailsMeasurementName);
+        textViewDateTime = (TextView) findViewById(R.id.textViewDetailsMeasurementDateTime);
+        textViewLocation = (TextView) findViewById(R.id.textViewDetailsMeasurementLocation);
+        textViewDescription = (TextView) findViewById(R.id.textViewListMeasurementDescription);
+
+        // Update all textviews at once
+        onUpdateMeasurementTexts();
 
         // Imageview holding our photo
         // When we click the image and no image was present, we attempt to take a picture with the phones camera
@@ -62,5 +80,15 @@ public class MeasurementDetails extends AppCompatActivity {
         imageViewMeasurementPhoto.setImageBitmap(bitmap);
     }
 
+    /**
+     * This will update all textviews containing the details about the measurement we are looking at
+     * TODO Where shall we call this from?
+     */
+    public void onUpdateMeasurementTexts() {
+        textViewName.setText(measurement.GetName());
+        textViewDateTime.setText(measurement.GetDateTime());
+        textViewLocation.setText(measurement.GetLocation());
+        textViewDescription.setText(measurement.GetDescription());
+    }
 
 }

@@ -5,57 +5,49 @@ import android.icu.util.Measure;
 
 /**
  * Class used to hold a measurements
+ * TODO Implement a popup to set a name if there is none?
  */
 public class Measurement {
 
     private String name;
+    private String datetime;
+    private String location;
+    private String description;
     private Bitmap photo;
 
     /**
      * Constructor for this class
      */
-    public Measurement() {
+    public Measurement(String name) {
         this.name = "My measurement";
+        this.datetime = "15-02-2019 20:23";
+        this.location = "Grote Markt, Delft";
+        this.description = "Een hele mooie omschrijving jawel!";
         this.photo = null;
     }
 
-    /**
-     * Overloaded constructor for this class
-     * TODO Do we need this? This was created for debug purposes
-     */
-    public Measurement(String name, Bitmap photo) {
-        this.name = name;
-        this.photo = photo;
-    }
+    //All getters and setters, nice and compact #codingconventions
+    public void SetName(String name) { this.name = name; }
+    public void SetDateTime(String datetime) { this.datetime = datetime; }
+    public void SetLocation(String location) { this.location = location; }
+    public void SetDescription(String description) { this.description = description; }
 
-    /**
-     * Overwrite the current name
-     * @param name The new name
-     */
-    public void SetName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Returns the name
-     * TODO Implement a popup to set a name if there is none?
-     * @return
-     */
-    public String GetName() {
-        return name;
-    }
+    public String GetName() { return this.name; }
+    public String GetDateTime() { return this.datetime; }
+    public String GetLocation() { return this.location; }
+    public String GetDescription() { return this.description; }
 
     /**
      * Add a photo to the measurement
      * @param photo The photo to add
      */
-    public void AddPhoto(Bitmap photo) {
+    public void UpdatePhoto(Bitmap photo) {
         this.photo = photo;
     }
 
     /**
      * Returns the photo
-     * TODO Implement default picture or a way to show an empty picture
+     * The "no picture present" handling is NOT done by this class
      * @return A photo in Bitmap format, null if there is no photo
      */
     public Bitmap GetPhoto() {
