@@ -2,11 +2,14 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.Switch;
 
@@ -35,11 +38,36 @@ public class CategoryPage extends AppCompatActivity {
                 attemptConfirmChosenCategories(v);
             }
         });
-        fabCategoryConfirm.setEnabled(false);
+        setFabBackgroundTint(fabCategoryConfirm, false);
 
-        // Items
+        // Spinners
         spinnerCategoryBuilding = (Spinner) findViewById(R.id.spinnerCategoryBuilding);
+        spinnerCategoryBuilding.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                OnAnyItemSelected();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                OnAnyItemSelected();
+            }
+        });
+
         spinnerCategoryVibration = (Spinner) findViewById(R.id.spinnerCategoryVibration);
+        spinnerCategoryVibration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                OnAnyItemSelected();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                OnAnyItemSelected();
+            }
+        });
+
+        // Switch
         switchCategoryVibrationSensitive = (Switch) findViewById(R.id.switchCategoryVibrationSensitive);
     }
 
@@ -88,5 +116,35 @@ public class CategoryPage extends AppCompatActivity {
      */
     public void onClickCategoryIDontKnow(View view) {
         WidgetControl.StartWidget(this);
+    }
+
+    /**
+     * Controls the look and feel for the fab
+     * Also sets it to enabled or disabld
+     * @param fab The floating action button
+     * @param enabled True if it should be enabled
+     */
+    private void setFabBackgroundTint(FloatingActionButton fab, boolean enabled) {
+        if (enabled) {
+            fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
+        } else {
+            fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.fab_background_disabled)));
+        }
+    }
+
+    /**
+     * Gets called when the user changes something in either of the spinners
+     */
+    private void OnAnyItemSelected() {
+        // Extract
+        int buildingIndex = spinnerCategoryBuilding.getSelectedItemPosition();
+        int vibrationIndex = spinnerCategoryVibration.getSelectedItemPosition();
+
+        // If we are yet to select a building category
+        if (buildingIndex == 0 || vibrationIndex == 0) {
+            setFabBackgroundTint(fabCategoryConfirm, false);
+        } else {
+            setFabBackgroundTint(fabCategoryConfirm, true);
+        }
     }
 }
