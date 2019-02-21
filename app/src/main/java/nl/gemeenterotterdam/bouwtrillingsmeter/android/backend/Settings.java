@@ -6,8 +6,13 @@ public class Settings {
     public VibrationCategory vibrationCategory;
     public boolean vibrationSensitive;
 
+    /**
+     * Constructor
+     */
     public Settings() {
-
+        buildingCategory = BuildingCategory.none;
+        vibrationCategory = VibrationCategory.none;
+        vibrationSensitive = false;
     }
 
 }

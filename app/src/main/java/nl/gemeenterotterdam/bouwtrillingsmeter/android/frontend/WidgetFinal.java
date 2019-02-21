@@ -1,6 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.app.Activity;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +12,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 public class WidgetFinal extends AppCompatActivity {
 
     Activity thisActivity;
-    Button buttonWidgetFinalConfirm;
+    FloatingActionButton fabWidgetFinalConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +23,8 @@ public class WidgetFinal extends AppCompatActivity {
         thisActivity = this;
 
         // Button to confirm
-        buttonWidgetFinalConfirm = (Button) findViewById(R.id.fabWidgetFinalConfirm);
-        buttonWidgetFinalConfirm.setOnClickListener(new View.OnClickListener() {
+        fabWidgetFinalConfirm = (FloatingActionButton) findViewById(R.id.fabWidgetFinalConfirm);
+        fabWidgetFinalConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 WidgetControl.ConfirmWidget(thisActivity);

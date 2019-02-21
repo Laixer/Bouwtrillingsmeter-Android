@@ -48,4 +48,25 @@
     <string name="widget_final_categorie_trilling">Categorie trilling</string>
     <string name="widget_final_trillingsgevoelig">Trillingsgevoelig</string>
 
+    <!--Category page-->
+    <string name="category_vibration_sensitive">Trillingsgevoelig gebouw</string>
+    <string name="category_i_dont_know">Ik weet het niet</string>
+
+    <string-array name="category_dropdown_building">
+        <item>Kies categorie gebouw...</item>
+        <item>Categorie 1</item>
+        <item>Categorie 2</item>
+        <item>Categorie 3</item>
+    </string-array>
+    <string-array name="category_dropdown_vibration">
+        <item>Kies type trilling...</item>
+        <item>Kort</item>
+        <item>Kort herhaald</item>
+        <item>Continu</item>
+    </string-array>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="category_notyetselected_building">Selecteer het type gebouw</string>
+    <string name="category_notyetselected_vibration">Selecteer het type vibratie</string>
+
 </resources>

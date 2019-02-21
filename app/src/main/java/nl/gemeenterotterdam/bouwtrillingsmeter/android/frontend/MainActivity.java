@@ -94,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intentFirstVisitTutorial = new Intent(getApplicationContext(), FirstVisitTutorial.class);
             startActivity(intentFirstVisitTutorial);
         } else {
-            Intent intentStartMeasurement = new Intent(getApplicationContext(), Measuring.class);
-            startActivity(intentStartMeasurement);
+            Intent intentCategorySelection = new Intent(getApplicationContext(), CategoryPage.class);
+            startActivity(intentCategorySelection);
         }
     }
 
@@ -105,8 +105,4 @@ public class MainActivity extends AppCompatActivity {
         new PreferenceManager(this).clearPreference();
     }
 
-    // TODO Remove this
-    public void onClickDebugWidget(View view) {
-        WidgetControl.StartWidget(this);
-    }
 }

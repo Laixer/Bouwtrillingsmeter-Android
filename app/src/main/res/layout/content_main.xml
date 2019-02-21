@@ -20,17 +20,6 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/buttonDebugWidget"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="[DEBUG] Go to widget"
-        android:onClick="onClickDebugWidget"
-        app:layout_constraintBottom_toTopOf="@+id/buttonDebugClearAppdata"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabNewMeasurement"
         android:layout_width="wrap_content"

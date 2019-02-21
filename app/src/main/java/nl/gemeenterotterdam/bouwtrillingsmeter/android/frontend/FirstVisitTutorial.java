@@ -40,18 +40,6 @@ public class FirstVisitTutorial extends AppCompatActivity {
 
         setContentView(R.layout.activity_first_visit_tutorial);
 
-        // This finishes the tutorial
-        // TODO Implement a way to skip the tutorial?
-//        buttonFinishTutorial = (Button) findViewById(R.id.buttonTutorialFinish);
-//        buttonFinishTutorial.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                GlobalVariables.firstVisit = false;
-//                Intent intentFinishTutorial = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(intentFinishTutorial);
-//            }
-//        });
-
         // Viewpager for the tutorial
         // Also link the adapter
         viewPager = findViewById(R.id.viewPagerTutorial);
@@ -142,7 +130,7 @@ public class FirstVisitTutorial extends AppCompatActivity {
      */
     private void onCompleteTutorial() {
         new PreferenceManager(this).writePreferences();
-        Intent intentStartMeasuring = new Intent(getApplicationContext(), Measuring.class);
-        startActivity(intentStartMeasuring);
+        Intent intentCategorySelection = new Intent(getApplicationContext(), CategoryPage.class);
+        startActivity(intentCategorySelection);
     }
 }
