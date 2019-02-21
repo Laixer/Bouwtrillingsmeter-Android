@@ -8,6 +8,29 @@
     tools:context=".frontend.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <Button
+        android:id="@+id/buttonDebugClearAppdata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="[DEBUG] Clear appdata"
+        android:onClick="onClickDebugClearAppdata"
+        app:layout_constraintBottom_toBottomOf="@+id/listViewMeasurements"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonDebugWidget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="[DEBUG] Go to widget"
+        android:onClick="onClickDebugWidget"
+        app:layout_constraintBottom_toTopOf="@+id/buttonDebugClearAppdata"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabNewMeasurement"
         android:layout_width="wrap_content"
@@ -16,6 +39,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:clickable="true"
+        android:focusable="true"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

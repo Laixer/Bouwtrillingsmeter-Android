@@ -10,7 +10,8 @@
 
     <color name="indicatorDotActive">#00AC5C</color>
     <color name="indicatorDotInactive">#061557</color>
-    <color name="plus">#ffff</color>
+    <color name="fab_plus">#ffffff</color>
+    <color name="fab_checkmark">#ffffff</color>
     <color name="photo_not_found_indicator">#cccccc</color>
 
 

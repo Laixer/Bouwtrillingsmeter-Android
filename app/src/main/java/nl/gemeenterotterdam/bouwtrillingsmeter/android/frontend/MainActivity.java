@@ -101,7 +101,12 @@ public class MainActivity extends AppCompatActivity {
 
     // Gets called when the clear preference debug button is clicked
     // TODO Remove this
-    public void onClickClearPreferences(View view) {
+    public void onClickDebugClearAppdata(View view) {
         new PreferenceManager(this).clearPreference();
+    }
+
+    // TODO Remove this
+    public void onClickDebugWidget(View view) {
+        WidgetControl.StartWidget(this);
     }
 }

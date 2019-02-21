@@ -24,4 +24,28 @@
     <string name="first_visit_slide_2_description">Deze tekst bevat meer beschrijvingen voor de gebruiker</string>
     <string name="first_visit_slide_3_description">Je raadt het nooit - Nog meer beschrijvingen!</string>
     <string name="title_activity_alleen_constraints">AlleenConstraints</string>
+
+    <!--Widget-->
+    <string name="widget_button_yes">Ja</string>
+    <string name="widget_button_no">Nee</string>
+
+    <string name="widget_default_text">Assigned trough code</string>
+    <string-array name="widget_text_main">
+        <item>Bestaat het gebouw waarin u wilt meten uit een betonnen bebouwing met metselwerk of gevelbekleding?</item>
+        <item>Betreft de bebouwing een monument of beschermd stadsgezicht?</item>
+        <item>Zijn de trillingen die u wilt meten afkomstig van één van de onderstaande bronnen: \n-Explosies \n-Botsingen \n-Het van hoogte legen van kraanbakken \n-Het met de kraan breken van beton \n-Storten van puin in een container(bak)</item>
+        <item>Is het pand gefundeerd op houten funderingspalen of is het gebouw op staal gefundeerd?</item>
+    </string-array>
+    <string-array name="widget_text_extra">
+        <item>Veel bebouwing na 1970 valt in deze categorie</item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+
+    <string name="widget_final_top">Aan de hand van uw antwoorden is het volgende bepaald:</string>
+    <string name="widget_final_categorie_gebouw">Categorie pand</string>
+    <string name="widget_final_categorie_trilling">Categorie trilling</string>
+    <string name="widget_final_trillingsgevoelig">Trillingsgevoelig</string>
+
 </resources>
