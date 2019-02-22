@@ -8,8 +8,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     ListView listViewMeasurements;
+    MeasurementAdapter listViewMeasurementsAdapter;
     ArrayList<Measurement> measurements;
 
     @Override
@@ -30,15 +33,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initialize the utility frontend
+        Utility.ApplicationContext = getApplicationContext();
+        Utility.Resources = getResources();
+
         // Initialize the backend
         Backend.Initialize();
         // TODO Remove this debug statement
         Backend.MeasurementControl.setDebugMeasurementsList();
-
-        // DEBUG
-        // TODO Remove this
-        Intent intentDebug = new Intent(getApplicationContext(), Measuring.class);
-        startActivity(intentDebug);
 
         // Toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -56,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
         // Setup measurements list and link adapter
         listViewMeasurements = (ListView) findViewById(R.id.listViewMeasurements);
         listViewMeasurements.setEmptyView(findViewById(R.id.textViewNoMeasurements));
-        listViewMeasurements.setAdapter(new MeasurementAdapter(this, Backend.MeasurementControl.getAllMeasurements()));
+        listViewMeasurementsAdapter = new MeasurementAdapter(this, Backend.MeasurementControl.getAllMeasurements());
+        listViewMeasurements.setAdapter(listViewMeasurementsAdapter);
         listViewMeasurements.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -88,6 +91,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * This gets called when we press the back button and end up in the main activity again
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        listViewMeasurementsAdapter.OnDatasetChanged();
     }
 
     /**

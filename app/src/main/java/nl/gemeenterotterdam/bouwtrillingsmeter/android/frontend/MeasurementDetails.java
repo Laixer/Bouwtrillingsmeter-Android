@@ -67,6 +67,7 @@ public class MeasurementDetails extends AppCompatActivity {
                 startActivityForResult(intentTakePicture, 0);
             }
         });
+        Utility.UpdateScaledPhoto(imageViewMeasurementPhoto, measurement.GetPhoto());
     }
 
     /**
@@ -77,7 +78,9 @@ public class MeasurementDetails extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-        imageViewMeasurementPhoto.setImageBitmap(bitmap);
+        measurement.UpdatePhoto(bitmap);
+
+        Utility.UpdateScaledPhoto(imageViewMeasurementPhoto, measurement.GetPhoto());
     }
 
     /**

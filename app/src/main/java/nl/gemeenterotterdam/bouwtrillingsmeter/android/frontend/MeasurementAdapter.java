@@ -64,23 +64,16 @@ public class MeasurementAdapter extends BaseAdapter {
         // Add an actionlistener to this to attempt to take a photo
         // TODO Remove photo bar at all when none is present????
         Bitmap photo = measurements.get(position).GetPhoto();
-        if (photo != null) {
-            // TODO Implement scaling, else we crash our app
-            imageViewPhoto.setImageBitmap(photo);
-        } else {
-            imageViewPhoto.setImageResource(R.drawable.ic_image_not_present);
-        }
+        Utility.UpdateScaledPhoto(imageViewPhoto, photo);
 
         return view;
     }
 
     /**
-     * Returns the corresponding resource index to our measurement image
-     * TODO Implement this so that specific images get returned too
-     * @param measurementIndex
-     * @return The corresponding resource index for the image
+     * Forces the adapter to update
      */
-    private int getImage(int measurementIndex) {
-        return R.drawable.ic_image_not_present;
+    public void OnDatasetChanged() {
+        this.notifyDataSetChanged();
     }
+
 }
