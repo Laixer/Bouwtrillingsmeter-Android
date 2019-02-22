@@ -35,6 +35,11 @@ public class MainActivity extends AppCompatActivity {
         // TODO Remove this debug statement
         Backend.MeasurementControl.setDebugMeasurementsList();
 
+        // DEBUG
+        // TODO Remove this
+        Intent intentDebug = new Intent(getApplicationContext(), Measuring.class);
+        startActivity(intentDebug);
+
         // Toolbar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

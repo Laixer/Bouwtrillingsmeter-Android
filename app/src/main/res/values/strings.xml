@@ -17,6 +17,9 @@
     <string name="measurement_description_default">Dit is een beschrijving van de meting. Hier kan van alles in staan, bijvoorbeeld wat de gebruiker heeft gehoord. Deze tekst is langer om te kijken hoe dit schaalt in de user interface.</string>
 
     <!--Tutorial on first visit-->
+    <string name="first_visit_skip">Overslaan</string>
+    <string name="first_visit_next">Volgende</string>
+    <string name="first_visit_start">Start</string>
     <string name="first_visit_slide_1_title">Tutorial slide 1</string>
     <string name="first_visit_slide_2_title">Tutorial slide 2</string>
     <string name="first_visit_slide_3_title">Tutorial slide 3</string>
@@ -68,5 +71,10 @@
 
     <string name="category_notyetselected_building">Selecteer het type gebouw</string>
     <string name="category_notyetselected_vibration">Selecteer het type vibratie</string>
+
+    <!--Measuring page-->
+    <string name="measuring_place_device_on_table">Plaats uw telefoon op tafel</string>
+    <string name="measuring_measuring_now">Aan het meten...</string>
+    <string name="measuring_show_graphs">Laat grafieken zien</string>
 
 </resources>

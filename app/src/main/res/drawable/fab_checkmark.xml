@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--Left part-->
     <item
-        android:width="32dp"
+        android:width="24dp"
         android:height="8dp"
         android:top="20dp">
         <rotate
@@ -12,11 +13,12 @@
         </rotate>
     </item>
 
+    <!--Right part-->
     <item
-        android:width="50dp"
+        android:width="54dp"
         android:height="8dp"
-        android:top="15dp"
-        android:left="16dp">
+        android:top="11dp"
+        android:left="8.5dp">
         <rotate
             android:fromDegrees="-45">
             <shape android:shape="rectangle">
@@ -25,11 +27,11 @@
         </rotate>
     </item>
 
-    <item
-        android:width="10dp"
-        android:height="40dp">
-        <shape android:shape="rectangle">
-            <solid android:color="@android:color/transparent"/>
-        </shape>
-    </item>
+    <!--<item-->
+        <!--android:width="10dp"-->
+        <!--android:height="20dp">-->
+        <!--<shape android:shape="rectangle">-->
+            <!--<solid android:color="@android:color/transparent"/>-->
+        <!--</shape>-->
+    <!--</item>-->
 </layer-list>
