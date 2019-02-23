@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--Main theme colors-->
     <color name="colorPrimary">#00AC5C</color>
     <color name="colorPrimaryDark">#061557</color>
     <color name="colorAccent">#D81B60</color>
-
-    <!--<color name="colorPrimary">#008577</color>-->
-    <!--<color name="colorPrimaryDark">#00574B</color>-->
-    <!--<color name="colorAccent">#D81B60</color>-->
 
     <color name="indicatorDotActive">#00AC5C</color>
     <color name="indicatorDotInactive">#061557</color>
@@ -15,5 +13,8 @@
     <color name="fab_background_disabled">#dddddd</color>
     <color name="photo_not_found_indicator">#cccccc</color>
 
+    <!--First visit highlight popup-->
+    <color name="first_visit_popup_text">#ffffff</color>
+    <color name="first_visit_popup_background">#ff061557</color>
 
 </resources>

@@ -1,15 +1,10 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.graphics.drawable.VectorDrawableCompat;
 import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
@@ -26,6 +21,7 @@ public class Utility {
 
     /**
      * Checks if our screen is in landscape or portrait mode
+     *
      * @param context The context from which we are checking
      * @return True if portrait, false if landscape
      */
@@ -45,6 +41,7 @@ public class Utility {
 
     /**
      * Returns the screen width in pixels
+     *
      * @param context The context from which we are checking
      * @return The screen width in pixels
      */
@@ -58,6 +55,7 @@ public class Utility {
 
     /**
      * Returns the screen height in pixels
+     *
      * @param context The context from which we are checking
      * @return The screen height in pixels
      */
@@ -71,8 +69,9 @@ public class Utility {
 
     /**
      * Scales a bitmap and pushes it onto an imageview
+     *
      * @param imageView The imageview to update
-     * @param bitmap The bitmap to scale
+     * @param bitmap    The bitmap to scale
      */
     public static void UpdateScaledPhoto(ImageView imageView, Bitmap bitmap) {
         // If we have no bitmap we call the default bitmap function
@@ -91,8 +90,8 @@ public class Utility {
         ratio = ratio / 100;
 
         // Set the pixel values
-        int desiredWidth = imageView.getWidth();
-        int desiredHeight = (int) ((double)(Utility.GetScreenHeight(ApplicationContext) * ratio));
+        int desiredWidth = GetScreenWidth(ApplicationContext);
+        int desiredHeight = (int) ((double) (Utility.GetScreenHeight(ApplicationContext) * ratio));
         imageView.setMaxHeight(desiredHeight);
 
         // Scale image
@@ -104,6 +103,7 @@ public class Utility {
 
     /**
      * Sets the image not present placeholder as a bitmap
+     *
      * @param imageView The image view to update
      */
     public static void UpdateScaledPhotoMissing(ImageView imageView) {

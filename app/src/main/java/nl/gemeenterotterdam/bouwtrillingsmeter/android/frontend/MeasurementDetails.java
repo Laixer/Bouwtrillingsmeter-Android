@@ -28,6 +28,7 @@ public class MeasurementDetails extends AppCompatActivity {
 
     /**
      * Gets called when this activity is launched
+     *
      * @param savedInstanceState
      */
     @Override

@@ -5,20 +5,19 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Adapter;
+import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import me.toptas.fancyshowcase.FancyShowCaseView;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,8 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize the backend
         Backend.Initialize();
+
         // TODO Remove this debug statement
-        Backend.MeasurementControl.setDebugMeasurementsList();
+        // Backend.MeasurementControl.setDebugMeasurementsList();
 
         // Toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -69,6 +69,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intentShowMeasuremenstDetails);
             }
         });
+
+        // Showcase first visit
+        // TODO debug remove this
+        // ShowcaseFirstVisit();
     }
 
     @Override
@@ -120,6 +124,23 @@ public class MainActivity extends AppCompatActivity {
     // TODO Remove this
     public void onClickDebugClearAppdata(View view) {
         new PreferenceManager(this).clearPreference();
+    }
+
+    /**
+     * Creates a popup on first visit that points at the plus sign
+     */
+    private void ShowcaseFirstVisit() {
+        View view = findViewById(R.id.fabNewMeasurement);
+        String title = getResources().getString(R.string.first_visit_popup);
+
+        FancyShowCaseView.Builder showCaseView = new FancyShowCaseView.Builder(this);
+        showCaseView.focusOn(view);
+
+        showCaseView.title(title);
+        showCaseView.titleStyle(R.style.FirstVisitPopup, Gravity.CENTER);
+        showCaseView.backgroundColor(getResources().getColor(R.color.first_visit_popup_background));
+
+        showCaseView.build().show();
     }
 
 }

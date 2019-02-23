@@ -16,6 +16,9 @@
     <string name="measurement_location_default">Locatie van de meting</string>
     <string name="measurement_description_default">Dit is een beschrijving van de meting. Hier kan van alles in staan, bijvoorbeeld wat de gebruiker heeft gehoord. Deze tekst is langer om te kijken hoe dit schaalt in de user interface.</string>
 
+    <!--Popup on first visit-->
+    <string name="first_visit_popup">Klik op het plusje om uw eerste meting te starten</string>
+
     <!--Tutorial on first visit-->
     <string name="first_visit_skip">Overslaan</string>
     <string name="first_visit_next">Volgende</string>

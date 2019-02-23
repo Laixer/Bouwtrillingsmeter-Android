@@ -1,7 +1,6 @@
 Frontend todos
 
-TODO Foto scalen
-TODO Instellingen bewaren voor pand? Misschien vragen
+TODO Highlight first visit
 TODO Foto OPSLAAN bij klikken op "foto mist" icon
 TODO Bug weghalen waarbij je altijd terug gaat naar de tutorial via de back button
 TODO Geen metingen en first visit? Pijltje naar de plus knop, rest donkerder ding
@@ -11,3 +10,4 @@ TODO Hoe zit het met app data op de telefoon? --> Al wel soort van geïmplemente
 TODO Hoe zit het met strings en vertalingen?
 TODO Tutorial slides naar constraint layout, niet relative layout (slide 1 heeft dit al!)
 TODO Beter "foto mist" icon implementeren
+TODO Instellingen bewaren voor pand? Misschien vragen
