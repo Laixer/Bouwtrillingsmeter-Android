@@ -3,11 +3,13 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 import android.graphics.Bitmap;
 import android.icu.util.Measure;
 
+import java.io.Serializable;
+
 /**
  * Class used to hold a measurements
  * TODO Implement a popup to set a name if there is none?
  */
-public class Measurement {
+public class Measurement implements Serializable {
 
     private String name;
     private String datetime;
@@ -17,9 +19,10 @@ public class Measurement {
 
     /**
      * Constructor for this class
+     * TODO Remove this default data
      */
     public Measurement(String name) {
-        this.name = "My measurement";
+        this.name = name;
         this.datetime = "15-02-2019 20:23";
         this.location = "Grote Markt, Delft";
         this.description = "Een hele mooie omschrijving jawel!";

@@ -14,6 +14,9 @@ public class Backend {
      */
     public static void Initialize() {
         MeasurementControl = new MeasurementControl();
+
+        // TODO Remove this
+        ReadWrite.DebugFunction();
     }
 
 }

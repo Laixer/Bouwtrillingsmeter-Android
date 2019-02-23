@@ -1,3 +1,4 @@
+TODO Storage
 TODO Save bitmaps
 TODO Load bitmaps
 TODO Make structure to load and save measurement object
