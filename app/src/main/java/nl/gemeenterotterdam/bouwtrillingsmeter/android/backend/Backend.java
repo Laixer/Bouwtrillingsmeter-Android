@@ -19,4 +19,19 @@ public class Backend {
         ReadWrite.DebugFunction();
     }
 
+    /**
+     * This gets called when the application is opened
+     * TODO Implement reading every serialized object in here
+     */
+    public static void OnApplicationStartup() {
+        //
+    }
+
+    /**
+     * This gets called when the application is shut down
+     */
+    public static void OnApplicationShutdown() {
+        MeasurementControl.OnApplicationShutdown();
+    }
+
 }

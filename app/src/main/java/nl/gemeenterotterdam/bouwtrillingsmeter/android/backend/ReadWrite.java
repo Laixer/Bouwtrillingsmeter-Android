@@ -1,17 +1,8 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
-import android.app.Application;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.icu.util.Measure;
-import android.os.Environment;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import org.jetbrains.annotations.Nullable;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
 
@@ -22,6 +13,7 @@ public class ReadWrite {
 
     /**
      * This attempts to write a measurement to the internal storage
+     * This always overwrites existing objects
      *
      * @param context     The context from which we are calling
      * @param measurement The measurement
@@ -35,16 +27,16 @@ public class ReadWrite {
         } catch (Exception e) {
             return false;
         }
-
     }
 
     /**
      * Attempts to read a measurement based on a key
      *
      * @param context The context from which we are calling
-     * @param key The key
-     * @return The measurement if succesful, null if not
+     * @param key     The key
+     * @return The measurement if successful, null if not
      */
+    @Nullable
     public static Measurement TryReadMeasurement(Context context, String key) {
         try {
             Measurement result = (Measurement) InternalStorage.readObject(context, key);
@@ -54,19 +46,26 @@ public class ReadWrite {
         }
     }
 
+
+
     /**
      * Used for debug purposes
      * TODO Remove this
      */
     public static void DebugFunction() {
-        Measurement writeMeasurement = new Measurement("measurement 1");
         String key = "lalalalala";
 
+        Measurement writeMeasurement = new Measurement("measurement 1");
         TryWriteMeasurement(Utility.ApplicationContext, writeMeasurement, key);
-
         Measurement readMeasurement = TryReadMeasurement(Utility.ApplicationContext, key);
 
         System.out.println("Hi there");
+
+        writeMeasurement = new Measurement("measurement 2");
+        TryWriteMeasurement(Utility.ApplicationContext, writeMeasurement, key);
+        readMeasurement = TryReadMeasurement(Utility.ApplicationContext, key);
+
+        System.out.println("Hi there again");
     }
 
 }

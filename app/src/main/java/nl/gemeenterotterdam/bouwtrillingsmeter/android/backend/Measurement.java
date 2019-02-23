@@ -1,9 +1,9 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 import android.graphics.Bitmap;
-import android.icu.util.Measure;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Class used to hold a measurements
@@ -11,6 +11,7 @@ import java.io.Serializable;
  */
 public class Measurement implements Serializable {
 
+    private String uid;
     private String name;
     private String datetime;
     private String location;
@@ -19,9 +20,23 @@ public class Measurement implements Serializable {
 
     /**
      * Constructor for this class
+     */
+    public Measurement() {
+        this("default name");
+    }
+
+    /**
+     * Constructor for this class
      * TODO Remove this default data
+     *
+     * @param name The name for this measurement
      */
     public Measurement(String name) {
+        // Generate a random uid for this measurement
+        this.uid = UUID.randomUUID().toString();
+
+        // Link all data
+        // Also create default data
         this.name = name;
         this.datetime = "15-02-2019 20:23";
         this.location = "Grote Markt, Delft";
@@ -30,18 +45,45 @@ public class Measurement implements Serializable {
     }
 
     //All getters and setters, nice and compact #codingconventions
-    public void SetName(String name) { this.name = name; }
-    public void SetDateTime(String datetime) { this.datetime = datetime; }
-    public void SetLocation(String location) { this.location = location; }
-    public void SetDescription(String description) { this.description = description; }
+    public void SetName(String name) {
+        this.name = name;
+    }
 
-    public String GetName() { return this.name; }
-    public String GetDateTime() { return this.datetime; }
-    public String GetLocation() { return this.location; }
-    public String GetDescription() { return this.description; }
+    public void SetDateTime(String datetime) {
+        this.datetime = datetime;
+    }
+
+    public void SetLocation(String location) {
+        this.location = location;
+    }
+
+    public void SetDescription(String description) {
+        this.description = description;
+    }
+
+    public String GetUID() {
+        return this.uid;
+    }
+
+    public String GetName() {
+        return this.name;
+    }
+
+    public String GetDateTime() {
+        return this.datetime;
+    }
+
+    public String GetLocation() {
+        return this.location;
+    }
+
+    public String GetDescription() {
+        return this.description;
+    }
 
     /**
      * Add a photo to the measurement
+     *
      * @param photo The photo to add
      */
     public void UpdatePhoto(Bitmap photo) {
@@ -51,6 +93,7 @@ public class Measurement implements Serializable {
     /**
      * Returns the photo
      * The "no picture present" handling is NOT done by this class
+     *
      * @return A photo in Bitmap format, null if there is no photo
      */
     public Bitmap GetPhoto() {
