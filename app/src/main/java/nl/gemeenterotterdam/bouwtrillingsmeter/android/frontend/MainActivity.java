@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Showcase first visit
         // TODO debug remove this
-        // ShowcaseFirstVisit();
+        ShowcaseFirstVisit();
     }
 
     @Override
