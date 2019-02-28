@@ -1,6 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
 
@@ -76,6 +77,13 @@ public class MeasurementControl {
         for (Measurement measurement : allMeasurements) {
             ReadWrite.TryWriteMeasurement(Utility.ApplicationContext, currentMeasurement, currentMeasurement.GetUID());
         }
+    }
+
+
+    public static void SetDebugMeasurementList() {
+        allMeasurements = new ArrayList<Measurement>();
+        allMeasurements.add(new Measurement());
+        allMeasurements.add(new Measurement());
     }
 
 }

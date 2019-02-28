@@ -1,0 +1,5 @@
+TODO Storage
+TODO Save bitmaps
+TODO Load bitmaps
+TODO Make structure to load and save measurement object
+TODO Make sure that the frontend knows when we have read all measurements (for the listview)

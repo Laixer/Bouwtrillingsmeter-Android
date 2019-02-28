@@ -13,10 +13,10 @@ public class Backend {
      * All is static so this can be accessed from anywhere in the frontend
      */
     public static void Initialize() {
-        MeasurementControl = new MeasurementControl();
+        MeasurementControl.Initialize();
 
         // TODO Remove this
-        ReadWrite.DebugFunction();
+//        ReadWrite.DebugFunction();
     }
 
     /**

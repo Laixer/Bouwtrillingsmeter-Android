@@ -18,6 +18,7 @@ import me.toptas.fancyshowcase.FancyShowCaseView;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.MeasurementControl;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         Backend.Initialize();
 
         // TODO Remove this debug statement
-        // Backend.MeasurementControl.setDebugMeasurementsList();
+        MeasurementControl.SetDebugMeasurementList();
 
         // Toolbar
         toolbar = findViewById(R.id.toolbar);
