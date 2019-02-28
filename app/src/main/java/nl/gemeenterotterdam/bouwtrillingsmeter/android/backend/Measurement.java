@@ -4,7 +4,9 @@ import android.graphics.Bitmap;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.UUID;
+import java.util.Date;
 
 /**
  * Measurement class
@@ -26,6 +28,8 @@ class Measurement implements Serializable {
     private Bitmap photo;
 
     public ArrayList<DataInterval> dataIntervals;
+    public Date dateStart;
+    public Date dateEnd;
 
     /**
      * Simplified constructor for this class
@@ -60,7 +64,20 @@ class Measurement implements Serializable {
      * @param dataInterval A measured DataInterval object, containing datapoints and all calculations
      */
     public void addDataInterval(DataInterval dataInterval) {
+        // Set starttime if this is our first data interval
+        if (dataIntervals.size() == 0) {
+            dateStart = Calendar.getInstance().getTime();
+        }
+
         dataIntervals.add(dataInterval);
+    }
+
+    /**
+     * Called when we stop the measuring.
+     * This saves our end time.
+     */
+    public void onStopMeasuring() {
+        dateEnd = Calendar.getInstance().getTime();
     }
 
     //All getters and setters, nice and compact #codingconventions

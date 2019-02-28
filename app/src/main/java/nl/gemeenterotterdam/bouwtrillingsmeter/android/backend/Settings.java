@@ -7,6 +7,9 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
  * These settings are determined in the settings widget.
  * When checking if we exceed the norms we use these settings
  * TODO How are we going to pass this trough? Static or put it in the measurement?
+ *
+ * @author Thomas Beckers
+ * @since 2019-02-20
  */
 class Settings {
 
