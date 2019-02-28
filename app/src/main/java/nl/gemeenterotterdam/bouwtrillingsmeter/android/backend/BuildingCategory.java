@@ -1,8 +1,8 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 public enum BuildingCategory {
-    none,
-    categorie1,
-    categorie2,
-    categorie3
+    NONE,
+    CATEGORY_1,
+    CATEGORY_2,
+    CATEGORY_3
 }

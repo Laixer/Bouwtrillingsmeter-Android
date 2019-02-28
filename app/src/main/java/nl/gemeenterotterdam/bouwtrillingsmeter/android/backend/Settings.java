@@ -1,6 +1,16 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
-public class Settings {
+/**
+ * Settings class
+ * <p>
+ * This class holds the settings for our current measurement.
+ * These settings are determined in the settings widget.
+ * When checking if we exceed the norms we use these settings
+ * TODO How are we going to pass this trough? Static or put it in the measurement?
+ */
+class Settings {
+
+    public static Settings settings;
 
     public BuildingCategory buildingCategory;
     public VibrationCategory vibrationCategory;
@@ -10,10 +20,42 @@ public class Settings {
      * Constructor
      */
     public Settings() {
-        buildingCategory = BuildingCategory.none;
-        vibrationCategory = VibrationCategory.none;
+        buildingCategory = BuildingCategory.NONE;
+        vibrationCategory = VibrationCategory.NONE;
         vibrationSensitive = false;
     }
 
-}
+    /**
+     * Creates a settings file based on the category settings page
+     * Accessible via Settings.settings
+     *
+     * @param buildingCategory   The building category as enum
+     * @param vibrationCategory  The vibration category as enum
+     * @param vibrationSensitive A boolean indicating if we are dealing with a vibration sensitive building
+     */
+    public static void CreateSettingsFromCategoryPage(BuildingCategory buildingCategory, VibrationCategory vibrationCategory, boolean vibrationSensitive) {
+        settings = new Settings();
 
+        settings.buildingCategory = buildingCategory;
+        settings.vibrationCategory = vibrationCategory;
+        settings.vibrationSensitive = vibrationSensitive;
+    }
+
+    /**
+     * Creates a settings file based on the outcome of a widget
+     * Accessible via Settings.settings
+     * TODO Implement this
+     *
+     * @param answers A boolean array representing the answers to each widget page
+     */
+    public static void CreateSettingsFromWidget(boolean[] answers) {
+        settings = new Settings();
+
+        boolean betonMetselwerkGevelbekleding = answers[0];
+        boolean monumentBeschermdStadsgezicht = answers[1];
+        boolean afkomstigVanGegevenBronnen = answers[2];
+        boolean funderingHoutOfStaal = answers[3];
+    }
+
+
+}

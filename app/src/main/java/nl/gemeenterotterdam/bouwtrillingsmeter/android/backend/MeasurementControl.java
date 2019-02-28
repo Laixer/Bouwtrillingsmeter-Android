@@ -5,7 +5,14 @@ import java.util.List;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
 
-public class MeasurementControl {
+/**
+ * MeasurementControl class
+ *
+ * This class controls all measurements.
+ * It holds the current measurement.
+ * It handles the loading and saving of all measurements.
+ */
+class MeasurementControl {
 
     private static Measurement currentMeasurement;
     private static ArrayList<Measurement> allMeasurements;

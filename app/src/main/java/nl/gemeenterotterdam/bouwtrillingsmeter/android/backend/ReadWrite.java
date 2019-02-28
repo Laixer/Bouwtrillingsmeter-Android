@@ -9,7 +9,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
 /**
  * This class reads and writes files to and from the phone memory
  */
-public class ReadWrite {
+class ReadWrite {
 
     /**
      * This attempts to write a measurement to the internal storage

@@ -9,7 +9,7 @@ import java.util.UUID;
  * Class used to hold a measurements
  * TODO Implement a popup to set a name if there is none?
  */
-public class Measurement implements Serializable {
+class Measurement implements Serializable {
 
     private String uid;
     private String name;
