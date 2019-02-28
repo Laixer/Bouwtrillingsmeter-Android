@@ -5,6 +5,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
+ * TODO Do we need this? I don't think so
+ *
+ *
  * DataCollection class
  * <p>
  * This class holds all data we collect during a period of parsing sensor data.

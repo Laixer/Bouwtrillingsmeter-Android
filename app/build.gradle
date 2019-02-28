@@ -30,4 +30,5 @@ dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.41'
     implementation 'me.toptas.fancyshowcase:fancyshowcaseview:1.1.5'
+    implementation 'com.github.wendykierp:JTransforms:3.0'
 }

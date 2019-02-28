@@ -1,6 +1,11 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 /**
+ * TODO Do wee need this?
+ *
+ * @author Thomas Beckers
+ * @version 1.0
+ *
  * SensorControl class
  *
  * This is the only part of the application that communicates with the sensors of the phone.

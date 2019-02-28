@@ -1,6 +1,11 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 /**
+ * TODO Rethink structure
+ *
+ * @author Thomas Beckers
+ * @version 1.0
+ *
  * MotionDataPaser Class
  * <p>
  * This class translates our sensor data to actual usable information.
@@ -55,13 +60,8 @@ class MotionDataParser {
      *
      * @return A DominantFrequency object with the calculated frequencies
      */
-    private static DominantFrequency[] calculateDominantFrequencies() {
-        DominantFrequency[] result = new DominantFrequency[3];
-
-        // One for every dimension
-        result[0] = new DominantFrequency(1, 4, false);
-        result[1] = new DominantFrequency(2, 2, false);
-        result[2] = new DominantFrequency(3, 1, false);
+    private static DominantFrequency calculateDominantFrequencies() {
+        DominantFrequency result = null;
 
         return result;
     }
