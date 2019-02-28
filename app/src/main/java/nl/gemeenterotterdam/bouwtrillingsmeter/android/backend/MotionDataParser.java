@@ -58,10 +58,10 @@ class MotionDataParser {
      * This calculates the dominant frequencies on a given interval
      * TODO Calculate
      *
-     * @return A DominantFrequency object with the calculated frequencies
+     * @return A DominantFrequencies object with the calculated frequencies
      */
-    private static DominantFrequency calculateDominantFrequencies() {
-        DominantFrequency result = null;
+    private static DominantFrequencies calculateDominantFrequencies() {
+        DominantFrequencies result = null;
 
         return result;
     }

@@ -266,7 +266,7 @@ class Calculator {
      * @param velocities array with velocity for each frequency
      * @return dominant frequency for each direction (x,y,z)
      */
-    public static DominantFrequency domFreq(ArrayList<DataPoint <int[]>> limitValues, ArrayList<DataPoint<int[]>> velocities){
+    public static DominantFrequencies domFreq(ArrayList<DataPoint <int[]>> limitValues, ArrayList<DataPoint<int[]>> velocities){
         int domFreqX = -1;
         float ratioX = 0;
         float domVelX = -1;
@@ -299,7 +299,7 @@ class Calculator {
                 domVelZ = velocity.values[2];
             }
         }
-        return new DominantFrequency(new int[]{domFreqX, domFreqY, domFreqZ}, new float[]{domVelX, domVelY, domVelZ}, new boolean[]{ratioX > 1, ratioY > 1, ratioZ > 1});
+        return new DominantFrequencies(new int[]{domFreqX, domFreqY, domFreqZ}, new float[]{domVelX, domVelY, domVelZ}, new boolean[]{ratioX > 1, ratioY > 1, ratioZ > 1});
     }
 
 

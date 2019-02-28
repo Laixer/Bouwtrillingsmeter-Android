@@ -15,29 +15,23 @@ import java.util.Date;
  * <p>
  * Based on code by Marijn Otte
  */
-public final class DataInterval {
+public class DataInterval {
 
-    public final ArrayList<DataPoint<int[]>> dataPoints;
+    public ArrayList<DataPoint<Date>> dataPoints;
     public Date dateStart;
     public Date dateEnd;
 
-    public final float[] maxAccelerations;
-    public final float[] maxVelocities;
-    public final int[] maxFrequencies;
-    public final DominantFrequency dominantFrequency;
+    public float[] maxAccelerations;
+    public float[] maxVelocities;
+    public int[] maxFrequencies;
+    public DominantFrequencies dominantFrequencies;
 
     /**
      * Constructor
-     * TODO Put all calculations in here?
      */
     public DataInterval() {
-        dataPoints = new ArrayList<DataPoint<int[]>>();
+        dataPoints = new ArrayList<DataPoint<Date>>();
         dateStart = Calendar.getInstance().getTime();
-
-        maxAccelerations = null;
-        maxVelocities = null;
-        maxFrequencies = null;
-        dominantFrequency = null;
     }
 
     /**
@@ -45,7 +39,7 @@ public final class DataInterval {
      *
      * @param dataPoint The datapoint to add
      */
-    public void addDataPoint(DataPoint<int[]> dataPoint) {
+    public void addDataPoint(DataPoint<Date> dataPoint) {
         dataPoints.add(dataPoint);
     }
 
