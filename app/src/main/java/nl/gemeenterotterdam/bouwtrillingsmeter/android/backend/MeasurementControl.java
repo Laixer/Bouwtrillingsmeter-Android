@@ -72,7 +72,7 @@ class MeasurementControl {
      * This also attempts to save the current measurement to the cache
      */
     public static boolean SaveCurrentMeasurement() {
-        boolean hasExported = ReadWrite.TryWriteMeasurement(Utility.ApplicationContext, currentMeasurement, currentMeasurement.GetUID());
+        boolean hasExported = ReadWrite.TryWriteMeasurement(Utility.ApplicationContext, currentMeasurement, currentMeasurement.getUID());
         return hasExported;
     }
 
@@ -82,7 +82,7 @@ class MeasurementControl {
      */
     public static void OnApplicationShutdown() {
         for (Measurement measurement : allMeasurements) {
-            ReadWrite.TryWriteMeasurement(Utility.ApplicationContext, currentMeasurement, currentMeasurement.GetUID());
+            ReadWrite.TryWriteMeasurement(Utility.ApplicationContext, currentMeasurement, currentMeasurement.getUID());
         }
     }
 

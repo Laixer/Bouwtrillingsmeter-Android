@@ -1,6 +1,5 @@
 Structure
 TODO General backend structure
-TODO How to store our datacollection (integer, or what else?)
 
 Storage & bitmaps
 TODO Storage

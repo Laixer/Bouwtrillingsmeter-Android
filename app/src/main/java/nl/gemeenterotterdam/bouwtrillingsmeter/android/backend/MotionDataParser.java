@@ -3,13 +3,13 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 /**
  * TODO Rethink structure
  *
- * @author Thomas Beckers
- * @version 1.0
- *
  * MotionDataPaser Class
  * <p>
  * This class translates our sensor data to actual usable information.
  * The data is stored in a DataCollection object.
+ *
+ * @author Thomas Beckers
+ * @since 2019-02-28
  */
 class MotionDataParser {
 

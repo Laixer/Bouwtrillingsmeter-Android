@@ -61,7 +61,7 @@ public class MeasurementAdapter extends BaseAdapter {
         // Set the photo
         // Add an actionlistener to this to attempt to take a photo
         // TODO Remove photo bar at all when none is present????
-        Bitmap photo = measurements.get(position).GetPhoto();
+        Bitmap photo = measurements.get(position).getPhoto();
         Utility.UpdateScaledPhoto(imageViewPhoto, photo);
 
         return view;

@@ -68,7 +68,7 @@ public class MeasurementDetails extends AppCompatActivity {
                 startActivityForResult(intentTakePicture, 0);
             }
         });
-        Utility.UpdateScaledPhoto(imageViewMeasurementPhoto, measurement.GetPhoto());
+        Utility.UpdateScaledPhoto(imageViewMeasurementPhoto, measurement.getPhoto());
     }
 
     /**
@@ -81,7 +81,7 @@ public class MeasurementDetails extends AppCompatActivity {
         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
         measurement.UpdatePhoto(bitmap);
 
-        Utility.UpdateScaledPhoto(imageViewMeasurementPhoto, measurement.GetPhoto());
+        Utility.UpdateScaledPhoto(imageViewMeasurementPhoto, measurement.getPhoto());
     }
 
     /**

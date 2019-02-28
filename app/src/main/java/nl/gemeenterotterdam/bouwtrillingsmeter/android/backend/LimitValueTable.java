@@ -1,7 +1,8 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 /**
- * Created by Marijn Otte on 16-9-2017.
+ * @author Marijn Otte
+ * @since 2017-09-16
  * Class containing limitValues (velocity) for each frequency for each category
  */
 

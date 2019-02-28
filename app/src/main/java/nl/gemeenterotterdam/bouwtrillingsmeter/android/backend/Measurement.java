@@ -3,11 +3,18 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 import android.graphics.Bitmap;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * Class used to hold a measurements
- * TODO Implement a popup to set a name if there is none?
+ * Measurement class
+ *
+ * This class holds all (meta)data for a measurement made by the user.
+ * It has an arraylist of dataIntervals, which link to the actual sensor data + calculated values.
+ * This class can be sent to the database for analysis.
+ *
+ * @author Thomas Beckers
+ * @since 2019-02-28
  */
 class Measurement implements Serializable {
 
@@ -18,8 +25,10 @@ class Measurement implements Serializable {
     private String description;
     private Bitmap photo;
 
+    public ArrayList<DataInterval> dataIntervals;
+
     /**
-     * Constructor for this class
+     * Simplified constructor for this class
      */
     public Measurement() {
         this("default name");
@@ -42,42 +51,52 @@ class Measurement implements Serializable {
         this.location = "Grote Markt, Delft";
         this.description = "Een hele mooie omschrijving jawel!";
         this.photo = null;
+
+        this.dataIntervals = new ArrayList<DataInterval>();
+    }
+
+    /**
+     * Adds a data point to our datapoint arraylist
+     * @param dataInterval A measured DataInterval object, containing datapoints and all calculations
+     */
+    public void addDataInterval(DataInterval dataInterval) {
+        dataIntervals.add(dataInterval);
     }
 
     //All getters and setters, nice and compact #codingconventions
-    public void SetName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void SetDateTime(String datetime) {
+    public void setDateTime(String datetime) {
         this.datetime = datetime;
     }
 
-    public void SetLocation(String location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
-    public void SetDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public String GetUID() {
+    public String getUID() {
         return this.uid;
     }
 
-    public String GetName() {
+    public String getName() {
         return this.name;
     }
 
-    public String GetDateTime() {
+    public String getDateTime() {
         return this.datetime;
     }
 
-    public String GetLocation() {
+    public String getLocation() {
         return this.location;
     }
 
-    public String GetDescription() {
+    public String getDescription() {
         return this.description;
     }
 
@@ -96,7 +115,7 @@ class Measurement implements Serializable {
      *
      * @return A photo in Bitmap format, null if there is no photo
      */
-    public Bitmap GetPhoto() {
+    public Bitmap getPhoto() {
         if (photo == null) {
             System.out.println("Photo is null, fix this.");
             return null;
