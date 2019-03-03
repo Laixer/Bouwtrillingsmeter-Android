@@ -33,15 +33,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize the utility frontend
+        // initialize the utility frontend
         Utility.ApplicationContext = getApplicationContext();
         Utility.Resources = getResources();
 
-        // Initialize the backend
-        Backend.Initialize();
+        // initialize the backend
+        Backend.initialize();
 
         // TODO Remove this debug statement
-        MeasurementControl.SetDebugMeasurementList();
+        MeasurementControl.setDebugMeasurementList();
 
         // Toolbar
         toolbar = findViewById(R.id.toolbar);

@@ -20,7 +20,7 @@ class MeasurementControl {
     /**
      * initializes the class for static use
      */
-    public static void Initialize() {
+    public static void initialize() {
         allMeasurements = new ArrayList<Measurement>();
     }
 
@@ -62,7 +62,7 @@ class MeasurementControl {
      * The UID for this measurement is created by the measuremetn class
      * Also sets this measurement as currentMeasurement
      */
-    public static void CreateNewMeasurement() {
+    public static void createNewMeasurement() {
         Measurement measurement = new Measurement();
         currentMeasurement = measurement;
     }
@@ -71,7 +71,7 @@ class MeasurementControl {
      * This adds the current measurement to the measurement list
      * This also attempts to save the current measurement to the cache
      */
-    public static boolean SaveCurrentMeasurement() {
+    public static boolean saveCurrentMeasurement() {
         boolean hasExported = ReadWrite.TryWriteMeasurement(Utility.ApplicationContext, currentMeasurement, currentMeasurement.getUID());
         return hasExported;
     }
@@ -80,14 +80,14 @@ class MeasurementControl {
      * This gets called when the program exits
      * This attempts to write all measurements to the program cache
      */
-    public static void OnApplicationShutdown() {
+    public static void onApplicationShutdown() {
         for (Measurement measurement : allMeasurements) {
             ReadWrite.TryWriteMeasurement(Utility.ApplicationContext, currentMeasurement, currentMeasurement.getUID());
         }
     }
 
 
-    public static void SetDebugMeasurementList() {
+    public static void setDebugMeasurementList() {
         allMeasurements = new ArrayList<Measurement>();
         allMeasurements.add(new Measurement());
         allMeasurements.add(new Measurement());
