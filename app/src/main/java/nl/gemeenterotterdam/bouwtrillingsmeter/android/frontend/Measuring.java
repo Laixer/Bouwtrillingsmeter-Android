@@ -9,14 +9,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.AccelerometerControl;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.AccelerometerListener;
 
-public class Measuring extends AppCompatActivity {
+public class Measuring extends AppCompatActivity implements AccelerometerListener {
 
     private Activity thisActivity;
     private TextView textViewMeasuringCenter;
     private Button buttonMeasuringShowGraphs;
     private ProgressBar progressBarMeasuring;
     private boolean isMeasuring;
+
+    // TODO DeBUG Remove this
+    private TextView textViewMeasuringDebugX;
+    private TextView textViewMeasuringDebugY;
+    private TextView textViewMeasuringDebugZ;
 
 
     @Override
@@ -43,6 +50,10 @@ public class Measuring extends AppCompatActivity {
                 ChangePageToState();
             }
         });
+        AccelerometerControl.addListener(this);
+        textViewMeasuringDebugX = (TextView) findViewById(R.id.textViewMeasuringDebugX);
+        textViewMeasuringDebugY = (TextView) findViewById(R.id.textViewMeasuringDebugY);
+        textViewMeasuringDebugZ = (TextView) findViewById(R.id.textViewMeasuringDebugZ);
     }
 
     /**
@@ -71,4 +82,19 @@ public class Measuring extends AppCompatActivity {
         ChangePageToState();
     }
 
+    /**
+     * This gets called when our accelerometer measures data.
+     * The data does NOT have to be different from the previous dataset.
+     * This will just get called every "tick".
+     *
+     * @param x The acceleration in the x direction.
+     * @param y The acceleration in the y direction.
+     * @param z The acceleration in the z direction.
+     */
+    @Override
+    public void onReceivedData(float x, float y, float z) {
+        textViewMeasuringDebugX.setText(Float.toString(x));
+        textViewMeasuringDebugY.setText(Float.toString(y));
+        textViewMeasuringDebugZ.setText(Float.toString(z));
+    }
 }

@@ -5,6 +5,10 @@ import android.content.SharedPreferences;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
+/**
+ * TODO Javadoc
+ * TODO Restructure this one
+ */
 public class PreferenceManager {
 
     private Context context;
