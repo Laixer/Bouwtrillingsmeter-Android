@@ -56,7 +56,7 @@ public class MeasurementAdapter extends BaseAdapter {
         ImageView imageViewPhoto = (ImageView) view.findViewById(R.id.imageViewListMeasurementPhoto);
 
         // Set the name
-        textViewName.setText(measurements.get(position).GetName());
+        textViewName.setText(measurements.get(position).getName());
 
         // Set the photo
         // Add an actionlistener to this to attempt to take a photo
@@ -70,7 +70,7 @@ public class MeasurementAdapter extends BaseAdapter {
     /**
      * Forces the adapter to update
      */
-    public void OnDatasetChanged() {
+    public void onDatasetChanged() {
         this.notifyDataSetChanged();
     }
 

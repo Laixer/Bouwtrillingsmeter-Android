@@ -11,7 +11,7 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
  * @author Thomas Beckers
  * @since 2019-02-20
  */
-class Settings {
+public class Settings {
 
     public static Settings settings;
 
@@ -36,12 +36,10 @@ class Settings {
      * @param vibrationCategory  The vibration category as enum
      * @param vibrationSensitive A boolean indicating if we are dealing with a vibration sensitive building
      */
-    public static void CreateSettingsFromCategoryPage(BuildingCategory buildingCategory, VibrationCategory vibrationCategory, boolean vibrationSensitive) {
-        settings = new Settings();
-
-        settings.buildingCategory = buildingCategory;
-        settings.vibrationCategory = vibrationCategory;
-        settings.vibrationSensitive = vibrationSensitive;
+    public void overwriteSettingsFromCategoryPage(BuildingCategory buildingCategory, VibrationCategory vibrationCategory, boolean vibrationSensitive) {
+        buildingCategory = buildingCategory;
+        vibrationCategory = vibrationCategory;
+        vibrationSensitive = vibrationSensitive;
     }
 
     /**
@@ -51,9 +49,7 @@ class Settings {
      *
      * @param answers A boolean array representing the answers to each widget page
      */
-    public static void CreateSettingsFromWidget(boolean[] answers) {
-        settings = new Settings();
-
+    public void overwriteSettingsFromWidget(boolean[] answers) {
         boolean betonMetselwerkGevelbekleding = answers[0];
         boolean monumentBeschermdStadsgezicht = answers[1];
         boolean afkomstigVanGegevenBronnen = answers[2];

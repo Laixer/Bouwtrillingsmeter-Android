@@ -18,8 +18,10 @@ import me.toptas.fancyshowcase.FancyShowCaseView;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.MeasurementControl;
 
+/**
+ * TODO Document this
+ */
 public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbar;
@@ -40,9 +42,6 @@ public class MainActivity extends AppCompatActivity {
         // initialize the backend
         Backend.initialize();
 
-        // TODO Remove this debug statement
-        MeasurementControl.setDebugMeasurementList();
-
         // Toolbar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -52,21 +51,25 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onStartMeasurement();
+                onClickCreateNewMeasurement();
             }
         });
 
         // Setup measurements list and link adapter
         listViewMeasurements = (ListView) findViewById(R.id.listViewMeasurements);
         listViewMeasurements.setEmptyView(findViewById(R.id.textViewNoMeasurements));
-        listViewMeasurementsAdapter = new MeasurementAdapter(this, Backend.MeasurementControl.getAllMeasurements());
+        listViewMeasurementsAdapter = new MeasurementAdapter(this, Backend.getAllMeasurementsList());
         listViewMeasurements.setAdapter(listViewMeasurementsAdapter);
         listViewMeasurements.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intentShowMeasuremenstDetails = new Intent(getApplicationContext(), MeasurementDetails.class);
-                intentShowMeasuremenstDetails.putExtra("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX", position);
+
+                // TODO Reconsider measurement linking structure
+//              intentShowMeasuremenstDetails.putExtra("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX", position);
+                MeasurementDetails.measurement = Backend.getAllMeasurementsList().get(position);
+
                 startActivity(intentShowMeasuremenstDetails);
             }
         });
@@ -104,18 +107,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        listViewMeasurementsAdapter.OnDatasetChanged();
+        listViewMeasurementsAdapter.onDatasetChanged();
     }
 
     /**
      * Gets fired when we click the start a new measurement button
+     * Creates a new measurement in the backend (if not first visit)
+     *
      * This also gets fired when the tutorial finishes
      */
-    public void onStartMeasurement() {
+    public void onClickCreateNewMeasurement() {
+        // If we are in our first visit
         if (GlobalVariables.firstVisit) {
             Intent intentFirstVisitTutorial = new Intent(getApplicationContext(), FirstVisitTutorial.class);
             startActivity(intentFirstVisitTutorial);
-        } else {
+        }
+
+        // If we have already visited before
+        else {
+            Backend.createNewMeasurement();
+
             Intent intentCategorySelection = new Intent(getApplicationContext(), CategoryPage.class);
             startActivity(intentCategorySelection);
         }

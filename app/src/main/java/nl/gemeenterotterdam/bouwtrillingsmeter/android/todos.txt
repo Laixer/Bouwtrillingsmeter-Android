@@ -1,3 +1,6 @@
 General todos
 TODO Consider public vs get/set consistency
 TODO Documentation @see?
+TODO Acitivity names strak
+TODO Als je je measurement nooit start moet hij worden weggegooid
+TODO Oude widget instellignen opslaan?

@@ -5,12 +5,12 @@ import android.graphics.Bitmap;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.UUID;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Measurement class
- *
+ * <p>
  * This class holds all (meta)data for a measurement made by the user.
  * It has an arraylist of dataIntervals, which link to the actual sensor data + calculated values.
  * This class can be sent to the database for analysis.
@@ -18,7 +18,7 @@ import java.util.Date;
  * @author Thomas Beckers
  * @since 2019-02-28
  */
-class Measurement implements Serializable {
+public class Measurement implements Serializable {
 
     private String uid;
     private String name;
@@ -27,6 +27,7 @@ class Measurement implements Serializable {
     private String description;
     private Bitmap photo;
 
+    public Settings settings;
     public ArrayList<DataInterval> dataIntervals;
     public Date dateStart;
     public Date dateEnd;
@@ -56,11 +57,14 @@ class Measurement implements Serializable {
         this.description = "Een hele mooie omschrijving jawel!";
         this.photo = null;
 
+        // Create public variables
+        this.settings = new Settings();
         this.dataIntervals = new ArrayList<DataInterval>();
     }
 
     /**
      * Adds a data point to our datapoint arraylist
+     *
      * @param dataInterval A measured DataInterval object, containing datapoints and all calculations
      */
     public void addDataInterval(DataInterval dataInterval) {
@@ -80,7 +84,9 @@ class Measurement implements Serializable {
         dateEnd = Calendar.getInstance().getTime();
     }
 
-    //All getters and setters, nice and compact #codingconventions
+    /**
+     * All getters and setters in one place.
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -122,7 +128,7 @@ class Measurement implements Serializable {
      *
      * @param photo The photo to add
      */
-    public void UpdatePhoto(Bitmap photo) {
+    public void updatePhoto(Bitmap photo) {
         this.photo = photo;
     }
 

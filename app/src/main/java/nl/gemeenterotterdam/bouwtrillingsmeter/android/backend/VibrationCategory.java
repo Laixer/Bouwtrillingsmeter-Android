@@ -1,6 +1,6 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
-enum VibrationCategory {
+public enum VibrationCategory {
     NONE,
     KORT,
     KORT_HERHAALD,

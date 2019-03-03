@@ -15,9 +15,13 @@ import android.widget.Switch;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BuildingCategory;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.SettingsControl;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Settings;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory;
 
+/**
+ * TODO Javadoc
+ */
 public class CategoryPage extends AppCompatActivity {
 
     Spinner spinnerCategoryBuilding;
@@ -94,7 +98,7 @@ public class CategoryPage extends AppCompatActivity {
         BuildingCategory buildingCategory = BuildingCategory.values()[buildingIndex];
         VibrationCategory vibrationCategory = VibrationCategory.values()[vibrationIndex];
         boolean vibrationSensitive = switchCategoryVibrationSensitive.isSelected();
-        SettingsControl.CreateSettingsFromCategoryPage(buildingCategory, vibrationCategory, vibrationSensitive);
+        Backend.getCurrentMeasurement().settings.overwriteSettingsFromCategoryPage(buildingCategory, vibrationCategory, vibrationSensitive);
 
         // Create a new intent
         Intent intent = new Intent(getApplicationContext(), Measuring.class);

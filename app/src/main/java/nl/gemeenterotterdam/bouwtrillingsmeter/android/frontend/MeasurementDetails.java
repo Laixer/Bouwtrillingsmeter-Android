@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 
 /**
@@ -24,10 +23,12 @@ public class MeasurementDetails extends AppCompatActivity {
     TextView textViewLocation;
     TextView textViewDescription;
     ImageView imageViewMeasurementPhoto;
-    Measurement measurement;
+
+    public static Measurement measurement;
 
     /**
      * Gets called when this activity is launched
+     * TODO Reconsider measurement calling structure
      *
      * @param savedInstanceState
      */
@@ -39,15 +40,15 @@ public class MeasurementDetails extends AppCompatActivity {
         textViewName = (TextView) findViewById(R.id.textViewListMeasurementName);
 
         // Get the information from our activity
-        Intent intent = getIntent();
-        int measurementIndex = -1;
-        if (intent.hasExtra("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX")) {
-            measurementIndex = intent.getExtras().getInt("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX");
-        }
-
-        // Link our measurement
-        // TODO Handle a measurement getting error
-        measurement = Backend.MeasurementControl.getMeasurementByIndex(measurementIndex);
+//        Intent intent = getIntent();
+//        int measurementIndex = -1;
+//        if (intent.hasExtra("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX")) {
+//            measurementIndex = intent.getExtras().getInt("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX");
+//        }
+//
+//        // Link our measurement
+//        // TODO Handle a measurement getting error
+//        measurement = Backend.MeasurementControl.getMeasurementByIndex(measurementIndex);
 
         // Link the descriptive UI elements
         textViewName = (TextView) findViewById(R.id.textViewDetailsMeasurementName);
@@ -79,7 +80,7 @@ public class MeasurementDetails extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-        measurement.UpdatePhoto(bitmap);
+        measurement.updatePhoto(bitmap);
 
         Utility.UpdateScaledPhoto(imageViewMeasurementPhoto, measurement.getPhoto());
     }
@@ -89,10 +90,10 @@ public class MeasurementDetails extends AppCompatActivity {
      * TODO Where shall we call this from?
      */
     public void onUpdateMeasurementTexts() {
-        textViewName.setText(measurement.GetName());
-        textViewDateTime.setText(measurement.GetDateTime());
-        textViewLocation.setText(measurement.GetLocation());
-        textViewDescription.setText(measurement.GetDescription());
+        textViewName.setText(measurement.getName());
+        textViewDateTime.setText(measurement.getDateTime());
+        textViewLocation.setText(measurement.getLocation());
+        textViewDescription.setText(measurement.getDescription());
     }
 
 }
