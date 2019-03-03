@@ -5,6 +5,8 @@ TODO Bug weghalen waarbij je altijd terug gaat naar de tutorial via de back butt
 TODO Geen metingen en first visit? Pijltje naar de plus knop, rest donkerder ding
 TODO Graph page
 TODO Highlight first visit mooi maken
+TODO Wait icon groen -> niet elke API!
+TODO Switch achtergrond ook groen
 
 TODO Hoe zit het met app data op de telefoon? --> Al wel soort van geïmplementeerd
 TODO Hoe zit het met strings en vertalingen?

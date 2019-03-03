@@ -17,7 +17,7 @@ public class Backend {
      */
     public static void initialize() {
         MeasurementControl.initialize();
-        SensorControl.initialize();
+        AccelerometerControl.initialize();
     }
 
     /**
@@ -25,7 +25,7 @@ public class Backend {
      * TODO Implement reading every serialized object in here
      */
     public static void OnApplicationStartup() {
-        //
+
     }
 
     /**

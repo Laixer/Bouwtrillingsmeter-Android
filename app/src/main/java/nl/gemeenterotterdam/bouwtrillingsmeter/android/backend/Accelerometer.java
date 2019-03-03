@@ -19,28 +19,20 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
  */
 class Accelerometer implements SensorEventListener {
 
+    public static Accelerometer accelerometer;
+
     private static final int sensorType = Sensor.TYPE_LINEAR_ACCELERATION;
     private static final int sensorDelay = SensorManager.SENSOR_DELAY_FASTEST;
     private static SensorManager sensorManager;
     private static Sensor sensor;
 
     /**
-     * Constructor
+     * Constructor.
+     * This attempts to connect to the hardware present.
+     * @throws UnsupportedOperationException Thrown when the hardware is not supported on this phone.
      */
     public Accelerometer() {
         sensorManager = (SensorManager) Utility.ApplicationContext.getSystemService(Context.SENSOR_SERVICE);
-        try {
-            registerSensor();
-        } catch (UnsupportedOperationException e) {
-            System.out.println(e.getMessage());
-        }
-
-    }
-
-    /**
-     * This attempts to connect to the accelerometer on the phone
-     */
-    private void registerSensor() {
         sensor = sensorManager.getDefaultSensor(sensorType);
         if (sensor != null) {
             sensorManager.registerListener(this, sensor, sensorDelay);
@@ -70,6 +62,7 @@ class Accelerometer implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         System.out.println(event.values[0]);    // X value
+        AccelerometerControl.onAccelerometerChanged();
     }
 
     /**

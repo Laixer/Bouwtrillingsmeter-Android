@@ -2,6 +2,7 @@ Structure
 TODO General backend structure
 TODO Hoe gaan we om met een gepasseerd interval zonder dat er een datapoint binnen komt? Dit wordt niet gecalld dan!
 TODO Rethink generic structure within DataPoint
+TODO Wat als er geen accelerometer is?
 
 Storage & bitmaps
 TODO Storage
