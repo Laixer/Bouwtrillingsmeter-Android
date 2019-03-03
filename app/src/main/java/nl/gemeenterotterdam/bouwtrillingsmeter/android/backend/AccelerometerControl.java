@@ -52,10 +52,10 @@ public class AccelerometerControl {
      * Gets called when the accelerometer class receives new values from the sensor.
      * This will trigger all listeners.
      */
-    public static void onAccelerometerChanged() {
+    public static void onAccelerometerChanged(float x, float y, float z) {
         for (AccelerometerListener listener : listeners) {
             if (listener != null) {
-                listener.onReceivedData();
+                listener.onReceivedData(x, y, z);
             }
         }
     }

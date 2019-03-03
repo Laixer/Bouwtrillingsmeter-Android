@@ -61,8 +61,7 @@ class Accelerometer implements SensorEventListener {
      */
     @Override
     public void onSensorChanged(SensorEvent event) {
-        System.out.println(event.values[0]);    // X value
-        AccelerometerControl.onAccelerometerChanged();
+        AccelerometerControl.onAccelerometerChanged(event.values[0], event.values[1], event.values[2]);
     }
 
     /**

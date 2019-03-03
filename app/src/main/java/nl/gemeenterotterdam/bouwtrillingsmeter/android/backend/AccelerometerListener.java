@@ -6,6 +6,6 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
  */
 public interface AccelerometerListener {
 
-    void onReceivedData();
+    void onReceivedData(float x, float y, float z);
 
 }
