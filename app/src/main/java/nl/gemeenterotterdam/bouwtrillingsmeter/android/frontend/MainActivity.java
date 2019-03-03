@@ -111,12 +111,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Gets fired when we click the start a new measurement button
-     * Creates a new measurement in the backend (if not first visit)
-     *
-     * This also gets fired when the tutorial finishes
+     * Gets fired when we click the start a new measurement button.
+     * Creates a new measurement in the backend (always).
+     * This also gets fired when the tutorial finishes.
      */
     public void onClickCreateNewMeasurement() {
+        Backend.createNewMeasurement();
+
         // If we are in our first visit
         if (GlobalVariables.firstVisit) {
             Intent intentFirstVisitTutorial = new Intent(getApplicationContext(), FirstVisitTutorial.class);
@@ -125,8 +126,6 @@ public class MainActivity extends AppCompatActivity {
 
         // If we have already visited before
         else {
-            Backend.createNewMeasurement();
-
             Intent intentCategorySelection = new Intent(getApplicationContext(), CategoryPage.class);
             startActivity(intentCategorySelection);
         }
