@@ -3,7 +3,13 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 import java.util.ArrayList;
 
 /**
- * TODO Javadoc
+ * @author Thomas Beckers
+ * @since 1.0
+ * <p>
+ * This class instantiates an {@link Accelerometer Accelerometer} object.
+ * When the accelerometer data changes an event is fired.
+ * This class will then trigger all registered listeners,
+ * sending them the new data (x, y and z acceleration).
  */
 public class AccelerometerControl {
 

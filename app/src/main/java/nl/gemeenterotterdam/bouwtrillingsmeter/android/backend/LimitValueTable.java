@@ -2,8 +2,14 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 /**
  * @author Marijn Otte
- * @since 2017-09-16
- * Class containing limitValues (velocity) for each frequency for each category
+ * @author Thomas Beckers
+ * @since 1.0
+ * <p>
+ * Class containing limitValues (velocity) for each frequency for each category in the form of a lookup table.
+ * This is used by our {@link Calculator} to determine if the discovered {@link DominantFrequencies}
+ * exceed our limits. These limit values are stored within this class.
+ * <p>
+ * TODO Implement enum {@link BuildingCategory} in here. (or is it vibration category?).
  */
 
 public class LimitValueTable {

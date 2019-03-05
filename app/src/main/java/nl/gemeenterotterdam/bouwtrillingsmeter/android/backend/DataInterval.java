@@ -6,14 +6,10 @@ import java.util.Date;
 
 /**
  * @author Thomas Beckers
- * @version 1.0
+ * @since 1.0
  * <p>
- * DataInterval class
- * <p>
- * This class holds a reference to all datapoints within a given time interval
+ * This class holds a reference to all {@link DataPoint}s within a given time interval.
  * This also holds all result values of calculations (fft etc)
- * <p>
- * Based on code by Marijn Otte
  */
 public class DataInterval {
 

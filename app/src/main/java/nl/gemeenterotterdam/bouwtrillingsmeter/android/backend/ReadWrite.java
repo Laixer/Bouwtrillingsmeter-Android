@@ -7,7 +7,10 @@ import org.jetbrains.annotations.Nullable;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
 
 /**
- * This class reads and writes files to and from the phone memory
+ * @author Thomas Beckers
+ * @since 1.0
+ * <p>
+ * This class reads and writes files to and from the phone memory.
  */
 class ReadWrite {
 
@@ -45,7 +48,6 @@ class ReadWrite {
             return null;
         }
     }
-
 
 
     /**

@@ -5,14 +5,16 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * DataHandler class
+ * @author Thomas Beckers
+ * @since 1.0
  * <p>
  * This class triggers the collection of data.
- * This class also triggers the calculations done on said data.
+ * It also triggers the calculations done on said data, which are executed by the {@link Calculator}.
+ * Data is received in the form of a {@link DataPoint}.
+ * The collection and measurements are stored in a {@link DataInterval} object.
+ * These intervals are stored within a {@link Measurement} object.
+ * <p>
  * TODO Check if the pass by value structure of Java does what we want it to do here
- *
- * @author Thomas Beckers
- * @since 2019-02-28
  */
 class DataHandler {
 
@@ -53,16 +55,16 @@ class DataHandler {
         }
 
         // Trigger all calculations
-        float[] maxAccelerations = Calculator.MaxValueInArray(dataInterval.dataPoints);
+        float[] maxAccelerations = Calculator.maxValueInArray(dataInterval.dataPoints);
 
         ArrayList<DataPoint<int[]>> fftAccelerations = Calculator.FFT(dataInterval.dataPoints);
-        int[] maxFrequencies = Calculator.MaxFrequency(fftAccelerations);
+        int[] maxFrequencies = Calculator.maxFrequencies(fftAccelerations);
 
         ArrayList<DataPoint<int[]>> velocitiesFreqDomain = Calculator.calcVelocityFreqDomain(fftAccelerations);
         ArrayList<DataPoint<int[]>> limitValues = Calculator.limitValue(velocitiesFreqDomain);
-        DominantFrequencies dominantFrequencies = Calculator.domFreq(limitValues, velocitiesFreqDomain);
+        DominantFrequencies dominantFrequencies = Calculator.getDominantFrequencies(limitValues, velocitiesFreqDomain);
 
-        float[] maxVelocities = Calculator.MaxValueInArray(velocitiesFreqDomain);
+        float[] maxVelocities = Calculator.maxValueInArray(velocitiesFreqDomain);
         maxVelocities = Calculator.addMargin(maxVelocities);
 
         // Write relevant calculations

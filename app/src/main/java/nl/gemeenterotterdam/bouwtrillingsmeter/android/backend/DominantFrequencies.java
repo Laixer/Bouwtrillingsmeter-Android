@@ -2,12 +2,11 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 /**
  * @author Thomas Beckers
- * @version 1.0
- *
- * DominantFrequencies class
- *
- * This class is used to store a dominant frequency found in a measurement.
- * Nothing more than an elegant way of storing data.
+ * @since 1.0
+ * <p>
+ * This class is used to store a dominant frequency found in a {@link DataInterval}.
+ * The created instance is also stored in said {@link DataInterval}.
+ * It's nothing more than an elegant way of storing data.
  */
 class DominantFrequencies {
 

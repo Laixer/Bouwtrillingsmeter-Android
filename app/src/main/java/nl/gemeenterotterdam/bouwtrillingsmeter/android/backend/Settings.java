@@ -1,15 +1,13 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 /**
- * Settings class
+ * @author Thomas Beckers
+ * @since 1.0
  * <p>
  * This class holds the settings for our current measurement.
- * These settings are determined in the settings widget.
- * When checking if we exceed the norms we use these settings
- * TODO How are we going to pass this trough? Static or put it in the measurement?
- *
- * @author Thomas Beckers
- * @since 2019-02-20
+ * These settings are determined in the settings widget, containing:
+ * {@link BuildingCategory}, {@link VibrationCategory} and a boolean to indicate if we are {@link #vibrationSensitive}.
+ * When checking if we exceed the norms we use these settings in our {@link LimitValueTable} lookup table.
  */
 public class Settings {
 

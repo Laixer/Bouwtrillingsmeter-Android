@@ -3,11 +3,11 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 import java.util.ArrayList;
 
 /**
- * Backend class
- *
+ * @author Thomas Beckers
+ * @since 1.0
+ * <p>
  * This is used as a main communication unit between the frontend and the backend
- * This will initialize all backend components in one go.
- * TODO Rethink this structure
+ * This will initialize all backend components in one go by firing {@link #initialize()}.
  */
 public class Backend {
 

@@ -8,6 +8,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * @author Thomas Beckers
+ * @since 1.0
+ * <p>
+ * This class communicates with the storage of our phone.
+ * At the moment this stores everything in the Cache, which will be changed later.
+ * <p>
+ * TODO Don't store in the Cache.
+ */
 final class InternalStorage {
 
     private InternalStorage() {
@@ -17,8 +26,8 @@ final class InternalStorage {
      * Used to write an object to the internal storage
      *
      * @param context The context from which we are calling
-     * @param key The object key
-     * @param object The object to write
+     * @param key     The object key
+     * @param object  The object to write
      * @throws IOException Exception
      */
     public static void writeObject(Context context, String key, Object object) throws IOException {
@@ -33,9 +42,9 @@ final class InternalStorage {
      * Attempt to read an object from the internal storage
      *
      * @param context The context from which we are calling
-     * @param key The object key
+     * @param key     The object key
      * @return The object
-     * @throws IOException Exception
+     * @throws IOException            Exception
      * @throws ClassNotFoundException Exception
      */
     public static Object readObject(Context context, String key) throws IOException, ClassNotFoundException {

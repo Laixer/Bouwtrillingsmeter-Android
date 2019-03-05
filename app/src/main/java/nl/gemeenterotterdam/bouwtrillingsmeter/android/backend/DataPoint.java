@@ -1,17 +1,19 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 /**
- * DataPoint Class
+ * @author Thomas Beckers
+ * @since 1.0
  * <p>
  * This class holds a given datapoint.
  * If we are operating in the time domain, domain is of type Date.
  * If we are operating in the frequency domain, domain is of type float[x, y, z], where x y z are frequencies.
+ * All other functions regarding data use an ArrayList of these datapoints.
  * <p>
  * OLD DOCUMENTATION:
  * DataPoint, used for storage.
  * X: Date if DataPoint in time domain, float[] (x, y, z values of frequencies) in frequencydomain)
  * values: x, y, z values of data, usually velocity or acceleration
- *
+ * <p>
  * Based on code by Marijn Otte
  */
 

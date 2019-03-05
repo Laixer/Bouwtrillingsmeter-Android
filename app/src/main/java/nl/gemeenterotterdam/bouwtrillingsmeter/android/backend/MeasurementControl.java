@@ -1,16 +1,16 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
 
 /**
- * MeasurementControl class
- *
- * This class controls all measurements.
- * It holds the current measurement.
- * It handles the loading and saving of all measurements.
+ * @author Thomas Beckers
+ * @since 1.0
+ * <p>
+ * This class controls all {@link Measurement}s.
+ * It holds all saved {@link Measurement}s and triggers saving / loading.
+ * Our {@link #currentMeasurement} is the {@link Measurement} object to which we are currently saving our data.
  */
 class MeasurementControl {
 
@@ -43,21 +43,6 @@ class MeasurementControl {
     }
 
     /**
-     * Returns a measurement based on its index in the arraylist
-     *
-     * @param index
-     * @return The desired measurement
-     */
-    public static Measurement getMeasurementByIndex(int index) throws IndexOutOfBoundsException {
-        int count = allMeasurements.size();
-        if (index < 0 || index >= count) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        return allMeasurements.get(index);
-    }
-
-    /**
      * This creates a new measurement
      * The UID for this measurement is created by the measuremetn class
      * Also sets this measurement as currentMeasurement
@@ -86,7 +71,10 @@ class MeasurementControl {
         }
     }
 
-
+    /**
+     * Used for DEBUG purposes.
+     * TODO Remove this
+     */
     public static void setDebugMeasurementList() {
         allMeasurements = new ArrayList<Measurement>();
         allMeasurements.add(new Measurement());

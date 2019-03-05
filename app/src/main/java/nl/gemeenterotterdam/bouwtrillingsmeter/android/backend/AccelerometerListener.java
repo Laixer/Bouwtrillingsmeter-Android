@@ -1,8 +1,11 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 /**
+ * @author Thomas Beckers
+ * @since 1.0
+ * <p>
  * This interface is used to listen to changes in the accelerometer.
- * The function onReceivedData() will only be called if an accelerometer is present.
+ * The function {@link AccelerometerListener#onReceivedData(float, float, float) onReceivedData()}  will only be called if an accelerometer is present.
  */
 public interface AccelerometerListener {
 

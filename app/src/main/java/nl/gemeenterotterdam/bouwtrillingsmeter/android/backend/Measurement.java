@@ -9,16 +9,22 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * Measurement class
+ * @author Thomas Beckers
+ * @since 1.0
  * <p>
  * This class holds all (meta)data for a measurement made by the user.
- * It has an arraylist of dataIntervals, which link to the actual sensor data + calculated values.
+ * It has an arraylist of {@link DataInterval}s.
+ * These {@link DataInterval}s contains all {@link DataPoint}s.
+ * All calculated values (done by our {@link Calculator}) are also stored in said {@link DataInterval}.
+ * <p>
  * This class can be sent to the database for analysis.
- *
- * @author Thomas Beckers
- * @since 2019-02-28
  */
 public class Measurement implements Serializable {
+
+    public Settings settings;
+    public ArrayList<DataInterval> dataIntervals;
+    public Date dateStart;
+    public Date dateEnd;
 
     private String uid;
     private String name;
@@ -26,11 +32,6 @@ public class Measurement implements Serializable {
     private String location;
     private String description;
     private Bitmap photo;
-
-    public Settings settings;
-    public ArrayList<DataInterval> dataIntervals;
-    public Date dateStart;
-    public Date dateEnd;
 
     /**
      * Simplified constructor for this class

@@ -10,12 +10,11 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
 
 /**
  * @author Thomas Beckers
- * @version 1.0
- * <p>
- * Accelerometer class
+ * @since 1.0
  * <p>
  * This communicates with the accelerometer sensor in your phone.
  * No other class communicates with the hardware.
+ * Instances of this class are managed by {@link AccelerometerControl}.
  */
 class Accelerometer implements SensorEventListener {
 
@@ -29,6 +28,7 @@ class Accelerometer implements SensorEventListener {
     /**
      * Constructor.
      * This attempts to connect to the hardware present.
+     *
      * @throws UnsupportedOperationException Thrown when the hardware is not supported on this phone.
      */
     public Accelerometer() {
