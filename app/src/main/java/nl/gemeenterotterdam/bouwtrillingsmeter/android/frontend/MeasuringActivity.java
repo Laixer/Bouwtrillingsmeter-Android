@@ -12,7 +12,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.AccelerometerControl;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.AccelerometerListener;
 
-public class Measuring extends AppCompatActivity implements AccelerometerListener {
+public class MeasuringActivity extends AppCompatActivity implements AccelerometerListener {
 
     private Activity thisActivity;
     private TextView textViewMeasuringCenter;
@@ -61,7 +61,7 @@ public class Measuring extends AppCompatActivity implements AccelerometerListene
      * If isMeasuring: True if we are measuring, false if we are waiting for the device to be placed on the table
      */
     private void ChangePageToState() {
-        // Measuring state
+        // MeasuringActivity state
         if (isMeasuring) {
             textViewMeasuringCenter.setText(getResources().getString(R.string.measuring_measuring_now));
             buttonMeasuringShowGraphs.setVisibility(View.VISIBLE);

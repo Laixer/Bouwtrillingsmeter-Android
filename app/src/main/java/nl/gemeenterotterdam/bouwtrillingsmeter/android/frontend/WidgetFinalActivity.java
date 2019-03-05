@@ -9,7 +9,7 @@ import android.widget.Button;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
-public class WidgetFinal extends AppCompatActivity {
+public class WidgetFinalActivity extends AppCompatActivity {
 
     Activity thisActivity;
     FloatingActionButton fabWidgetFinalConfirm;

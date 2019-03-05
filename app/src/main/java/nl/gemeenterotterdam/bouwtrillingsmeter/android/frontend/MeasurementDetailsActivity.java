@@ -16,7 +16,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
  * This class controls the page that opens when you click a certain measurement
  * This does NOT control anything layout-wise within the measurement list
  */
-public class MeasurementDetails extends AppCompatActivity {
+public class MeasurementDetailsActivity extends AppCompatActivity {
 
     TextView textViewName;
     TextView textViewDateTime;

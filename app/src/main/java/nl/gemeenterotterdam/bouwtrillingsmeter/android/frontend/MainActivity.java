@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     ListView listViewMeasurements;
-    MeasurementAdapter listViewMeasurementsAdapter;
+    MeasurementListAdapter listViewMeasurementsAdapter;
     ArrayList<Measurement> measurements;
 
     @Override
@@ -58,17 +58,17 @@ public class MainActivity extends AppCompatActivity {
         // Setup measurements list and link adapter
         listViewMeasurements = (ListView) findViewById(R.id.listViewMeasurements);
         listViewMeasurements.setEmptyView(findViewById(R.id.textViewNoMeasurements));
-        listViewMeasurementsAdapter = new MeasurementAdapter(this, Backend.getAllMeasurementsList());
+        listViewMeasurementsAdapter = new MeasurementListAdapter(this, Backend.getAllMeasurementsList());
         listViewMeasurements.setAdapter(listViewMeasurementsAdapter);
         listViewMeasurements.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intentShowMeasuremenstDetails = new Intent(getApplicationContext(), MeasurementDetails.class);
+                Intent intentShowMeasuremenstDetails = new Intent(getApplicationContext(), MeasurementDetailsActivity.class);
 
                 // TODO Reconsider measurement linking structure
 //              intentShowMeasuremenstDetails.putExtra("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX", position);
-                MeasurementDetails.measurement = Backend.getAllMeasurementsList().get(position);
+                MeasurementDetailsActivity.measurement = Backend.getAllMeasurementsList().get(position);
 
                 startActivity(intentShowMeasuremenstDetails);
             }
@@ -120,13 +120,13 @@ public class MainActivity extends AppCompatActivity {
 
         // If we are in our first visit
         if (GlobalVariables.firstVisit) {
-            Intent intentFirstVisitTutorial = new Intent(getApplicationContext(), FirstVisitTutorial.class);
+            Intent intentFirstVisitTutorial = new Intent(getApplicationContext(), FirstVisitTutorialActivity.class);
             startActivity(intentFirstVisitTutorial);
         }
 
         // If we have already visited before
         else {
-            Intent intentCategorySelection = new Intent(getApplicationContext(), CategoryPage.class);
+            Intent intentCategorySelection = new Intent(getApplicationContext(), CategoryPageActivity.class);
             startActivity(intentCategorySelection);
         }
     }

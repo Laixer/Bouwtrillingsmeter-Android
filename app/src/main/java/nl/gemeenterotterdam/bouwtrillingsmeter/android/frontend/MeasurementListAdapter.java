@@ -18,7 +18,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
  * This class is used as an adapter for each measurement item in the main measurement listview
  * This class does NOT control the page that opens when you click a measurement within said listview
  */
-public class MeasurementAdapter extends BaseAdapter {
+public class MeasurementListAdapter extends BaseAdapter {
 
     LayoutInflater mLayoutInflater;
     ArrayList<Measurement> measurements;
@@ -28,7 +28,7 @@ public class MeasurementAdapter extends BaseAdapter {
      * @param context Our context, usually referred to as "this"
      * @param measurements The pointer to the measurements list
      */
-    public MeasurementAdapter(Context context, ArrayList<Measurement> measurements) {
+    public MeasurementListAdapter(Context context, ArrayList<Measurement> measurements) {
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.measurements = measurements;
     }

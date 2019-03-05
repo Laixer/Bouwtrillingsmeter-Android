@@ -75,7 +75,7 @@
     <string name="category_notyetselected_building">Selecteer het type gebouw</string>
     <string name="category_notyetselected_vibration">Selecteer het type vibratie</string>
 
-    <!--Measuring page-->
+    <!--MeasuringActivity page-->
     <string name="measuring_place_device_on_table">Plaats uw telefoon op tafel</string>
     <string name="measuring_measuring_now">Aan het meten...</string>
     <string name="measuring_show_graphs">Laat grafieken zien</string>

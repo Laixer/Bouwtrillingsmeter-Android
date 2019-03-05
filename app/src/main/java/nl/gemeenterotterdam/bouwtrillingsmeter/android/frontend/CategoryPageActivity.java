@@ -1,9 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,13 +14,12 @@ import android.widget.Switch;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BuildingCategory;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Settings;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory;
 
 /**
  * TODO Javadoc
  */
-public class CategoryPage extends AppCompatActivity {
+public class CategoryPageActivity extends AppCompatActivity {
 
     Spinner spinnerCategoryBuilding;
     Spinner spinnerCategoryVibration;
@@ -101,7 +98,7 @@ public class CategoryPage extends AppCompatActivity {
         Backend.getCurrentMeasurement().settings.overwriteSettingsFromCategoryPage(buildingCategory, vibrationCategory, vibrationSensitive);
 
         // Create a new intent
-        Intent intent = new Intent(getApplicationContext(), Measuring.class);
+        Intent intent = new Intent(getApplicationContext(), MeasuringActivity.class);
         startActivity(intent);
     }
 

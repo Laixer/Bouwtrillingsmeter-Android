@@ -40,7 +40,7 @@ public class WidgetControl {
 
         // If we have completed the widget
         if (widgetPageIndex >= widgetPageCount - 1) {
-            Intent intent = new Intent(from.getApplicationContext(), WidgetFinal.class);
+            Intent intent = new Intent(from.getApplicationContext(), WidgetFinalActivity.class);
             from.startActivity(intent);
         }
 
@@ -57,7 +57,7 @@ public class WidgetControl {
      * @param index The page index
      */
     private static void SetToPage(Activity from, int index) {
-        Intent intent = new Intent(from.getApplicationContext(), WidgetPage.class);
+        Intent intent = new Intent(from.getApplicationContext(), WidgetPageActivity.class);
         intent.putExtra("nl.gemeenterotterdam.bouwtrillingsmeter.WIDGET_PAGE_INDEX", index);
         from.startActivity(intent);
     }

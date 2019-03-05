@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
-public class FirstVisitTutorial extends AppCompatActivity {
+public class FirstVisitTutorialActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     private int[] tutorialSlides = {
@@ -130,7 +130,7 @@ public class FirstVisitTutorial extends AppCompatActivity {
      */
     private void onCompleteTutorial() {
         new PreferenceManager(this).writePreferences();
-        Intent intentCategorySelection = new Intent(getApplicationContext(), CategoryPage.class);
+        Intent intentCategorySelection = new Intent(getApplicationContext(), CategoryPageActivity.class);
         startActivity(intentCategorySelection);
     }
 }

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
-public class WidgetPage extends AppCompatActivity {
+public class WidgetPageActivity extends AppCompatActivity {
 
     private int widgetPageIndex = -1;
     private Activity thisActivity;
