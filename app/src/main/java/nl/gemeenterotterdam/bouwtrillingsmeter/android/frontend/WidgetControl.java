@@ -5,6 +5,14 @@ import android.content.Intent;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
+/**
+ * This class takes us through the widget to determine the settings.
+ * We enter this widget from the {@link CategoryPageActivity} page.
+ * Pressing the 'ok fab', present on the {@link WidgetFinalActivity} page takes us to the {@link MeasuringActivity} page.
+ * <p>
+ * Every widget page is a {@link WidgetPageActivity}.
+ * At the end of the widget the determined categories are displayed via the {@link WidgetFinalActivity}.
+ */
 public class WidgetControl {
 
     private static int widgetPageCount;
@@ -12,6 +20,7 @@ public class WidgetControl {
 
     /**
      * Starts the widget
+     *
      * @param from The activity from which we are being called
      */
     public static void StartWidget(Activity from) {
@@ -23,17 +32,19 @@ public class WidgetControl {
     /**
      * This completes and closes the widget
      * TODO Disable back button flowing back into the widget
+     *
      * @param from The activity from which we are being called
      */
     public static void ConfirmWidget(Activity from) {
-        
+
     }
 
     /**
      * This gets called when the user clicks a button in the widget
-     * @param from The activity from which we are being called
+     *
+     * @param from            The activity from which we are being called
      * @param widgetPageIndex The page index from which the button was pressed
-     * @param yes True if yes, false if no
+     * @param yes             True if yes, false if no
      */
     public static void OnClickYesNo(Activity from, int widgetPageIndex, boolean yes) {
         results[widgetPageIndex] = yes;
@@ -53,7 +64,8 @@ public class WidgetControl {
 
     /**
      * This function sets our widget to a certain page by creating a new activity
-     * @param from The activity from which we are being called
+     *
+     * @param from  The activity from which we are being called
      * @param index The page index
      */
     private static void SetToPage(Activity from, int index) {

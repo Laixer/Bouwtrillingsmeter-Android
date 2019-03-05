@@ -1,8 +1,8 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -12,6 +12,17 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.AccelerometerControl;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.AccelerometerListener;
 
+/**
+ * @author Thomas Beckers
+ * @since 1.0
+ * <p>
+ * This activity gets called when we finish setting up our settings in the {@link CategoryPageActivity} page.
+ * First, we await till the user places the phone flat on a surface.
+ * TODO Implement this call from the backend.
+ * <p>
+ * When the phone is flat, we begin our measurements.
+ * TODO Implement this call to the backend.
+ */
 public class MeasuringActivity extends AppCompatActivity implements AccelerometerListener {
 
     private Activity thisActivity;

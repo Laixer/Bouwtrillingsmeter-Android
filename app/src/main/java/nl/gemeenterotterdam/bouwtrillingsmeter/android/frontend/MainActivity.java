@@ -20,7 +20,17 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 
 /**
- * TODO Document this
+ * @author Thomas Beckers
+ * @since 1.0
+ * <p>
+ * This is the main entry point of the application.
+ * This page shows an overview of our saved activities, if any are present.
+ * <p>
+ * Clicking an item in our activity list takes us to the {@link MeasurementDetailsActivity}.
+ * Clicking the '+ fab' on first visit takes us to the {@link FirstVisitTutorialActivity}.
+ * Clicking the '+ fab' after that takes us to the {@link CategoryPageActivity}.
+ * <p>
+ * Our first visit will highlight the '+ fab' using the {@link #showcaseFirstVisit()} function.
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -76,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Showcase first visit
         // TODO debug remove this
-        ShowcaseFirstVisit();
+        showcaseFirstVisit();
     }
 
     @Override
@@ -140,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Creates a popup on first visit that points at the plus sign
      */
-    private void ShowcaseFirstVisit() {
+    private void showcaseFirstVisit() {
         View view = findViewById(R.id.fabNewMeasurement);
         String title = getResources().getString(R.string.first_visit_popup);
 

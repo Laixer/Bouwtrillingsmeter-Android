@@ -12,6 +12,18 @@ import android.widget.ImageView;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
+/**
+ * @author Thomas Beckers
+ * @since 1.0
+ * <p>
+ * This class contains some utility functions used throughout the frontend.
+ * <p>
+ * The application context pointer is stored as {@link #ApplicationContext}.
+ * The application resources pointer is stored as {@link Resources}.
+ * Some scripts that are not {@link android.app.Activity} based need these pointers.
+ * <p>
+ * Image scaling is also implemented in here, since this is reused throughout multiple scripts.
+ */
 public class Utility {
 
     // These get set a startup since using these pointers is becoming a hassle

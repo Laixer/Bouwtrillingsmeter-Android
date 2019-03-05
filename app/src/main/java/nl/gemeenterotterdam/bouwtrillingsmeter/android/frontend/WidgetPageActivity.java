@@ -2,14 +2,22 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
+/**
+ * @author Thomas Beckers
+ * @since 1.0
+ * <p>
+ * This class represents a single widget page.
+ * These pages are handled by the {@link WidgetControl} class.
+ * The displayed text is taken from our application {@link android.content.res.Resources}.
+ */
 public class WidgetPageActivity extends AppCompatActivity {
 
     private int widgetPageIndex = -1;

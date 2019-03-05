@@ -2,9 +2,9 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,10 +13,17 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 
 /**
- * This class controls the page that opens when you click a certain measurement
- * This does NOT control anything layout-wise within the measurement list
+ * @author Thomas Beckers
+ * @since 1.0
+ * <p>
+ * This class controls the page that opens when you click a list item in the measurement list on the {@link MainActivity} page.
+ * This does NOT control anything layout-wise within the measurement list, this is done by {@link MeasurementListAdapter}.
+ * <p>
+ * Clicking the displayed photo attempts to open our camera, coded in the {@link #onCreate(Bundle)} function.
+ * The callback is handled by {@link #onActivityResult(int, int, Intent)}.
  */
 public class MeasurementDetailsActivity extends AppCompatActivity {
+
 
     TextView textViewName;
     TextView textViewDateTime;

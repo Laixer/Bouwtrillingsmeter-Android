@@ -6,7 +6,12 @@ import android.content.SharedPreferences;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
 /**
- * TODO Javadoc
+ * @author Thomas Beckers
+ * @since 1.0
+ * <p>
+ * This class handles our preferences, which are saved on the phone.
+ * Currently this isn't properly implemented.
+ * <p>
  * TODO Restructure this one
  */
 public class PreferenceManager {
@@ -14,7 +19,7 @@ public class PreferenceManager {
     private Context context;
     private SharedPreferences sharedPreferences;
 
-    public PreferenceManager (Context context) {
+    public PreferenceManager(Context context) {
         this.context = context;
         fetchSharedPreferences();
     }
@@ -37,6 +42,7 @@ public class PreferenceManager {
 
     /**
      * This checks if it is our first visit or not
+     *
      * @return False if we have not opened our app at least once
      */
     public boolean checkPreference() {
