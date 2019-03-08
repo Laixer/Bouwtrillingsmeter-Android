@@ -2,18 +2,19 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.Switch;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BuildingCategory;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BuildingCategory;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Settings;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory;
 
 /**
@@ -74,6 +75,7 @@ public class CategoryPageActivity extends AppCompatActivity {
 
     /**
      * This gets called when the confirming FAB is clicked
+     *
      * @param view View used to pass towards the snackbar
      */
     private void attemptConfirmChosenCategories(View view) {
@@ -95,7 +97,8 @@ public class CategoryPageActivity extends AppCompatActivity {
         BuildingCategory buildingCategory = BuildingCategory.values()[buildingIndex];
         VibrationCategory vibrationCategory = VibrationCategory.values()[vibrationIndex];
         boolean vibrationSensitive = switchCategoryVibrationSensitive.isSelected();
-        Backend.getCurrentMeasurement().settings.overwriteSettingsFromCategoryPage(buildingCategory, vibrationCategory, vibrationSensitive);
+        Settings settings = SettingsGenerator.createSettingsFromCategoryPage(buildingCategory, vibrationCategory, vibrationSensitive);
+        Backend.onGeneratedNewSettings(settings);
 
         // Create a new intent
         Intent intent = new Intent(getApplicationContext(), MeasuringActivity.class);
@@ -104,6 +107,7 @@ public class CategoryPageActivity extends AppCompatActivity {
 
     /**
      * This gets called when the user attempts to complete the form without having selected everything
+     *
      * @param message The message to display
      */
     private void requireFormCompletion(View view, String message) {
@@ -113,6 +117,7 @@ public class CategoryPageActivity extends AppCompatActivity {
 
     /**
      * Starts the widget
+     *
      * @param view The view we are in
      */
     public void onClickCategoryIDontKnow(View view) {
@@ -122,7 +127,8 @@ public class CategoryPageActivity extends AppCompatActivity {
     /**
      * Controls the look and feel for the fab
      * Also sets it to enabled or disabld
-     * @param fab The floating action button
+     *
+     * @param fab     The floating action button
      * @param enabled True if it should be enabled
      */
     private void setFabBackgroundTint(FloatingActionButton fab, boolean enabled) {

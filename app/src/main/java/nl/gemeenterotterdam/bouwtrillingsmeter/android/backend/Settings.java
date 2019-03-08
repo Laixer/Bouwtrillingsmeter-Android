@@ -26,4 +26,13 @@ public class Settings {
         vibrationSensitive = false;
     }
 
+    /**
+     * Constructor
+     */
+    public Settings(BuildingCategory buildingCategory, VibrationCategory vibrationCategory, boolean vibrationSensitive) {
+        this.buildingCategory = buildingCategory;
+        this.vibrationCategory = vibrationCategory;
+        this.vibrationSensitive = vibrationSensitive;
+    }
+
 }
