@@ -18,11 +18,20 @@ import java.util.Date;
  */
 class DataHandler {
 
-
+    private static boolean currentlyMeasuring;
     private static DataInterval currentDataInterval;
     private static int currentDataIntervalIndex;
     private static int lastExceedingIndex;
     private static ArrayList<Integer> indexesToBeCleared;
+
+    /**
+     * Check if we are measuring right now.
+     *
+     * @return True if we are currently measuring.
+     */
+    public static boolean isCurrentlyMeasuring() {
+        return currentlyMeasuring;
+    }
 
     /**
      * This starts all measurement loops.
@@ -30,6 +39,7 @@ class DataHandler {
      * via the MeasurementControl.getCurrentMeasurement().
      */
     public static void startMeasuring() {
+        currentlyMeasuring = true;
         currentDataIntervalIndex = 0;
         lastExceedingIndex = -1;
         indexesToBeCleared = new ArrayList<Integer>();
@@ -151,6 +161,11 @@ class DataHandler {
      * This stops all measurement loops.
      */
     public static void stopMeasuring() {
+        if (currentlyMeasuring == false) {
+            throw new IllegalStateException("Attempted to stop measuring when we were not measuring.");
+        }
+
+        currentlyMeasuring = false;
         MeasurementControl.getCurrentMeasurement().onStopMeasuring();
     }
 

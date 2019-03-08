@@ -90,9 +90,32 @@ public class Backend {
     }
 
     /**
+     * This overwrites the current settings.
+     *
+     * @param settings The settings object
+     */
+    public static void onGeneratedNewSettings(Settings settings) {
+        // If something went wrong with the setup
+        if (settings.buildingCategory == null ||
+                settings.buildingCategory == BuildingCategory.NONE ||
+                settings.vibrationCategory == null ||
+                settings.vibrationCategory == VibrationCategory.NONE) {
+            throw new IllegalArgumentException("Our settings file contained incomplete values.");
+        }
+
+        // If we are currently measuring
+        if (DataHandler.isCurrentlyMeasuring()) {
+            System.out.println("We are measuring. Do not change the settings.");
+            return;
+        }
+
+        getCurrentMeasurement().settings = settings;
+    }
+
+    /**
      * This gets called by the {@link DataHandler} if we exceed a limit.
      * The frontend should refer to this function in some way.
-     * TODO Link this to the frontend.
+     * TODO Make this an event for the frontend?
      */
     public static void onExceedLimit() {
         System.out.println("Exceeded limit!");

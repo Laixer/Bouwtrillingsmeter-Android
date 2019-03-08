@@ -26,33 +26,4 @@ public class Settings {
         vibrationSensitive = false;
     }
 
-    /**
-     * Creates a settings file based on the category settings page
-     * Accessible via Settings.settings
-     *
-     * @param buildingCategory   The building category as enum
-     * @param vibrationCategory  The vibration category as enum
-     * @param vibrationSensitive A boolean indicating if we are dealing with a vibration sensitive building
-     */
-    public void overwriteSettingsFromCategoryPage(BuildingCategory buildingCategory, VibrationCategory vibrationCategory, boolean vibrationSensitive) {
-        buildingCategory = buildingCategory;
-        vibrationCategory = vibrationCategory;
-        vibrationSensitive = vibrationSensitive;
-    }
-
-    /**
-     * Creates a settings file based on the outcome of a widget
-     * Accessible via Settings.settings
-     * TODO Implement this
-     *
-     * @param answers A boolean array representing the answers to each widget page
-     */
-    public void overwriteSettingsFromWidget(boolean[] answers) {
-        boolean betonMetselwerkGevelbekleding = answers[0];
-        boolean monumentBeschermdStadsgezicht = answers[1];
-        boolean afkomstigVanGegevenBronnen = answers[2];
-        boolean funderingHoutOfStaal = answers[3];
-    }
-
-
 }

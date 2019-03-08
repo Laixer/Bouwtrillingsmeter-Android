@@ -1,5 +1,4 @@
 Nu:
-TODO Frontend ding met settings even rechttrekken
 
 Daarna:
 TODO Calculations: kloppen deze wel???
