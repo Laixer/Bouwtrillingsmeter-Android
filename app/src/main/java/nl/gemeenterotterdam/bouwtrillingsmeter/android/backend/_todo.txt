@@ -1,7 +1,10 @@
-Structure
-TODO General backend structure
+Nu:
+TODO Frontend ding met settings even rechttrekken
+
+TODO Calculations async
+TODO Calculations: kloppen deze wel???
+TODO
 TODO Hoe gaan we om met een gepasseerd interval zonder dat er een datapoint binnen komt? Dit wordt niet gecalld dan!
-TODO Rethink generic structure within DataPoint
 TODO Wat als er geen accelerometer is?
 
 Storage & bitmaps
