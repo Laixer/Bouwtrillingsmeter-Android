@@ -22,12 +22,15 @@ public class DataInterval {
     public int[] maxFrequencies;
     public DominantFrequencies dominantFrequencies;
 
+    private boolean isLockedByThread;
+
     /**
      * Constructor
      */
     public DataInterval() {
         dataPoints = new ArrayList<DataPoint<Date>>();
         dateStart = Calendar.getInstance().getTime();
+        isLockedByThread = false;
     }
 
     /**
@@ -46,6 +49,52 @@ public class DataInterval {
      */
     public void onIntervalEnd() {
         dateEnd = Calendar.getInstance().getTime();
+    }
+
+    /**
+     * Checks if we have exceeded any limits within our interval.
+     * The checks are done on the {@link #dominantFrequencies}.
+     *
+     * @return True if we have exceeded any limits.
+     */
+    public boolean isExceedingLimit() {
+        for (boolean bool : dominantFrequencies.exceedsLimit) {
+           if (bool == true) {
+               return true;
+           }
+        }
+
+        return false;
+    }
+
+    /**
+     * This locks our object when the calculations thread is working on it.
+     */
+    public void onThreadCalculationsStart() {
+        isLockedByThread = true;
+    }
+
+    /**
+     * This unlocks our object when the calculation thread is done with it.
+     */
+    public void onThreadCalculationsEnd() {
+        isLockedByThread = false;
+    }
+
+    /**
+     * This will clear our {@link #dataPoints} array.
+     * A clear is only performed if we are not {@link #isLockedByThread}.
+     * This is done to save memory and prevent sending large files across the internet.
+     */
+    public boolean deleteDataPoints() {
+        if (isLockedByThread) {
+            return false;
+        }
+
+        else {
+            dataPoints = new ArrayList<DataPoint<Date>>();
+            return true;
+        }
     }
 
 }

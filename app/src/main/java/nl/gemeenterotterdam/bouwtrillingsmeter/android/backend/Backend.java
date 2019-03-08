@@ -17,11 +17,10 @@ public class Backend {
      */
     public static void initialize() {
         MeasurementControl.initialize();
+        AccelerometerControl.initialize();
 
         // TODO DEBUG Remove this
         MeasurementControl.setDebugMeasurementList();
-
-        AccelerometerControl.initialize();
     }
 
     /**
@@ -88,5 +87,14 @@ public class Backend {
      */
     public static Measurement getCurrentMeasurement() {
         return MeasurementControl.getCurrentMeasurement();
+    }
+
+    /**
+     * This gets called by the {@link DataHandler} if we exceed a limit.
+     * The frontend should refer to this function in some way.
+     * TODO Link this to the frontend.
+     */
+    public static void onExceedLimit() {
+        System.out.println("Exceeded limit!");
     }
 }
