@@ -68,7 +68,7 @@ class DataHandler {
      * This is because {@link #performIntervalCalculations(DataInterval)} is done in a separate thread.
      * In this way we can work thread safe.
      * <p>
-     * How many data will be saved is determined by {@link Constants#saveDataIntervalsBeforeExceeding}
+     * How many data intervals will be saved is determined by {@link Constants#saveDataIntervalsBeforeExceeding}
      * and by {@link Constants#saveDataIntervalsBeforeExceeding}.
      */
     private static void clearAbundantDataPoints() {
