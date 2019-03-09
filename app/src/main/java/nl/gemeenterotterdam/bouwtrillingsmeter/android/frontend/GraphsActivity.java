@@ -35,11 +35,11 @@ public class GraphsActivity extends AppCompatActivity {
 
         // TODO Debug this creates graphs
         graphs = new Graph[5];
-        graphs[0] = new Graph("Graph 1!","Horizontal","Vertical");
-        graphs[1] = new Graph("Graph 2!","Horizontal","Vertical");
-        graphs[2] = new Graph("Graph 3!","Horizontal","Vertical");
-        graphs[3] = new Graph("Graph 4!","Horizontal","Vertical");
-        graphs[4] = new Graph("Graph 5!","Horizontal","Vertical");
+        graphs[0] = new Graph("Graph 1","Horizontal","Vertical");
+        graphs[1] = new Graph("Graph 2","Horizontal","Vertical");
+        graphs[2] = new Graph("Graph 3","Horizontal","Vertical");
+        graphs[3] = new Graph("Graph 4","Horizontal","Vertical");
+        graphs[4] = new Graph("Graph 5","Horizontal","Vertical");
 
         // Viewpager for the tutorial
         // Also link the adapter

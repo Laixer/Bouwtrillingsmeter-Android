@@ -21,12 +21,13 @@ public class Graph {
     /**
      * TODO This is for debug purposes
      *
-     * @return A series of 10 random data points
+     * @return A series of 100 random data points
      */
     public LineGraphSeries<DataPoint> getAsSeries() {
-        DataPoint[] dataPoints = new DataPoint[10];
-        for (int i = 0; i < dataPoints.length; i++) {
-            dataPoints[i] = new DataPoint(i, Math.random() * 5);
+        DataPoint[] dataPoints = new DataPoint[101];
+        dataPoints[0] = new DataPoint(0, 0.5);
+        for (int i = 1; i < dataPoints.length; i++) {
+            dataPoints[i] = new DataPoint(i, dataPoints[i-1].getY() + (-0.5 + Math.random()) * 0.05);
         }
         return new LineGraphSeries<DataPoint>(dataPoints);
     }

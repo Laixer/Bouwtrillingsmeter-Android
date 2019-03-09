@@ -1,22 +1,21 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
-
-import org.w3c.dom.Text;
+import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.Viewport;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
-public class GraphSlideAdapter  extends PagerAdapter {
+public class GraphSlideAdapter extends PagerAdapter {
 
 
     private Graph[] graphs;
@@ -25,6 +24,7 @@ public class GraphSlideAdapter  extends PagerAdapter {
 
     /**
      * Constructor for this adapter
+     *
      * @param context The context
      */
     public GraphSlideAdapter(Context context, Graph[] graphs) {
@@ -54,7 +54,7 @@ public class GraphSlideAdapter  extends PagerAdapter {
         // Assign variables
         Graph graph = graphs[position];
         textViewName.setText(graph.getName());
-        graphView.addSeries(graph.getAsSeries());
+        setAllGraphViewProperties(graphView, graph);
 
         // Add and return
         container.addView(view);
@@ -65,5 +65,35 @@ public class GraphSlideAdapter  extends PagerAdapter {
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         View view = (View) object;
         container.removeView(view);
+    }
+
+    /**
+     * This sets a bunch of properties on our graph view.
+     * This is placed in a function to clean up the {@link #instantiateItem(ViewGroup, int)} function.
+     *
+     * @param graphView
+     */
+    private void setAllGraphViewProperties(GraphView graphView, Graph graph) {
+        // Series and line styling
+        LineGraphSeries series = graph.getAsSeries();
+        series.setThickness(4);
+        series.setColor(Utility.ApplicationContext.getResources().getColor(R.color.colorPrimary));
+        graphView.addSeries(series);
+
+        // Scaling
+        Viewport viewport = graphView.getViewport();
+        viewport.setScalable(true);
+        viewport.setScalableY(true);
+        viewport.setScrollable(true);
+        viewport.setScrollableY(true);
+
+        // Text and names
+        // graphView.setTitle(graph.getName()); This is done with a separate label because it looked ugly
+
+        GridLabelRenderer gridLabelRenderer = graphView.getGridLabelRenderer();
+        graphView.setPadding(0, 0, 0, 0);
+        gridLabelRenderer.setHorizontalAxisTitle(graph.getTextAxisHorizontal());
+        gridLabelRenderer.setVerticalAxisTitle(graph.getTextAxisVertical());
+        gridLabelRenderer.setPadding(40);
     }
 }
