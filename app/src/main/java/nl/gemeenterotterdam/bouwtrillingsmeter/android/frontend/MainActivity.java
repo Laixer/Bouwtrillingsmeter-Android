@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
      * This also gets fired when the tutorial finishes.
      */
     public void onClickCreateNewMeasurement() {
-        Backend.createNewMeasurement();
+        Backend.onClickCreateNewMeasurement();
 
         // If we are in our first visit
         if (GlobalVariables.firstVisit) {

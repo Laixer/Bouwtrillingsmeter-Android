@@ -8,6 +8,8 @@ import java.util.ArrayList;
  * <p>
  * This is used as a main communication unit between the frontend and the backend
  * This will initialize all backend components in one go by firing {@link #initialize()}.
+ * <p>
+ * TODO Consistency with where we put the edge cases (exception throwers) in the backend state.
  */
 public class Backend {
 
@@ -18,21 +20,13 @@ public class Backend {
      * Initialize the backend.
      */
     public static void initialize() {
-        backendState = BackendState.BEFORE_MEASURING;
         backendStateListeners = new ArrayList<BackendStateListener>();
 
         MeasurementControl.initialize();
         AccelerometerControl.initialize();
         DataHandler.initialize();
-    }
 
-    /**
-     * This gets the backend state as an {@link BackendState} enum.
-     *
-     * @return The backend state.
-     */
-    static BackendState getBackendState() {
-        return backendState;
+        onChangeBackendState(BackendState.BROWSING_APP);
     }
 
     /**
@@ -57,16 +51,35 @@ public class Backend {
 
         BackendState oldState = backendState;
         switch (newState) {
-            case BEFORE_MEASURING:
+            case BROWSING_APP:
+                break;
+
+            case PREPARING_MEASUREMENT:
+                MeasurementControl.createNewMeasurement();
                 break;
 
             case AWAITING_PHONE_FLAT:
+
                 break;
 
             case MEASURING:
+                // Edge cases
+                if (MeasurementControl.getCurrentMeasurement() == null) {
+                    throw new IllegalStateException("No measurement object was present.");
+                }
+
+                if (MeasurementControl.getCurrentMeasurement().isClosed()) {
+                    throw new IllegalStateException("The current measurement object is already closed. No more data can be added.");
+                }
+
+                // Start the measurement
+                MeasurementControl.getCurrentMeasurement().onStartMeasuring();
+                DataHandler.startMeasuring();
                 break;
 
-            case MEASURING_END:
+            case MEASUREMENT_END:
+                DataHandler.stopMeasuring();
+                MeasurementControl.getCurrentMeasurement().onStopMeasuring();
                 break;
         }
 
@@ -80,54 +93,42 @@ public class Backend {
     }
 
     /**
-     * This gets called when the application is opened
-     * TODO Implement reading every serialized object in here
+     * TODO Javadoc
      */
-    public static void onApplicationStartup() {
-
-    }
-
-    /**
-     * This gets called when the application is shut down
-     */
-    public static void onApplicationShutdown() {
-        MeasurementControl.onApplicationShutdown();
-    }
-
-    /**
-     * This creates a new measurement.
-     * This gets called by the + sign.
-     */
-    public static void createNewMeasurement() {
-        if (!MeasurementControl.getCurrentMeasurement().isClosed()) {
+    public static void onClickCreateNewMeasurement() {
+        if (MeasurementControl.getCurrentMeasurement() != null && !MeasurementControl.getCurrentMeasurement().isClosed()) {
             throw new IllegalStateException("Our current measurement object is still measuring! Creating a new measurement is not allowed.");
         }
 
-        MeasurementControl.createNewMeasurement();
+        onChangeBackendState(BackendState.PREPARING_MEASUREMENT);
     }
 
     /**
-     * This starts the current measurement.
+     * TODO Javadoc
      */
-    public static void startMeasuring() {
-        // Edge cases
-        if (MeasurementControl.getCurrentMeasurement() == null) {
-            throw new IllegalStateException("No measurement object was present.");
-        }
+    public static void onClickCompleteSettingsSetup() {
+        onChangeBackendState(BackendState.AWAITING_PHONE_FLAT);
+    }
 
-        if (MeasurementControl.getCurrentMeasurement().isClosed()) {
-            throw new IllegalStateException("The current measurement object is already closed. No more data can be added.");
-        }
+    /**
+     * This attempts to end the measurement.
+     */
+    public static void onPickUpPhoneWhileMeasuring() {
+        onChangeBackendState(BackendState.MEASUREMENT_END);
+    }
 
-        // Start the measurement
-        MeasurementControl.getCurrentMeasurement().onStartMeasuring();
-        DataHandler.startMeasuring();
+    /**
+     * This gets called when the user presses the back button or something like that.
+     * TODO Implement some kind of catch mechanism, maybe a popup message?
+     */
+    public static void onUserForceStopMeasurement() {
+        onChangeBackendState(BackendState.MEASUREMENT_END);
     }
 
     /**
      * This stops the current measurement.
      */
-    public static void stopMeasuring() {
+    protected static void stopMeasuring() {
         // Edge cases
         if (MeasurementControl.getCurrentMeasurement() == null) {
             throw new IllegalStateException("No measurement object was present.");
@@ -137,8 +138,7 @@ public class Backend {
             throw new IllegalStateException("The current measurement object is already closed. Closing it again is not possible.");
         }
 
-        DataHandler.stopMeasuring();
-        MeasurementControl.getCurrentMeasurement().onStopMeasuring();
+        onChangeBackendState(BackendState.MEASUREMENT_END);
     }
 
     /**
@@ -180,8 +180,8 @@ public class Backend {
         }
 
         // If we are in the wrong state
-        if (backendState != BackendState.BEFORE_MEASURING) {
-            throw new IllegalStateException("We are in the BEFORE_MEASURING state. No settings object can be created at the moment.");
+        if (backendState != BackendState.PREPARING_MEASUREMENT) {
+            throw new IllegalStateException("We are in the PREPARING_MEASUREMENT state. No settings object can be created at the moment.");
         }
 
         getCurrentMeasurement().settings = settings;
@@ -192,7 +192,14 @@ public class Backend {
      * The frontend should refer to this function in some way.
      * TODO Make this an event for the frontend?
      */
-    public static void onExceedLimit() {
+    protected static void onExceedLimit() {
         System.out.println("Exceeded limit!");
+    }
+
+    /**
+     * TODO Remove this debug function.
+     */
+    public static void debugOnPhoneFlat() {
+        onChangeBackendState(BackendState.MEASURING);
     }
 }

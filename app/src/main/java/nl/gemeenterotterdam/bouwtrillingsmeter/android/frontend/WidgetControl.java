@@ -32,11 +32,13 @@ public class WidgetControl {
     /**
      * This completes and closes the widget
      * TODO Disable back button flowing back into the widget
+     * TODO Save these settings to the category page.
      *
      * @param from The activity from which we are being called
      */
     public static void ConfirmWidget(Activity from) {
-
+        Intent intent = new Intent(from.getApplicationContext(), CategoryPageActivity.class);
+        from.startActivity(intent);
     }
 
     /**

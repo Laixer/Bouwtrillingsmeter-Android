@@ -1,9 +1,16 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
+/**
+ * @author Thomas Beckers
+ * @since 1.0
+ * <p>
+ * This enum indicates the state of the backend.
+ */
 public enum BackendState {
     NONE,
-    BEFORE_MEASURING,
+    BROWSING_APP,
+    PREPARING_MEASUREMENT,
     AWAITING_PHONE_FLAT,
     MEASURING,
-    MEASURING_END
+    MEASUREMENT_END
 }

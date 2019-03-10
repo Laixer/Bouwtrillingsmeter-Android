@@ -84,7 +84,7 @@ public class MeasuringActivity extends AppCompatActivity implements Acceleromete
         if (isMeasuring) {
             textViewMeasuringCenter.setText(getResources().getString(R.string.measuring_measuring_now));
             buttonMeasuringShowGraphs.setVisibility(View.VISIBLE);
-            Backend.startMeasuring();
+            Backend.debugOnPhoneFlat();
         }
 
         // Place device on table state
@@ -122,6 +122,6 @@ public class MeasuringActivity extends AppCompatActivity implements Acceleromete
      * TODO Remove this debug function
      */
     public void onClickDebugStopMeasuring() {
-        Backend.stopMeasuring();
+        Backend.onPickUpPhoneWhileMeasuring();
     }
 }
