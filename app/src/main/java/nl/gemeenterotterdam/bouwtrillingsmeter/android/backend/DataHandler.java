@@ -13,8 +13,6 @@ import java.util.Date;
  * Data is received in the form of a {@link DataPoint}.
  * The collection and measurements are stored in a {@link DataInterval} object.
  * These intervals are stored within a {@link Measurement} object.
- * <p>
- * TODO Check if the pass by value structure of Java does what we want it to do here
  */
 class DataHandler {
 
@@ -51,13 +49,16 @@ class DataHandler {
      * A new DataInterval object is created.
      * This also calls {@link #clearAbundantDataPoints()}.
      * This also calls {@link Backend#onExceedLimit()}.
+     * This also calls {@link #performIntervalCalculations(DataInterval)}.
      */
     private static void onStartNewInterval() {
         // Create and add our new interval
         if (currentDataInterval != null) {
             currentDataInterval.onIntervalEnd();
+            performIntervalCalculations(currentDataInterval);
             MeasurementControl.getCurrentMeasurement().addDataInterval(currentDataInterval);
         }
+
 
         // Check if we exceed any limits
         if (currentDataInterval.isExceedingLimit()) {

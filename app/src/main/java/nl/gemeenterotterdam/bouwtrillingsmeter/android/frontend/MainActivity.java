@@ -85,9 +85,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // TODO debug remove this
-        showcaseFirstVisit();
-        Intent intent = new Intent(getApplicationContext(), GraphsActivity.class);
-        startActivity(intent);
+        // showcaseFirstVisit();
     }
 
     @Override

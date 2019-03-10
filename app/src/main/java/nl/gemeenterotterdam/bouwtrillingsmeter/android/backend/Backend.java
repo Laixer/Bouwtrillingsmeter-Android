@@ -18,9 +18,6 @@ public class Backend {
     public static void initialize() {
         MeasurementControl.initialize();
         AccelerometerControl.initialize();
-
-        // TODO DEBUG Remove this
-        MeasurementControl.setDebugMeasurementList();
     }
 
     /**

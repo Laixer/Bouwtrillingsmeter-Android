@@ -1,4 +1,5 @@
 Nu:
+TODO De app functioneel maken.
 
 Daarna:
 TODO Calculations: kloppen deze wel???

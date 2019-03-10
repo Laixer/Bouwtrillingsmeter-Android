@@ -11,6 +11,7 @@ import android.widget.TextView;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.AccelerometerControl;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.AccelerometerListener;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 
 /**
  * @author Thomas Beckers
@@ -53,12 +54,19 @@ public class MeasuringActivity extends AppCompatActivity implements Acceleromete
 
         // DEBUG
         // TODO Remove this
-        Button buttonDebug = (Button) findViewById(R.id.buttonDebugDeciveOnTable);
-        buttonDebug.setOnClickListener(new View.OnClickListener() {
+        Button buttonDebugFlat = (Button) findViewById(R.id.buttonDebugDeciveOnTable);
+        buttonDebugFlat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isMeasuring = !isMeasuring;
                 ChangePageToState();
+            }
+        });
+        Button buttonDebugStopMeasuring = (Button) findViewById(R.id.buttonDebugStopMeasuring);
+        buttonDebugStopMeasuring.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickDebugStopMeasuring();
             }
         });
         AccelerometerControl.addListener(this);
@@ -76,6 +84,7 @@ public class MeasuringActivity extends AppCompatActivity implements Acceleromete
         if (isMeasuring) {
             textViewMeasuringCenter.setText(getResources().getString(R.string.measuring_measuring_now));
             buttonMeasuringShowGraphs.setVisibility(View.VISIBLE);
+            Backend.startMeasuring();
         }
 
         // Place device on table state
@@ -107,5 +116,12 @@ public class MeasuringActivity extends AppCompatActivity implements Acceleromete
         textViewMeasuringDebugX.setText(Float.toString(x));
         textViewMeasuringDebugY.setText(Float.toString(y));
         textViewMeasuringDebugZ.setText(Float.toString(z));
+    }
+
+    /**
+     * TODO Remove this debug function
+     */
+    public void onClickDebugStopMeasuring() {
+        Backend.stopMeasuring();
     }
 }
