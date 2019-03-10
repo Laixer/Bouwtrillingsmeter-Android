@@ -80,7 +80,7 @@ public class MeasuringActivity extends AppCompatActivity implements Acceleromete
      * If isMeasuring: True if we are measuring, false if we are waiting for the device to be placed on the table
      */
     private void ChangePageToState() {
-        // MeasuringActivity state
+        // Measuring state
         if (isMeasuring) {
             textViewMeasuringCenter.setText(getResources().getString(R.string.measuring_measuring_now));
             buttonMeasuringShowGraphs.setVisibility(View.VISIBLE);
@@ -112,7 +112,7 @@ public class MeasuringActivity extends AppCompatActivity implements Acceleromete
      * @param z The acceleration in the z direction.
      */
     @Override
-    public void onReceivedData(float x, float y, float z) {
+    public void onReceivedDataRenamed(float x, float y, float z) {
         textViewMeasuringDebugX.setText(Float.toString(x));
         textViewMeasuringDebugY.setText(Float.toString(y));
         textViewMeasuringDebugZ.setText(Float.toString(z));

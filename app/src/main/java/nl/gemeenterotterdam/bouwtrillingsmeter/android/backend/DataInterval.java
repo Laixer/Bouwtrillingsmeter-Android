@@ -13,6 +13,7 @@ import java.util.Date;
  */
 public class DataInterval {
 
+    public int index;
     public ArrayList<DataPoint<Date>> dataPoints;
     public Date dateStart;
     public Date dateEnd;
@@ -27,7 +28,9 @@ public class DataInterval {
     /**
      * Constructor
      */
-    public DataInterval() {
+    public DataInterval(int index) {
+        this.index = index;
+
         dataPoints = new ArrayList<DataPoint<Date>>();
         dateStart = Calendar.getInstance().getTime();
         isLockedByThread = false;
@@ -54,10 +57,27 @@ public class DataInterval {
     /**
      * Checks if we have exceeded any limits within our interval.
      * The checks are done on the {@link #dominantFrequencies}.
+     * TODO Remove the debug thingy with chance.
      *
      * @return True if we have exceeded any limits.
      */
     public boolean isExceedingLimit() {
+        if (index == 10) {
+            return true;
+        } else {
+            return false;
+        }
+
+        /**
+        if (dominantFrequencies == null) {
+            double chance = Math.random();
+            if (chance < 0.1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         for (boolean bool : dominantFrequencies.exceedsLimit) {
            if (bool == true) {
                return true;
@@ -65,6 +85,7 @@ public class DataInterval {
         }
 
         return false;
+         */
     }
 
     /**
@@ -86,13 +107,13 @@ public class DataInterval {
      * A clear is only performed if we are not {@link #isLockedByThread}.
      * This is done to save memory and prevent sending large files across the internet.
      */
-    public boolean deleteDataPoints() {
+    public boolean attemptDeleteDataPoints() {
         if (isLockedByThread) {
             return false;
         }
 
         else {
-            dataPoints = new ArrayList<DataPoint<Date>>();
+            dataPoints.clear();
             return true;
         }
     }

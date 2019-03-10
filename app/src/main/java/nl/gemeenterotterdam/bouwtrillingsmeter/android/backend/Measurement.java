@@ -78,6 +78,13 @@ public class Measurement implements Serializable {
     }
 
     /**
+     * Saves our current start time.
+     */
+    public void onStartMeasuring() {
+        dateStart = Calendar.getInstance().getTime();
+    }
+
+    /**
      * Called when we stop the measuring.
      * This saves our end time.
      */

@@ -14,13 +14,31 @@ import java.util.Date;
  * The collection and measurements are stored in a {@link DataInterval} object.
  * These intervals are stored within a {@link Measurement} object.
  */
-class DataHandler {
+class DataHandler implements AccelerometerListener {
 
     private static boolean currentlyMeasuring;
     private static DataInterval currentDataInterval;
     private static int currentDataIntervalIndex;
     private static int lastExceedingIndex;
     private static ArrayList<Integer> indexesToBeCleared;
+
+    /**
+     * This is used as a workaround to implement the {@link AccelerometerListener} interface
+     * in a static context.
+     */
+    private static DataHandler listenerInstance;
+
+    /**
+     * Initializes this static class.
+     * This adds this class as an accelerometer listener.
+     * Call {@link AccelerometerControl#initialize()} first!
+     */
+    public static void initialize() {
+        currentlyMeasuring = false;
+        currentDataInterval = null;
+        listenerInstance = new DataHandler();
+        AccelerometerControl.addListener(listenerInstance);
+    }
 
     /**
      * Check if we are measuring right now.
@@ -37,39 +55,39 @@ class DataHandler {
      * via the MeasurementControl.getCurrentMeasurement().
      */
     public static void startMeasuring() {
+        // Give an error if we have no measurement object
+        if (MeasurementControl.getCurrentMeasurement() == null) {
+            throw new NullPointerException("We have no current measurement object!");
+        }
+
         currentlyMeasuring = true;
         currentDataIntervalIndex = 0;
         lastExceedingIndex = -1;
         indexesToBeCleared = new ArrayList<Integer>();
-        onStartNewInterval();
+        currentDataInterval = new DataInterval(currentDataIntervalIndex);
+
+        MeasurementControl.getCurrentMeasurement().onStartMeasuring();
     }
 
     /**
      * This gets called when a new interval starts.
      * A new DataInterval object is created.
+     * <p>
      * This also calls {@link #clearAbundantDataPoints()}.
-     * This also calls {@link Backend#onExceedLimit()}.
      * This also calls {@link #performIntervalCalculations(DataInterval)}.
+     * This does not check if we exceed limits. This is done
+     * async in the {@link #performIntervalCalculations(DataInterval)} function.
      */
     private static void onStartNewInterval() {
         // Create and add our new interval
-        if (currentDataInterval != null) {
-            currentDataInterval.onIntervalEnd();
-            performIntervalCalculations(currentDataInterval);
-            MeasurementControl.getCurrentMeasurement().addDataInterval(currentDataInterval);
-        }
+        currentDataInterval.onIntervalEnd();
+        performIntervalCalculations(currentDataInterval);
+        MeasurementControl.getCurrentMeasurement().addDataInterval(currentDataInterval);
 
-
-        // Check if we exceed any limits
-        if (currentDataInterval.isExceedingLimit()) {
-            lastExceedingIndex = currentDataIntervalIndex;
-            Backend.onExceedLimit();
-        }
-
-        // Clear abundant datapoints in our CURRENT measurement.
+        // Clear abundant datapoints in our current measurement.
         clearAbundantDataPoints();
 
-        currentDataInterval = new DataInterval();
+        currentDataInterval = new DataInterval(currentDataIntervalIndex);
         currentDataIntervalIndex += 1;
     }
 
@@ -81,30 +99,42 @@ class DataHandler {
      * <p>
      * How many data intervals will be saved is determined by {@link Constants#saveDataIntervalsBeforeExceeding}
      * and by {@link Constants#saveDataIntervalsBeforeExceeding}.
+     * <p>
+     * TODO First interval and last x intervals are never cleared.
      */
     private static void clearAbundantDataPoints() {
         // See which indexes have to be cleared
         int indexSafeInterval = Constants.saveDataIntervalsBeforeExceeding + Constants.saveDataIntervalsAfterExceeding;
-        int indexSafeBefore = Math.min(0, lastExceedingIndex - Constants.saveDataIntervalsBeforeExceeding);
+        int indexSafeBefore = Math.max(0, lastExceedingIndex - Constants.saveDataIntervalsBeforeExceeding);
         int indexSafeAfter = lastExceedingIndex + Constants.saveDataIntervalsAfterExceeding;
 
-        int indexLookingAt = Math.min(0, currentDataIntervalIndex - indexSafeInterval);
-        if (indexLookingAt < indexSafeBefore || indexLookingAt > indexSafeAfter) {
+        int indexLookingAt = Math.max(0, currentDataIntervalIndex - indexSafeInterval);
+        if (lastExceedingIndex != -1 && indexLookingAt < indexSafeBefore || indexLookingAt > indexSafeAfter) {
             indexesToBeCleared.add(indexLookingAt);
         }
 
-        // Attempt to clear all that have to be cleared
+        // Attempt to clear all that has to be cleared
         ArrayList<DataInterval> dataIntervals = MeasurementControl.getCurrentMeasurement().dataIntervals;
+        ArrayList<Integer> indexesClearedSuccessfully = new ArrayList<Integer>();
         for (int index : indexesToBeCleared) {
-            if (dataIntervals.get(index).deleteDataPoints()) {
-                dataIntervals.remove(index);
+            if (dataIntervals.get(index).attemptDeleteDataPoints()) {
+                indexesClearedSuccessfully.add(index);
             }
+        }
+
+        // Remove all cleared indexes in a clean way
+        // Just putting remove(index) would not work
+        for (int index : indexesClearedSuccessfully) {
+            indexesToBeCleared.remove(new Integer(index));
         }
     }
 
     /**
      * This performs all calculations on the data within an interval.
      * All these calculations are done within their own thread.
+     * <p>
+     * This also checks if we exceeded any limit.
+     * If so, this calls {@link Backend#onExceedLimit()}.
      * TODO Will this break if we attempt to delete any datapoints while calculations are in progress?
      *
      * @param dataInterval The data interval.
@@ -116,9 +146,13 @@ class DataHandler {
             return;
         }
 
+        // Create a thread for all calculations
         final DataInterval thisDataInterval = dataInterval;
         new Thread(new Runnable() {
             public void run() {
+                // Lock dataInterval
+                thisDataInterval.onThreadCalculationsStart();
+
                 // Trigger all calculations
                 float[] maxAccelerations = Calculator.maxValueInArray(thisDataInterval.dataPoints);
 
@@ -137,6 +171,15 @@ class DataHandler {
                 thisDataInterval.dominantFrequencies = dominantFrequencies;
                 thisDataInterval.maxFrequencies = maxFrequencies;
                 thisDataInterval.maxVelocities = maxVelocities;
+
+                // Check if we exceed any limits
+                if (thisDataInterval.isExceedingLimit()) {
+                    lastExceedingIndex = thisDataInterval.index;
+                    Backend.onExceedLimit();
+                }
+
+                // Unlock this data interval
+                thisDataInterval.onThreadCalculationsEnd();
             }
         }).start();
     }
@@ -145,17 +188,24 @@ class DataHandler {
      * Gets called by the accellerometer hardware listener.
      * If our interval has passed, a new interval is created.
      * In this case the datapoint gets added to the new interval.
-     *
-     * @param dataPoint The datapoint that was created
      */
-    public static void onReceiveDataPoint(DataPoint<Date> dataPoint) {
-        // Check if our interval has passed.
-        // Date.getTime() returns total time in milliseconds.
-        if (MeasurementControl.getCurrentMeasurement().dateStart.getTime() + Constants.intervalInMilliseconds >= Calendar.getInstance().getTime().getTime()) {
-            onStartNewInterval();
-        }
+    @Override
+    public void onReceivedDataRenamed(float x, float y, float z) {
+        // If we are measuring
+        if (isCurrentlyMeasuring() && currentDataInterval != null) {
+            // Check if our interval has passed.
+            // Date.getTime() returns total time in milliseconds.
+            long timePassed = -currentDataInterval.dateStart.getTime() + Calendar.getInstance().getTime().getTime();
+            long interval = Constants.intervalInMilliseconds;
 
-        currentDataInterval.addDataPoint(dataPoint);
+            if (timePassed > interval) {
+                onStartNewInterval();
+            }
+
+            // Push the data
+            DataPoint<Date> dataPoint = new DataPoint<>(new Date(), x, y, z);
+            currentDataInterval.addDataPoint(dataPoint);
+        }
     }
 
     /**
@@ -167,7 +217,6 @@ class DataHandler {
         }
 
         currentlyMeasuring = false;
-        MeasurementControl.getCurrentMeasurement().onStopMeasuring();
     }
 
 }

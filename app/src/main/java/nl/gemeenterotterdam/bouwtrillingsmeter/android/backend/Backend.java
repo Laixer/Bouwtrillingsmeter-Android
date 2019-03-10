@@ -18,6 +18,7 @@ public class Backend {
     public static void initialize() {
         MeasurementControl.initialize();
         AccelerometerControl.initialize();
+        DataHandler.initialize();
     }
 
     /**
@@ -64,6 +65,7 @@ public class Backend {
      */
     public static void stopMeasuring() {
         DataHandler.stopMeasuring();
+        MeasurementControl.getCurrentMeasurement().onStopMeasuring();
     }
 
     /**

@@ -33,4 +33,21 @@ public class DataPoint<X> {
         this.values = values;
     }
 
+    /**
+     * Constructor
+     *
+     * @param domain The domain, being of type a Date (time domain) or float[x, y, z] (frequency domain)
+     * @param x Data x
+     * @param y Data y
+     * @param z Data z
+     */
+    public DataPoint(X domain, float x, float y, float z) {
+        this.domain = domain;
+        float[] values = new float[3];
+        values[0] = x;
+        values[1] = y;
+        values[2] = z;
+        this.values = values;
+    }
+
 }
