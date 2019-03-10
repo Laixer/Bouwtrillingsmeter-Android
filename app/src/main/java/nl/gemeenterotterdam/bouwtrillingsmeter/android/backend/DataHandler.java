@@ -65,8 +65,6 @@ class DataHandler implements AccelerometerListener {
         lastExceedingIndex = -1;
         indexesToBeCleared = new ArrayList<Integer>();
         currentDataInterval = new DataInterval(currentDataIntervalIndex);
-
-        MeasurementControl.getCurrentMeasurement().onStartMeasuring();
     }
 
     /**

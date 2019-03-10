@@ -33,6 +33,8 @@ public class Measurement implements Serializable {
     private String description;
     private Bitmap photo;
 
+    private boolean closed;
+
     /**
      * Simplified constructor for this class
      */
@@ -48,19 +50,21 @@ public class Measurement implements Serializable {
      */
     public Measurement(String name) {
         // Generate a random uid for this measurement
-        this.uid = UUID.randomUUID().toString();
+        uid = UUID.randomUUID().toString();
 
         // Link all data
         // Also create default data
-        this.name = name;
-        this.datetime = "15-02-2019 20:23";
-        this.location = "Grote Markt, Delft";
-        this.description = "Een hele mooie omschrijving jawel!";
-        this.photo = null;
+        name = name;
+        datetime = "15-02-2019 20:23";
+        location = "Grote Markt, Delft";
+        description = "Een hele mooie omschrijving jawel!";
+        photo = null;
 
         // Create public variables
-        this.settings = new Settings();
-        this.dataIntervals = new ArrayList<DataInterval>();
+        settings = new Settings();
+        dataIntervals = new ArrayList<DataInterval>();
+
+        closed = false;
     }
 
     /**
@@ -90,6 +94,15 @@ public class Measurement implements Serializable {
      */
     public void onStopMeasuring() {
         dateEnd = Calendar.getInstance().getTime();
+    }
+
+    /**
+     * Checks if we have already closed our measurement.
+     *
+     * @return True if the measurement has already been closed.
+     */
+    public boolean isClosed() {
+        return closed;
     }
 
     /**
