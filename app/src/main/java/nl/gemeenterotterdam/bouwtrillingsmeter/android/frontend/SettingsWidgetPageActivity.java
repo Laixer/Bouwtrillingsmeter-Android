@@ -15,7 +15,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
  * @since 1.0
  * <p>
  * This class represents a single widget page.
- * These pages are handled by the {@link SettingsWidgetControl} class.
+ * These pages are handled by the {@link SettingsPagesControl} class.
  * The displayed text is taken from our application {@link android.content.res.Resources}.
  */
 public class SettingsWidgetPageActivity extends AppCompatActivity {
@@ -53,7 +53,7 @@ public class SettingsWidgetPageActivity extends AppCompatActivity {
         buttonWidgetYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SettingsWidgetControl.onClickYesNo(thisActivity, widgetPageIndex, true);
+                SettingsPagesControl.onClickYesNo(thisActivity, widgetPageIndex, true);
             }
         });
 
@@ -62,7 +62,7 @@ public class SettingsWidgetPageActivity extends AppCompatActivity {
         buttonWidgetNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SettingsWidgetControl.onClickYesNo(thisActivity, widgetPageIndex, false);
+                SettingsPagesControl.onClickYesNo(thisActivity, widgetPageIndex, false);
             }
         });
 

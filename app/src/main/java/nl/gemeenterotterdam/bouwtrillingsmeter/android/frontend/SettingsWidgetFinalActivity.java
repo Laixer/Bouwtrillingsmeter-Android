@@ -13,7 +13,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
  * @since 1.0
  * <p>
  * This is the page where our determined categories are displayed.
- * The widget is controlled by the {@link SettingsWidgetControl} class.
+ * The widget is controlled by the {@link SettingsPagesControl} class.
  * Pressing the 'ok fab' takes us to the {@link MeasuringActivity} page.
  */
 public class SettingsWidgetFinalActivity extends AppCompatActivity {
@@ -34,7 +34,7 @@ public class SettingsWidgetFinalActivity extends AppCompatActivity {
         fabWidgetFinalConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SettingsWidgetControl.confirmWidget(thisActivity);
+                SettingsPagesControl.confirmWidget(thisActivity);
             }
         });
     }

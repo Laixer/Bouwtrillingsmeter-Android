@@ -44,7 +44,7 @@ public class SettingsGenerator {
     }
 
     /**
-     * Overwrites our current settings file based on the outcome our {@link SettingsWidgetControl}.
+     * Overwrites our current settings file based on the outcome our {@link SettingsPagesControl}.
      * This calls the {@link nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend} to attempt to overwrite the settings.
      * TODO Implement this. Remove placeholder Settings parameters.
      *

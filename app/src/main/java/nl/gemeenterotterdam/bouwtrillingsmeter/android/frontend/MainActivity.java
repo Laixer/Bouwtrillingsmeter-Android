@@ -123,11 +123,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * This fires the {@link SettingsWidgetControl} class,
+     * This fires the {@link SettingsPagesControl} class,
      * which then takes us to the settings part of the app.
      */
     public void onClickCreateNewMeasurementFab() {
-        SettingsWidgetControl.onClickNewMeasurementFab(this);
+        SettingsPagesControl.onClickNewMeasurementFab(this);
     }
 
     // Gets called when the clear preference debug button is clicked

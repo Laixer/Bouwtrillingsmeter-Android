@@ -27,8 +27,6 @@ public class SettingsPageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SettingsWidgetControl.settingsPageActivity = this;
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_page);
 
@@ -71,16 +69,23 @@ public class SettingsPageActivity extends AppCompatActivity {
 
         // Switch
         switchVibrationSensitive = (Switch) findViewById(R.id.switchCategoryVibrationSensitive);
+
+        // See if we have any settings created by our widget and push them if so
+        if (SettingsPagesControl.createdSettingsFromWidget != null) {
+            onPushParametersFromWidget(SettingsPagesControl.createdSettingsFromWidget);
+        }
     }
 
     /**
      * This pushes our parameters from the widget once we confirm the widget.
+     * This only works in our {@link #onCreate(Bundle)} method. This has to do
+     * with the adapter, see docs.
      *
      * @param settings The generated settings file.
      */
-    public void onPushParametersFromWidget(Settings settings) {
-        spinnerCategoryBuilding.setSelection(settings.buildingCategory.ordinal());
-        spinnerCategoryVibration.setSelection(settings.vibrationCategory.ordinal());
+    private void onPushParametersFromWidget(Settings settings) {
+        spinnerCategoryBuilding.setSelection(settings.buildingCategory.ordinal(), true);
+        spinnerCategoryVibration.setSelection(settings.vibrationCategory.ordinal(), true);
         switchVibrationSensitive.setChecked(settings.vibrationSensitive);
     }
 
@@ -111,7 +116,7 @@ public class SettingsPageActivity extends AppCompatActivity {
         SettingsGenerator.createSettingsFromCategoryPage(buildingCategory, vibrationCategory, vibrationSensitive);
 
         // Go
-        SettingsWidgetControl.onClickStartMeasurementFab(this);
+        SettingsPagesControl.onClickStartMeasurementFab(this);
     }
 
     /**
@@ -130,7 +135,7 @@ public class SettingsPageActivity extends AppCompatActivity {
      * @param view The view we are in
      */
     public void onClickCategoryIDontKnow(View view) {
-        SettingsWidgetControl.StartWidget(this);
+        SettingsPagesControl.StartWidget(this);
     }
 
     /**

@@ -18,11 +18,11 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Settings;
  * <p>
  * This class does NOT call {@link Backend#onGeneratedNewSettings(Settings)}.
  */
-public class SettingsWidgetControl {
+public class SettingsPagesControl {
 
     private static int widgetPageCount;
     private static boolean[] widgetAnswers;
-    public static SettingsPageActivity settingsPageActivity;
+    public static Settings createdSettingsFromWidget = null;
 
     /**
      * This takes us to the category page activity.
@@ -33,6 +33,8 @@ public class SettingsWidgetControl {
      */
     public static void onClickNewMeasurementFab(Activity from) {
         Backend.onClickCreateNewMeasurement();
+
+        createdSettingsFromWidget = null;
 
         // If we are in our first visit
         if (GlobalVariables.firstVisit) {
@@ -82,11 +84,10 @@ public class SettingsWidgetControl {
      */
     public static void confirmWidget(Activity from) {
         SettingsGenerator.overwriteSettingsFromWidget(widgetAnswers);
+        createdSettingsFromWidget = SettingsGenerator.getCurrentSettings();
 
         Intent intent = new Intent(from.getApplicationContext(), SettingsPageActivity.class);
         from.startActivity(intent);
-
-        settingsPageActivity.onPushParametersFromWidget(SettingsGenerator.getCurrentSettings());
     }
 
     /**
