@@ -1,14 +1,14 @@
 Frontend todos
 
 Nu:
-TODO Grafiek bouwen
+TODO Button outline
 
 Later:
+TODO Grafiek linken aan data!
 TODO Widget één activity gebruiken
 TODO User preferences even goed doen
 TODO Advanced options erin bouwen
 TODO Foto OPSLAAN bij klikken op "foto mist" icon
-TODO Bug weghalen waarbij je altijd terug gaat naar de tutorial via de back button
 TODO Highlight first visit mooi maken
 TODO Wait icon groen -> niet elke API!
 TODO Switch achtergrond ook groen (check API version!)

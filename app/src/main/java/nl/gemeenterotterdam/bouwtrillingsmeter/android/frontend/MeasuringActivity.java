@@ -25,19 +25,13 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
  * When the phone is flat, we begin our measurements.
  * TODO Implement this call to the backend.
  */
-public class MeasuringActivity extends AppCompatActivity implements AccelerometerListener {
+public class MeasuringActivity extends AppCompatActivity {
 
     private Activity thisActivity;
     private TextView textViewMeasuringCenter;
     private Button buttonMeasuringShowGraphs;
     private ProgressBar progressBarMeasuring;
     private boolean isMeasuring;
-
-    // TODO DeBUG Remove this
-    private TextView textViewMeasuringDebugX;
-    private TextView textViewMeasuringDebugY;
-    private TextView textViewMeasuringDebugZ;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +64,8 @@ public class MeasuringActivity extends AppCompatActivity implements Acceleromete
                 onClickDebugStopMeasuring();
             }
         });
-        AccelerometerControl.addListener(this);
-        textViewMeasuringDebugX = (TextView) findViewById(R.id.textViewMeasuringDebugX);
-        textViewMeasuringDebugY = (TextView) findViewById(R.id.textViewMeasuringDebugY);
-        textViewMeasuringDebugZ = (TextView) findViewById(R.id.textViewMeasuringDebugZ);
+
+        // Link show graph
     }
 
     /**
@@ -103,20 +95,8 @@ public class MeasuringActivity extends AppCompatActivity implements Acceleromete
         ChangePageToState();
     }
 
-    /**
-     * This gets called when our accelerometer measures data.
-     * The data does NOT have to be different from the previous dataset.
-     * This will just get called every "tick".
-     *
-     * @param x The acceleration in the x direction.
-     * @param y The acceleration in the y direction.
-     * @param z The acceleration in the z direction.
-     */
-    @Override
-    public void onReceivedDataRenamed(float x, float y, float z) {
-        textViewMeasuringDebugX.setText(Float.toString(x));
-        textViewMeasuringDebugY.setText(Float.toString(y));
-        textViewMeasuringDebugZ.setText(Float.toString(z));
+    public void onClickShowGraphs() {
+
     }
 
     /**

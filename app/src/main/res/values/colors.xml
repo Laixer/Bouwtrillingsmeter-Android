@@ -12,6 +12,7 @@
     <color name="fab_checkmark">#ffffff</color>
     <color name="fab_background_disabled">#dddddd</color>
     <color name="photo_not_found_indicator">#cccccc</color>
+    <color name="button_outline">#061557</color>
 
     <!--First visit highlight popup-->
     <color name="first_visit_popup_text">#ffffff</color>
