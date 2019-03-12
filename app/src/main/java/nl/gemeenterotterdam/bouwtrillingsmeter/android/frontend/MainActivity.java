@@ -51,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
         Utility.Resources = getResources();
 
         // initialize the backend
-        // TODO This initializes the backend EVERY TIME!
-        // This is now failsaved within the backend itself...
         Backend.initialize();
 
         // Toolbar

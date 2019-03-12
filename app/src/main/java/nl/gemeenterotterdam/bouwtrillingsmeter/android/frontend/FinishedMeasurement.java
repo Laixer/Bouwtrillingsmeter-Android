@@ -1,9 +1,9 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,7 +16,9 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 public class FinishedMeasurement extends AppCompatActivity {
 
     /**
-     * On create
+     * On create.
+     * When we exit this activity, all previous activities but the
+     * {@link MainActivity} are closed and removed from the backstack.
      *
      * @param savedInstanceState
      */
@@ -35,14 +37,13 @@ public class FinishedMeasurement extends AppCompatActivity {
         }
 
         // Take us back to the main screen
-        // TODO We are creating new activites every time! Do something with this.
         FloatingActionButton fabDone = (FloatingActionButton) findViewById(R.id.fabFinishedMeasurementDone);
         fabDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Backend.onDoneWithMeasurement();
-
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });

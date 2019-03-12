@@ -15,24 +15,18 @@ public class Backend {
 
     private static BackendState backendState;
     private static ArrayList<BackendStateListener> backendStateListeners;
-    private static boolean initialized = false;
 
     /**
      * Initialize the backend.
-     * TODO This has a failsafe because our frontend calls this EVERY TIME we return to the main activity.
      */
     public static void initialize() {
-        if (initialized == false) {
-            backendStateListeners = new ArrayList<BackendStateListener>();
+        backendStateListeners = new ArrayList<BackendStateListener>();
 
-            MeasurementControl.initialize();
-            AccelerometerControl.initialize();
-            DataHandler.initialize();
+        MeasurementControl.initialize();
+        AccelerometerControl.initialize();
+        DataHandler.initialize();
 
-            onChangeBackendState(BackendState.BROWSING_APP);
-
-            initialized = true;
-        }
+        onChangeBackendState(BackendState.BROWSING_APP);
     }
 
     /**
