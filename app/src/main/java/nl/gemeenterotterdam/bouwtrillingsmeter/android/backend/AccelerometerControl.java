@@ -61,7 +61,7 @@ public class AccelerometerControl {
     public static void onAccelerometerChanged(float x, float y, float z) {
         for (AccelerometerListener listener : listeners) {
             if (listener != null) {
-                listener.onReceivedDataRenamed(x, y, z);
+                listener.onReceivedData(x, y, z);
             }
         }
     }

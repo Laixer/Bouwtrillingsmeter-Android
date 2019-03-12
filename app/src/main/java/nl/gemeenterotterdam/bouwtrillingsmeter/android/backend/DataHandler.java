@@ -188,7 +188,7 @@ class DataHandler implements AccelerometerListener {
      * In this case the datapoint gets added to the new interval.
      */
     @Override
-    public void onReceivedDataRenamed(float x, float y, float z) {
+    public void onReceivedData(float x, float y, float z) {
         // If we are measuring
         if (isCurrentlyMeasuring() && currentDataInterval != null) {
             // Check if our interval has passed.
