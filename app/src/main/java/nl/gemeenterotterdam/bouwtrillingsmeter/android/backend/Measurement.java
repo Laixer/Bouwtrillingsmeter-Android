@@ -54,7 +54,7 @@ public class Measurement implements Serializable {
 
         // Link all data
         // Also create default data
-        name = name;
+        this.name = name;
         datetime = "15-02-2019 20:23";
         location = "Grote Markt, Delft";
         description = "Een hele mooie omschrijving jawel!";
@@ -73,6 +73,10 @@ public class Measurement implements Serializable {
      * @param dataInterval A measured DataInterval object, containing datapoints and all calculations
      */
     public void addDataInterval(DataInterval dataInterval) {
+        if (closed == true) {
+            throw new IllegalStateException("Current measurement is already closed! No more data can be added.");
+        }
+
         // Set starttime if this is our first data interval
         if (dataIntervals.size() == 0) {
             dateStart = Calendar.getInstance().getTime();
@@ -94,6 +98,7 @@ public class Measurement implements Serializable {
      */
     public void onStopMeasuring() {
         dateEnd = Calendar.getInstance().getTime();
+        closed = true;
     }
 
     /**
