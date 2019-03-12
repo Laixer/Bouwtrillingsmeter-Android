@@ -2,3 +2,4 @@ General todos
 TODO haxm
 TODO Als je je measurement nooit start moet hij worden weggegooid
 TODO Oude widget instellignen opslaan?
+TODO Een miljoen unittests schrijven

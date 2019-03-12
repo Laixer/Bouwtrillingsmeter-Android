@@ -1,6 +1,5 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,7 +11,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BuildingCategory;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Settings;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory;
@@ -20,17 +18,19 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory
 /**
  * TODO Javadoc
  */
-public class CategoryPageActivity extends AppCompatActivity {
+public class SettingsPageActivity extends AppCompatActivity {
 
     Spinner spinnerCategoryBuilding;
     Spinner spinnerCategoryVibration;
-    Switch switchCategoryVibrationSensitive;
+    Switch switchVibrationSensitive;
     FloatingActionButton fabCategoryConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SettingsWidgetControl.settingsPageActivity = this;
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category_page);
+        setContentView(R.layout.activity_settings_page);
 
         // FAB
         fabCategoryConfirm = (FloatingActionButton) findViewById(R.id.fabCategoryConfirm);
@@ -70,7 +70,18 @@ public class CategoryPageActivity extends AppCompatActivity {
         });
 
         // Switch
-        switchCategoryVibrationSensitive = (Switch) findViewById(R.id.switchCategoryVibrationSensitive);
+        switchVibrationSensitive = (Switch) findViewById(R.id.switchCategoryVibrationSensitive);
+    }
+
+    /**
+     * This pushes our parameters from the widget once we confirm the widget.
+     *
+     * @param settings The generated settings file.
+     */
+    public void onPushParametersFromWidget(Settings settings) {
+        spinnerCategoryBuilding.setSelection(settings.buildingCategory.ordinal());
+        spinnerCategoryVibration.setSelection(settings.vibrationCategory.ordinal());
+        switchVibrationSensitive.setChecked(settings.vibrationSensitive);
     }
 
     /**
@@ -96,13 +107,11 @@ public class CategoryPageActivity extends AppCompatActivity {
         // If we have completed our form
         BuildingCategory buildingCategory = BuildingCategory.values()[buildingIndex];
         VibrationCategory vibrationCategory = VibrationCategory.values()[vibrationIndex];
-        boolean vibrationSensitive = switchCategoryVibrationSensitive.isSelected();
-        Settings settings = SettingsGenerator.createSettingsFromCategoryPage(buildingCategory, vibrationCategory, vibrationSensitive);
-        Backend.onGeneratedNewSettings(settings);
+        boolean vibrationSensitive = switchVibrationSensitive.isSelected();
+        SettingsGenerator.createSettingsFromCategoryPage(buildingCategory, vibrationCategory, vibrationSensitive);
 
-        // Create a new intent
-        Intent intent = new Intent(getApplicationContext(), MeasuringActivity.class);
-        startActivity(intent);
+        // Go
+        SettingsWidgetControl.onClickStartMeasurementFab(this);
     }
 
     /**
@@ -121,7 +130,7 @@ public class CategoryPageActivity extends AppCompatActivity {
      * @param view The view we are in
      */
     public void onClickCategoryIDontKnow(View view) {
-        WidgetControl.StartWidget(this);
+        SettingsWidgetControl.StartWidget(this);
     }
 
     /**

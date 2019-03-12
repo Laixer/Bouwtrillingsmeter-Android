@@ -28,7 +28,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
  * <p>
  * Clicking an item in our activity list takes us to the {@link MeasurementDetailsActivity}.
  * Clicking the '+ fab' on first visit takes us to the {@link FirstVisitTutorialActivity}.
- * Clicking the '+ fab' after that takes us to the {@link CategoryPageActivity}.
+ * Clicking the '+ fab' after that takes us to the {@link SettingsPageActivity}.
  * <p>
  * Our first visit will highlight the '+ fab' using the {@link #showcaseFirstVisit()} function.
  */
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickCreateNewMeasurement();
+                onClickCreateNewMeasurementFab();
             }
         });
 
@@ -74,13 +74,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intentShowMeasuremenstDetails = new Intent(getApplicationContext(), MeasurementDetailsActivity.class);
+                Intent intentShowMeasurementDetails = new Intent(getApplicationContext(), MeasurementDetailsActivity.class);
 
                 // TODO Reconsider measurement linking structure
 //              intentShowMeasuremenstDetails.putExtra("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX", position);
                 MeasurementDetailsActivity.measurement = Backend.getAllMeasurementsList().get(position);
 
-                startActivity(intentShowMeasuremenstDetails);
+                startActivity(intentShowMeasurementDetails);
             }
         });
 
@@ -120,24 +120,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Gets fired when we click the start a new measurement button.
-     * Creates a new measurement in the backend (always).
-     * This also gets fired when the tutorial finishes.
+     * This fires the {@link SettingsWidgetControl} class,
+     * which then takes us to the settings part of the app.
      */
-    public void onClickCreateNewMeasurement() {
-        Backend.onClickCreateNewMeasurement();
-
-        // If we are in our first visit
-        if (GlobalVariables.firstVisit) {
-            Intent intentFirstVisitTutorial = new Intent(getApplicationContext(), FirstVisitTutorialActivity.class);
-            startActivity(intentFirstVisitTutorial);
-        }
-
-        // If we have already visited before
-        else {
-            Intent intentCategorySelection = new Intent(getApplicationContext(), CategoryPageActivity.class);
-            startActivity(intentCategorySelection);
-        }
+    public void onClickCreateNewMeasurementFab() {
+        SettingsWidgetControl.onClickNewMeasurementFab(this);
     }
 
     // Gets called when the clear preference debug button is clicked

@@ -17,7 +17,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
  * @author Thomas Beckers
  * @since 1.0
  * <p>
- * This activity gets called when we finish setting up our settings in the {@link CategoryPageActivity} page.
+ * This activity gets called when we finish setting up our settings in the {@link SettingsPageActivity} page.
  * First, we await till the user places the phone flat on a surface.
  * TODO Implement this call from the backend.
  * <p>

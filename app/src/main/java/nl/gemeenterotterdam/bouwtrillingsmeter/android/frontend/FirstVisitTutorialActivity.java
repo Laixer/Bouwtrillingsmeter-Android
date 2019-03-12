@@ -130,7 +130,7 @@ public class FirstVisitTutorialActivity extends AppCompatActivity {
      */
     private void onCompleteTutorial() {
         new PreferenceManager(this).writePreferences();
-        Intent intentCategorySelection = new Intent(getApplicationContext(), CategoryPageActivity.class);
+        Intent intentCategorySelection = new Intent(getApplicationContext(), SettingsPageActivity.class);
         startActivity(intentCategorySelection);
     }
 }

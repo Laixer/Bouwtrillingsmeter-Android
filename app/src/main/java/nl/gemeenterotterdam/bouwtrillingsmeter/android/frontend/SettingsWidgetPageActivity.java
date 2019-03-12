@@ -15,10 +15,10 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
  * @since 1.0
  * <p>
  * This class represents a single widget page.
- * These pages are handled by the {@link WidgetControl} class.
+ * These pages are handled by the {@link SettingsWidgetControl} class.
  * The displayed text is taken from our application {@link android.content.res.Resources}.
  */
-public class WidgetPageActivity extends AppCompatActivity {
+public class SettingsWidgetPageActivity extends AppCompatActivity {
 
     private int widgetPageIndex = -1;
     private Activity thisActivity;
@@ -30,7 +30,7 @@ public class WidgetPageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_widget_page);
+        setContentView(R.layout.activity_settings_widget_page);
 
         thisActivity = this;
 
@@ -53,7 +53,7 @@ public class WidgetPageActivity extends AppCompatActivity {
         buttonWidgetYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WidgetControl.OnClickYesNo(thisActivity, widgetPageIndex, true);
+                SettingsWidgetControl.onClickYesNo(thisActivity, widgetPageIndex, true);
             }
         });
 
@@ -62,7 +62,7 @@ public class WidgetPageActivity extends AppCompatActivity {
         buttonWidgetNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WidgetControl.OnClickYesNo(thisActivity, widgetPageIndex, false);
+                SettingsWidgetControl.onClickYesNo(thisActivity, widgetPageIndex, false);
             }
         });
 

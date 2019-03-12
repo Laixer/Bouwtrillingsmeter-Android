@@ -181,7 +181,7 @@ public class Backend {
 
         // If we are in the wrong state
         if (backendState != BackendState.PREPARING_MEASUREMENT) {
-            throw new IllegalStateException("We are in the PREPARING_MEASUREMENT state. No settings object can be created at the moment.");
+            throw new IllegalStateException("We are NOT in the PREPARING_MEASUREMENT state. No settings object can be created at the moment.");
         }
 
         getCurrentMeasurement().settings = settings;

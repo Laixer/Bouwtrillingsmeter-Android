@@ -10,9 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".frontend.GraphsActivity"></activity>
-        <activity android:name=".frontend.CategoryPageActivity" />
-        <activity android:name=".frontend.WidgetFinalActivity" />
-        <activity android:name=".frontend.WidgetPageActivity" />
+        <activity android:name=".frontend.SettingsPageActivity" />
+        <activity android:name=".frontend.SettingsWidgetFinalActivity" />
+        <activity android:name=".frontend.SettingsWidgetPageActivity" />
         <activity android:name=".frontend.MeasuringActivity" />
         <activity android:name=".frontend.FirstVisitTutorialActivity" />
         <activity android:name=".frontend.MeasurementDetailsActivity" />
