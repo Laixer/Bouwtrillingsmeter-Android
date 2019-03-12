@@ -106,6 +106,30 @@ public class Measurement implements Serializable {
     }
 
     /**
+     * Checks all our dataintervals to see if we have exceeded any limits.
+     * Also returns said dataintervals.
+     *
+     * @return An arraylist of all exceeding dataintervals. Null if we did not exceed any limits.
+     */
+    public ArrayList<DataInterval> getAllExceedingDataIntervals() {
+        ArrayList<DataInterval> result = new ArrayList<DataInterval>();
+        for (DataInterval dataInterval : dataIntervals) {
+            if (dataInterval.isExceedingLimit()) {
+                result.add(dataInterval);
+            }
+        }
+
+        if (result.size() > 0) {
+            return result;
+        }
+
+        else {
+            return null;
+        }
+
+    }
+
+    /**
      * All getters and setters in one place.
      */
     public void setName(String name) {

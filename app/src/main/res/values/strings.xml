@@ -4,6 +4,9 @@
     <string name="title_activity_first_visit_tutorial">First visit tutorial!</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
+    <!--Global-->
+    <string name="default_text">Assigned trough code</string>
+
     <!--User saved variables-->
     <string name="pref_first_visit"></string>
 
@@ -35,7 +38,6 @@
     <string name="widget_button_yes">Ja</string>
     <string name="widget_button_no">Nee</string>
 
-    <string name="widget_default_text">Assigned trough code</string>
     <string-array name="widget_text_main">
         <item>Bestaat het gebouw waarin u wilt meten uit een betonnen bebouwing met metselwerk of gevelbekleding?</item>
         <item>Betreft de bebouwing een monument of beschermd stadsgezicht?</item>
@@ -79,5 +81,10 @@
     <string name="measuring_place_device_on_table">Plaats uw telefoon op tafel</string>
     <string name="measuring_measuring_now">Aan het meten...</string>
     <string name="measuring_show_graphs">Laat grafieken zien</string>
+
+    <!--FinishedMeasurementActivity page-->
+    <string name="finished_measurement_completed">Meting voltooid!</string>
+    <string name="finished_measurement_not_exceeded">Er is geen overschrijding gedetecteerd.</string>
+    <string name="finished_measurement_exceeded">Er is een overschrijding gedecteerd!</string>
 
 </resources>

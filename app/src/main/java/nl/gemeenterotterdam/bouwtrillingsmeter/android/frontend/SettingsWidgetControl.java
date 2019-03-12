@@ -53,6 +53,8 @@ public class SettingsWidgetControl {
      * @param from
      */
     public static void onClickStartMeasurementFab(Activity from) {
+        Backend.onClickCompleteSettingsSetup();
+
         Intent intent = new Intent(from.getApplicationContext(), MeasuringActivity.class);
         from.startActivity(intent);
     }

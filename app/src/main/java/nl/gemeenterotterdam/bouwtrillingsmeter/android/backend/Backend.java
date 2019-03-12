@@ -15,18 +15,24 @@ public class Backend {
 
     private static BackendState backendState;
     private static ArrayList<BackendStateListener> backendStateListeners;
+    private static boolean initialized = false;
 
     /**
      * Initialize the backend.
+     * TODO This has a failsafe because our frontend calls this EVERY TIME we return to the main activity.
      */
     public static void initialize() {
-        backendStateListeners = new ArrayList<BackendStateListener>();
+        if (initialized == false) {
+            backendStateListeners = new ArrayList<BackendStateListener>();
 
-        MeasurementControl.initialize();
-        AccelerometerControl.initialize();
-        DataHandler.initialize();
+            MeasurementControl.initialize();
+            AccelerometerControl.initialize();
+            DataHandler.initialize();
 
-        onChangeBackendState(BackendState.BROWSING_APP);
+            onChangeBackendState(BackendState.BROWSING_APP);
+
+            initialized = true;
+        }
     }
 
     /**
@@ -50,6 +56,8 @@ public class Backend {
         }
 
         BackendState oldState = backendState;
+        backendState = newState;
+
         switch (newState) {
             case BROWSING_APP:
                 break;
@@ -77,9 +85,9 @@ public class Backend {
                 DataHandler.startMeasuring();
                 break;
 
-            case MEASUREMENT_END:
+            case FINISHED_MEASUREMENT:
                 DataHandler.stopMeasuring();
-                MeasurementControl.getCurrentMeasurement().onStopMeasuring();
+                MeasurementControl.onFinishMeasurement();
                 break;
         }
 
@@ -114,7 +122,7 @@ public class Backend {
      * This attempts to end the measurement.
      */
     public static void onPickUpPhoneWhileMeasuring() {
-        onChangeBackendState(BackendState.MEASUREMENT_END);
+        onChangeBackendState(BackendState.FINISHED_MEASUREMENT);
     }
 
     /**
@@ -122,7 +130,15 @@ public class Backend {
      * TODO Implement some kind of catch mechanism, maybe a popup message?
      */
     public static void onUserForceStopMeasurement() {
-        onChangeBackendState(BackendState.MEASUREMENT_END);
+        onChangeBackendState(BackendState.FINISHED_MEASUREMENT);
+    }
+
+    /**
+     * Gets called when we are done with the aftermath of our measurement.
+     * This basically allows us to return to the main screen again (if implemented in any frontend).
+     */
+    public static void onDoneWithMeasurement() {
+        onChangeBackendState(BackendState.BROWSING_APP);
     }
 
     /**
@@ -138,7 +154,7 @@ public class Backend {
             throw new IllegalStateException("The current measurement object is already closed. Closing it again is not possible.");
         }
 
-        onChangeBackendState(BackendState.MEASUREMENT_END);
+        onChangeBackendState(BackendState.FINISHED_MEASUREMENT);
     }
 
     /**

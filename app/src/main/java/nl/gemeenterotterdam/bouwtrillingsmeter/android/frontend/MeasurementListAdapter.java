@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 
 /**
@@ -75,6 +76,7 @@ public class MeasurementListAdapter extends BaseAdapter {
      * Forces the adapter to update
      */
     public void onDatasetChanged() {
+        System.out.println("MEASUREMENT LIST SIZE = " + Backend.getAllMeasurementsList().size());
         this.notifyDataSetChanged();
     }
 

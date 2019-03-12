@@ -53,6 +53,17 @@ class MeasurementControl {
     }
 
     /**
+     * This stops our measuring.
+     * This adds the current measurement to {@link #allMeasurements}.
+     * Our {@link #currentMeasurement} stays the same for future reference!
+     * This is only overwritten if we redo the entire measurement creation process.
+     */
+    public static void onFinishMeasurement() {
+        currentMeasurement.onStopMeasuring();
+        allMeasurements.add(currentMeasurement);
+    }
+
+    /**
      * This adds the current measurement to the measurement list
      * This also attempts to save the current measurement to the cache
      */

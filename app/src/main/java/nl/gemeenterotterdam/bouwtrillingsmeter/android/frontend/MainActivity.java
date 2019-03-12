@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("MainActivity was created!");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         Utility.Resources = getResources();
 
         // initialize the backend
+        // TODO This initializes the backend EVERY TIME!
+        // This is now failsaved within the backend itself...
         Backend.initialize();
 
         // Toolbar
