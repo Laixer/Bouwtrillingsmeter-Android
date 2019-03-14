@@ -1,7 +1,7 @@
 Frontend todos
 
 Nu:
-TODO Button outline
+TODO Fix back button x backend state
 
 Later:
 TODO Grafiek linken aan data!

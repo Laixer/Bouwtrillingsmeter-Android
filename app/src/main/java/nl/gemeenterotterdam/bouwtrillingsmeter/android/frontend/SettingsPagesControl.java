@@ -59,6 +59,9 @@ public class SettingsPagesControl {
 
         Intent intent = new Intent(from.getApplicationContext(), MeasuringActivity.class);
         from.startActivity(intent);
+
+        // Close our settings tab activity
+        from.finish();
     }
 
     /**
@@ -77,8 +80,6 @@ public class SettingsPagesControl {
      * This also pushes the new settings onto the UI,
      * by calling {@link SettingsPageActivity#onPushParametersFromWidget(Settings)}.
      * <p>
-     * TODO Disable back button flowing back into the widget
-     * TODO Save these settings to the category page.
      *
      * @param from The activity from which we are being called
      */
@@ -86,8 +87,14 @@ public class SettingsPagesControl {
         SettingsGenerator.overwriteSettingsFromWidget(widgetAnswers);
         createdSettingsFromWidget = SettingsGenerator.getCurrentSettings();
 
+        // Go back to the settings page
+        // DO NOT launch a new activity for this!
         Intent intent = new Intent(from.getApplicationContext(), SettingsPageActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         from.startActivity(intent);
+
+        // Close the previous question
+        from.finish();
     }
 
     /**
@@ -111,6 +118,8 @@ public class SettingsPagesControl {
             SetToPage(from, widgetPageIndex + 1);
         }
 
+        // Close the previous question
+        from.finish();
     }
 
     /**

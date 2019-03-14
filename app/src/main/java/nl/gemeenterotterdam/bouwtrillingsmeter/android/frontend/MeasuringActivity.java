@@ -10,8 +10,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.AccelerometerControl;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.AccelerometerListener;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 
 /**
@@ -61,7 +59,7 @@ public class MeasuringActivity extends AppCompatActivity {
         buttonDebugStopMeasuring.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickDebugStopMeasuring();
+                onStopMeasuring();
             }
         });
 
@@ -100,12 +98,16 @@ public class MeasuringActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO Remove this debug function
+     * TODO Javadoc
+     * TODO Remove debug statement here (backend call)
      */
-    public void onClickDebugStopMeasuring() {
+    public void onStopMeasuring() {
         Backend.onPickUpPhoneWhileMeasuring();
 
         Intent intent = new Intent(getApplicationContext(), FinishedMeasurement.class);
         startActivity(intent);
+
+        // Close this activity
+        finish();
     }
 }

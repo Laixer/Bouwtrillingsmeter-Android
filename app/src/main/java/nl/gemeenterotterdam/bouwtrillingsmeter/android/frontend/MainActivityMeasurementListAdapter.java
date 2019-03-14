@@ -22,7 +22,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
  * This class is used as an adapter for each measurement item in the main measurement listview displayd on our {@link MainActivity}.
  * This class does NOT control the page that opens when you click a measurement within said listview, this is done by {@link MeasurementDetailsActivity}.
  */
-public class MeasurementListAdapter extends BaseAdapter {
+public class MainActivityMeasurementListAdapter extends BaseAdapter {
 
     LayoutInflater mLayoutInflater;
     ArrayList<Measurement> measurements;
@@ -33,7 +33,7 @@ public class MeasurementListAdapter extends BaseAdapter {
      * @param context      Our context, usually referred to as "this"
      * @param measurements The pointer to the measurements list
      */
-    public MeasurementListAdapter(Context context, ArrayList<Measurement> measurements) {
+    public MainActivityMeasurementListAdapter(Context context, ArrayList<Measurement> measurements) {
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.measurements = measurements;
     }
@@ -65,7 +65,7 @@ public class MeasurementListAdapter extends BaseAdapter {
 
         // Set the photo
         // Add an actionlistener to this to attempt to take a photo
-        // TODO Remove photo bar at all when none is present????
+        // TODO Remove photo bar at all when none is present
         Bitmap photo = measurements.get(position).getPhoto();
         Utility.UpdateScaledPhoto(imageViewPhoto, photo);
 
@@ -76,7 +76,6 @@ public class MeasurementListAdapter extends BaseAdapter {
      * Forces the adapter to update
      */
     public void onDatasetChanged() {
-        System.out.println("MEASUREMENT LIST SIZE = " + Backend.getAllMeasurementsList().size());
         this.notifyDataSetChanged();
     }
 

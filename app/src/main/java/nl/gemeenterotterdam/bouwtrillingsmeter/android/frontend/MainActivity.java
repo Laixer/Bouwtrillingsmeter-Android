@@ -36,21 +36,21 @@ public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     ListView listViewMeasurements;
-    MeasurementListAdapter listViewMeasurementsAdapter;
+    MainActivityMeasurementListAdapter listViewMeasurementsAdapter;
     ArrayList<Measurement> measurements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.println("MainActivity was created!");
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // initialize the utility frontend
+        // Initialize the utility frontend
         Utility.ApplicationContext = getApplicationContext();
         Utility.Resources = getResources();
 
-        // initialize the backend
+        // Initialize the backend.
+        // This is failsaved, so that we can only do this once.
+        // This might only be relevant if we drop our mainactivity from memory in the case of low phone memory.
         Backend.initialize();
 
         // Toolbar
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         // Setup measurements list and link adapter
         listViewMeasurements = (ListView) findViewById(R.id.listViewMeasurements);
         listViewMeasurements.setEmptyView(findViewById(R.id.textViewNoMeasurements));
-        listViewMeasurementsAdapter = new MeasurementListAdapter(this, Backend.getAllMeasurementsList());
+        listViewMeasurementsAdapter = new MainActivityMeasurementListAdapter(this, Backend.getAllMeasurementsList());
         listViewMeasurements.setAdapter(listViewMeasurementsAdapter);
         listViewMeasurements.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

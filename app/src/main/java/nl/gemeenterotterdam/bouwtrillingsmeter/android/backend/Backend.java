@@ -15,18 +15,26 @@ public class Backend {
 
     private static BackendState backendState;
     private static ArrayList<BackendStateListener> backendStateListeners;
+    private static boolean initialized = false;
 
     /**
      * Initialize the backend.
+     * This has a failsafe so that we can only call this once.
+     * The only way this might happen is if our {@link nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.MainActivity} gets droppoed from memory
+     * in the case of low phone memory.
      */
     public static void initialize() {
-        backendStateListeners = new ArrayList<BackendStateListener>();
+        if (!initialized) {
+            backendStateListeners = new ArrayList<BackendStateListener>();
 
-        MeasurementControl.initialize();
-        AccelerometerControl.initialize();
-        DataHandler.initialize();
+            MeasurementControl.initialize();
+            AccelerometerControl.initialize();
+            DataHandler.initialize();
 
-        onChangeBackendState(BackendState.BROWSING_APP);
+            onChangeBackendState(BackendState.BROWSING_APP);
+
+            initialized = true;
+        }
     }
 
     /**

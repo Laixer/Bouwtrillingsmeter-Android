@@ -17,7 +17,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
  * @since 1.0
  * <p>
  * This class controls the page that opens when you click a list item in the measurement list on the {@link MainActivity} page.
- * This does NOT control anything layout-wise within the measurement list, this is done by {@link MeasurementListAdapter}.
+ * This does NOT control anything layout-wise within the measurement list, this is done by {@link MainActivityMeasurementListAdapter}.
  * <p>
  * Clicking the displayed photo attempts to open our camera, coded in the {@link #onCreate(Bundle)} function.
  * The callback is handled by {@link #onActivityResult(int, int, Intent)}.
