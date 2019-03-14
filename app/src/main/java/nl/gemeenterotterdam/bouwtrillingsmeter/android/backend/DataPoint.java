@@ -1,5 +1,11 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
+
+import android.app.Application;
+
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * @author Thomas Beckers
  * @since 1.0
@@ -21,6 +27,7 @@ public class DataPoint<X> {
 
     public X domain;
     public float[] values;
+    public long time;
 
     /**
      * Constructor
@@ -29,17 +36,16 @@ public class DataPoint<X> {
      * @param values The corresponding data values
      */
     public DataPoint(X domain, float[] values) {
-        this.domain = domain;
-        this.values = values;
+        this(domain, values[0], values[1], values[2]);
     }
 
     /**
      * Constructor
      *
      * @param domain The domain, being of type a Date (time domain) or float[x, y, z] (frequency domain)
-     * @param x Data x
-     * @param y Data y
-     * @param z Data z
+     * @param x      Data x
+     * @param y      Data y
+     * @param z      Data z
      */
     public DataPoint(X domain, float x, float y, float z) {
         this.domain = domain;
@@ -48,6 +54,17 @@ public class DataPoint<X> {
         values[1] = y;
         values[2] = z;
         this.values = values;
+
+        /**
+         * If we are dealing with a {@link Date} object,
+         * our domain variable is the starttime of our {@link Measurement}.
+         * We need to calculate the time since the starttime of the measurement
+         * and set it as our domain, for the graphs to work properly.
+         */
+        if (domain instanceof Date) {
+            // TODO Implement
+        }
+
     }
 
 }

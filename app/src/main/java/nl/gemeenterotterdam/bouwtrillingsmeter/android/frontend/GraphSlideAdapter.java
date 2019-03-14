@@ -51,10 +51,12 @@ public class GraphSlideAdapter extends PagerAdapter {
         TextView textViewName = (TextView) view.findViewById(R.id.textViewGraphTemplateName);
         GraphView graphView = (GraphView) view.findViewById(R.id.graphViewGraphTemplate);
 
+        // Link view to our graph object
+        graphs[position].onCreatedGraphView(graphView);
+
         // Assign variables
         Graph graph = graphs[position];
         textViewName.setText(graph.getName());
-        setAllGraphViewProperties(graphView, graph);
 
         // Add and return
         container.addView(view);
@@ -65,35 +67,5 @@ public class GraphSlideAdapter extends PagerAdapter {
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         View view = (View) object;
         container.removeView(view);
-    }
-
-    /**
-     * This sets a bunch of properties on our graph view.
-     * This is placed in a function to clean up the {@link #instantiateItem(ViewGroup, int)} function.
-     *
-     * @param graphView
-     */
-    private void setAllGraphViewProperties(GraphView graphView, Graph graph) {
-        // Series and line styling
-        LineGraphSeries series = graph.getAsSeries();
-        series.setThickness(4);
-        series.setColor(Utility.ApplicationContext.getResources().getColor(R.color.colorPrimary));
-        graphView.addSeries(series);
-
-        // Scaling
-        Viewport viewport = graphView.getViewport();
-        viewport.setScalable(true);
-        viewport.setScalableY(true);
-        viewport.setScrollable(true);
-        viewport.setScrollableY(true);
-
-        // Text and names
-        // graphView.setTitle(graph.getName()); This is done with a separate label because it looked ugly
-
-        GridLabelRenderer gridLabelRenderer = graphView.getGridLabelRenderer();
-        graphView.setPadding(0, 0, 0, 0);
-        gridLabelRenderer.setHorizontalAxisTitle(graph.getTextAxisHorizontal());
-        gridLabelRenderer.setVerticalAxisTitle(graph.getTextAxisVertical());
-        gridLabelRenderer.setPadding(40);
     }
 }

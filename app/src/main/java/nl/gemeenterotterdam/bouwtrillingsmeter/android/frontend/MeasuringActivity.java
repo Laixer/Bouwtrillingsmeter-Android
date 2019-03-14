@@ -68,6 +68,13 @@ public class MeasuringActivity extends AppCompatActivity {
         });
 
         // Link show graph
+        Button buttonShowGraphs = (Button) findViewById(R.id.buttonMeasuringShowGraphs);
+        buttonShowGraphs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickShowGraphs();
+            }
+        });
     }
 
     /**
@@ -97,8 +104,14 @@ public class MeasuringActivity extends AppCompatActivity {
         ChangePageToState();
     }
 
+    /**
+     * Open the graphs, by calling {@link GraphsActivity}.
+     * This does not start a new activity if the activity is already open.
+     */
     public void onClickShowGraphs() {
-
+        Intent intent = new Intent(getApplicationContext(), GraphsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
     }
 
     /**
@@ -131,8 +144,6 @@ public class MeasuringActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
     /**
      * This gets called when we (want to) cancel our current measurement.

@@ -14,13 +14,16 @@ import java.util.Date;
  * The collection and measurements are stored in a {@link DataInterval} object.
  * These intervals are stored within a {@link Measurement} object.
  */
-class DataHandler implements AccelerometerListener {
+public class DataHandler implements AccelerometerListener {
 
     private static boolean currentlyMeasuring;
     private static DataInterval currentDataInterval;
+    private static DataInterval lastCalculatedDataInterval;
     private static int currentDataIntervalIndex;
     private static int lastExceedingIndex;
     private static ArrayList<Integer> indexesToBeCleared;
+
+    private static ArrayList<DataIntervalClosedListener> dataIntervalClosedListeners;
 
     /**
      * This is used as a workaround to implement the {@link AccelerometerListener} interface
@@ -33,11 +36,42 @@ class DataHandler implements AccelerometerListener {
      * This adds this class as an accelerometer listener.
      * Call {@link AccelerometerControl#initialize()} first!
      */
-    public static void initialize() {
+    static void initialize() {
         currentlyMeasuring = false;
         currentDataInterval = null;
         listenerInstance = new DataHandler();
+
+        dataIntervalClosedListeners = new ArrayList<DataIntervalClosedListener>();
+
         AccelerometerControl.addListener(listenerInstance);
+    }
+
+    /**
+     * Adds a {@link DataIntervalClosedListener} listener.
+     * This will be called every time a data interval is closed.
+     *
+     * @param listener The listener object. Don't forget to @Override!
+     */
+    public static void addDataIntervalClosedListener(DataIntervalClosedListener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("Listener to be added to data interval closed listeners can not be null.");
+        }
+
+        dataIntervalClosedListeners.add(listener);
+    }
+
+    /**
+     * This triggers all listeners, which have the
+     * {@link DataIntervalClosedListener} interface.
+     *
+     * @param dataInterval The closed datainterval, including all calculations.
+     */
+    private static void triggerDataIntervalClosedEvent(DataInterval dataInterval) {
+        for (DataIntervalClosedListener listener : dataIntervalClosedListeners) {
+            if (listener != null) {
+                listener.onDataIntervalClosed(dataInterval);
+            }
+        }
     }
 
     /**
@@ -45,7 +79,7 @@ class DataHandler implements AccelerometerListener {
      *
      * @return True if we are currently measuring.
      */
-    public static boolean isCurrentlyMeasuring() {
+    static boolean isCurrentlyMeasuring() {
         return currentlyMeasuring;
     }
 
@@ -54,7 +88,7 @@ class DataHandler implements AccelerometerListener {
      * The measurement object that all data is stored to is accessed
      * via the MeasurementControl.getCurrentMeasurement().
      */
-    public static void startMeasuring() {
+    static void startMeasuring() {
         // Give an error if we have no measurement object
         if (MeasurementControl.getCurrentMeasurement() == null) {
             throw new NullPointerException("We have no current measurement object!");
@@ -87,6 +121,9 @@ class DataHandler implements AccelerometerListener {
 
         currentDataInterval = new DataInterval(currentDataIntervalIndex);
         currentDataIntervalIndex += 1;
+
+        // Trigger our interval closed event
+        triggerDataIntervalClosedEvent(lastCalculatedDataInterval);
     }
 
     /**
@@ -178,6 +215,9 @@ class DataHandler implements AccelerometerListener {
 
                 // Unlock this data interval
                 thisDataInterval.onThreadCalculationsEnd();
+
+                // Save calculated data interval
+                lastCalculatedDataInterval = thisDataInterval;
             }
         }).start();
     }
@@ -201,7 +241,7 @@ class DataHandler implements AccelerometerListener {
             }
 
             // Push the data
-            DataPoint<Date> dataPoint = new DataPoint<>(new Date(), x, y, z);
+            DataPoint<Date> dataPoint = new DataPoint<Date>(MeasurementControl.getCurrentMeasurement().dateStart, x, y, z);
             currentDataInterval.addDataPoint(dataPoint);
         }
     }
@@ -209,7 +249,7 @@ class DataHandler implements AccelerometerListener {
     /**
      * This stops all measurement loops.
      */
-    public static void stopMeasuring() {
+    static void stopMeasuring() {
         if (currentlyMeasuring == false) {
             throw new IllegalStateException("Attempted to stop measuring when we were not measuring.");
         }

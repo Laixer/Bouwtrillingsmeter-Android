@@ -1,16 +1,16 @@
 Frontend todos
 
 Nu:
-TODO Popup question green colors
+TODO Grafiek activity werkend maken
 
 Later:
+TODO Tekst measuring laten cyclen
+TODO Graph unlcok
 TODO Wat als je geen settings file kan creëren met de huidige instellingen?
 TODO Widget opnieuw?
-TODO Grafiek activity werkend maken
 TODO Grafiek linken aan data!
 TODO Widget één activity gebruiken --> weer met die bolletjes
 TODO User preferences even goed doen
-TODO Advanced options erin bouwen
 TODO Foto OPSLAAN bij klikken op "foto mist" icon
 TODO Highlight first visit mooi maken
 TODO Wait icon groen -> niet elke API!

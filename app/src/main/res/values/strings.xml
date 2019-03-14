@@ -90,4 +90,26 @@
     <string name="finished_measurement_exceeded">Er is een overschrijding gedecteerd!</string>
     <string name="finished_measurement_exit_save_confirm">Uw meting is opgeslagen en verstuurd</string>
 
+    <!--Graphs-->
+    <string-array name="graph_title">
+        <item>Versnellingsdiagram</item>
+        <item>Dominante frequentie</item>
+        <item>Snelheidsdiagram</item>
+        <item>Frequentiespectrum</item>
+        <item>Snelheid - Frequentie diagram</item>
+    </string-array>
+    <string-array name="graph_axis_horizontal">
+        <item>Tijd [s]</item>
+        <item>Tijd [s]</item>
+        <item>Tijd [s]</item>
+        <item>Frequentie [Hz]</item>
+        <item>Frequentie [Hz]</item>
+    </string-array>
+    <string-array name="graph_axis_vertical">
+        <item>Versnelling [mm/s2]</item>
+        <item>Frequentie [Hz]</item>
+        <item>Snelheid [mm/s]</item>
+        <item>Snelheid [mm/s]</item>
+        <item>Snelheid [mm/s]</item>
+    </string-array>
 </resources>
