@@ -22,7 +22,6 @@ public class SettingsPagesControl {
 
     private static int widgetPageCount;
     private static boolean[] widgetAnswers;
-    public static Settings createdSettingsFromWidget = null;
 
     /**
      * This takes us to the category page activity.
@@ -33,8 +32,6 @@ public class SettingsPagesControl {
      */
     public static void onClickNewMeasurementFab(Activity from) {
         Backend.onClickCreateNewMeasurement();
-
-        createdSettingsFromWidget = null;
 
         // If we are in our first visit
         if (GlobalVariables.firstVisit) {
@@ -55,6 +52,7 @@ public class SettingsPagesControl {
      * @param from
      */
     public static void onClickStartMeasurementFab(Activity from) {
+        Backend.onGeneratedNewSettings(SettingsGenerator.getCurrentSettings());
         Backend.onClickCompleteSettingsSetup();
 
         Intent intent = new Intent(from.getApplicationContext(), MeasuringActivity.class);
@@ -69,32 +67,32 @@ public class SettingsPagesControl {
      *
      * @param from The activity from which we are being called
      */
-    public static void StartWidget(Activity from) {
+    public static void startWidget(Activity from) {
         widgetPageCount = from.getResources().getStringArray(R.array.widget_text_main).length;
         widgetAnswers = new boolean[widgetPageCount];
-        SetToPage(from, 0);
+        setToPage(from, 0);
     }
 
     /**
      * This completes and closes the widget.
-     * This also pushes the new settings onto the UI,
-     * by calling {@link SettingsPageActivity#onPushParametersFromWidget(Settings)}.
-     * <p>
      *
      * @param from The activity from which we are being called
      */
     public static void confirmWidget(Activity from) {
-        SettingsGenerator.overwriteSettingsFromWidget(widgetAnswers);
-        createdSettingsFromWidget = SettingsGenerator.getCurrentSettings();
+        Backend.onGeneratedNewSettings(SettingsGenerator.getCurrentSettings());
 
         // Go back to the settings page
         // DO NOT launch a new activity for this!
         Intent intent = new Intent(from.getApplicationContext(), SettingsPageActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         from.startActivity(intent);
+    }
 
-        // Close the previous question
-        from.finish();
+    /**
+     * Throw away our generated widget settings.
+     */
+    public static void discardWidget() {
+        SettingsGenerator.restoreToPreviousSettings();
     }
 
     /**
@@ -109,13 +107,15 @@ public class SettingsPagesControl {
 
         // If we have completed the widget
         if (widgetPageIndex >= widgetPageCount - 1) {
+            SettingsGenerator.overwriteSettingsFromWidget(widgetAnswers);
+
             Intent intent = new Intent(from.getApplicationContext(), SettingsWidgetFinalActivity.class);
             from.startActivity(intent);
         }
 
         // If we are still within the pages
         else {
-            SetToPage(from, widgetPageIndex + 1);
+            setToPage(from, widgetPageIndex + 1);
         }
 
         // Close the previous question
@@ -128,7 +128,7 @@ public class SettingsPagesControl {
      * @param from  The activity from which we are being called
      * @param index The page index
      */
-    private static void SetToPage(Activity from, int index) {
+    private static void setToPage(Activity from, int index) {
         Intent intent = new Intent(from.getApplicationContext(), SettingsWidgetPageActivity.class);
         intent.putExtra("nl.gemeenterotterdam.bouwtrillingsmeter.WIDGET_PAGE_INDEX", index);
         from.startActivity(intent);

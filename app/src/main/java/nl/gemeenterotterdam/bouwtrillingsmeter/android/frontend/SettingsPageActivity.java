@@ -11,8 +11,8 @@ import android.widget.Spinner;
 import android.widget.Switch;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BuildingCategory;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Settings;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory;
 
 /**
@@ -70,23 +70,19 @@ public class SettingsPageActivity extends AppCompatActivity {
         // Switch
         switchVibrationSensitive = (Switch) findViewById(R.id.switchCategoryVibrationSensitive);
 
-        // See if we have any settings created by our widget and push them if so
-        if (SettingsPagesControl.createdSettingsFromWidget != null) {
-            onPushParametersFromWidget(SettingsPagesControl.createdSettingsFromWidget);
-        }
+        // Try to push settings
+        checkForPushParametersFromWidget();
     }
 
     /**
      * This pushes our parameters from the widget once we confirm the widget.
-     * This only works in our {@link #onCreate(Bundle)} method. This has to do
-     * with the adapter, see docs.
-     *
-     * @param settings The generated settings file.
      */
-    private void onPushParametersFromWidget(Settings settings) {
-        spinnerCategoryBuilding.setSelection(settings.buildingCategory.ordinal(), true);
-        spinnerCategoryVibration.setSelection(settings.vibrationCategory.ordinal(), true);
-        switchVibrationSensitive.setChecked(settings.vibrationSensitive);
+    private void checkForPushParametersFromWidget() {
+        if (SettingsGenerator.getCurrentSettings() != null) {
+            spinnerCategoryBuilding.setSelection(SettingsGenerator.getCurrentSettings().buildingCategory.ordinal(), true);
+            spinnerCategoryVibration.setSelection(SettingsGenerator.getCurrentSettings().vibrationCategory.ordinal(), true);
+            switchVibrationSensitive.setChecked(SettingsGenerator.getCurrentSettings().vibrationSensitive);
+        }
     }
 
     /**
@@ -135,7 +131,7 @@ public class SettingsPageActivity extends AppCompatActivity {
      * @param view The view we are in
      */
     public void onClickCategoryIDontKnow(View view) {
-        SettingsPagesControl.StartWidget(this);
+        SettingsPagesControl.startWidget(this);
     }
 
     /**
@@ -167,5 +163,23 @@ public class SettingsPageActivity extends AppCompatActivity {
         } else {
             setFabBackgroundTint(fabCategoryConfirm, true);
         }
+    }
+
+    /**
+     * This gets called when we press the back button.
+     */
+    @Override
+    public void onBackPressed() {
+        Backend.onPressBackButtonFrom(this);
+        finish();
+    }
+
+    /**
+     * Check for any widget exported settings when we get back to this activity,
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkForPushParametersFromWidget();
     }
 }

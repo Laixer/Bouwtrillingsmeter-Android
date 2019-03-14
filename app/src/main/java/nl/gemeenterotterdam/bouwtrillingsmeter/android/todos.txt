@@ -3,3 +3,6 @@ TODO haxm
 TODO Als je je measurement nooit start moet hij worden weggegooid
 TODO Oude widget instellignen opslaan?
 TODO Een miljoen unittests schrijven
+
+Details
+TODO How to deal with widget x memory clearup deleting the settingspages page?

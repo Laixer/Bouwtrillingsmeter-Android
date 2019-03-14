@@ -98,6 +98,14 @@ public class MeasuringActivity extends AppCompatActivity {
     }
 
     /**
+     * This gets called when we press the back button.
+     */
+    @Override
+    public void onBackPressed() {
+
+    }
+
+    /**
      * TODO Javadoc
      * TODO Remove debug statement here (backend call)
      */

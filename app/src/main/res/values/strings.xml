@@ -6,6 +6,8 @@
 
     <!--Global-->
     <string name="default_text">Assigned trough code</string>
+    <string name="default_yes">Ja</string>
+    <string name="default_no">Nee</string>
 
     <!--User saved variables-->
     <string name="pref_first_visit"></string>

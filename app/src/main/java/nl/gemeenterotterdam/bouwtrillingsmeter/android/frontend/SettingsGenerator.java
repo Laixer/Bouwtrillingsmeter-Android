@@ -1,5 +1,6 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BuildingCategory;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Settings;
@@ -15,9 +16,11 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory
  */
 public class SettingsGenerator {
 
+    private static Settings previousSettings;
     private static Settings currentSettings;
 
     private static void setCurrentSettings(Settings settings) {
+        previousSettings = currentSettings;
         currentSettings = settings;
         Backend.onGeneratedNewSettings(currentSettings);
     }
@@ -58,4 +61,12 @@ public class SettingsGenerator {
 
         setCurrentSettings(new Settings(BuildingCategory.CATEGORY_1, VibrationCategory.CONTINUOUS, true));
     }
+
+    /**
+     * Used by our widget, if we discard our widget changes.
+     */
+    public static void restoreToPreviousSettings() {
+        currentSettings = previousSettings;
+    }
+
 }

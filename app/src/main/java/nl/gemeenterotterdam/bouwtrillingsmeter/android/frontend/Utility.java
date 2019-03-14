@@ -11,6 +11,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BuildingCategory;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory;
 
 /**
  * @author Thomas Beckers
@@ -121,6 +123,26 @@ public class Utility {
     public static void UpdateScaledPhotoMissing(ImageView imageView) {
         Drawable drawable = Resources.getDrawable(R.drawable.ic_image_not_present);
         imageView.setImageDrawable(drawable);
+    }
+
+    /**
+     * Transform our {@link BuildingCategory} enum to the correct text.
+     *
+     * @param buildingCategory
+     * @return Our string according to the resources: {@link R.array#category_dropdown_building}.
+     */
+    public static String getBuildingCategoryString(BuildingCategory buildingCategory) {
+        return Utility.Resources.getStringArray(R.array.category_dropdown_building)[buildingCategory.ordinal()];
+    }
+
+    /**
+     * Transform our {@link VibrationCategory} enum to the correct text.
+     *
+     * @param vibrationCategory
+     * @return Our string according to the resources: {@link R.array#category_dropdown_vibration}.
+     */
+    public static String getVibrationCategoryString(VibrationCategory vibrationCategory) {
+        return Utility.Resources.getStringArray(R.array.category_dropdown_vibration)[vibrationCategory.ordinal()];
     }
 
 }

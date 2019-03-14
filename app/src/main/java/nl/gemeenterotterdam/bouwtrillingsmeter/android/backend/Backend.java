@@ -1,5 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
+import android.app.Activity;
+
 import java.util.ArrayList;
 
 /**
@@ -31,7 +33,7 @@ public class Backend {
             AccelerometerControl.initialize();
             DataHandler.initialize();
 
-            onChangeBackendState(BackendState.BROWSING_APP);
+            changeBackendState(BackendState.BROWSING_APP);
 
             initialized = true;
         }
@@ -52,7 +54,7 @@ public class Backend {
      *
      * @param newState The new state.
      */
-    private static void onChangeBackendState(BackendState newState) {
+    private static void changeBackendState(BackendState newState) {
         if (newState == null || newState == BackendState.NONE) {
             throw new IllegalStateException("New backend state is not valid.");
         }
@@ -103,44 +105,27 @@ public class Backend {
     }
 
     /**
-     * TODO Javadoc
+     * Makes sure that if we exit an acitivity we get returned to the proper state
+     *
+     * @param activity The activity from which the back button was fired
      */
-    public static void onClickCreateNewMeasurement() {
-        if (MeasurementControl.getCurrentMeasurement() != null && !MeasurementControl.getCurrentMeasurement().isClosed()) {
-            throw new IllegalStateException("Our current measurement object is still measuring! Creating a new measurement is not allowed.");
+    public static void onPressBackButtonFrom(Activity activity) {
+        switch (backendState) {
+
+            // We exited the settings menu
+            // Go back to browsing the app
+            case PREPARING_MEASUREMENT:
+                changeBackendState(BackendState.BROWSING_APP);
+                MeasurementControl.deleteCurrentMeasurement();
+                break;
+
+            // Abort our measurement
+            case MEASURING:
+                changeBackendState(BackendState.BROWSING_APP);
+                DataHandler.stopMeasuring();
+                MeasurementControl.abortCurrentMeasurement();
+                break;
         }
-
-        onChangeBackendState(BackendState.PREPARING_MEASUREMENT);
-    }
-
-    /**
-     * TODO Javadoc
-     */
-    public static void onClickCompleteSettingsSetup() {
-        onChangeBackendState(BackendState.AWAITING_PHONE_FLAT);
-    }
-
-    /**
-     * This attempts to end the measurement.
-     */
-    public static void onPickUpPhoneWhileMeasuring() {
-        onChangeBackendState(BackendState.FINISHED_MEASUREMENT);
-    }
-
-    /**
-     * This gets called when the user presses the back button or something like that.
-     * TODO Implement some kind of catch mechanism, maybe a popup message?
-     */
-    public static void onUserForceStopMeasurement() {
-        onChangeBackendState(BackendState.FINISHED_MEASUREMENT);
-    }
-
-    /**
-     * Gets called when we are done with the aftermath of our measurement.
-     * This basically allows us to return to the main screen again (if implemented in any frontend).
-     */
-    public static void onDoneWithMeasurement() {
-        onChangeBackendState(BackendState.BROWSING_APP);
     }
 
     /**
@@ -156,7 +141,55 @@ public class Backend {
             throw new IllegalStateException("The current measurement object is already closed. Closing it again is not possible.");
         }
 
-        onChangeBackendState(BackendState.FINISHED_MEASUREMENT);
+        changeBackendState(BackendState.FINISHED_MEASUREMENT);
+    }
+
+
+    /**
+     * These functions are called from the frontend
+     * TODO Make sure all are in the right place, some functions are internal.
+     */
+
+    /**
+     * TODO Javadoc
+     */
+    public static void onClickCreateNewMeasurement() {
+        if (MeasurementControl.getCurrentMeasurement() != null && !MeasurementControl.getCurrentMeasurement().isClosed()) {
+            throw new IllegalStateException("Our current measurement object is still measuring! Creating a new measurement is not allowed.");
+        }
+
+        changeBackendState(BackendState.PREPARING_MEASUREMENT);
+    }
+
+    /**
+     * TODO Javadoc
+     * TODO Implement failsafe for invalid settings file
+     */
+    public static void onClickCompleteSettingsSetup() {
+        changeBackendState(BackendState.AWAITING_PHONE_FLAT);
+    }
+
+    /**
+     * This attempts to end the measurement.
+     */
+    public static void onPickUpPhoneWhileMeasuring() {
+        changeBackendState(BackendState.FINISHED_MEASUREMENT);
+    }
+
+    /**
+     * This gets called when the user presses the back button or something like that.
+     * TODO Implement some kind of catch mechanism, maybe a popup message?
+     */
+    public static void onUserForceStopMeasurement() {
+        changeBackendState(BackendState.FINISHED_MEASUREMENT);
+    }
+
+    /**
+     * Gets called when we are done with the aftermath of our measurement.
+     * This basically allows us to return to the main screen again (if implemented in any frontend).
+     */
+    public static void onDoneWithMeasurement() {
+        changeBackendState(BackendState.BROWSING_APP);
     }
 
     /**
@@ -218,6 +251,6 @@ public class Backend {
      * TODO Remove this debug function.
      */
     public static void debugOnPhoneFlat() {
-        onChangeBackendState(BackendState.MEASURING);
+        changeBackendState(BackendState.MEASURING);
     }
 }

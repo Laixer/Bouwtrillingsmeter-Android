@@ -64,6 +64,22 @@ class MeasurementControl {
     }
 
     /**
+     * This aborts our current measurement.
+     * It gets closed, then {@link #deleteCurrentMeasurement()} gets called.
+     */
+    public static void abortCurrentMeasurement() {
+        currentMeasurement.onStopMeasuring();
+        deleteCurrentMeasurement();
+    }
+
+    /**
+     * Deletes our current measurement
+     */
+    public static void deleteCurrentMeasurement() {
+        currentMeasurement = null;
+    }
+
+    /**
      * This adds the current measurement to the measurement list
      * This also attempts to save the current measurement to the cache
      */
@@ -71,6 +87,8 @@ class MeasurementControl {
         boolean hasExported = ReadWrite.TryWriteMeasurement(Utility.ApplicationContext, currentMeasurement, currentMeasurement.getUID());
         return hasExported;
     }
+
+
 
     /**
      * This gets called when the program exits

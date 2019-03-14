@@ -7,7 +7,7 @@
     tools:context=".frontend.SettingsWidgetFinalActivity">
 
     <TextView
-        android:id="@+id/textViewWidgetFinalTrillingevoelig2"
+        android:id="@+id/textViewWidgetFinalVibrationSensitive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="@+id/textViewWidgetFinalTrillingsgevoelig" />
 
     <TextView
-        android:id="@+id/textViewWidgetFinalCategoriePand2"
+        android:id="@+id/textViewWidgetFinalBuildingCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="@+id/textViewWidgetFinalStaticCategoriePand" />
 
     <TextView
-        android:id="@+id/textViewWidgetFinalCategorieTrilling2"
+        android:id="@+id/textViewWidgetFinalVibrationCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
