@@ -106,24 +106,28 @@ public class Backend {
 
     /**
      * Makes sure that if we exit an acitivity we get returned to the proper state
-     *
-     * @param activity The activity from which the back button was fired
      */
-    public static void onPressBackButtonFrom(Activity activity) {
+    public static void onPressedBackButton() {
         switch (backendState) {
-
             // We exited the settings menu
             // Go back to browsing the app
             case PREPARING_MEASUREMENT:
+                MeasurementControl.abortCurrentMeasurement();
                 changeBackendState(BackendState.BROWSING_APP);
-                MeasurementControl.deleteCurrentMeasurement();
+                break;
+
+            // We abort the "await for phone to be flat" bit
+            // This is done after the popup message
+            case AWAITING_PHONE_FLAT:
+                MeasurementControl.abortCurrentMeasurement();
+                changeBackendState(BackendState.BROWSING_APP);
                 break;
 
             // Abort our measurement
             case MEASURING:
-                changeBackendState(BackendState.BROWSING_APP);
                 DataHandler.stopMeasuring();
                 MeasurementControl.abortCurrentMeasurement();
+                changeBackendState(BackendState.BROWSING_APP);
                 break;
         }
     }
@@ -143,7 +147,6 @@ public class Backend {
 
         changeBackendState(BackendState.FINISHED_MEASUREMENT);
     }
-
 
     /**
      * These functions are called from the frontend

@@ -3,6 +3,7 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -34,6 +35,11 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
  */
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * TODO This is a hacky fix. Make this clean.
+     */
+    public static MainActivity mainActivity;
+
     Toolbar toolbar;
     ListView listViewMeasurements;
     MainActivityMeasurementListAdapter listViewMeasurementsAdapter;
@@ -41,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mainActivity = this;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -149,6 +157,20 @@ public class MainActivity extends AppCompatActivity {
         showCaseView.backgroundColor(getResources().getColor(R.color.first_visit_popup_background));
 
         showCaseView.build().show();
+    }
+
+    /**
+     * TODO This is a hacky fix
+     * Pushes a snackbar onto our activity.
+     *
+     * @param message The message to display.
+     */
+    public static void pushSnackbar(String message) {
+        // Push a snackbar
+
+        View view = mainActivity.findViewById(R.id.listViewMeasurements);
+        Snackbar.make(view, mainActivity.getResources().getString(R.string.finished_measurement_exit_save_confirm), Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
 }

@@ -51,7 +51,7 @@ public class SettingsPagesControl {
      * Called from {@link SettingsPageActivity#attemptConfirmChosenCategories(View)}.
      * @param from
      */
-    public static void onClickStartMeasurementFab(Activity from) {
+    public static void onClickStartMeasurementFabValid(Activity from) {
         Backend.onGeneratedNewSettings(SettingsGenerator.getCurrentSettings());
         Backend.onClickCompleteSettingsSetup();
 

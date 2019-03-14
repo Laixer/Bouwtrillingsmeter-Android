@@ -1,8 +1,10 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -41,14 +43,31 @@ public class FinishedMeasurement extends AppCompatActivity {
         fabDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Backend.onDoneWithMeasurement();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
-
-                // Close this activity
-                finish();
+                onExitThisActivity();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        onExitThisActivity();
+    }
+
+    /**
+     * This takes us back to the main activity.
+     * This also pushes a snackbar, confirming our measurement was saved and sent.
+     */
+    private void onExitThisActivity() {
+        Backend.onDoneWithMeasurement();
+
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+
+        // Close this activity
+        finish();
+
+        // Trigger snackbar
+        MainActivity.pushSnackbar(getResources().getString(R.string.finished_measurement_exit_save_confirm));
     }
 }

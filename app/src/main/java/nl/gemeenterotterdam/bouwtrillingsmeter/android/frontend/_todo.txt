@@ -1,8 +1,7 @@
 Frontend todos
 
 Nu:
-TODO Fix back button x backend state measurement
-TODO    --> Popup question!
+TODO Popup question green colors
 
 Later:
 TODO Wat als je geen settings file kan creëren met de huidige instellingen?
@@ -17,6 +16,9 @@ TODO Highlight first visit mooi maken
 TODO Wait icon groen -> niet elke API!
 TODO Switch achtergrond ook groen (check API version!)
 TODO Switch touch hele breedte
+
+Details:
+TODO Snackbar from activity complete in front of activity animation
 
 Latere vragen:
 TODO Hoe zit het met app data op de telefoon? --> Al wel soort van geïmplementeerd

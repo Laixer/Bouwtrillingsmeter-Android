@@ -64,18 +64,12 @@ class MeasurementControl {
     }
 
     /**
-     * This aborts our current measurement.
-     * It gets closed, then {@link #deleteCurrentMeasurement()} gets called.
+     * This aborts our current measurement, then deletes it.
      */
     public static void abortCurrentMeasurement() {
-        currentMeasurement.onStopMeasuring();
-        deleteCurrentMeasurement();
-    }
-
-    /**
-     * Deletes our current measurement
-     */
-    public static void deleteCurrentMeasurement() {
+        if (!currentMeasurement.isClosed()) {
+            currentMeasurement.onStopMeasuring();
+        }
         currentMeasurement = null;
     }
 

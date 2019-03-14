@@ -112,7 +112,7 @@ public class SettingsPageActivity extends AppCompatActivity {
         SettingsGenerator.createSettingsFromCategoryPage(buildingCategory, vibrationCategory, vibrationSensitive);
 
         // Go
-        SettingsPagesControl.onClickStartMeasurementFab(this);
+        SettingsPagesControl.onClickStartMeasurementFabValid(this);
     }
 
     /**
@@ -170,7 +170,7 @@ public class SettingsPageActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        Backend.onPressBackButtonFrom(this);
+        Backend.onPressedBackButton();
         finish();
     }
 
