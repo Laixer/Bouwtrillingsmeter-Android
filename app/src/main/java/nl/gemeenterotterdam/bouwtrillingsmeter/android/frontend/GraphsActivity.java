@@ -116,6 +116,7 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
      * This updates all graphs
      * This gets called when the {@link DataInterval} is closed.
      * Do not forget to add the @Override tag to this function!
+     * TODO Impement this
      *
      * @param dataInterval
      */
@@ -127,14 +128,14 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         }
 
         // Try it out
-        Graph graph = graphs[0];
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
-
-        ArrayList<DataPoint> points = new ArrayList<DataPoint>();
-        for (nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint dataPoint : dataInterval.dataPoints) {
-            points.add(new DataPoint(dataPoint.time, dataPoint.values[0]));
-        }
-
-        graph.addToSeries(points);
+//        Graph graph = graphs[0];
+//        LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+//
+//        ArrayList<DataPoint> points = new ArrayList<DataPoint>();
+//        for (nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint dataPoint : dataInterval.dataPoints) {
+//            points.add(new DataPoint(dataPoint.time, dataPoint.values[0]));
+//        }
+//
+//        graph.addToSeries(points);
     }
 }

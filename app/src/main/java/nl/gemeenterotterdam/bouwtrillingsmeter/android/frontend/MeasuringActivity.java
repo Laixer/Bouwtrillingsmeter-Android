@@ -3,7 +3,6 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +11,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Queue;
+import java.util.concurrent.DelayQueue;
+import java.util.concurrent.Delayed;
+import java.util.concurrent.TimeUnit;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
@@ -84,9 +90,10 @@ public class MeasuringActivity extends AppCompatActivity {
     private void ChangePageToState() {
         // Measuring state
         if (isMeasuring) {
-            textViewMeasuringCenter.setText(getResources().getString(R.string.measuring_measuring_now));
             buttonMeasuringShowGraphs.setVisibility(View.VISIBLE);
+            textViewMeasuringCenter.setText(getResources().getString(R.string.measuring_cycle_measuring_now));
             Backend.debugOnPhoneFlat();
+//            startMeasuringTextCycle();
         }
 
         // Place device on table state
@@ -94,6 +101,58 @@ public class MeasuringActivity extends AppCompatActivity {
             textViewMeasuringCenter.setText(getResources().getString(R.string.measuring_place_device_on_table));
             buttonMeasuringShowGraphs.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * This starts the text cycle while measuring.
+     */
+    private void startMeasuringTextCycle() {
+        final ArrayList<String> strings = new ArrayList<String>();
+        strings.add(getResources().getString(R.string.measuring_cycle_measuring_now));
+        strings.add(getResources().getString(R.string.measuring_cycle_keep_on_table));
+        strings.add(getResources().getString(R.string.measuring_cycle_lift_to_stop));
+        strings.add("This is our exceeding yes or no message");
+
+        new Thread(new Runnable() {
+            public void run() {
+                int index = 0;
+                while (isMeasuring) {
+                    // Check for (new) backend exceedings
+                    // Our iterations pause for one cycle
+//                    if (Backend.isCurrentMeasurementExceeded()) {
+//                        if (Backend.getTimeLastExceeding().getTime() - Calendar.getInstance().getTimeInMillis() > Constants.minimumTimeInMilisBetweenExceedings) {
+//                            textViewMeasuringCenter.setText(getResources().getString(R.string.measuring_cycle_measuring_now));
+//                        }
+//                    }
+
+                    // Display a regular message
+                    /**else*/ if (index < strings.size() - 1) {
+                        textViewMeasuringCenter.setText(strings.get(index));
+                        index++;
+                    }
+
+                    // Display if we have exceeded in the past, yes or no
+                    else if (index == strings.size() - 1) {
+                        textViewMeasuringCenter.setText(Backend.isCurrentMeasurementExceeded() ?
+                                getResources().getString(R.string.measuring_cycle_exceeding_detected) :
+                                getResources().getString(R.string.measuring_cycle_no_exceeding_detected));
+                        index++;
+                    }
+
+                    // Go back to 0
+                    else {
+                        index = 0;
+                    }
+                }
+
+                // Set timer
+                try {
+                    Thread.sleep(Constants.measuringTextCycleSleepTimeInMilis);
+                } catch (Exception e) {
+                    System.out.println("Error while sleeping text cycle thread. Message: " + e.getMessage());
+                }
+            }
+        }).start();
     }
 
     /**

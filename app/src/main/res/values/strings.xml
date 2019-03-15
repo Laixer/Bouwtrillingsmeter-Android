@@ -80,7 +80,12 @@
 
     <!--Measuring page-->
     <string name="measuring_place_device_on_table">Plaats uw telefoon op tafel</string>
-    <string name="measuring_measuring_now">Aan het meten...</string>
+    <string name="measuring_cycle_measuring_now">Aan het meten...</string>
+    <string name="measuring_cycle_keep_on_table">Laat de telefoon liggen...</string>
+    <string name="measuring_cycle_lift_to_stop">Pak de telefoon op als u de meting wilt stoppen...</string>
+    <string name="measuring_cycle_no_exceeding_detected">Nog geen overschrijding gedetecteerd...</string>
+    <string name="measuring_cycle_exceeding_detected">Er zijn overschrijdingen gedetecteerd...</string>
+    <string name="measuring_cycle_exceeding_detected_now">Overschrijding gedecteerd! Laat de telefoon liggen...</string>
     <string name="measuring_show_graphs">Laat grafieken zien</string>
     <string name="measuring_backbutton_text">Wilt u de meting annuleren?</string>
 

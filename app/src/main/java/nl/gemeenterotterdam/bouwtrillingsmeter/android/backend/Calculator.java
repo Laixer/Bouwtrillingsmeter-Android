@@ -18,34 +18,57 @@ class Calculator {
      * yv: margin on speeddata. Each speed value calculated is multiplied with this value.
      * yt: margin on limitvalue.
      * Determined by input of user on question:
+     * TODO Find out why we need these.
      */
     public static float yv = 0f;
     public static float yt = 0f;
 
     /**
-     * Calculates velocity from acceleration data
+     * Calculates velocity from acceleration data.
+     * This is done by integrating each step.
+     * We calculate the area under the graph,
+     * then add it to the total in order to get the
+     * velocity for each point.
      *
      * @param data values from acceleroMeter (retrieved for 1 second)
+     * @return A new arraylist, with a velocity for each point. All time values will be the same as the input data.
      */
     public static ArrayList<DataPoint<Date>> differentiate(ArrayList<DataPoint<Date>> data) {
+        // Instantiate variables
         ArrayList<DataPoint<Date>> velocities = new ArrayList<DataPoint<Date>>();
-        float[] accvalues = data.get(0).values;
-        float Vx = accvalues[0];
-        float Vy = accvalues[1];
-        float Vz = accvalues[2];
-        float[] currVelocity = new float[]{Vx, Vy, Vz};
-        velocities.add(new DataPoint<Date>(data.get(0).domain, currVelocity));
+
+        // Save the velocities of the first datapoint
+        // TODO Does this work? We say here that a = v
+        // TODO We do not have our start velocity v0
+        float[] accelerations = data.get(0).values;
+        float Vx = accelerations[0];
+        float Vy = accelerations[1];
+        float Vz = accelerations[2];
+
+        // Add the first data point
+        velocities.add(new DataPoint<Date>(data.get(0).domain, new float[]{Vx, Vy, Vz}));
+
+        // Add all other data points
+        // We need two points to differentiate
+        // That's why we skip the first one
         for (int i = 1; i < data.size(); i++) {
-            accvalues = data.get(i).values;
+            // Calculate dt [ms]
             Date currTime = data.get(i).domain;
             Date prevTime = data.get(i - 1).domain;
             double dTime = (currTime.getTime() - prevTime.getTime()) / 1000.0;
-            Vx += accvalues[0] * dTime;
-            Vy += accvalues[1] * dTime;
-            Vz += accvalues[2] * dTime;
-            currVelocity = new float[]{Vx, Vy, Vz};
-            velocities.add(new DataPoint<Date>(data.get(i).domain, currVelocity));
+
+            // Compute the integral
+            // Add each bit to the total velocity
+            accelerations = data.get(i).values;
+            Vx += accelerations[0] * dTime;
+            Vy += accelerations[1] * dTime;
+            Vz += accelerations[2] * dTime;
+
+            // Create a new datapoint with the new velocities
+            velocities.add(new DataPoint<Date>(data.get(i).domain, new float[]{Vx, Vy, Vz}));
         }
+
+        // Return our result
         return velocities;
     }
 

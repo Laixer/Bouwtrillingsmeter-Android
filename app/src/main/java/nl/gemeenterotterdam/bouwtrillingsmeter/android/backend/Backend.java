@@ -1,8 +1,8 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
-import android.app.Activity;
-
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * @author Thomas Beckers
@@ -18,6 +18,8 @@ public class Backend {
     private static BackendState backendState;
     private static ArrayList<BackendStateListener> backendStateListeners;
     private static boolean initialized = false;
+    private static boolean currentMeasurementExceeded;
+    private static Date timeLastExceeding;
 
     /**
      * Initialize the backend.
@@ -85,6 +87,7 @@ public class Backend {
                 }
 
                 // Start the measurement
+                currentMeasurementExceeded = false;
                 MeasurementControl.getCurrentMeasurement().onStartMeasuring();
                 DataHandler.startMeasuring();
                 break;
@@ -196,6 +199,25 @@ public class Backend {
     }
 
     /**
+     * These are the getters called by the frontend
+     * TODO Move the measuremnet things to measurementcontrol?
+     */
+
+    /**
+     * @return True if our current measurement has exceeded a limit.
+     */
+    public static boolean isCurrentMeasurementExceeded() {
+        return currentMeasurementExceeded;
+    }
+
+    /**
+     * @return The date object created during our last exceeding event.
+     */
+    public static Date getTimeLastExceeding() {
+        return timeLastExceeding;
+    }
+
+    /**
      * Gets a list with all known measurements.
      * This is used by the UI to display all the measurements the user made.
      *
@@ -248,6 +270,8 @@ public class Backend {
      */
     protected static void onExceedLimit() {
         System.out.println("Exceeded limit!");
+        currentMeasurementExceeded = true;
+        timeLastExceeding = Calendar.getInstance().getTime();
     }
 
     /**
