@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -59,6 +60,9 @@ public abstract class Graph {
         viewport.setScalableY(true);
         viewport.setScrollable(true);
         viewport.setScrollableY(true);
+        viewport.setXAxisBoundsManual(true);
+        viewport.setMinX(0);
+        viewport.setMaxX(100);
 
         // Text and names
         // graphView.setTitle(graph.getName()); This is done with a separate label because it looked ugly
@@ -68,6 +72,10 @@ public abstract class Graph {
         gridLabelRenderer.setHorizontalAxisTitle(getTextAxisHorizontal());
         gridLabelRenderer.setVerticalAxisTitle(getTextAxisVertical());
         gridLabelRenderer.setPadding(40);
+
+        // Legend renderer
+        LegendRenderer legendRenderer = graphView.getLegendRenderer();
+        legendRenderer.setVisible(true);
     }
 
     /**
@@ -88,8 +96,10 @@ public abstract class Graph {
             to = temp;
         }
 
-        graphView.getViewport().setMinX(from);
-        graphView.getViewport().setMaxX(to);
+        if (graphView != null) {
+            graphView.getViewport().setMinX(from);
+            graphView.getViewport().setMaxX(to);
+        }
     }
 
     /**

@@ -21,7 +21,7 @@ class Accelerometer implements SensorEventListener {
     public static Accelerometer accelerometer;
 
     private static final int sensorType = Sensor.TYPE_LINEAR_ACCELERATION;
-    private static final int sensorDelay = SensorManager.SENSOR_DELAY_FASTEST;
+    private static final int sensorDelay = SensorManager.SENSOR_DELAY_GAME;
     private static SensorManager sensorManager;
     private static Sensor sensor;
 

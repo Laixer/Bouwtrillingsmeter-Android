@@ -139,12 +139,10 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
             return;
         }
 
-        Graph graph;
-
         /**
          * Graph 1: Velocity // time
          */
-        graph = graphs[1];
+        Graph graph = graphs[1];
         ArrayList<DataPoint3D<Long>> dataPoints3D = dataInterval.velocities;
         DataPoint[] dataPoints1D;
         for (int i = 0; i < 3; i++) {
