@@ -145,7 +145,7 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
          * Graph 1: Velocity // time
          */
         graph = graphs[1];
-        ArrayList<DataPoint3D<Long>> dataPoints3D = dataInterval.dataPoints3DAcceleration;
+        ArrayList<DataPoint3D<Long>> dataPoints3D = dataInterval.velocities;
         DataPoint[] dataPoints1D;
         for (int i = 0; i < 3; i++) {
             dataPoints1D = new DataPoint[dataPoints3D.size()];
