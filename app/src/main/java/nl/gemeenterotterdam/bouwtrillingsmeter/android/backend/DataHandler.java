@@ -188,7 +188,7 @@ public class DataHandler implements AccelerometerListener {
                 thisDataInterval.onThreadCalculationsStart();
 
                 // Trigger all calculations
-                float[] maxAccelerations = Calculator.maxValueInArray(thisDataInterval.dataPoints3DAcceleration);
+//                float[] maxAccelerations = Calculator.maxValueInArray(thisDataInterval.dataPoints3DAcceleration);
 
                 ArrayList<DataPoint3D<int[]>> fftAccelerations = Calculator.FFT(thisDataInterval.dataPoints3DAcceleration);
                 int[] maxFrequencies = Calculator.maxFrequencies(fftAccelerations);
@@ -201,7 +201,7 @@ public class DataHandler implements AccelerometerListener {
                 maxVelocities = Calculator.addMargin(maxVelocities);
 
                 // Write relevant calculations
-                thisDataInterval.maxAccelerations = maxAccelerations;
+//                thisDataInterval.maxAccelerations = maxAccelerations;
                 thisDataInterval.dominantFrequencies = dominantFrequencies;
                 thisDataInterval.maxFrequencies = maxFrequencies;
                 thisDataInterval.maxVelocities = maxVelocities;

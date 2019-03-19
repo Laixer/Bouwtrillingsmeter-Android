@@ -61,6 +61,28 @@ public abstract class Graph {
     }
 
     /**
+     * Set our horizontal axis range.
+     * Only does so if we are not scaling the graph manually at that moment.
+     * Swaps if from > to.
+     *
+     * @param from
+     * @param to
+     */
+    protected void setHorizontalRange(double from, double to) {
+        // Return if we are scaling manually
+
+
+        if (from > to) {
+            double temp = from;
+            from = to;
+            to = temp;
+        }
+
+        graphView.getViewport().setMinX(from);
+        graphView.getViewport().setMaxX(to);
+    }
+
+    /**
      * Call this to style the series
      *
      * @param series

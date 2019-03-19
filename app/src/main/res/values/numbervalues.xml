@@ -10,7 +10,7 @@
         <item>1</item>
     </integer-array>
     
-    <integer name="graphs_time_bound_max_width_ms">5000</integer>
+    <integer name="graphs_time_horizontal_axis_range_ms">5000</integer>
     <integer name="graphs_frequency_bound_min">0</integer>
     <integer name="graphs_frequency_bound_max">100</integer>
 </resources>

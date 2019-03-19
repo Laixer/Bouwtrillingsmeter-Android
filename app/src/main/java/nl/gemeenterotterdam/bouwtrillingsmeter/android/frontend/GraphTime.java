@@ -13,7 +13,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
  */
 public class GraphTime extends Graph {
 
-    private int maxWidthInMs;
+    private int maxHorizontalRange;
 
     /**
      * This has to be an ArrayList, since our LineGraphSeries is generic.
@@ -32,7 +32,7 @@ public class GraphTime extends Graph {
         super(name, textAxisHorizontal, textAxisVertical);
 
         // Get constants
-        maxWidthInMs = Utility.Resources.getInteger(R.integer.graphs_time_bound_max_width_ms);
+        maxHorizontalRange = Utility.Resources.getInteger(R.integer.graphs_time_horizontal_axis_range_ms);
 
         // Initialize variables
         series = new ArrayList<LineGraphSeries<DataPoint>>();
@@ -74,11 +74,17 @@ public class GraphTime extends Graph {
             throw new IllegalArgumentException("The dimension parameter must be x=0, y=1 or z=2!");
         }
 
+        LineGraphSeries serie = series.get(dimension);
         for (DataPoint dataPoint : dataPoints) {
             if (dataPoint.getX() > lastTimeValue[dimension]) {
-                series.get(dimension).appendData(dataPoint, true, maxWidthInMs);
+                serie.appendData(dataPoint, true, maxHorizontalRange);
                 lastTimeValue[dimension] = dataPoint.getX();
             }
+        }
+
+        // If we are the last update
+        if (dimension == 2) {
+            setHorizontalRange(Math.max(serie.getLowestValueX(), serie.getHighestValueX() - maxHorizontalRange), serie.getHighestValueX());
         }
     }
 

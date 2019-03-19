@@ -1,12 +1,12 @@
 Frontend todos
 
 Nu:
-TODO Grafiek activity werkend maken
 
 Later:
 TODO Tekst measuring laten cyclen
 TODO Gaan we de acceleration graph realtime laten updaten ipv elke seconde? Misschien wel elegant!
-TODO Graph unlcok
+TODO Graph unlock
+TODO Graph datapoints --> dit is ook veel data. Wat doen we hiermee?
 TODO Wat als je geen settings file kan creëren met de huidige instellingen?
 TODO Widget opnieuw?
 TODO Grafiek linken aan data!
