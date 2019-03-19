@@ -1,67 +1,46 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 
-import java.util.Date;
-
 /**
  * @author Thomas Beckers
  * @since 1.0
  * <p>
  * This class holds a given datapoint.
- * If we are operating in the time domain, domain is of type Date.
- * If we are operating in the frequency domain, domain is of type float[x, y, z], where x y z are frequencies.
+ * If we are operating in the time xAxisValue, xAxisValue is of type long
+ * If we are operating in the frequency xAxisValue, xAxisValue is of type int or int[].
  * All other functions regarding data use an ArrayList of these datapoints.
- * <p>
- * OLD DOCUMENTATION:
- * DataPoint3D, used for storage.
- * X: Date if DataPoint3D in time domain, float[] (x, y, z values of frequencies) in frequencydomain)
- * values: x, y, z values of data, usually velocity or acceleration
- * <p>
- * Based on code by Marijn Otte
  */
 
 public class DataPoint3D<X> {
 
-    public X domain;
+    public X xAxisValue;
     public float[] values;
-    public long time;
 
     /**
      * Constructor
      *
-     * @param domain The domain, being of type a Date (time domain) or float[x, y, z] (frequency domain)
+     * @param xAxisValue The xAxisValue. Long is used for time. Int or int[] is used for frequency.
      * @param values The corresponding data values
      */
-    public DataPoint3D(X domain, float[] values) {
-        this(domain, values[0], values[1], values[2]);
+    public DataPoint3D(X xAxisValue, float[] values) {
+        this(xAxisValue, values[0], values[1], values[2]);
     }
 
     /**
      * Constructor
      *
-     * @param domain The domain, being of type a Date (time domain) or float[x, y, z] (frequency domain)
+     * @param xAxisValue The xAxisValue, being of type a Date (time xAxisValue) or float[x, y, z] (frequency xAxisValue)
      * @param x      Data x
      * @param y      Data y
      * @param z      Data z
      */
-    public DataPoint3D(X domain, float x, float y, float z) {
-        this.domain = domain;
+    public DataPoint3D(X xAxisValue, float x, float y, float z) {
+        this.xAxisValue = xAxisValue;
         float[] values = new float[3];
         values[0] = x;
         values[1] = y;
         values[2] = z;
         this.values = values;
-
-        /**
-         * If we are dealing with a {@link Date} object,
-         * our domain variable is the starttime of our {@link Measurement}.
-         * We need to calculate the time since the starttime of the measurement
-         * and set it as our domain, for the graphs to work properly.
-         */
-        if (domain instanceof Date) {
-
-        }
-
     }
 
 }

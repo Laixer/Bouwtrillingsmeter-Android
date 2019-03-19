@@ -95,7 +95,7 @@ public class DataHandler implements AccelerometerListener {
      *
      * @param dataPoint3DTime The datapoint created.
      */
-    private static void triggerPointAccelerometerCreatedEvent(DataPoint3DTime dataPoint3DTime) {
+    private static void triggerPointAccelerometerCreatedEvent(DataPoint3D<Long> dataPoint3DTime) {
         for (DataPointAccelerometerCreatedListener listener : dataPointAccelerometerCreatedListeners) {
             if (listener != null) {
                 listener.onDataPointAccelerometerCreated(dataPoint3DTime);
@@ -273,7 +273,7 @@ public class DataHandler implements AccelerometerListener {
             long dataPointTime = currentTime - startTime;
 
             // Push the datapoint
-            DataPoint3DTime dataPoint3DTime = new DataPoint3DTime(dataPointTime, x, y, z);
+            DataPoint3D<Long> dataPoint3DTime = new DataPoint3D<Long>(dataPointTime, x, y, z);
             currentDataInterval.addDataPoint3D(dataPoint3DTime);
 
             // Trigger datapoint event

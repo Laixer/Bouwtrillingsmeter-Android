@@ -17,7 +17,6 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataHandler;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataInterval;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClosedListener;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3DTime;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPointAccelerometerCreatedListener;
 
 import java.util.Date;
@@ -146,12 +145,12 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
          * Graph 1: Velocity // time
          */
         graph = graphs[1];
-        ArrayList<DataPoint3DTime> dataPoints3D = dataInterval.dataPoints3DAcceleration;
+        ArrayList<DataPoint3D<Long>> dataPoints3D = dataInterval.dataPoints3DAcceleration;
         DataPoint[] dataPoints1D;
         for (int i = 0; i < 3; i++) {
             dataPoints1D = new DataPoint[dataPoints3D.size()];
             for (int j = 0; j < dataPoints3D.size(); j++) {
-                dataPoints1D[j] = (new DataPoint(dataPoints3D.get(j).time, dataPoints3D.get(j).values[i]));
+                dataPoints1D[j] = (new DataPoint(dataPoints3D.get(j).xAxisValue, dataPoints3D.get(j).values[i]));
             }
             graph.addDataToSeries1D(dataPoints1D, i);
         }
@@ -164,13 +163,13 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
      * @param dataPoint3DTime
      */
     @Override
-    public void onDataPointAccelerometerCreated(DataPoint3DTime dataPoint3DTime) {
+    public void onDataPointAccelerometerCreated(DataPoint3D<Long> dataPoint3DTime) {
         Graph graph = graphs[0];
         if (graph != null && graph.canDataBeAdded()) {
             graph = graphs[0];
             for (int i = 0; i < 3; i++) {
                 DataPoint[] singleDataPoint1D = new DataPoint[1];
-                singleDataPoint1D[0] = new DataPoint(dataPoint3DTime.time, dataPoint3DTime.values[i]);
+                singleDataPoint1D[0] = new DataPoint(dataPoint3DTime.xAxisValue, dataPoint3DTime.values[i]);
                 graph.addDataToSeries1D(singleDataPoint1D, i);
             }
         }

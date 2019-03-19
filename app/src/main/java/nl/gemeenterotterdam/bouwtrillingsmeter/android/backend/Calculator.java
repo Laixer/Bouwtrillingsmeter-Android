@@ -3,7 +3,6 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 import org.jtransforms.fft.FloatFFT_1D;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * @author Marijn Otte
@@ -23,6 +22,19 @@ class Calculator {
     public static float yv = 0f;
     public static float yt = 0f;
 
+    private static DataPoint3D<Long> accelerationPrevious;
+    private static float[] velocity;
+
+    /**
+     * This initializes the calculator.
+     * You should call this before starting a measurement.
+     * This is due to the correct starting boundary conditions.
+     */
+    public static void onStartMeasurementCalculations() {
+        accelerationPrevious = new DataPoint3D<Long>((long)0, new float[]{0, 0, 0});
+        velocity = new float[]{0, 0, 0};
+    }
+
     /**
      * Calculates velocity from acceleration data.
      * This is done by integrating each step.
@@ -33,43 +45,35 @@ class Calculator {
      * @param data values from acceleroMeter (retrieved for 1 second)
      * @return A new arraylist, with a velocity for each point. All time values will be the same as the input data.
      */
-    public static ArrayList<DataPoint3D<Date>> differentiate(ArrayList<DataPoint3D<Date>> data) {
-        // Instantiate variables
-        ArrayList<DataPoint3D<Date>> velocities = new ArrayList<DataPoint3D<Date>>();
+    public static ArrayList<DataPoint3D<Long>> accelerationToVelocity(ArrayList<DataPoint3D<Long>> data) {
+        // Create a result array
+        ArrayList<DataPoint3D<Long>> result = new ArrayList<DataPoint3D<Long>>();
 
-        // Save the velocities of the first datapoint
-        // TODO Does this work? We say here that a = v
-        // TODO We do not have our start velocity v0
-        float[] accelerations = data.get(0).values;
-        float Vx = accelerations[0];
-        float Vy = accelerations[1];
-        float Vz = accelerations[2];
-
-        // Add the first data point
-        velocities.add(new DataPoint3D<Date>(data.get(0).domain, new float[]{Vx, Vy, Vz}));
-
-        // Add all other data points
-        // We need two points to differentiate
-        // That's why we skip the first one
-        for (int i = 1; i < data.size(); i++) {
+        /**
+         * Differentiate based on our {@link accelerationPrevious} variable.
+         * Set this variable after each point.
+         * This ensures cross interval consistent boundary conditions.
+         */
+        for (int i = 0; i < data.size(); i++) {
             // Calculate dt [ms]
-            Date currTime = data.get(i).domain;
-            Date prevTime = data.get(i - 1).domain;
-            double dTime = (currTime.getTime() - prevTime.getTime()) / 1000.0;
+            long timeCurrent = data.get(i).xAxisValue;
+            long timePrevious = accelerationPrevious.xAxisValue;
+            double dtSeconds = (timeCurrent - timePrevious) / 1000.0;
 
-            // Compute the integral
-            // Add each bit to the total velocity
-            accelerations = data.get(i).values;
-            Vx += accelerations[0] * dTime;
-            Vy += accelerations[1] * dTime;
-            Vz += accelerations[2] * dTime;
+            // Compute the integral by adding each bit to the total velocity
+            velocity[0] += data.get(i).values[0] * dtSeconds;
+            velocity[1] += data.get(i).values[1] * dtSeconds;
+            velocity[2] += data.get(i).values[2] * dtSeconds;
 
             // Create a new datapoint with the new velocities
-            velocities.add(new DataPoint3D<Date>(data.get(i).domain, new float[]{Vx, Vy, Vz}));
+            result.add(new DataPoint3D<Long>(data.get(i).xAxisValue, velocity));
+
+            // Store our datapoint as previous for the next iteration
+            accelerationPrevious = data.get(i);
         }
 
         // Return our result
-        return velocities;
+        return result;
     }
 
     /**
@@ -109,7 +113,7 @@ class Calculator {
         int freqz = 0;
 
         for (DataPoint3D dataPoint3D : dataArray) {
-            int[] frequencies = (int[]) dataPoint3D.domain;
+            int[] frequencies = (int[]) dataPoint3D.xAxisValue;
             float[] magnitudes = (float[]) dataPoint3D.values;
             float xVel = magnitudes[0];
             float yVel = magnitudes[1];
@@ -147,7 +151,7 @@ class Calculator {
      * @return float frequency in x, y and z direction in range (0-50)Hz with corresponding magnitude
      */
 
-    public static ArrayList<DataPoint3D<int[]>> FFT(ArrayList<DataPoint3DTime> velocities) {
+    public static ArrayList<DataPoint3D<int[]>> FFT(ArrayList<DataPoint3D<Long>> velocities) {
         if (velocities.size() == 0) {
             ArrayList<DataPoint3D<int[]>> data = new ArrayList<DataPoint3D<int[]>>();
             data.add(new DataPoint3D<int[]>(new int[]{0, 0, 0}, new float[]{0f, 0f, 0f}));
@@ -218,8 +222,8 @@ class Calculator {
     }
 
     /**
-     * @param acc acceleration data in frequency domain (frequency + acceleration)
-     * @return velocity data in frequency domain (frequency + velocity)
+     * @param acc acceleration data in frequency xAxisValue (frequency + acceleration)
+     * @return velocity data in frequency xAxisValue (frequency + velocity)
      */
     public static ArrayList<DataPoint3D<int[]>> calcVelocityFreqDomain(ArrayList<DataPoint3D<int[]>> acc) {
         float xVel = 0;
@@ -232,9 +236,9 @@ class Calculator {
             float yAcc = dataPoint3D.values[1];
             float zAcc = dataPoint3D.values[2];
 
-            int xFreq = dataPoint3D.domain[0];
-            int yFreq = dataPoint3D.domain[1];
-            int zFreq = dataPoint3D.domain[2];
+            int xFreq = dataPoint3D.xAxisValue[0];
+            int yFreq = dataPoint3D.xAxisValue[1];
+            int zFreq = dataPoint3D.xAxisValue[2];
 
             xVel = xAcc / (2f * (float) Math.PI * (float) xFreq);
             yVel = yAcc / (2f * (float) Math.PI * (float) yFreq);
@@ -247,16 +251,16 @@ class Calculator {
     }
 
     /**
-     * @param velocities list of velocities obtained for 1 second in frequency domain
+     * @param velocities list of velocities obtained for 1 second in frequency xAxisValue
      * @return limitValue (m/s) for each velocity
      */
 
     public static ArrayList<DataPoint3D<int[]>> limitValue(ArrayList<DataPoint3D<int[]>> velocities) {
         ArrayList<DataPoint3D<int[]>> limitValues = new ArrayList<DataPoint3D<int[]>>();
         for (DataPoint3D<int[]> dataPoint3D : velocities) {
-            int xfreq = dataPoint3D.domain[0];
-            int yfreq = dataPoint3D.domain[1];
-            int zfreq = dataPoint3D.domain[2];
+            int xfreq = dataPoint3D.xAxisValue[0];
+            int yfreq = dataPoint3D.xAxisValue[1];
+            int zfreq = dataPoint3D.xAxisValue[2];
 
             float xLimit = findLimit(xfreq);
             float yLimit = findLimit(yfreq);
@@ -304,19 +308,19 @@ class Calculator {
 
             if (velocity.values[0] / limitValue.values[0] > ratioX) {
                 ratioX = velocity.values[0] / limitValue.values[0];
-                domFreqX = limitValue.domain[0];
+                domFreqX = limitValue.xAxisValue[0];
                 domVelX = velocity.values[0];
             }
 
             if (velocity.values[1] / limitValue.values[1] > ratioY) {
                 ratioY = velocity.values[1] / limitValue.values[1];
-                domFreqY = limitValue.domain[1];
+                domFreqY = limitValue.xAxisValue[1];
                 domVelY = velocity.values[1];
             }
 
             if (velocity.values[2] / limitValue.values[2] > ratioZ) {
                 ratioZ = velocity.values[2] / limitValue.values[2];
-                domFreqZ = limitValue.domain[2];
+                domFreqZ = limitValue.xAxisValue[2];
                 domVelZ = velocity.values[2];
             }
         }

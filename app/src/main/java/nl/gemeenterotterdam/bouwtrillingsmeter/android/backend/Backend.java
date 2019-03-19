@@ -9,7 +9,7 @@ import java.util.Date;
  * @since 1.0
  * <p>
  * This is used as a main communication unit between the frontend and the backend
- * This will initialize all backend components in one go by firing {@link #initialize()}.
+ * This will onStartMeasurementCalculations all backend components in one go by firing {@link #initialize()}.
  * <p>
  * TODO Consistency with where we put the edge cases (exception throwers) in the backend state.
  */
@@ -88,6 +88,7 @@ public class Backend {
 
                 // Start the measurement
                 currentMeasurementExceeded = false;
+                Calculator.onStartMeasurementCalculations();
                 MeasurementControl.getCurrentMeasurement().onStartMeasuring();
                 DataHandler.startMeasuring();
                 break;

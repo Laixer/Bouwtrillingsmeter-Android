@@ -5,6 +5,6 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
  */
 public interface DataPointAccelerometerCreatedListener {
 
-    public void onDataPointAccelerometerCreated(DataPoint3DTime dataPoint3DTime);
+    public void onDataPointAccelerometerCreated(DataPoint3D<Long> dataPoint3DTime);
 
 }
