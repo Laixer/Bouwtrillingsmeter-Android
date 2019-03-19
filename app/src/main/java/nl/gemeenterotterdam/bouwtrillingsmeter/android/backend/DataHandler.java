@@ -9,7 +9,7 @@ import java.util.Calendar;
  * <p>
  * This class triggers the collection of data.
  * It also triggers the calculations done on said data, which are executed by the {@link Calculator}.
- * Data is received in the form of a {@link DataPoint3DTime}.
+ * Data is received in the form of a {@link DataPoint3D<Long>}.
  * The collection and measurements are stored in a {@link DataInterval} object.
  * These intervals are stored within a {@link Measurement} object.
  */
@@ -217,9 +217,13 @@ public class DataHandler implements AccelerometerListener {
                 // Lock dataInterval
                 thisDataInterval.onThreadCalculationsStart();
 
+                // Calculate time-domain velocities
+                ArrayList<DataPoint3D<Long>> velocities = Calculator.calculateVelocityFromAcceleration(thisDataInterval.dataPoints3DAcceleration);
+                thisDataInterval.velocities = velocities;
+
                 // Trigger all calculations
 //                float[] maxAccelerations = Calculator.maxValueInArray(thisDataInterval.dataPoints3DAcceleration);
-
+//                thisDataInterval.maxAccelerations = maxAccelerations;
                 ArrayList<DataPoint3D<int[]>> fftAccelerations = Calculator.FFT(thisDataInterval.dataPoints3DAcceleration);
                 int[] maxFrequencies = Calculator.maxFrequencies(fftAccelerations);
 
@@ -231,7 +235,7 @@ public class DataHandler implements AccelerometerListener {
                 maxVelocities = Calculator.addMargin(maxVelocities);
 
                 // Write relevant calculations
-//                thisDataInterval.maxAccelerations = maxAccelerations;
+
                 thisDataInterval.dominantFrequencies = dominantFrequencies;
                 thisDataInterval.maxFrequencies = maxFrequencies;
                 thisDataInterval.maxVelocities = maxVelocities;

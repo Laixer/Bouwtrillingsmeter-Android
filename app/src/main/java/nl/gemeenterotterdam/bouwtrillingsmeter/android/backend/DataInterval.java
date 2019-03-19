@@ -18,6 +18,7 @@ public class DataInterval {
     public Date dateStart;
     public Date dateEnd;
 
+    public ArrayList<DataPoint3D<Long>> velocities;
     public float[] maxAccelerations;
     public float[] maxVelocities;
     public int[] maxFrequencies;

@@ -45,7 +45,7 @@ class Calculator {
      * @param data values from acceleroMeter (retrieved for 1 second)
      * @return A new arraylist, with a velocity for each point. All time values will be the same as the input data.
      */
-    public static ArrayList<DataPoint3D<Long>> accelerationToVelocity(ArrayList<DataPoint3D<Long>> data) {
+    public static ArrayList<DataPoint3D<Long>> calculateVelocityFromAcceleration(ArrayList<DataPoint3D<Long>> data) {
         // Create a result array
         ArrayList<DataPoint3D<Long>> result = new ArrayList<DataPoint3D<Long>>();
 
