@@ -40,6 +40,7 @@ public class GraphTime extends Graph {
         series = new ArrayList<LineGraphSeries<DataPoint>>();
         for (int i = 0; i < 3; i++) {
             series.add(new LineGraphSeries<DataPoint>());
+            series.get(i).setTitle(Utility.Resources.getStringArray(R.array.graph_legend_xyz_names)[i]);
         }
         lastTimeValue = new double[3];
     }
@@ -65,6 +66,8 @@ public class GraphTime extends Graph {
      * Adds data to the series.
      * This skipps any data points that are overlapping with previous points.
      * TODO This can be done more efficiently? Maybe series has an append range function?
+     * TODO Maybe not make this check every iteration for the lowest point
+     * TODO Maybe make this not check every iteration for updating our scale
      *
      * @param dataPoints A time based array of datapoints.
      * @param dimension  Indicates x y or z. x=0, y=1, z=2
@@ -72,8 +75,8 @@ public class GraphTime extends Graph {
      */
     @Override
     public void addDataToSeries1D(DataPoint[] dataPoints, int dimension) {
-        if (dimension < 0 || dimension > 2) {
-            throw new IllegalArgumentException("The dimension parameter must be x=0, y=1 or z=2!");
+        if (lowestValue == 0) {
+            lowestValue = dataPoints[0].getX();
         }
 
         LineGraphSeries serie = series.get(dimension);
@@ -87,7 +90,7 @@ public class GraphTime extends Graph {
         // If we are the last update
         if (dimension == 2) {
             highestValue = dataPoints[dataPoints.length - 1].getX();
-            setHorizontalRange(Math.max(0, highestValue - maxHorizontalRange), serie.getHighestValueX());
+            setHorizontalRange(Math.max(lowestValue, highestValue - maxHorizontalRange), serie.getHighestValueX());
         }
     }
 

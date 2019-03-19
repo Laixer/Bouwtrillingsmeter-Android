@@ -139,16 +139,31 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
             return;
         }
 
+        Graph graph;
+        DataPoint[] dataPoints1D;
+
         /**
          * Graph 1: Velocity // time
          */
-        Graph graph = graphs[1];
-        ArrayList<DataPoint3D<Long>> dataPoints3D = dataInterval.velocities;
-        DataPoint[] dataPoints1D;
+        graph = graphs[1];
+        ArrayList<DataPoint3D<Long>> dataPoints3DTime = dataInterval.velocities;
         for (int i = 0; i < 3; i++) {
-            dataPoints1D = new DataPoint[dataPoints3D.size()];
-            for (int j = 0; j < dataPoints3D.size(); j++) {
-                dataPoints1D[j] = (new DataPoint(dataPoints3D.get(j).xAxisValue, dataPoints3D.get(j).values[i]));
+            dataPoints1D = new DataPoint[dataPoints3DTime.size()];
+            for (int j = 0; j < dataPoints3DTime.size(); j++) {
+                dataPoints1D[j] = (new DataPoint(dataPoints3DTime.get(j).xAxisValue, dataPoints3DTime.get(j).values[i]));
+            }
+            graph.addDataToSeries1D(dataPoints1D, i);
+        }
+
+        /**
+         * Graph 4: Amplitude // frequency
+         */
+        graph = graphs[3];
+        ArrayList<DataPoint3D<Double>> dataPoints3DFrequency = dataInterval.frequencyAmplitudes;
+        for (int i = 0; i < 3; i++) {
+            dataPoints1D = new DataPoint[dataPoints3DFrequency.size()];
+            for (int j = 0; j < dataPoints3DFrequency.size(); j++) {
+                dataPoints1D[j] = (new DataPoint(dataPoints3DFrequency.get(j).xAxisValue, dataPoints3DFrequency.get(j).values[i]));
             }
             graph.addDataToSeries1D(dataPoints1D, i);
         }

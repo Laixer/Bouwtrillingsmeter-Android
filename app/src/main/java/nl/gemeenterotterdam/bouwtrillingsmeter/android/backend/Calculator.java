@@ -4,6 +4,9 @@ import org.jtransforms.fft.FloatFFT_1D;
 
 import java.util.ArrayList;
 
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
+
 /**
  * @author Marijn Otte
  * @author Thomas Beckers
@@ -31,7 +34,7 @@ class Calculator {
      * This is due to the correct starting boundary conditions.
      */
     public static void onStartMeasurementCalculations() {
-        accelerationPrevious = new DataPoint3D<Long>((long)0, new float[]{0, 0, 0});
+        accelerationPrevious = new DataPoint3D<Long>((long) 0, new float[]{0, 0, 0});
         velocity = new float[]{0, 0, 0};
     }
 
@@ -143,69 +146,85 @@ class Calculator {
     }
 
     /**
-     * Calculate FFT
+     * Calculate fft
      * realForward returns Re+Im values
      * Calculate Magnitude from Re + Im
+     * <p>
+     * TODO n = 2^x voor optimale fft
+     * <p>
+     * n = amount of datapoints
+     * fft[0] = DC value (average of the entire sample)
+     * t / dt = sampling frequency fs
+     * Bb = fs
+     * df in fourier domain = Bb / n
+     * <p>
+     * max f = Bb / 2 (sampling theorem = nyquist frequency)
+     * -> halverwege is de maximale frequentie die je in het tijdsdomein kan laten zien
+     * hierom pakken we meestal alleen de eerste helft van de array
+     * <p>
+     * Math.hypot returns sqrt(x^2 + y^2)
+     * Extract frequencies from first half
+     * The second half is not accurate because this is beyond the nyquist frequency
+     * <p>
+     * From the documentation the data is ordened as follows
+     * a[2*k] = Re[k], 0<=k<n/2
+     * a[2*k+1] = Im[k], 0<k<n/2
+     * a[1] = Re[n/2]
      *
-     * @param velocities list of velocities obtained for 1 second
+     * @param accelerations3D list of velocities obtained for 1 second
      * @return float frequency in x, y and z direction in range (0-50)Hz with corresponding magnitude
      */
+    public static ArrayList<DataPoint3D<Double>> fft(ArrayList<DataPoint3D<Long>> accelerations3D) {
+        // Calculate extraction constants
+        int n = accelerations3D.size();
+        double df = ((double) Constants.intervalInMilliseconds / 1000.0) / n;
 
-    public static ArrayList<DataPoint3D<int[]>> FFT(ArrayList<DataPoint3D<Long>> velocities) {
-        if (velocities.size() == 0) {
-            ArrayList<DataPoint3D<int[]>> data = new ArrayList<DataPoint3D<int[]>>();
-            data.add(new DataPoint3D<int[]>(new int[]{0, 0, 0}, new float[]{0f, 0f, 0f}));
-            return data;
+        // Create velocity array for each dimension
+        float[][] accelerationsSplit = new float[3][n];
+        accelerationsSplit[0] = new float[n];
+        accelerationsSplit[1] = new float[n];
+        accelerationsSplit[2] = new float[n];
+
+        // Fill our acceleration arrays
+        for (int i = 0; i < accelerations3D.size(); i++) {
+            accelerationsSplit[0][i] = accelerations3D.get(i).values[0];
+            accelerationsSplit[1][i] = accelerations3D.get(i).values[1];
+            accelerationsSplit[2][i] = accelerations3D.get(i).values[2];
         }
-        int maxIX = 0;
-        float maxMagX = 0;
-        int maxIY = 0;
-        float maxMagY = 0;
-        int maxIZ = 0;
-        float maxMagZ = 0;
-        float[] xvelo = new float[velocities.size()];
-        float[] yvelo = new float[velocities.size()];
-        float[] zvelo = new float[velocities.size()];
-        ArrayList<DataPoint3D<int[]>> datapoints = new ArrayList<>();
-        FloatFFT_1D fft = new FloatFFT_1D(velocities.size());
 
+        // Apply FFT on each dimension array.
+        // The results are stored in said array.
+        FloatFFT_1D fft = new FloatFFT_1D(n);
+        fft.realForward(accelerationsSplit[0]);
+        fft.realForward(accelerationsSplit[1]);
+        fft.realForward(accelerationsSplit[2]);
 
-        for (int i = 0; i < velocities.size(); i++) {
-            xvelo[i] = velocities.get(i).values[0];
-            yvelo[i] = velocities.get(i).values[1];
-            zvelo[i] = velocities.get(i).values[2];
+        // Create storage variables
+        float[] magnitude = new float[3];
+        float[] magnitudeMax = new float[3];
+        int[] magnitudeMaxIndex = new int[3];
+
+        // Loop trough fft transformed datapoints
+        ArrayList<DataPoint3D<Double>> result = new ArrayList<DataPoint3D<Double>>();
+        for (int i = 0; i < n / 2; i++) {
+            for (int dimension = 0; dimension < 3; dimension++) {
+                // Get real and imaginairy parts of each datapoint and calculate the combined magnitude
+                double re = accelerationsSplit[dimension][2 * i];
+                double im = accelerationsSplit[dimension][2 * i + 1];
+                magnitude[dimension] = (float) Math.hypot(im, re);
+
+                // Track our maxima and their index
+                if (magnitude[dimension] > magnitudeMax[dimension]) {
+                    magnitudeMax[dimension] = magnitude[dimension];
+                    magnitudeMaxIndex[dimension] = i;
+                }
+            }
+            double frequency = df * i;
+            result.add(new DataPoint3D<Double>(frequency, magnitude));
         }
-        fft.realForward(xvelo);
-        fft.realForward(yvelo);
-        fft.realForward(zvelo);
 
-        for (int i = 0; i < velocities.size() / 2; i++) {
-            double ReX = xvelo[2 * i];
-            double ImX = xvelo[2 * i + 1];
-            float MagX = (float) Math.hypot(ReX, ImX);
-            double ReY = yvelo[2 * i];
-            double ImY = yvelo[2 * i + 1];
-            float MagY = (float) Math.hypot(ReY, ImY);
-            double ReZ = zvelo[2 * i];
-            double ImZ = zvelo[2 * i + 1];
-            float MagZ = (float) Math.hypot(ReZ, ImZ);
-
-            if (MagX > maxMagX) {
-                maxMagX = MagX;
-                maxIX = i;
-            }
-            if (MagY > maxMagY) {
-                maxMagY = MagY;
-                maxIY = i;
-            }
-            if (MagZ > maxMagZ) {
-                maxMagZ = MagZ;
-                maxIZ = i;
-            }
-            DataPoint3D<int[]> d = new DataPoint3D<int[]>(new int[]{i, i, i}, new float[]{MagX, MagY, MagZ});
-            datapoints.add(d);
-        }
-        return datapoints;
+        // Return the fourier domain data points
+        return result;
     }
 
     /**

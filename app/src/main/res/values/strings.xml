@@ -117,4 +117,10 @@
         <item>Frequentie [Hz]</item>
         <item>Frequentie [Hz]</item>
     </string-array>
+
+    <string-array name="graph_legend_xyz_names">
+        <item>X</item>
+        <item>Y</item>
+        <item>Z</item>
+    </string-array>
 </resources>

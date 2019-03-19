@@ -76,6 +76,7 @@ public abstract class Graph {
         // Legend renderer
         LegendRenderer legendRenderer = graphView.getLegendRenderer();
         legendRenderer.setVisible(true);
+        legendRenderer.setAlign(LegendRenderer.LegendAlign.TOP);
     }
 
     /**
