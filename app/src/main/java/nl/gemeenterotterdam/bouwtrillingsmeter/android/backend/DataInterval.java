@@ -8,13 +8,13 @@ import java.util.Date;
  * @author Thomas Beckers
  * @since 1.0
  * <p>
- * This class holds a reference to all {@link DataPoint}s within a given time interval.
+ * This class holds a reference to all {@link DataPoint3D}s within a given time interval.
  * This also holds all result values of calculations (fft etc)
  */
 public class DataInterval {
 
     public int index;
-    public ArrayList<DataPoint<Date>> dataPointsAcceleration;
+    public ArrayList<DataPoint3D<Date>> dataPoints3DAcceleration;
     public Date dateStart;
     public Date dateEnd;
 
@@ -31,7 +31,7 @@ public class DataInterval {
     public DataInterval(int index) {
         this.index = index;
 
-        dataPointsAcceleration = new ArrayList<DataPoint<Date>>();
+        dataPoints3DAcceleration = new ArrayList<DataPoint3D<Date>>();
         dateStart = Calendar.getInstance().getTime();
         isLockedByThread = false;
     }
@@ -39,10 +39,10 @@ public class DataInterval {
     /**
      * Adds a datapoint to our arraylist
      *
-     * @param dataPoint The datapoint to add
+     * @param dataPoint3D The datapoint to add
      */
-    public void addDataPoint(DataPoint<Date> dataPoint) {
-        dataPointsAcceleration.add(dataPoint);
+    public void addDataPoint(DataPoint3D<Date> dataPoint3D) {
+        dataPoints3DAcceleration.add(dataPoint3D);
     }
 
     /**
@@ -103,7 +103,7 @@ public class DataInterval {
     }
 
     /**
-     * This will clear our {@link #dataPointsAcceleration} array.
+     * This will clear our {@link #dataPoints3DAcceleration} array.
      * A clear is only performed if we are not {@link #isLockedByThread}.
      * This is done to save memory and prevent sending large files across the internet.
      */
@@ -113,7 +113,7 @@ public class DataInterval {
         }
 
         else {
-            dataPointsAcceleration.clear();
+            dataPoints3DAcceleration.clear();
             return true;
         }
     }

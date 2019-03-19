@@ -14,7 +14,7 @@ import java.util.UUID;
  * <p>
  * This class holds all (meta)data for a measurement made by the user.
  * It has an arraylist of {@link DataInterval}s.
- * These {@link DataInterval}s contains all {@link DataPoint}s.
+ * These {@link DataInterval}s contains all {@link DataPoint3D}s.
  * All calculated values (done by our {@link Calculator}) are also stored in said {@link DataInterval}.
  * <p>
  * This class can be sent to the database for analysis.

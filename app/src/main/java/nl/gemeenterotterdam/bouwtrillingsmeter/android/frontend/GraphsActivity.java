@@ -4,16 +4,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Layout;
-import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
-import com.jjoe64.graphview.series.Series;
 
 import java.util.ArrayList;
 
@@ -21,7 +16,9 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataHandler;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataInterval;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClosedListener;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
+import java.util.Date;
 /**
  * This activity shows all the graphs.
  */
@@ -29,7 +26,7 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
 
     ViewPager viewPager;
     private Graph[] graphs;
-    private GraphSlideAdapter graphSlideAdapter;
+    private GraphsSlideAdapter graphSlideAdapter;
     private DataInterval previousDataInterval;
 
     private LinearLayout dotsLayout;
@@ -49,7 +46,7 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         // Viewpager for the tutorial
         // Also link the adapter
         viewPager = findViewById(R.id.viewPagerGraphs);
-        graphSlideAdapter = new GraphSlideAdapter(this, graphs);
+        graphSlideAdapter = new GraphsSlideAdapter(this, graphs);
         viewPager.setAdapter(graphSlideAdapter);
 
         // Viewpager dots
@@ -99,21 +96,31 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
     }
 
     /**
-     * Creates all the graphs
+     * Creates all the graphs.
      */
     private void createAllGraphs() {
-        int graphCount = 5;
+        int graphCount = Utility.Resources.getInteger(R.integer.graphs_count);
         graphs = new Graph[graphCount];
         for (int i = 0; i < graphCount; i++) {
             String title = getResources().getStringArray(R.array.graph_title)[i];
             String axisHorizontal = getResources().getStringArray(R.array.graph_axis_horizontal)[i];
             String axisVertical = getResources().getStringArray(R.array.graph_axis_vertical)[i];
-            graphs[i] = new Graph(title, axisHorizontal, axisVertical);
+            for (int j = 0; j < graphCount; j++) {
+                int resourceValue = Utility.Resources.getIntArray(R.array.graphs_0_time_1_frequency)[i];
+                if (resourceValue == 0) {
+                    graphs[i] = new GraphTime(title, axisHorizontal, axisVertical);
+                } else if (resourceValue == 1) {
+                    // TODO Frequency
+                    graphs[i] = new GraphTime(title, axisHorizontal, axisVertical);
+                } else {
+                    throw new UnsupportedOperationException("The value in our resources indicating wether we are dealing with a frequency or time graph can only be 1 or 0!");
+                }
+            }
         }
     }
 
     /**
-     * This updates all graphs
+     * This updates all graphs and thus is quite a big function.
      * This gets called when the {@link DataInterval} is closed.
      * Do not forget to add the @Override tag to this function!
      * TODO Impement this
@@ -127,13 +134,30 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
             return;
         }
 
+        Graph graph;
+        ArrayList<DataPoint3D<Date>> dataPoints3D;
+
+        /**
+         * Graph 0: Velocity // time
+         */
+        graph = graphs[0];
+        dataPoints3D = dataInterval.dataPoints3DAcceleration;
+        DataPoint[] dataPoints1D;
+        for (int i = 0; i < 3; i++) {
+            dataPoints1D = new DataPoint[dataPoints3D.size()];
+            for (int j = 0; j < dataPoints3D.size(); j++) {
+                dataPoints1D[j] = (new DataPoint(dataPoints3D.get(j).time, dataPoints3D.get(j).values[i]));
+            }
+            graph.addDataToSeries1D(dataPoints1D);
+        }
+
         // Try it out
 //        Graph graph = graphs[0];
-//        LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+//        LineGraphSeries<DataPoint3D> series = new LineGraphSeries<>();
 //
-//        ArrayList<DataPoint> points = new ArrayList<DataPoint>();
-//        for (nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint dataPoint : dataInterval.dataPointsAcceleration) {
-//            points.add(new DataPoint(dataPoint.time, dataPoint.values[0]));
+//        ArrayList<DataPoint3D> points = new ArrayList<DataPoint3D>();
+//        for (nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D dataPoint : dataInterval.dataPoints3DAcceleration) {
+//            points.add(new DataPoint3D(dataPoint.time, dataPoint.values[0]));
 //        }
 //
 //        graph.addToSeries(points);

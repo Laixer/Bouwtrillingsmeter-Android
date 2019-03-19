@@ -15,7 +15,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
-public class GraphSlideAdapter extends PagerAdapter {
+public class GraphsSlideAdapter extends PagerAdapter {
 
 
     private Graph[] graphs;
@@ -27,7 +27,7 @@ public class GraphSlideAdapter extends PagerAdapter {
      *
      * @param context The context
      */
-    public GraphSlideAdapter(Context context, Graph[] graphs) {
+    public GraphsSlideAdapter(Context context, Graph[] graphs) {
         this.context = context;
         this.graphs = graphs;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

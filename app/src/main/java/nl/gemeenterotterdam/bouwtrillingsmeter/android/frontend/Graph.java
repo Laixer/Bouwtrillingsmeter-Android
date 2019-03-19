@@ -1,5 +1,6 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.graphics.Color;
 import android.view.View;
 
 import com.jjoe64.graphview.GraphView;
@@ -16,20 +17,20 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataInterval;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClosedListener;
 
-public class Graph {
+/**
+ * TODO Doc
+ */
+public abstract class Graph {
 
     private String name;
     private String textAxisHorizontal;
     private String textAxisVertical;
-    private LineGraphSeries<DataPoint> series;
     private GraphView graphView;
 
     public Graph(String name, String textAxisHorizontal, String textAxisVertical) {
         this.name = name;
         this.textAxisHorizontal = textAxisHorizontal;
         this.textAxisVertical = textAxisVertical;
-
-        series = new LineGraphSeries<DataPoint>();
     }
 
     /**
@@ -38,14 +39,9 @@ public class Graph {
      *
      * @param graphView The graphview in our view.
      */
-    public void onCreatedGraphView(GraphView graphView) {
+    protected void onCreatedGraphView(GraphView graphView) {
         // Link graphview and series
         this.graphView = graphView;
-        graphView.addSeries(series);
-
-        // Series and line styling
-        series.setThickness(4);
-        series.setColor(Utility.ApplicationContext.getResources().getColor(R.color.colorPrimary));
 
         // Scaling
         Viewport viewport = graphView.getViewport();
@@ -64,19 +60,26 @@ public class Graph {
         gridLabelRenderer.setPadding(40);
     }
 
-    public void addToSeries(ArrayList<DataPoint> dataPoints) {
-        for (DataPoint dataPoint : dataPoints) {
-            series.appendData(dataPoint, true, 1000);
-        }
+    /**
+     * Call this to style the series
+     * @param series
+     */
+    protected void addAndStyleSeries(LineGraphSeries series, int colorResourceAsInteger) {
+        // Add to the graphview, or we won't see anything
+        graphView.addSeries(series);
+
+        // Series and line styling
+        series.setThickness(4);
+        series.setColor(Utility.ApplicationContext.getResources().getColor(colorResourceAsInteger));
+    }
+
+    public void addDataToSeries1D(DataPoint[] dataPoints) {
+
     }
 
     /**
      * Getters.
      */
-
-    public LineGraphSeries<DataPoint> getSeries() {
-        return series;
-    }
 
     public String getName() {
         if (name == null) {

@@ -1,9 +1,6 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 
-import android.app.Application;
-
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -16,14 +13,14 @@ import java.util.Date;
  * All other functions regarding data use an ArrayList of these datapoints.
  * <p>
  * OLD DOCUMENTATION:
- * DataPoint, used for storage.
- * X: Date if DataPoint in time domain, float[] (x, y, z values of frequencies) in frequencydomain)
+ * DataPoint3D, used for storage.
+ * X: Date if DataPoint3D in time domain, float[] (x, y, z values of frequencies) in frequencydomain)
  * values: x, y, z values of data, usually velocity or acceleration
  * <p>
  * Based on code by Marijn Otte
  */
 
-public class DataPoint<X> {
+public class DataPoint3D<X> {
 
     public X domain;
     public float[] values;
@@ -35,7 +32,7 @@ public class DataPoint<X> {
      * @param domain The domain, being of type a Date (time domain) or float[x, y, z] (frequency domain)
      * @param values The corresponding data values
      */
-    public DataPoint(X domain, float[] values) {
+    public DataPoint3D(X domain, float[] values) {
         this(domain, values[0], values[1], values[2]);
     }
 
@@ -47,7 +44,7 @@ public class DataPoint<X> {
      * @param y      Data y
      * @param z      Data z
      */
-    public DataPoint(X domain, float x, float y, float z) {
+    public DataPoint3D(X domain, float x, float y, float z) {
         this.domain = domain;
         float[] values = new float[3];
         values[0] = x;

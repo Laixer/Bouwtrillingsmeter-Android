@@ -33,9 +33,9 @@ class Calculator {
      * @param data values from acceleroMeter (retrieved for 1 second)
      * @return A new arraylist, with a velocity for each point. All time values will be the same as the input data.
      */
-    public static ArrayList<DataPoint<Date>> differentiate(ArrayList<DataPoint<Date>> data) {
+    public static ArrayList<DataPoint3D<Date>> differentiate(ArrayList<DataPoint3D<Date>> data) {
         // Instantiate variables
-        ArrayList<DataPoint<Date>> velocities = new ArrayList<DataPoint<Date>>();
+        ArrayList<DataPoint3D<Date>> velocities = new ArrayList<DataPoint3D<Date>>();
 
         // Save the velocities of the first datapoint
         // TODO Does this work? We say here that a = v
@@ -46,7 +46,7 @@ class Calculator {
         float Vz = accelerations[2];
 
         // Add the first data point
-        velocities.add(new DataPoint<Date>(data.get(0).domain, new float[]{Vx, Vy, Vz}));
+        velocities.add(new DataPoint3D<Date>(data.get(0).domain, new float[]{Vx, Vy, Vz}));
 
         // Add all other data points
         // We need two points to differentiate
@@ -65,7 +65,7 @@ class Calculator {
             Vz += accelerations[2] * dTime;
 
             // Create a new datapoint with the new velocities
-            velocities.add(new DataPoint<Date>(data.get(i).domain, new float[]{Vx, Vy, Vz}));
+            velocities.add(new DataPoint3D<Date>(data.get(i).domain, new float[]{Vx, Vy, Vz}));
         }
 
         // Return our result
@@ -77,15 +77,15 @@ class Calculator {
      *
      * @param dataArray array with DataPoints, corresponding to accelerations or velocities
      */
-    public static <T> float[] maxValueInArray(ArrayList<DataPoint<T>> dataArray) {
+    public static <T> float[] maxValueInArray(ArrayList<DataPoint3D<T>> dataArray) {
         float maxx = 0;
         float maxy = 0;
         float maxz = 0;
 
-        for (DataPoint dataPoint : dataArray) {
-            float xAcc = Math.abs(dataPoint.values[0]);
-            float yAcc = Math.abs(dataPoint.values[1]);
-            float zAcc = Math.abs(dataPoint.values[2]);
+        for (DataPoint3D dataPoint3D : dataArray) {
+            float xAcc = Math.abs(dataPoint3D.values[0]);
+            float yAcc = Math.abs(dataPoint3D.values[1]);
+            float zAcc = Math.abs(dataPoint3D.values[2]);
 
             maxx = Math.max(maxx, xAcc);
             maxy = Math.max(maxy, yAcc);
@@ -100,7 +100,7 @@ class Calculator {
      * @param dataArray array of frequency datapoints
      * @return max frequency of array in x,y and z direction
      */
-    public static int[] maxFrequencies(ArrayList<DataPoint<int[]>> dataArray) {
+    public static int[] maxFrequencies(ArrayList<DataPoint3D<int[]>> dataArray) {
         float maxx = 0;
         float maxy = 0;
         float maxz = 0;
@@ -108,9 +108,9 @@ class Calculator {
         int freqy = 0;
         int freqz = 0;
 
-        for (DataPoint dataPoint : dataArray) {
-            int[] frequencies = (int[]) dataPoint.domain;
-            float[] magnitudes = (float[]) dataPoint.values;
+        for (DataPoint3D dataPoint3D : dataArray) {
+            int[] frequencies = (int[]) dataPoint3D.domain;
+            float[] magnitudes = (float[]) dataPoint3D.values;
             float xVel = magnitudes[0];
             float yVel = magnitudes[1];
             float zVel = magnitudes[2];
@@ -147,10 +147,10 @@ class Calculator {
      * @return float frequency in x, y and z direction in range (0-50)Hz with corresponding magnitude
      */
 
-    public static ArrayList<DataPoint<int[]>> FFT(ArrayList<DataPoint<Date>> velocities) {
+    public static ArrayList<DataPoint3D<int[]>> FFT(ArrayList<DataPoint3D<Date>> velocities) {
         if (velocities.size() == 0) {
-            ArrayList<DataPoint<int[]>> data = new ArrayList<DataPoint<int[]>>();
-            data.add(new DataPoint<int[]>(new int[]{0, 0, 0}, new float[]{0f, 0f, 0f}));
+            ArrayList<DataPoint3D<int[]>> data = new ArrayList<DataPoint3D<int[]>>();
+            data.add(new DataPoint3D<int[]>(new int[]{0, 0, 0}, new float[]{0f, 0f, 0f}));
             return data;
         }
         int maxIX = 0;
@@ -162,7 +162,7 @@ class Calculator {
         float[] xvelo = new float[velocities.size()];
         float[] yvelo = new float[velocities.size()];
         float[] zvelo = new float[velocities.size()];
-        ArrayList<DataPoint<int[]>> datapoints = new ArrayList<>();
+        ArrayList<DataPoint3D<int[]>> datapoints = new ArrayList<>();
         FloatFFT_1D fft = new FloatFFT_1D(velocities.size());
 
 
@@ -198,7 +198,7 @@ class Calculator {
                 maxMagZ = MagZ;
                 maxIZ = i;
             }
-            DataPoint<int[]> d = new DataPoint<int[]>(new int[]{i, i, i}, new float[]{MagX, MagY, MagZ});
+            DataPoint3D<int[]> d = new DataPoint3D<int[]>(new int[]{i, i, i}, new float[]{MagX, MagY, MagZ});
             datapoints.add(d);
         }
         return datapoints;
@@ -221,26 +221,26 @@ class Calculator {
      * @param acc acceleration data in frequency domain (frequency + acceleration)
      * @return velocity data in frequency domain (frequency + velocity)
      */
-    public static ArrayList<DataPoint<int[]>> calcVelocityFreqDomain(ArrayList<DataPoint<int[]>> acc) {
+    public static ArrayList<DataPoint3D<int[]>> calcVelocityFreqDomain(ArrayList<DataPoint3D<int[]>> acc) {
         float xVel = 0;
         float yVel = 0;
         float zVel = 0;
         float maxzvel = 0;
-        ArrayList<DataPoint<int[]>> velocities = new ArrayList<DataPoint<int[]>>();
-        for (DataPoint<int[]> dataPoint : acc) {
-            float xAcc = dataPoint.values[0];
-            float yAcc = dataPoint.values[1];
-            float zAcc = dataPoint.values[2];
+        ArrayList<DataPoint3D<int[]>> velocities = new ArrayList<DataPoint3D<int[]>>();
+        for (DataPoint3D<int[]> dataPoint3D : acc) {
+            float xAcc = dataPoint3D.values[0];
+            float yAcc = dataPoint3D.values[1];
+            float zAcc = dataPoint3D.values[2];
 
-            int xFreq = dataPoint.domain[0];
-            int yFreq = dataPoint.domain[1];
-            int zFreq = dataPoint.domain[2];
+            int xFreq = dataPoint3D.domain[0];
+            int yFreq = dataPoint3D.domain[1];
+            int zFreq = dataPoint3D.domain[2];
 
             xVel = xAcc / (2f * (float) Math.PI * (float) xFreq);
             yVel = yAcc / (2f * (float) Math.PI * (float) yFreq);
             zVel = zAcc / (2f * (float) Math.PI * (float) zFreq);
             maxzvel = Math.max(zVel, maxzvel);
-            velocities.add(new DataPoint<int[]>(new int[]{xFreq, yFreq, zFreq}, new float[]{xVel, yVel, zVel}));
+            velocities.add(new DataPoint3D<int[]>(new int[]{xFreq, yFreq, zFreq}, new float[]{xVel, yVel, zVel}));
         }
         velocities.remove(0);
         return velocities;
@@ -251,12 +251,12 @@ class Calculator {
      * @return limitValue (m/s) for each velocity
      */
 
-    public static ArrayList<DataPoint<int[]>> limitValue(ArrayList<DataPoint<int[]>> velocities) {
-        ArrayList<DataPoint<int[]>> limitValues = new ArrayList<DataPoint<int[]>>();
-        for (DataPoint<int[]> dataPoint : velocities) {
-            int xfreq = dataPoint.domain[0];
-            int yfreq = dataPoint.domain[1];
-            int zfreq = dataPoint.domain[2];
+    public static ArrayList<DataPoint3D<int[]>> limitValue(ArrayList<DataPoint3D<int[]>> velocities) {
+        ArrayList<DataPoint3D<int[]>> limitValues = new ArrayList<DataPoint3D<int[]>>();
+        for (DataPoint3D<int[]> dataPoint3D : velocities) {
+            int xfreq = dataPoint3D.domain[0];
+            int yfreq = dataPoint3D.domain[1];
+            int zfreq = dataPoint3D.domain[2];
 
             float xLimit = findLimit(xfreq);
             float yLimit = findLimit(yfreq);
@@ -267,7 +267,7 @@ class Calculator {
             yLimit = yLimit / yt;
             zLimit = zLimit / yt;
 
-            limitValues.add(new DataPoint<int[]>(new int[]{xfreq, yfreq, zfreq}, new float[]{xLimit, yLimit, zLimit}));
+            limitValues.add(new DataPoint3D<int[]>(new int[]{xfreq, yfreq, zfreq}, new float[]{xLimit, yLimit, zLimit}));
         }
         return limitValues;
     }
@@ -287,7 +287,7 @@ class Calculator {
      * @param velocities  array with velocity for each frequency
      * @return dominant frequency for each direction (x,y,z)
      */
-    public static DominantFrequencies getDominantFrequencies(ArrayList<DataPoint<int[]>> limitValues, ArrayList<DataPoint<int[]>> velocities) {
+    public static DominantFrequencies getDominantFrequencies(ArrayList<DataPoint3D<int[]>> limitValues, ArrayList<DataPoint3D<int[]>> velocities) {
         int domFreqX = -1;
         float ratioX = 0;
         float domVelX = -1;
@@ -299,8 +299,8 @@ class Calculator {
         float domVelZ = -1;
 
         for (int i = 0; i < limitValues.size(); i++) {
-            DataPoint<int[]> limitValue = limitValues.get(i);
-            DataPoint<int[]> velocity = velocities.get(i);
+            DataPoint3D<int[]> limitValue = limitValues.get(i);
+            DataPoint3D<int[]> velocity = velocities.get(i);
 
             if (velocity.values[0] / limitValue.values[0] > ratioX) {
                 ratioX = velocity.values[0] / limitValue.values[0];

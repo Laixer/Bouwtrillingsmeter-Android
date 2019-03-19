@@ -10,7 +10,7 @@ import java.util.Date;
  * <p>
  * This class triggers the collection of data.
  * It also triggers the calculations done on said data, which are executed by the {@link Calculator}.
- * Data is received in the form of a {@link DataPoint}.
+ * Data is received in the form of a {@link DataPoint3D}.
  * The collection and measurements are stored in a {@link DataInterval} object.
  * These intervals are stored within a {@link Measurement} object.
  */
@@ -176,7 +176,7 @@ public class DataHandler implements AccelerometerListener {
      */
     private static void performIntervalCalculations(DataInterval dataInterval) {
         // Edge cases
-        if (dataInterval.dataPointsAcceleration.size() == 0) {
+        if (dataInterval.dataPoints3DAcceleration.size() == 0) {
             System.out.println("No datapoints were added to this interval.");
             return;
         }
@@ -189,13 +189,13 @@ public class DataHandler implements AccelerometerListener {
                 thisDataInterval.onThreadCalculationsStart();
 
                 // Trigger all calculations
-                float[] maxAccelerations = Calculator.maxValueInArray(thisDataInterval.dataPointsAcceleration);
+                float[] maxAccelerations = Calculator.maxValueInArray(thisDataInterval.dataPoints3DAcceleration);
 
-                ArrayList<DataPoint<int[]>> fftAccelerations = Calculator.FFT(thisDataInterval.dataPointsAcceleration);
+                ArrayList<DataPoint3D<int[]>> fftAccelerations = Calculator.FFT(thisDataInterval.dataPoints3DAcceleration);
                 int[] maxFrequencies = Calculator.maxFrequencies(fftAccelerations);
 
-                ArrayList<DataPoint<int[]>> velocitiesFreqDomain = Calculator.calcVelocityFreqDomain(fftAccelerations);
-                ArrayList<DataPoint<int[]>> limitValues = Calculator.limitValue(velocitiesFreqDomain);
+                ArrayList<DataPoint3D<int[]>> velocitiesFreqDomain = Calculator.calcVelocityFreqDomain(fftAccelerations);
+                ArrayList<DataPoint3D<int[]>> limitValues = Calculator.limitValue(velocitiesFreqDomain);
                 DominantFrequencies dominantFrequencies = Calculator.getDominantFrequencies(limitValues, velocitiesFreqDomain);
 
                 float[] maxVelocities = Calculator.maxValueInArray(velocitiesFreqDomain);
@@ -241,8 +241,8 @@ public class DataHandler implements AccelerometerListener {
             }
 
             // Push the data
-            DataPoint<Date> dataPoint = new DataPoint<Date>(MeasurementControl.getCurrentMeasurement().dateStart, x, y, z);
-            currentDataInterval.addDataPoint(dataPoint);
+            DataPoint3D<Date> dataPoint3D = new DataPoint3D<Date>(MeasurementControl.getCurrentMeasurement().dateStart, x, y, z);
+            currentDataInterval.addDataPoint(dataPoint3D);
         }
     }
 
