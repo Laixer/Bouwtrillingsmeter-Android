@@ -1,10 +1,11 @@
 Frontend todos
 
 Nu:
+TODO Calculations goed krijgen.
 
 Later:
+TODO Graph scaling alleen als je hem niet aanraakt.
 TODO Tekst measuring laten cyclen
-TODO Gaan we de acceleration graph realtime laten updaten ipv elke seconde? Misschien wel elegant!
 TODO Graph unlock
 TODO Graph datapoints --> dit is ook veel data. Wat doen we hiermee?
 TODO Wat als je geen settings file kan creëren met de huidige instellingen?

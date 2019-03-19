@@ -98,10 +98,17 @@
     <!--Graphs-->
     <string-array name="graph_title">
         <item>Versnellingsdiagram</item>
-        <item>Dominante frequentie</item>
         <item>Snelheidsdiagram</item>
+        <item>Dominante frequentie continu</item>
         <item>Frequentiespectrum</item>
-        <item>Snelheid - Frequentie diagram</item>
+        <item>Dominante frequentie</item>
+    </string-array>
+    <string-array name="graph_axis_vertical">
+        <item>Versnelling [mm/s2]</item>
+        <item>Snelheid [mm/s]</item>
+        <item>(Dominante) frequentie [Hz]</item>
+        <item>Amplitude (snelheid) [mm/s]</item>
+        <item>Amplitude (snelheid) [mm/s]</item>
     </string-array>
     <string-array name="graph_axis_horizontal">
         <item>Tijd [s]</item>
@@ -109,12 +116,5 @@
         <item>Tijd [s]</item>
         <item>Frequentie [Hz]</item>
         <item>Frequentie [Hz]</item>
-    </string-array>
-    <string-array name="graph_axis_vertical">
-        <item>Versnelling [mm/s2]</item>
-        <item>Frequentie [Hz]</item>
-        <item>Snelheid [mm/s]</item>
-        <item>Snelheid [mm/s]</item>
-        <item>Snelheid [mm/s]</item>
     </string-array>
 </resources>

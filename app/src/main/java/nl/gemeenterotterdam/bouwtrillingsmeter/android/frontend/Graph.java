@@ -34,6 +34,16 @@ public abstract class Graph {
     }
 
     /**
+     * Checks if we can add data.
+     * This is to make sure that we have a viewport to add to
+     *
+     * @return False if we cant add data.
+     */
+    public boolean canDataBeAdded() {
+        return graphView == null ? false : true;
+    }
+
+    /**
      * This links our graphView view object to this instance.
      * This also sets a bunch of graph layout properties.
      *
@@ -70,7 +80,7 @@ public abstract class Graph {
      */
     protected void setHorizontalRange(double from, double to) {
         // Return if we are scaling manually
-
+        // TODO Implement
 
         if (from > to) {
             double temp = from;
@@ -104,6 +114,7 @@ public abstract class Graph {
      * Getters.
      */
 
+    /** */
     public String getName() {
         if (name == null) {
             name = "default name";

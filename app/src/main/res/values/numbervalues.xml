@@ -4,8 +4,8 @@
     <integer name="graphs_count">5</integer>
     <integer-array name="graphs_0_time_1_frequency">
         <item>0</item>
-        <item>1</item>
-        <item>1</item>
+        <item>0</item>
+        <item>0</item>
         <item>1</item>
         <item>1</item>
     </integer-array>
