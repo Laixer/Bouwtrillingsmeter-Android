@@ -14,14 +14,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Queue;
-import java.util.concurrent.DelayQueue;
-import java.util.concurrent.Delayed;
-import java.util.concurrent.TimeUnit;
+import java.util.Date;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
-
 /**
  * @author Thomas Beckers
  * @since 1.0
@@ -91,9 +87,9 @@ public class MeasuringActivity extends AppCompatActivity {
         // Measuring state
         if (isMeasuring) {
             buttonMeasuringShowGraphs.setVisibility(View.VISIBLE);
-            textViewMeasuringCenter.setText(getResources().getString(R.string.measuring_cycle_measuring_now));
+//            textViewMeasuringCenter.setText(getResources().getString(R.string.measuring_cycle_measuring_now));
             Backend.debugOnPhoneFlat();
-//            startMeasuringTextCycle();
+            startMeasuringTextCycle();
         }
 
         // Place device on table state
@@ -111,48 +107,64 @@ public class MeasuringActivity extends AppCompatActivity {
         strings.add(getResources().getString(R.string.measuring_cycle_measuring_now));
         strings.add(getResources().getString(R.string.measuring_cycle_keep_on_table));
         strings.add(getResources().getString(R.string.measuring_cycle_lift_to_stop));
-        strings.add("This is our exceeding yes or no message");
+        strings.add(getResources().getString(R.string.measuring_cycle_no_exceeding_detected));
 
         new Thread(new Runnable() {
             public void run() {
                 int index = 0;
                 while (isMeasuring) {
+                    // Determine the desired string
+                    String text = "";
+
                     // Check for (new) backend exceedings
                     // Our iterations pause for one cycle
-//                    if (Backend.isCurrentMeasurementExceeded()) {
-//                        if (Backend.getTimeLastExceeding().getTime() - Calendar.getInstance().getTimeInMillis() > Constants.minimumTimeInMilisBetweenExceedings) {
-//                            textViewMeasuringCenter.setText(getResources().getString(R.string.measuring_cycle_measuring_now));
-//                        }
-//                    }
+                    boolean isCurremtMeasurementExceeded = Backend.isCurrentMeasurementExceeded();
+                    Date dateLastExceeding = Backend.getTimeLastExceeding();
+                    long millisLastExceeding = 0;
+                    if (dateLastExceeding!= null) {
+                        millisLastExceeding = dateLastExceeding.getTime();
+                    }
+                    long millisCurrent = Calendar.getInstance().getTimeInMillis();
+                    long dt = millisCurrent - millisLastExceeding;
 
-                    // Display a regular message
-                    /**else*/ if (index < strings.size() - 1) {
-                        textViewMeasuringCenter.setText(strings.get(index));
-                        index++;
+                    if (Backend.isCurrentMeasurementExceeded()
+                            && (Backend.getTimeLastExceeding() == null
+                            || -Backend.getTimeLastExceeding().getTime() + Calendar.getInstance().getTimeInMillis() > Constants.minimumTimeInMilisBetweenExceedings)) {
+                        text = getResources().getString(R.string.measuring_cycle_measuring_now);
                     }
 
-                    // Display if we have exceeded in the past, yes or no
-                    else if (index == strings.size() - 1) {
-                        textViewMeasuringCenter.setText(Backend.isCurrentMeasurementExceeded() ?
-                                getResources().getString(R.string.measuring_cycle_exceeding_detected) :
-                                getResources().getString(R.string.measuring_cycle_no_exceeding_detected));
-                        index++;
-                    }
-
-                    // Go back to 0
+                    // Else display a regular message
                     else {
-                        index = 0;
+                        if (index >= strings.size()) {
+                            index = 0;
+                        }
+                        text = strings.get(index);
+                        index++;
                     }
-                }
 
-                // Set timer
-                try {
-                    Thread.sleep(Constants.measuringTextCycleSleepTimeInMilis);
-                } catch (Exception e) {
-                    System.out.println("Error while sleeping text cycle thread. Message: " + e.getMessage());
+                    // Push the text onto the textview
+                    // This can only be done in the UI thread
+                    final String textAsFinal = text;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            textViewMeasuringCenter.setText(textAsFinal);
+                        }
+                    });
+
+                    // Set timer
+                    try {
+                        Thread.sleep(Constants.measuringTextCycleSleepTimeInMilis);
+                    } catch (Exception e) {
+                        System.out.println("Error while sleeping text cycle thread. Message: " + e.getMessage());
+                    }
+
                 }
             }
-        }).start();
+        }).
+
+                start();
+
     }
 
     /**

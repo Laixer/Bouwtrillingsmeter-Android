@@ -176,7 +176,7 @@ public class DataHandler implements AccelerometerListener {
      */
     private static void performIntervalCalculations(DataInterval dataInterval) {
         // Edge cases
-        if (dataInterval.dataPoints.size() == 0) {
+        if (dataInterval.dataPointsAcceleration.size() == 0) {
             System.out.println("No datapoints were added to this interval.");
             return;
         }
@@ -189,9 +189,9 @@ public class DataHandler implements AccelerometerListener {
                 thisDataInterval.onThreadCalculationsStart();
 
                 // Trigger all calculations
-                float[] maxAccelerations = Calculator.maxValueInArray(thisDataInterval.dataPoints);
+                float[] maxAccelerations = Calculator.maxValueInArray(thisDataInterval.dataPointsAcceleration);
 
-                ArrayList<DataPoint<int[]>> fftAccelerations = Calculator.FFT(thisDataInterval.dataPoints);
+                ArrayList<DataPoint<int[]>> fftAccelerations = Calculator.FFT(thisDataInterval.dataPointsAcceleration);
                 int[] maxFrequencies = Calculator.maxFrequencies(fftAccelerations);
 
                 ArrayList<DataPoint<int[]>> velocitiesFreqDomain = Calculator.calcVelocityFreqDomain(fftAccelerations);

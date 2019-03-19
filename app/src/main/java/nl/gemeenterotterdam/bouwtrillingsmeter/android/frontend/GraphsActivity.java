@@ -132,7 +132,7 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
 //        LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
 //
 //        ArrayList<DataPoint> points = new ArrayList<DataPoint>();
-//        for (nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint dataPoint : dataInterval.dataPoints) {
+//        for (nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint dataPoint : dataInterval.dataPointsAcceleration) {
 //            points.add(new DataPoint(dataPoint.time, dataPoint.values[0]));
 //        }
 //

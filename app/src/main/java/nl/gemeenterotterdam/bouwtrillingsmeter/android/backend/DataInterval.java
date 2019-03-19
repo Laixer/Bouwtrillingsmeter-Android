@@ -14,7 +14,7 @@ import java.util.Date;
 public class DataInterval {
 
     public int index;
-    public ArrayList<DataPoint<Date>> dataPoints;
+    public ArrayList<DataPoint<Date>> dataPointsAcceleration;
     public Date dateStart;
     public Date dateEnd;
 
@@ -31,7 +31,7 @@ public class DataInterval {
     public DataInterval(int index) {
         this.index = index;
 
-        dataPoints = new ArrayList<DataPoint<Date>>();
+        dataPointsAcceleration = new ArrayList<DataPoint<Date>>();
         dateStart = Calendar.getInstance().getTime();
         isLockedByThread = false;
     }
@@ -42,7 +42,7 @@ public class DataInterval {
      * @param dataPoint The datapoint to add
      */
     public void addDataPoint(DataPoint<Date> dataPoint) {
-        dataPoints.add(dataPoint);
+        dataPointsAcceleration.add(dataPoint);
     }
 
     /**
@@ -103,7 +103,7 @@ public class DataInterval {
     }
 
     /**
-     * This will clear our {@link #dataPoints} array.
+     * This will clear our {@link #dataPointsAcceleration} array.
      * A clear is only performed if we are not {@link #isLockedByThread}.
      * This is done to save memory and prevent sending large files across the internet.
      */
@@ -113,7 +113,7 @@ public class DataInterval {
         }
 
         else {
-            dataPoints.clear();
+            dataPointsAcceleration.clear();
             return true;
         }
     }
