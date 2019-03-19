@@ -59,7 +59,7 @@ public class DataPoint3D<X> {
          * and set it as our domain, for the graphs to work properly.
          */
         if (domain instanceof Date) {
-            // TODO Implement
+
         }
 
     }

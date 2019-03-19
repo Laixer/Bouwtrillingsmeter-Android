@@ -14,7 +14,7 @@ import java.util.Date;
 public class DataInterval {
 
     public int index;
-    public ArrayList<DataPoint3D<Date>> dataPoints3DAcceleration;
+    public ArrayList<DataPoint3DTime> dataPoints3DAcceleration;
     public Date dateStart;
     public Date dateEnd;
 
@@ -31,7 +31,7 @@ public class DataInterval {
     public DataInterval(int index) {
         this.index = index;
 
-        dataPoints3DAcceleration = new ArrayList<DataPoint3D<Date>>();
+        dataPoints3DAcceleration = new ArrayList<DataPoint3DTime>();
         dateStart = Calendar.getInstance().getTime();
         isLockedByThread = false;
     }
@@ -39,10 +39,10 @@ public class DataInterval {
     /**
      * Adds a datapoint to our arraylist
      *
-     * @param dataPoint3D The datapoint to add
+     * @param dataPoint3DTime The datapoint to add
      */
-    public void addDataPoint(DataPoint3D<Date> dataPoint3D) {
-        dataPoints3DAcceleration.add(dataPoint3D);
+    public void addDataPoint3D(DataPoint3DTime dataPoint3DTime) {
+        dataPoints3DAcceleration.add(dataPoint3DTime);
     }
 
     /**

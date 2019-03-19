@@ -2,7 +2,6 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * @author Thomas Beckers
@@ -10,7 +9,7 @@ import java.util.Date;
  * <p>
  * This class triggers the collection of data.
  * It also triggers the calculations done on said data, which are executed by the {@link Calculator}.
- * Data is received in the form of a {@link DataPoint3D}.
+ * Data is received in the form of a {@link DataPoint3DTime}.
  * The collection and measurements are stored in a {@link DataInterval} object.
  * These intervals are stored within a {@link Measurement} object.
  */
@@ -232,17 +231,20 @@ public class DataHandler implements AccelerometerListener {
         // If we are measuring
         if (isCurrentlyMeasuring() && currentDataInterval != null) {
             // Check if our interval has passed.
-            // Date.getTime() returns total time in milliseconds.
             long timePassed = -currentDataInterval.dateStart.getTime() + Calendar.getInstance().getTime().getTime();
             long interval = Constants.intervalInMilliseconds;
-
             if (timePassed > interval) {
                 onStartNewInterval();
             }
 
-            // Push the data
-            DataPoint3D<Date> dataPoint3D = new DataPoint3D<Date>(MeasurementControl.getCurrentMeasurement().dateStart, x, y, z);
-            currentDataInterval.addDataPoint(dataPoint3D);
+            // Calculate the time for this datapoint
+            long startTime = MeasurementControl.getCurrentMeasurement().getStartTimeInMillis();
+            long currentTime = Calendar.getInstance().getTimeInMillis();
+            long dataPointTime = currentTime - startTime;
+
+            // Push the datapoint
+            DataPoint3DTime dataPoint3DTime = new DataPoint3DTime(dataPointTime, x, y, z);
+            currentDataInterval.addDataPoint3D(dataPoint3DTime);
         }
     }
 

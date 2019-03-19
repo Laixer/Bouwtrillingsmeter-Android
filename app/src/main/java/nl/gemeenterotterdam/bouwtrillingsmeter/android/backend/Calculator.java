@@ -77,12 +77,12 @@ class Calculator {
      *
      * @param dataArray array with DataPoints, corresponding to accelerations or velocities
      */
-    public static <T> float[] maxValueInArray(ArrayList<DataPoint3D<T>> dataArray) {
+    public static <T> float[] maxValueInArray(ArrayList<DataPoint3D<int[]>> dataArray) {
         float maxx = 0;
         float maxy = 0;
         float maxz = 0;
 
-        for (DataPoint3D dataPoint3D : dataArray) {
+        for (DataPoint3D<int[]> dataPoint3D : dataArray) {
             float xAcc = Math.abs(dataPoint3D.values[0]);
             float yAcc = Math.abs(dataPoint3D.values[1]);
             float zAcc = Math.abs(dataPoint3D.values[2]);
@@ -147,7 +147,7 @@ class Calculator {
      * @return float frequency in x, y and z direction in range (0-50)Hz with corresponding magnitude
      */
 
-    public static ArrayList<DataPoint3D<int[]>> FFT(ArrayList<DataPoint3D<Date>> velocities) {
+    public static ArrayList<DataPoint3D<int[]>> FFT(ArrayList<DataPoint3DTime> velocities) {
         if (velocities.size() == 0) {
             ArrayList<DataPoint3D<int[]>> data = new ArrayList<DataPoint3D<int[]>>();
             data.add(new DataPoint3D<int[]>(new int[]{0, 0, 0}, new float[]{0f, 0f, 0f}));

@@ -23,8 +23,8 @@ public class Measurement implements Serializable {
 
     public Settings settings;
     public ArrayList<DataInterval> dataIntervals;
-    public Date dateStart;
-    public Date dateEnd;
+    private Date dateStart;
+    private Date dateEnd;
 
     private String uid;
     private String name;
@@ -77,11 +77,6 @@ public class Measurement implements Serializable {
             throw new IllegalStateException("Current measurement is already closed! No more data can be added.");
         }
 
-        // Set starttime if this is our first data interval
-        if (dataIntervals.size() == 0) {
-            dateStart = Calendar.getInstance().getTime();
-        }
-
         dataIntervals.add(dataInterval);
     }
 
@@ -111,6 +106,15 @@ public class Measurement implements Serializable {
     }
 
     /**
+     * This will get us the start time in millis since Jan 1 1970.
+     *
+     * @return The start time in millis.
+     */
+    public long getStartTimeInMillis() {
+        return this.dateStart.getTime();
+    }
+
+    /**
      * Checks all our dataintervals to see if we have exceeded any limits.
      * Also returns said dataintervals.
      *
@@ -126,16 +130,14 @@ public class Measurement implements Serializable {
 
         if (result.size() > 0) {
             return result;
-        }
-
-        else {
+        } else {
             return null;
         }
 
     }
 
     /**
-     * All getters and setters in one place.
+     * All setters
      */
     public void setName(String name) {
         this.name = name;
@@ -152,6 +154,10 @@ public class Measurement implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    /**
+     * All getters
+     */
 
     public String getUID() {
         return this.uid;

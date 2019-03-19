@@ -62,6 +62,7 @@ public abstract class Graph {
 
     /**
      * Call this to style the series
+     *
      * @param series
      */
     protected void addAndStyleSeries(LineGraphSeries series, int colorResourceAsInteger) {
@@ -73,8 +74,8 @@ public abstract class Graph {
         series.setColor(Utility.ApplicationContext.getResources().getColor(colorResourceAsInteger));
     }
 
-    public void addDataToSeries1D(DataPoint[] dataPoints) {
-
+    public void addDataToSeries1D(DataPoint[] dataPoints, int dimension) {
+        /*  */
     }
 
     /**

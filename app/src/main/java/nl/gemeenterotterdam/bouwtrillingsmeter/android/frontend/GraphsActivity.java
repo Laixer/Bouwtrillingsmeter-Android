@@ -17,6 +17,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataHandler;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataInterval;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClosedListener;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3DTime;
 
 import java.util.Date;
 /**
@@ -135,20 +136,19 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         }
 
         Graph graph;
-        ArrayList<DataPoint3D<Date>> dataPoints3D;
 
         /**
          * Graph 0: Velocity // time
          */
         graph = graphs[0];
-        dataPoints3D = dataInterval.dataPoints3DAcceleration;
+        ArrayList<DataPoint3DTime> dataPoints3D = dataInterval.dataPoints3DAcceleration;
         DataPoint[] dataPoints1D;
         for (int i = 0; i < 3; i++) {
             dataPoints1D = new DataPoint[dataPoints3D.size()];
             for (int j = 0; j < dataPoints3D.size(); j++) {
                 dataPoints1D[j] = (new DataPoint(dataPoints3D.get(j).time, dataPoints3D.get(j).values[i]));
             }
-            graph.addDataToSeries1D(dataPoints1D);
+            graph.addDataToSeries1D(dataPoints1D, i);
         }
 
         // Try it out
@@ -160,6 +160,6 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
 //            points.add(new DataPoint3D(dataPoint.time, dataPoint.values[0]));
 //        }
 //
-//        graph.addToSeries(points);
+//        graph.addDataToSeries1D(points);
     }
 }
