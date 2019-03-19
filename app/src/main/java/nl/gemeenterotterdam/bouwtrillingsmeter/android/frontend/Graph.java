@@ -26,12 +26,31 @@ public abstract class Graph {
     private String name;
     private String textAxisHorizontal;
     private String textAxisVertical;
-    private GraphView graphView;
+    protected GraphView graphView;
 
+    /**
+     * This has to be an ArrayList, since our LineGraphSeries is generic.
+     * Java does not support arrays of generic types.
+     */
+    protected ArrayList<LineGraphSeries<DataPoint>> series;
+
+    /**
+     * Constructor
+     *
+     * @param name               Our graph name
+     * @param textAxisHorizontal Our horizontal label text
+     * @param textAxisVertical   Our vertical lable text
+     */
     public Graph(String name, String textAxisHorizontal, String textAxisVertical) {
         this.name = name;
         this.textAxisHorizontal = textAxisHorizontal;
         this.textAxisVertical = textAxisVertical;
+
+        series = new ArrayList<LineGraphSeries<DataPoint>>();
+        for (int i = 0; i < 3; i++) {
+            series.add(new LineGraphSeries<DataPoint>());
+            series.get(i).setTitle(Utility.Resources.getStringArray(R.array.graph_legend_xyz_names)[i]);
+        }
     }
 
     /**
@@ -53,6 +72,11 @@ public abstract class Graph {
     protected void onCreatedGraphView(GraphView graphView) {
         // Link graphview and series
         this.graphView = graphView;
+
+        // Link series
+        addAndStyleSeries(series.get(0), R.color.graph_series_color_x);
+        addAndStyleSeries(series.get(1), R.color.graph_series_color_y);
+        addAndStyleSeries(series.get(2), R.color.graph_series_color_z);
 
         // Scaling
         Viewport viewport = graphView.getViewport();
@@ -80,6 +104,23 @@ public abstract class Graph {
     }
 
     /**
+     * Call this to style the series
+     * TODO Ontbeun graphview not null
+     *
+     * @param series
+     */
+    protected void addAndStyleSeries(LineGraphSeries series, int colorResourceAsInteger) {
+        if (graphView != null) {
+            // Add to the graphview, or we won't see anything
+            graphView.addSeries(series);
+
+            // Series and line styling
+            series.setThickness(4);
+            series.setColor(Utility.ApplicationContext.getResources().getColor(colorResourceAsInteger));
+        }
+    }
+
+    /**
      * Set our horizontal axis range.
      * Only does so if we are not scaling the graph manually at that moment.
      * Swaps if from > to.
@@ -103,23 +144,7 @@ public abstract class Graph {
         }
     }
 
-    /**
-     * Call this to style the series
-     *
-     * @param series
-     */
-    protected void addAndStyleSeries(LineGraphSeries series, int colorResourceAsInteger) {
-        // Add to the graphview, or we won't see anything
-        graphView.addSeries(series);
-
-        // Series and line styling
-        series.setThickness(4);
-        series.setColor(Utility.ApplicationContext.getResources().getColor(colorResourceAsInteger));
-    }
-
-    public void addDataToSeries1D(DataPoint[] dataPoints, int dimension) {
-        /*  */
-    }
+    abstract void sendNewDataToSeries(DataPoint[] dataPoints, int dimension);
 
     /**
      * Getters.

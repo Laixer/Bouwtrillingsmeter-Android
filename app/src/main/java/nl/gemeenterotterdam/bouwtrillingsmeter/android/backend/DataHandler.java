@@ -221,29 +221,31 @@ public class DataHandler implements AccelerometerListener {
                 ArrayList<DataPoint3D<Long>> velocities = Calculator.calculateVelocityFromAcceleration(thisDataInterval.dataPoints3DAcceleration);
                 thisDataInterval.velocities = velocities;
 
-                // Calculate fourier spectrum transform for the acceleration
+                // Calculate fft for the acceleration
                 ArrayList<DataPoint3D<Double>> frequencyAmplitudes = Calculator.fft(thisDataInterval.dataPoints3DAcceleration);
                 thisDataInterval.frequencyAmplitudes = frequencyAmplitudes;
 
+                /**
                 // Trigger all calculations
-//                float[] maxAccelerations = Calculator.maxValueInArray(thisDataInterval.dataPoints3DAcceleration);
-//                thisDataInterval.maxAccelerations = maxAccelerations;
+                float[] maxAccelerations = Calculator.maxValueInArray(thisDataInterval.dataPoints3DAcceleration);
+                thisDataInterval.maxAccelerations = maxAccelerations;
 
 
-//                int[] maxFrequencies = Calculator.maxFrequencies(fftAccelerations);
-//
-//                ArrayList<DataPoint3D<int[]>> velocitiesFreqDomain = Calculator.calcVelocityFreqDomain(fftAccelerations);
-//                ArrayList<DataPoint3D<int[]>> limitValues = Calculator.limitValue(velocitiesFreqDomain);
-//                DominantFrequencies dominantFrequencies = Calculator.getDominantFrequencies(limitValues, velocitiesFreqDomain);
-//
-//                float[] maxVelocities = Calculator.maxValueInArray(velocitiesFreqDomain);
-//                maxVelocities = Calculator.addMargin(maxVelocities);
+                int[] maxFrequencies = Calculator.maxFrequencies(fftAccelerations);
 
-                // Write relevant calculations
+                ArrayList<DataPoint3D<int[]>> velocitiesFreqDomain = Calculator.calcVelocityFreqDomain(fftAccelerations);
+                ArrayList<DataPoint3D<int[]>> limitValues = Calculator.limitValue(velocitiesFreqDomain);
+                DominantFrequencies dominantFrequencies = Calculator.getDominantFrequencies(limitValues, velocitiesFreqDomain);
 
-//                thisDataInterval.dominantFrequencies = dominantFrequencies;
-//                thisDataInterval.maxFrequencies = maxFrequencies;
-//                thisDataInterval.maxVelocities = maxVelocities;
+                float[] maxVelocities = Calculator.maxValueInArray(velocitiesFreqDomain);
+                maxVelocities = Calculator.addMargin(maxVelocities);
+
+                 Write relevant calculations
+
+                thisDataInterval.dominantFrequencies = dominantFrequencies;
+                thisDataInterval.maxFrequencies = maxFrequencies;
+                thisDataInterval.maxVelocities = maxVelocities;
+                 */
 
                 // Check if we exceed any limits
                 if (thisDataInterval.isExceedingLimit()) {

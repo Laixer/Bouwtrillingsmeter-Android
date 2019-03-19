@@ -18,12 +18,6 @@ public class GraphTime extends Graph {
     private double highestValue = 0;
 
     /**
-     * This has to be an ArrayList, since our LineGraphSeries is generic.
-     * Java does not support arrays of generic types.
-     */
-    private ArrayList<LineGraphSeries<DataPoint>> series;
-
-    /**
      * This holds our previous time value, to prevent points from overlapping.
      * TODO This is a lot of extra comparison. This might be solvable in a more elegant way.
      */
@@ -37,29 +31,7 @@ public class GraphTime extends Graph {
         maxHorizontalRange = Utility.Resources.getInteger(R.integer.graphs_time_horizontal_axis_range_ms);
 
         // Initialize variables
-        series = new ArrayList<LineGraphSeries<DataPoint>>();
-        for (int i = 0; i < 3; i++) {
-            series.add(new LineGraphSeries<DataPoint>());
-            series.get(i).setTitle(Utility.Resources.getStringArray(R.array.graph_legend_xyz_names)[i]);
-        }
         lastTimeValue = new double[3];
-    }
-
-    /**
-     * This links our graphView view object to this instance.
-     * This also sets a bunch of graph layout properties.
-     *
-     * @param graphView The graphview in our view.
-     */
-    @Override
-    public void onCreatedGraphView(GraphView graphView) {
-        // Call super
-        super.onCreatedGraphView(graphView);
-
-        // Style series
-        addAndStyleSeries(series.get(0), R.color.graph_series_color_x);
-        addAndStyleSeries(series.get(1), R.color.graph_series_color_y);
-        addAndStyleSeries(series.get(2), R.color.graph_series_color_z);
     }
 
     /**
@@ -74,7 +46,7 @@ public class GraphTime extends Graph {
      * @throws IllegalArgumentException If our dimension is incorrect.
      */
     @Override
-    public void addDataToSeries1D(DataPoint[] dataPoints, int dimension) {
+    public void sendNewDataToSeries(DataPoint[] dataPoints, int dimension) {
         if (lowestValue == 0) {
             lowestValue = dataPoints[0].getX();
         }

@@ -176,8 +176,10 @@ class Calculator {
      */
     public static ArrayList<DataPoint3D<Double>> fft(ArrayList<DataPoint3D<Long>> accelerations3D) {
         // Calculate extraction constants
+        // TODO df is incorrect? Overwritten as = 1
         int n = accelerations3D.size();
-        double df = ((double) Constants.intervalInMilliseconds / 1000.0) / n;
+        double df = (((double) Constants.intervalInMilliseconds / 1000.0) / n);
+        df = 1;
 
         // Create velocity array for each dimension
         float[][] accelerationsSplit = new float[3][n];
