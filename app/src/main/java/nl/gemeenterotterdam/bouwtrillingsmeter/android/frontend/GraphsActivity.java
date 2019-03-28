@@ -25,7 +25,7 @@ import java.util.Date;
 /**
  * This activity shows all the graphs.
  */
-public class GraphsActivity extends AppCompatActivity implements DataIntervalClosedListener, DataPointAccelerometerCreatedListener {
+public class GraphsActivity extends AppCompatActivity implements DataIntervalClosedListener {
 
     ViewPager viewPager;
     private Graph[] graphs;
@@ -49,7 +49,7 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
 
         // Add this as a listener for interval close events and datapoint events
         DataHandler.addDataIntervalClosedListener(this);
-        DataHandler.addDataPointAccelerometerCreatedListeners(this);
+//        DataHandler.addDataPointAccelerometerCreatedListeners(this);
 
         // Get the realtime graph acceleration values
         graphAccelerationRealtime = getResources().getBoolean(R.bool.graph_acceleration_realtime_enabled);
@@ -160,13 +160,15 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         }
 
         Graph graph;
+        ArrayList<DataPoint3D<Long>> dataPoints3DTime;
+        ArrayList<DataPoint3D<Double>> dataPoints3DFrequency;
         DataPoint[] dataPoints1D;
 
         /**
-         * Graph 2: Velocity // time
+         * Graph 1: Acceleration // time
          */
-        graph = graphs[1];
-        ArrayList<DataPoint3D<Long>> dataPoints3DTime = dataInterval.velocities;
+        graph = graphs[0];
+        dataPoints3DTime = dataInterval.dataPoints3DAcceleration;
         for (int dimension = 0; dimension < 3; dimension++) {
             dataPoints1D = new DataPoint[dataPoints3DTime.size()];
             for (int j = 0; j < dataPoints3DTime.size(); j++) {
@@ -176,10 +178,28 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         }
 
         /**
+         * Graph 2: Velocity // time
+         */
+        graph = graphs[1];
+        dataPoints3DTime = dataInterval.velocities;
+        for (int dimension = 0; dimension < 3; dimension++) {
+            dataPoints1D = new DataPoint[dataPoints3DTime.size()];
+            for (int j = 0; j < dataPoints3DTime.size(); j++) {
+                dataPoints1D[j] = (new DataPoint(dataPoints3DTime.get(j).xAxisValue, dataPoints3DTime.get(j).values[dimension]));
+            }
+            graph.sendNewDataToSeries(dataPoints1D, dimension);
+        }
+
+        /**
+         * Graph 3:
+         */
+        graph = graphs[2];
+
+        /**
          * Graph 4: Amplitude // frequency
          */
         graph = graphs[3];
-        ArrayList<DataPoint3D<Double>> dataPoints3DFrequency = dataInterval.frequencyAmplitudes;
+        dataPoints3DFrequency = dataInterval.frequencyAmplitudes;
         for (int dimension = 0; dimension < 3; dimension++) {
             dataPoints1D = new DataPoint[dataPoints3DFrequency.size()];
             for (int j = 0; j < dataPoints3DFrequency.size(); j++) {
@@ -187,15 +207,21 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
             }
             graph.sendNewDataToSeries(dataPoints1D, dimension);
         }
+
+        /**
+         * Graph 4:
+         */
+        graph = graphs[4];
     }
 
     /**
      * This processes realtime accelerometer data.
      * TODO Implement some safes.
+     * TODO This is removed because it slowed us down
      *
      * @param dataPoint3DTime
      */
-    @Override
+    /*@Override
     public void onDataPointAccelerometerCreated(DataPoint3D<Long> dataPoint3DTime) {
         // Push to graph
         if (Calendar.getInstance().getTimeInMillis() > graphAccelerationPreviousUpdate + graphAccelerationIntervalMs) {
@@ -218,5 +244,5 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         else {
             graphAccelerationDataPoints.add(dataPoint3DTime);
         }
-    }
+    }*/
 }
