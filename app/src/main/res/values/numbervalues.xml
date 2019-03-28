@@ -14,4 +14,8 @@
     <integer name="graphs_frequency_bound_min">0</integer>
     <integer name="graphs_frequency_bound_max">100</integer>
     <integer name="graphs_max_datapoint_count">600</integer>
+
+    <!--The acceleration graph-->
+    <bool name="graph_acceleration_realtime_enabled">true</bool>
+    <integer name="graph_acceleration_realtime_fps">1</integer>
 </resources>

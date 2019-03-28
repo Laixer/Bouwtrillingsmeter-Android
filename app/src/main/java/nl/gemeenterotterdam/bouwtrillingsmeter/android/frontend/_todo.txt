@@ -1,6 +1,7 @@
 Frontend todos
 
 Nu:
+TODO Realtime graph 20fps ofzo
 TODO Calculations goed krijgen.
 
 Later:
