@@ -23,21 +23,4 @@ class DominantFrequencies {
         this.exceedsLimit = exceedsLimit;
     }
 
-    /**
-     * This is used because our calculator is an idiot.
-     * TODO Remove this.
-     *
-     * @return A dominant frequencies object with fake random values.
-     */
-    public static  DominantFrequencies getMockDominantFrequencies() {
-        int[] frequencies = new int[]{(int)(Math.random() * 25), (int)(Math.random() * 25), (int)(Math.random() * 25)};
-        float[] velocities = new float[]{(float)Math.random(), (float)Math.random(), (float)Math.random()};
-        boolean[] exceedsLimit = new boolean[3];
-        for (int i = 0; i < 3; i++) {
-            exceedsLimit[i] = false; //(Math.random() < 0.05) ? true : false;
-        }
-
-        return new DominantFrequencies(frequencies, velocities, exceedsLimit);
-    }
-
 }

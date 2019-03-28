@@ -1,5 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
+import com.jjoe64.graphview.series.DataPoint;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -225,27 +227,9 @@ public class DataHandler implements AccelerometerListener {
                 ArrayList<DataPoint3D<Double>> frequencyAmplitudes = Calculator.fft(thisDataInterval.dataPoints3DAcceleration);
                 thisDataInterval.frequencyAmplitudes = frequencyAmplitudes;
 
-                /**
-                // Trigger all calculations
-                float[] maxAccelerations = Calculator.maxValueInArray(thisDataInterval.dataPoints3DAcceleration);
-                thisDataInterval.maxAccelerations = maxAccelerations;
-
-
-                int[] maxFrequencies = Calculator.maxFrequencies(fftAccelerations);
-
-                ArrayList<DataPoint3D<int[]>> velocitiesFreqDomain = Calculator.calcVelocityFreqDomain(fftAccelerations);
-                ArrayList<DataPoint3D<int[]>> limitValues = Calculator.limitValue(velocitiesFreqDomain);
-                DominantFrequencies dominantFrequencies = Calculator.getDominantFrequencies(limitValues, velocitiesFreqDomain);
-
-                float[] maxVelocities = Calculator.maxValueInArray(velocitiesFreqDomain);
-                maxVelocities = Calculator.addMargin(maxVelocities);
-
-                 Write relevant calculations
-
+                // Calculate dominant frequencies of this interval
+                DominantFrequencies dominantFrequencies = Calculator.calculateDominantFrequencies(frequencyAmplitudes);
                 thisDataInterval.dominantFrequencies = dominantFrequencies;
-                thisDataInterval.maxFrequencies = maxFrequencies;
-                thisDataInterval.maxVelocities = maxVelocities;
-                 */
 
                 // Check if we exceed any limits
                 if (thisDataInterval.isExceedingLimit()) {

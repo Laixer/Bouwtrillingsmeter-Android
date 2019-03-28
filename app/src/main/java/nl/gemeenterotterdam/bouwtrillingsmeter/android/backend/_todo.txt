@@ -1,5 +1,4 @@
 Nu:
-TODO Calculations FFT
 
 Daarna:
 TODO Waarom hapert de accelerometer graph steeds?
