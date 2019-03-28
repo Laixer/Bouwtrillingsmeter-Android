@@ -4,9 +4,6 @@ import org.jtransforms.fft.FloatFFT_1D;
 
 import java.util.ArrayList;
 
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
-
 /**
  * @author Marijn Otte
  * @author Thomas Beckers
@@ -31,7 +28,7 @@ class Calculator {
     /**
      * This initializes the calculator.
      * You should call this before starting a measurement.
-     * This is due to the correct starting boundary conditions.
+     * This is due to the correct starting boundary conditions for our velocity.
      */
     public static void onStartMeasurementCalculations() {
         accelerationPrevious = new DataPoint3D<Long>((long) 0, new float[]{0, 0, 0});
@@ -44,6 +41,7 @@ class Calculator {
      * We calculate the area under the graph,
      * then add it to the total in order to get the
      * velocity for each point.
+     * TODO This does not seem to work properly.
      *
      * @param data values from acceleroMeter (retrieved for 1 second)
      * @return A new arraylist, with a velocity for each point. All time values will be the same as the input data.
@@ -79,107 +77,38 @@ class Calculator {
         return result;
     }
 
+
     /**
-     * Calculates max acceleration from arraylist with different acceleration datapoints
+     * Finds the maximum values in our array in 3 dimensions
      *
-     * @param dataArray array with DataPoints, corresponding to accelerations or velocities
+     * @param dataPoints The datapoints
+     * @param <T>        The datapoint type
+     * @return A float[3] with the highest values
      */
-    public static <T> float[] maxValueInArray(ArrayList<DataPoint3D<int[]>> dataArray) {
-        float maxx = 0;
-        float maxy = 0;
-        float maxz = 0;
+    public static <T> float[] maxValuesInArray3D(ArrayList<DataPoint3D<T>> dataPoints) {
+        float[] result = new float[]{Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE};
 
-        for (DataPoint3D<int[]> dataPoint3D : dataArray) {
-            float xAcc = Math.abs(dataPoint3D.values[0]);
-            float yAcc = Math.abs(dataPoint3D.values[1]);
-            float zAcc = Math.abs(dataPoint3D.values[2]);
-
-            maxx = Math.max(maxx, xAcc);
-            maxy = Math.max(maxy, yAcc);
-            maxz = Math.max(maxz, zAcc);
+        for (int i = 0; i < dataPoints.size(); i++) {
+            for (int dimension = 0; dimension <= 2; dimension++) {
+                float value = dataPoints.get(i).values[dimension];
+                result[dimension] = Math.max(result[dimension], value);
+            }
         }
 
-        float[] results = new float[]{maxx, maxy, maxz};
-        return results;
-    }
-
-    /**
-     * @param dataArray array of frequency datapoints
-     * @return max frequency of array in x,y and z direction
-     */
-    public static int[] maxFrequencies(ArrayList<DataPoint3D<int[]>> dataArray) {
-        float maxx = 0;
-        float maxy = 0;
-        float maxz = 0;
-        int freqx = 0;
-        int freqy = 0;
-        int freqz = 0;
-
-        for (DataPoint3D dataPoint3D : dataArray) {
-            int[] frequencies = (int[]) dataPoint3D.xAxisValue;
-            float[] magnitudes = (float[]) dataPoint3D.values;
-            float xVel = magnitudes[0];
-            float yVel = magnitudes[1];
-            float zVel = magnitudes[2];
-
-            if (xVel > maxx) {
-                freqx = frequencies[0];
-            }
-
-            if (yVel > maxy) {
-                freqy = frequencies[1];
-            }
-
-            if (zVel > maxz) {
-                freqz = frequencies[2];
-            }
-
-            maxx = Math.max(maxx, xVel);
-            maxy = Math.max(maxy, yVel);
-            maxz = Math.max(maxz, zVel);
-
-
-        }
-
-        int[] results = new int[]{freqx, freqy, freqz};
-        return results;
+        return result;
     }
 
     /**
      * Calculate fft
-     * realForward returns Re+Im values
-     * Calculate Magnitude from Re + Im
-     * <p>
-     * TODO n = 2^x voor optimale fft
-     * <p>
-     * n = amount of datapoints
-     * fft[0] = DC value (average of the entire sample)
-     * t / dt = sampling frequency fs
-     * Bb = fs
-     * df in fourier domain = Bb / n
-     * <p>
-     * max f = Bb / 2 (sampling theorem = nyquist frequency)
-     * -> halverwege is de maximale frequentie die je in het tijdsdomein kan laten zien
-     * hierom pakken we meestal alleen de eerste helft van de array
-     * <p>
-     * Math.hypot returns sqrt(x^2 + y^2)
-     * Extract frequencies from first half
-     * The second half is not accurate because this is beyond the nyquist frequency
-     * <p>
-     * From the documentation the data is ordened as follows
-     * a[2*k] = Re[k], 0<=k<n/2
-     * a[2*k+1] = Im[k], 0<k<n/2
-     * a[1] = Re[n/2]
      *
      * @param accelerations3D list of velocities obtained for 1 second
      * @return float frequency in x, y and z direction in range (0-50)Hz with corresponding magnitude
      */
     public static ArrayList<DataPoint3D<Double>> fft(ArrayList<DataPoint3D<Long>> accelerations3D) {
         // Calculate extraction constants
-        // TODO df is incorrect? Overwritten as = 1
+        // TODO df is incorrect? Overwritten as = 1 seems to work
         int n = accelerations3D.size();
-        double df = (((double) Constants.intervalInMilliseconds / 1000.0) / n);
-        df = 1;
+        double sampleRate = n / ((double) Constants.intervalInMilliseconds / 1000);
 
         // Create velocity array for each dimension
         float[][] accelerationsSplit = new float[3][n];
@@ -201,12 +130,8 @@ class Calculator {
         fft.realForward(accelerationsSplit[1]);
         fft.realForward(accelerationsSplit[2]);
 
-        // Create storage variables
-        float[] magnitude = new float[3];
-        float[] magnitudeMax = new float[3];
-        int[] magnitudeMaxIndex = new int[3];
-
         // Loop trough fft transformed datapoints
+        float[] magnitude = new float[3];
         ArrayList<DataPoint3D<Double>> result = new ArrayList<DataPoint3D<Double>>();
         for (int i = 0; i < n / 2; i++) {
             for (int dimension = 0; dimension < 3; dimension++) {
@@ -214,14 +139,8 @@ class Calculator {
                 double re = accelerationsSplit[dimension][2 * i];
                 double im = accelerationsSplit[dimension][2 * i + 1];
                 magnitude[dimension] = (float) Math.hypot(im, re);
-
-                // Track our maxima and their index
-                if (magnitude[dimension] > magnitudeMax[dimension]) {
-                    magnitudeMax[dimension] = magnitude[dimension];
-                    magnitudeMaxIndex[dimension] = i;
-                }
             }
-            double frequency = df * i;
+            double frequency = (sampleRate * i) / (n);
             result.add(new DataPoint3D<Double>(frequency, magnitude));
         }
 

@@ -1,8 +1,8 @@
 Nu:
-TODO De app functioneel maken.
+TODO Calculations FFT
 
 Daarna:
-TODO Calculations: kloppen deze wel???
+TODO Waarom hapert de accelerometer graph steeds?
 TODO Hoe gaan we om met een gepasseerd interval zonder dat er een datapoint binnen komt? Dit wordt niet gecalled dan!
 TODO Wat als er geen accelerometer is?
 TODO Optimize for arraylist size x datapoints per interval
