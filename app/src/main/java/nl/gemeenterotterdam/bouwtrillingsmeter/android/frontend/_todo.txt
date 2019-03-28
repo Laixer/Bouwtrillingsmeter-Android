@@ -1,8 +1,7 @@
 Frontend todos
 
 Nu:
-TODO Realtime graph 20fps ofzo
-TODO Calculations goed krijgen.
+TODO Grafieken goed implementeren
 
 Later:
 TODO Graph scaling alleen als je hem niet aanraakt.

@@ -52,7 +52,7 @@ public class GraphsSlideAdapter extends PagerAdapter {
         GraphView graphView = (GraphView) view.findViewById(R.id.graphViewGraphTemplate);
 
         // Link view to our graph object
-        graphs[position].onCreatedGraphView(graphView);
+        graphs[position].onCreatedGraphView(graphView, true);
 
         // Assign variables
         Graph graph = graphs[position];

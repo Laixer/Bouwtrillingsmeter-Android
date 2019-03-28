@@ -33,9 +33,9 @@ public class GraphFrequency extends Graph {
      * @param graphView The graphview in our view.
      */
     @Override
-    public void onCreatedGraphView(GraphView graphView) {
+    public void onCreatedGraphView(GraphView graphView, boolean addSeriesXYZ) {
         // Call super
-        super.onCreatedGraphView(graphView);
+        super.onCreatedGraphView(graphView, true);
 
         // Fix axis permanently
         int axisMin = Utility.Resources.getInteger(R.integer.graphs_frequency_bound_min);

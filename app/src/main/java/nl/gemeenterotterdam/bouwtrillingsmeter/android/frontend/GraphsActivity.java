@@ -17,10 +17,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataHandler;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataInterval;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClosedListener;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPointAccelerometerCreatedListener;
-
-import java.util.Calendar;
-import java.util.Date;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DominantFrequencies;
 
 /**
  * This activity shows all the graphs.
@@ -117,11 +114,13 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
 
             // Iterate trough
             for (int j = 0; j < graphCount; j++) {
-                int resourceValue = Utility.Resources.getIntArray(R.array.graphs_0_time_1_frequency)[i];
+                int resourceValue = Utility.Resources.getIntArray(R.array.graphs_0_time_1_frequency_2_fdom)[i];
                 if (resourceValue == 0) {
                     graphs[i] = new GraphTime(title, axisHorizontal, axisVertical);
                 } else if (resourceValue == 1) {
                     graphs[i] = new GraphFrequency(title, axisHorizontal, axisVertical);
+                } else if (resourceValue == 2) {
+                    graphs[i] = new GraphFrequencyDominant(title, axisHorizontal, axisVertical);
                 } else {
                     throw new UnsupportedOperationException("The value in our resources indicating wether we are dealing with a frequency or time graph can only be 1 or 0!");
                 }
@@ -133,7 +132,7 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
      * This updates all graphs and thus is quite a big function.
      * This gets called when the {@link DataInterval} is closed.
      * Do not forget to add the @Override tag to this function!
-     * TODO Implement this
+     * TODO Lots of duplicate code
      *
      * @param dataInterval
      */
@@ -157,7 +156,7 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         for (int dimension = 0; dimension < 3; dimension++) {
             dataPoints1D = new DataPoint[dataPoints3DTime.size()];
             for (int j = 0; j < dataPoints3DTime.size(); j++) {
-                dataPoints1D[j] = (new DataPoint(dataPoints3DTime.get(j).xAxisValue, dataPoints3DTime.get(j).values[dimension]));
+                dataPoints1D[j] = (new DataPoint(dataPoints3DTime.get(j).xAxisValue / 1000.0, dataPoints3DTime.get(j).values[dimension]));
             }
             graph.sendNewDataToSeries(dataPoints1D, dimension);
         }
@@ -170,15 +169,20 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         for (int dimension = 0; dimension < 3; dimension++) {
             dataPoints1D = new DataPoint[dataPoints3DTime.size()];
             for (int j = 0; j < dataPoints3DTime.size(); j++) {
-                dataPoints1D[j] = (new DataPoint(dataPoints3DTime.get(j).xAxisValue, dataPoints3DTime.get(j).values[dimension]));
+                dataPoints1D[j] = (new DataPoint(dataPoints3DTime.get(j).xAxisValue / 1000.0, dataPoints3DTime.get(j).values[dimension]));
             }
             graph.sendNewDataToSeries(dataPoints1D, dimension);
         }
 
         /**
-         * Graph 3:
+         * Graph 3: Dominant frequency // time
          */
         graph = graphs[2];
+        double time = dataInterval.dataPoints3DAcceleration.get(0).xAxisValue / 1000.0;
+        for (int dimension = 0; dimension < 3; dimension++) {
+            dataPoints1D = new DataPoint[]{new DataPoint(time, dataInterval.dominantFrequencies.frequencies[dimension])};
+            graph.sendNewDataToSeries(dataPoints1D, dimension);
+        }
 
         /**
          * Graph 4: Amplitude // frequency
@@ -194,8 +198,26 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         }
 
         /**
-         * Graph 4:
+         * Graph 5: Dominant frequency // frequency
          */
         graph = graphs[4];
+        ArrayList<DataPoint> tempDataPoints = new ArrayList<DataPoint>();
+        DominantFrequencies dominantFrequencies = dataInterval.dominantFrequencies;
+        for (int dimension = 0; dimension < 3; dimension++) {
+            if (dominantFrequencies.exceedsLimit[dimension]) {
+                double frequency = dominantFrequencies.frequencies[dimension];
+                double velocity = dominantFrequencies.velocities[dimension];
+                tempDataPoints.add(new DataPoint(frequency, velocity));
+            }
+        }
+
+        // If we created new datapoints
+        if (tempDataPoints.size() > 0) {
+            dataPoints1D = new DataPoint[tempDataPoints.size()];
+            for (int i = 0; i < tempDataPoints.size(); i++) {
+                dataPoints1D[i] = tempDataPoints.get(i);
+            }
+            graph.sendNewDataToSeries(dataPoints1D, 0);
+        }
     }
 }

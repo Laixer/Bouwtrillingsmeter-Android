@@ -8,7 +8,7 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
  * The created instance is also stored in said {@link DataInterval}.
  * It's nothing more than an elegant way of storing data.
  */
-class DominantFrequencies {
+public class DominantFrequencies {
 
     public int[] frequencies;
     public float[] velocities;
@@ -21,6 +21,24 @@ class DominantFrequencies {
         this.frequencies = frequencies;
         this.velocities = velocities;
         this.exceedsLimit = exceedsLimit;
+
+        // TODO Remove this debug
+        this.exceedsLimit[2] = true;
+    }
+
+    /**
+     * Checks if this object exceeds any limits
+     *
+     * @return True if we exceed limits
+     */
+    public boolean isExceedingLimit() {
+        for (boolean b : exceedsLimit) {
+            if (b) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

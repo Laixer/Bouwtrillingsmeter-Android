@@ -54,29 +54,21 @@ public abstract class Graph {
     }
 
     /**
-     * Checks if we can add data.
-     * This is to make sure that we have a viewport to add to
-     *
-     * @return False if we cant add data.
-     */
-    public boolean canDataBeAdded() {
-        return graphView == null ? false : true;
-    }
-
-    /**
      * This links our graphView view object to this instance.
      * This also sets a bunch of graph layout properties.
      *
      * @param graphView The graphview in our view.
      */
-    protected void onCreatedGraphView(GraphView graphView) {
+    protected void onCreatedGraphView(GraphView graphView, boolean addSeriesXYZ) {
         // Link graphview and series
         this.graphView = graphView;
 
         // Link series
-        addAndStyleSeries(series.get(0), R.color.graph_series_color_x);
-        addAndStyleSeries(series.get(1), R.color.graph_series_color_y);
-        addAndStyleSeries(series.get(2), R.color.graph_series_color_z);
+        if (addSeriesXYZ) {
+            addAndStyleSeries(series.get(0), R.color.graph_series_color_x);
+            addAndStyleSeries(series.get(1), R.color.graph_series_color_y);
+            addAndStyleSeries(series.get(2), R.color.graph_series_color_z);
+        }
 
         // Scaling
         Viewport viewport = graphView.getViewport();
@@ -85,6 +77,7 @@ public abstract class Graph {
         viewport.setScrollable(true);
         viewport.setScrollableY(true);
         viewport.setXAxisBoundsManual(true);
+        // TODO This seems hard coded!
         viewport.setMinX(0);
         viewport.setMaxX(100);
 
