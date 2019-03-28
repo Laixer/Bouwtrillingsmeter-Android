@@ -35,13 +35,6 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
     private LinearLayout dotsLayout;
     private ImageView[] dots;
 
-    boolean graphAccelerationRealtime;
-    int graphAccelerationFps;
-    long graphAccelerationIntervalMs;
-    long graphAccelerationPreviousUpdate;
-    ArrayList<DataPoint3D<Long>> graphAccelerationDataPoints;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,14 +42,6 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
 
         // Add this as a listener for interval close events and datapoint events
         DataHandler.addDataIntervalClosedListener(this);
-//        DataHandler.addDataPointAccelerometerCreatedListeners(this);
-
-        // Get the realtime graph acceleration values
-        graphAccelerationRealtime = getResources().getBoolean(R.bool.graph_acceleration_realtime_enabled);
-        graphAccelerationFps = getResources().getInteger(R.integer.graph_acceleration_realtime_fps);
-        graphAccelerationIntervalMs = (long) (1000.0 / (double) graphAccelerationFps);
-        graphAccelerationPreviousUpdate = Calendar.getInstance().getTimeInMillis();
-        graphAccelerationDataPoints = new ArrayList<DataPoint3D<Long>>();
 
         // Create all graphs
         createAllGraphs();
@@ -213,36 +198,4 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
          */
         graph = graphs[4];
     }
-
-    /**
-     * This processes realtime accelerometer data.
-     * TODO Implement some safes.
-     * TODO This is removed because it slowed us down
-     *
-     * @param dataPoint3DTime
-     */
-    /*@Override
-    public void onDataPointAccelerometerCreated(DataPoint3D<Long> dataPoint3DTime) {
-        // Push to graph
-        if (Calendar.getInstance().getTimeInMillis() > graphAccelerationPreviousUpdate + graphAccelerationIntervalMs) {
-            Graph graph = graphs[0];
-            if (graph != null && graph.canDataBeAdded()) {
-                for (DataPoint3D<Long> dataPoint : graphAccelerationDataPoints) {
-                    for (int i = 0; i < 3; i++) {
-                        DataPoint[] singleDataPoint1D = new DataPoint[1];
-                        singleDataPoint1D[0] = new DataPoint(dataPoint.xAxisValue, dataPoint.values[i]);
-                        graph.sendNewDataToSeries(singleDataPoint1D, i);
-                    }
-                }
-            }
-
-            graphAccelerationDataPoints = new ArrayList<DataPoint3D<Long>>();
-            graphAccelerationPreviousUpdate = Calendar.getInstance().getTimeInMillis();
-        }
-
-        // Append list
-        else {
-            graphAccelerationDataPoints.add(dataPoint3DTime);
-        }
-    }*/
 }
