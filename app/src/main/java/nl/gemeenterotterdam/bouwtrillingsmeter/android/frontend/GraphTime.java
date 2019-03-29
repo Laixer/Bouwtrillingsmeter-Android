@@ -1,10 +1,11 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.LegendRenderer;
+import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
-
-import java.util.ArrayList;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
@@ -13,7 +14,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
  */
 public class GraphTime extends Graph {
 
-    private int maxHorizontalRange;
+    private int maxHorizontalRange = Utility.Resources.getInteger(R.integer.graphs_time_horizontal_axis_range_s);
     private double lowestValue = 0;
     private double highestValue = 0;
 
@@ -26,9 +27,6 @@ public class GraphTime extends Graph {
     public GraphTime(String name, String textAxisHorizontal, String textAxisVertical) {
         // Call super
         super(name, textAxisHorizontal, textAxisVertical);
-
-        // Get constants
-        maxHorizontalRange = Utility.Resources.getInteger(R.integer.graphs_time_horizontal_axis_range_ms);
 
         // Initialize variables
         lastTimeValue = new double[3];
@@ -62,7 +60,9 @@ public class GraphTime extends Graph {
         // If we are the last update
         if (dimension == 2) {
             highestValue = dataPoints[dataPoints.length - 1].getX();
-            setHorizontalRange(Math.max(lowestValue, highestValue - maxHorizontalRange), serie.getHighestValueX());
+            double left = Math.max(lowestValue, highestValue - maxHorizontalRange);
+            double right = serie.getHighestValueX();
+            setHorizontalRange(left, right);
         }
     }
 

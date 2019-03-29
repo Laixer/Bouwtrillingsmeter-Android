@@ -18,6 +18,7 @@ TODO Highlight first visit mooi maken
 TODO Wait icon groen -> niet elke API!
 TODO Switch achtergrond ook groen (check API version!)
 TODO Switch touch hele breedte
+TODO Foto maken en cancellen haalt je meting weg
 
 Details:
 TODO Snackbar from activity complete in front of activity animation

@@ -77,9 +77,6 @@ public abstract class Graph {
         viewport.setScrollable(true);
         viewport.setScrollableY(true);
         viewport.setXAxisBoundsManual(true);
-        // TODO This seems hard coded!
-        viewport.setMinX(0);
-        viewport.setMaxX(100);
 
         // Text and names
         // graphView.setTitle(graph.getName()); This is done with a separate label because it looked ugly
@@ -89,6 +86,7 @@ public abstract class Graph {
         gridLabelRenderer.setHorizontalAxisTitle(getTextAxisHorizontal());
         gridLabelRenderer.setVerticalAxisTitle(getTextAxisVertical());
         gridLabelRenderer.setPadding(40);
+        gridLabelRenderer.setHighlightZeroLines(true);
 
         // Legend renderer
         LegendRenderer legendRenderer = graphView.getLegendRenderer();

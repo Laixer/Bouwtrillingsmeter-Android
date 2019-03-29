@@ -58,6 +58,9 @@ public class GraphFrequencyDominant extends Graph {
         int axisMax = Utility.Resources.getInteger(R.integer.graphs_frequency_bound_max);
         setHorizontalRange(axisMin, axisMax);
         graphView.getViewport().setMinY(0);
+
+        // Set some additional grid stuff
+        graphView.getGridLabelRenderer().setNumHorizontalLabels(11);
     }
 
     /**

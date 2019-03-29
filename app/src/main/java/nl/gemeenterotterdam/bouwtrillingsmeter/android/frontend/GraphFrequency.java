@@ -17,6 +17,8 @@ public class GraphFrequency extends Graph {
      * TODO Do we need this in the frequency graph?
      */
     private double[] lastFrequencyValue;
+    private int axisMin = Utility.Resources.getInteger(R.integer.graphs_frequency_bound_min);
+    private int axisMax = Utility.Resources.getInteger(R.integer.graphs_frequency_bound_max);
 
     public GraphFrequency(String name, String textAxisHorizontal, String textAxisVertical) {
         // Call super
@@ -38,16 +40,17 @@ public class GraphFrequency extends Graph {
         super.onCreatedGraphView(graphView, true);
 
         // Fix axis permanently
-        int axisMin = Utility.Resources.getInteger(R.integer.graphs_frequency_bound_min);
-        int axisMax = Utility.Resources.getInteger(R.integer.graphs_frequency_bound_max);
         setHorizontalRange(axisMin, axisMax);
+
+        // Set some additional grid stuff
+        graphView.getGridLabelRenderer().setNumHorizontalLabels(11);
     }
 
     /**
      * Replace all data in full
      *
-     * @param dataPoints
-     * @param dimension
+     * @param dataPoints The datapoints
+     * @param dimension x=0, y=1, z=2
      */
     @Override
     public void sendNewDataToSeries(DataPoint[] dataPoints, int dimension) {
