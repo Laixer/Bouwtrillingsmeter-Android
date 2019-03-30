@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import com.jjoe64.graphview.series.DataPoint;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataHandler;
@@ -132,7 +133,7 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
      * Do not forget to add the @Override tag to this function!
      * TODO Lots of duplicate code
      *
-     * @param dataInterval
+     * @param _dataInterval
      */
     @Override
     public void onDataIntervalClosed(DataInterval dataInterval) {
@@ -140,6 +141,8 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         if (dataInterval == previousDataInterval) {
             return;
         }
+
+        long before = Calendar.getInstance().getTimeInMillis();
 
         Graph graph;
         ArrayList<DataPoint3D<Long>> dataPoints3DTime;
@@ -210,6 +213,7 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         }
 
         // If we created new datapoints
+        // This only adds exceeded datapoints to the graph
         if (tempDataPoints.size() > 0) {
             dataPoints1D = new DataPoint[tempDataPoints.size()];
             for (int i = 0; i < tempDataPoints.size(); i++) {
@@ -217,5 +221,8 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
             }
             graph.sendNewDataToSeries(dataPoints1D, 0);
         }
+
+        long dt = Calendar.getInstance().getTimeInMillis() - before;
+        System.out.println("Updating our graphs took " + dt + " milliseconds.");
     }
 }

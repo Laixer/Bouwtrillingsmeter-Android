@@ -1,11 +1,12 @@
 Frontend todos
 
 Nu:
-TODO Widget één activity gebruiken --> weer met die bolletjes
+TODO Graph haper check
 
 Later:
 TODO Graph scaling alleen als je hem niet aanraakt.
-TODO Tekst measuring laten cyclen
+TODO
+TODO Text measurement cycle mooi
 TODO Graph unlock
 TODO Graph datapoints --> dit is ook veel data. Wat doen we hiermee?
 TODO Wat als je geen settings file kan creëren met de huidige instellingen?
@@ -18,6 +19,7 @@ TODO Wait icon groen -> niet elke API!
 TODO Switch achtergrond ook groen (check API version!)
 TODO Switch touch hele breedte
 TODO Foto maken en cancellen haalt je meting weg
+TODO Alle constraints checken -> er zitten nog wat hard coded stukken tussen
 
 Details:
 TODO Snackbar from activity complete in front of activity animation

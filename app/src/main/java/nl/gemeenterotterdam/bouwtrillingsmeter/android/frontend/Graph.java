@@ -76,7 +76,8 @@ public abstract class Graph {
         viewport.setScalableY(true);
         viewport.setScrollable(true);
         viewport.setScrollableY(true);
-        viewport.setXAxisBoundsManual(true);
+/*        viewport.setXAxisBoundsManual(true);
+        viewport.setYAxisBoundsManual(true);*/
 
         // Text and names
         // graphView.setTitle(graph.getName()); This is done with a separate label because it looked ugly

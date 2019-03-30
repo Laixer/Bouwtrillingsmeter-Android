@@ -45,6 +45,38 @@ public class GraphTime extends Graph {
      */
     @Override
     public void sendNewDataToSeries(DataPoint[] dataPoints, int dimension) {
+        /**
+         * New version
+         * Seems to have no lagging issues
+         * We only display the latest data
+         * Y scaling does not work atm (this can be added in O(n) time)
+         */
+
+        /*if (graphView == null) {
+            return;
+        }
+
+        LineGraphSeries serie = series.get(dimension);
+        if (graphView.getSeries().contains(serie)) {
+            graphView.removeSeries(serie);
+        }
+        series.set(dimension, new LineGraphSeries<DataPoint>(dataPoints));
+
+        if (dimension == 2) {
+            addAndStyleSeries(series.get(0), R.color.graph_series_color_x);
+            addAndStyleSeries(series.get(1), R.color.graph_series_color_y);
+            addAndStyleSeries(series.get(2), R.color.graph_series_color_z);
+
+            if (dataPoints.length > 1) {
+                setHorizontalRange(dataPoints[0].getX(), dataPoints[dataPoints.length - 1].getX());
+            }
+        }*/
+
+        /**
+         * This is the old variant
+         * Here we had serious lagging issues
+         */
+
         if (lowestValue == 0) {
             lowestValue = dataPoints[0].getX();
         }

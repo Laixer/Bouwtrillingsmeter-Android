@@ -27,6 +27,13 @@ public class DataHandler implements AccelerometerListener {
     private static ArrayList<DataIntervalClosedListener> dataIntervalClosedListeners;
     private static ArrayList<DataPointAccelerometerCreatedListener> dataPointAccelerometerCreatedListeners;
 
+    // TODO Remove this debug
+    private static long shortestInterval = 9999;
+    private static long longestInterval = 0;
+    private static long total = 0;
+    private static long previousTime = 0;
+    private static int count = 0;
+
     /**
      * This is used as a workaround to implement the {@link AccelerometerListener} interface
      * in a static context.
@@ -273,6 +280,24 @@ public class DataHandler implements AccelerometerListener {
 
             // Trigger datapoint event
             triggerPointAccelerometerCreatedEvent(dataPoint3DTime);
+
+            // TODO Remove this debug!
+            long thisMs = Calendar.getInstance().getTimeInMillis() - previousTime;
+            shortestInterval = Math.min(shortestInterval, thisMs);
+            longestInterval = Math.max(longestInterval, thisMs);
+            total += thisMs;
+            count++;
+
+            if (count > 500) {
+                double average = (double) total / (double) count;
+                System.out.println("shortest: " + shortestInterval + ", longest: " + longestInterval + ", avg: " + average + ". Values reset now.");
+                shortestInterval = 9999;
+                longestInterval = 0;
+                total = 0;
+                count = 0;
+            }
+
+            previousTime = Calendar.getInstance().getTimeInMillis();
         }
     }
 

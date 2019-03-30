@@ -6,6 +6,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.util.Calendar;
+
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
 
 /**
