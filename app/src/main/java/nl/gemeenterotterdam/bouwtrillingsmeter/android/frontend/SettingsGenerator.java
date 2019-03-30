@@ -1,6 +1,5 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BuildingCategory;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Settings;
@@ -47,7 +46,7 @@ public class SettingsGenerator {
     }
 
     /**
-     * Overwrites our current settings file based on the outcome our {@link SettingsPagesControl}.
+     * Overwrites our current settings file based on the outcome our {@link zSettingsAndTutorialPagesControl}.
      * This calls the {@link nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend} to attempt to overwrite the settings.
      * TODO Implement this. Remove placeholder Settings parameters.
      *

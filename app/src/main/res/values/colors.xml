@@ -8,6 +8,7 @@
 
     <color name="indicatorDotActive">#00AC5C</color>
     <color name="indicatorDotInactive">#061557</color>
+    <color name="indicatorDotDisabled">#cccccc</color>
     <color name="fab_plus">#ffffff</color>
     <color name="fab_checkmark">#ffffff</color>
     <color name="fab_background_disabled">#dddddd</color>

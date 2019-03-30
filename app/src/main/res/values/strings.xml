@@ -12,7 +12,7 @@
     <string name="default_cancel">Annuleren</string>
 
     <!--User saved variables-->
-    <string name="pref_first_visit"></string>
+    <string name="pref_has_visited_before"></string>
 
     <!--Everything regarding the measurements list-->
     <string name="measurement_list_empty">Je hebt nog geen opgeslagen metingen</string>

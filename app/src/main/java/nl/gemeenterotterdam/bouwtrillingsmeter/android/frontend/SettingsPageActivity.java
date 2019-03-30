@@ -1,5 +1,6 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Switch;
 
@@ -70,14 +72,23 @@ public class SettingsPageActivity extends AppCompatActivity {
         // Switch
         switchVibrationSensitive = (Switch) findViewById(R.id.switchCategoryVibrationSensitive);
 
-        // Try to push settings
-        checkForPushParametersFromWidget();
+        // Button
+        Button buttonIDontKnow = (Button) findViewById(R.id.buttonSettingsIDontKnow);
+        buttonIDontKnow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickCategoryIDontKnow();
+            }
+        });
+
+        // Push settings
+        pushGeneratedSettings();
     }
 
     /**
      * This pushes our parameters from the widget once we confirm the widget.
      */
-    private void checkForPushParametersFromWidget() {
+    private void pushGeneratedSettings() {
         if (SettingsGenerator.getCurrentSettings() != null) {
             spinnerCategoryBuilding.setSelection(SettingsGenerator.getCurrentSettings().buildingCategory.ordinal(), true);
             spinnerCategoryVibration.setSelection(SettingsGenerator.getCurrentSettings().vibrationCategory.ordinal(), true);
@@ -111,8 +122,10 @@ public class SettingsPageActivity extends AppCompatActivity {
         boolean vibrationSensitive = switchVibrationSensitive.isSelected();
         SettingsGenerator.createSettingsFromCategoryPage(buildingCategory, vibrationCategory, vibrationSensitive);
 
-        // Go
-        SettingsPagesControl.onClickStartMeasurementFabValid(this);
+        // Go and remove this from stack
+        Intent intent = new Intent(getApplicationContext(), MeasuringActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     /**
@@ -127,11 +140,10 @@ public class SettingsPageActivity extends AppCompatActivity {
 
     /**
      * Starts the widget
-     *
-     * @param view The view we are in
      */
-    public void onClickCategoryIDontKnow(View view) {
-        SettingsPagesControl.startWidget(this);
+    private void onClickCategoryIDontKnow() {
+        Intent intent = new Intent(getApplicationContext(), SettingsWidgetActivity.class);
+        startActivity(intent);
     }
 
     /**
@@ -180,6 +192,6 @@ public class SettingsPageActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        checkForPushParametersFromWidget();
+        pushGeneratedSettings();
     }
 }

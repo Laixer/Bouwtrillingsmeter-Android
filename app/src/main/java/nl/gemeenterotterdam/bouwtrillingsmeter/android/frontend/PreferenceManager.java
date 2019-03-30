@@ -16,50 +16,65 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
  */
 public class PreferenceManager {
 
-    private Context context;
-    private SharedPreferences sharedPreferences;
+    private static Context context;
+    private static SharedPreferences sharedPreferences;
 
-    public PreferenceManager(Context context) {
-        this.context = context;
-        fetchSharedPreferences();
-    }
+    private static final String defaultTrue = "TRUE";
+    private static final String defaultFalse = "FALSE";
+    private static final String defaultNull = "NULL";
 
     /**
      * Loads everything from the phone
      */
-    private void fetchSharedPreferences() {
-        sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_first_visit), Context.MODE_PRIVATE);
+    public static void fetchSharedPreferences(Context _context) {
+        context = _context;
+        sharedPreferences = context.getSharedPreferences(_context.getString(R.string.pref_has_visited_before), Context.MODE_PRIVATE);
     }
 
     /**
-     * This saves that we have opened the app at least once
-     */
-    public void writePreferences() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(context.getString(R.string.pref_first_visit), "INIT_OK");
-        editor.commit();
-    }
-
-    /**
-     * This checks if it is our first visit or not
+     * Saves a boolean preference
      *
-     * @return False if we have not opened our app at least once
+     * @param resourceID The resource ID
+     * @param value      True or false
      */
-    public boolean checkPreference() {
-        boolean result = true;
-
-        if (sharedPreferences.getString(context.getString(R.string.pref_first_visit), "null").equals("null")) {
-            result = false;
+    public static void writeBooleanPreference(int resourceID, boolean value) {
+        if (sharedPreferences == null || context == null) {
+            throw new IllegalArgumentException("Our preference manager was never initialized!");
         }
 
-        return result;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getString(resourceID), value ? defaultTrue : defaultFalse);
+        editor.apply();
+    }
+
+    /**
+     * Checks a boolean preference
+     *
+     * @param resourceID The resource ID
+     * @return The result as a boolean
+     */
+    public static boolean readBooleanPreference(int resourceID) {
+        if (sharedPreferences == null || context == null) {
+            throw new IllegalArgumentException("Our preference manager was never initialized!");
+        }
+
+        String preference = sharedPreferences.getString(context.getString(R.string.pref_has_visited_before), defaultNull);
+        if (preference.equals(defaultNull) || preference.equals(defaultFalse)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
      * This clears all the preferences
      */
-    public void clearPreference() {
-        sharedPreferences.edit().clear().commit();
+    public static void clearAllPreferences() {
+        if (sharedPreferences == null || context == null) {
+            throw new IllegalArgumentException("Our preference manager was never initialized!");
+        }
+
+        sharedPreferences.edit().clear().apply();
     }
 
 }

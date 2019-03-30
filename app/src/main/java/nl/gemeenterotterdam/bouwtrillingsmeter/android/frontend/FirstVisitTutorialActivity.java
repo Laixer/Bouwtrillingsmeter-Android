@@ -21,10 +21,10 @@ public class FirstVisitTutorialActivity extends AppCompatActivity {
             R.layout.first_visit_slide_2,
             R.layout.first_visit_slide_3
     };
-    private FirstVisitSlideAdapter firstVisitSlideAdapter;
+    FirstVisitSlideAdapter firstVisitSlideAdapter;
 
     private LinearLayout dotsLayout;
-    private ImageView[] dots;
+    ImageView[] dots;
 
     Button buttonTutorialSkip;
     Button buttonTutorialNext;
@@ -32,12 +32,6 @@ public class FirstVisitTutorialActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Check for our first visit
-        if (new PreferenceManager(this).checkPreference()) {
-            onCompleteTutorial();
-        }
-
         setContentView(R.layout.activity_first_visit_tutorial);
 
         // Viewpager for the tutorial
@@ -120,8 +114,6 @@ public class FirstVisitTutorialActivity extends AppCompatActivity {
                 dotsLayout.addView(dots[i], params);
             }
         }
-
-
     }
 
     /**
@@ -131,11 +123,22 @@ public class FirstVisitTutorialActivity extends AppCompatActivity {
      *
      */
     private void onCompleteTutorial() {
-        new PreferenceManager(this).writePreferences();
+        // Write our preference
+        PreferenceManager.writeBooleanPreference(R.string.pref_has_visited_before, true);
 
-        Intent intentCategorySelection = new Intent(getApplicationContext(), SettingsPageActivity.class);
-        startActivity(intentCategorySelection);
+        // Launch next intent
+        Intent intent = new Intent(getApplicationContext(), SettingsPageActivity.class);
+        startActivity(intent);
 
+        // Remove this activity from the stack
+        finish();
+    }
+
+    /**
+     * Discard this activity when the back button is pressed
+     */
+    @Override
+    public void onBackPressed() {
         finish();
     }
 }

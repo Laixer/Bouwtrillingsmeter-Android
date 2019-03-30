@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialize the utility frontend
         Utility.ApplicationContext = getApplicationContext();
         Utility.Resources = getResources();
+        PreferenceManager.fetchSharedPreferences(this);
 
         // Initialize the backend.
         // This is failsaved, so that we can only do this once.
@@ -129,17 +130,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * This fires the {@link SettingsPagesControl} class,
-     * which then takes us to the settings part of the app.
+     * This starts our tutorial OR starts our settings widget
      */
     public void onClickCreateNewMeasurementFab() {
-        SettingsPagesControl.onClickNewMeasurementFab(this);
+        Intent intent;
+        if (!PreferenceManager.readBooleanPreference(R.string.pref_has_visited_before)) {
+            intent = new Intent(getApplicationContext(), FirstVisitTutorialActivity.class);
+        } else {
+            intent = new Intent(getApplicationContext(), SettingsPageActivity.class);
+
+            // Tell the backend we are creating a new measurement
+            Backend.onClickCreateNewMeasurement();
+        }
+        startActivity(intent);
     }
 
     // Gets called when the clear preference debug button is clicked
     // TODO Remove this
     public void onClickDebugClearAppdata(View view) {
-        new PreferenceManager(this).clearPreference();
+        PreferenceManager.clearAllPreferences();
     }
 
     /**

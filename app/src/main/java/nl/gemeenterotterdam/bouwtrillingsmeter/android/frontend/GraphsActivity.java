@@ -93,8 +93,6 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
                 dotsLayout.addView(dots[i], params);
             }
         }
-
-
     }
 
     /**

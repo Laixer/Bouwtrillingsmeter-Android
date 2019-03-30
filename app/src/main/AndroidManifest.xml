@@ -9,23 +9,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".frontend.MainActivity"
+        <activity android:name=".frontend.SettingsWidgetActivity"></activity>
+        <activity
+            android:name=".frontend.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".frontend.FinishedMeasurement" />
         <activity android:name=".frontend.GraphsActivity" />
         <activity android:name=".frontend.SettingsPageActivity" />
-        <activity android:name=".frontend.SettingsWidgetFinalActivity" />
-        <activity android:name=".frontend.SettingsWidgetPageActivity" />
+        <activity android:name=".frontend.zSettingsWidgetFinalActivity" />
+        <activity android:name=".frontend.zSettingsWidgetPageActivity" />
         <activity android:name=".frontend.MeasuringActivity" />
         <activity android:name=".frontend.FirstVisitTutorialActivity" />
         <activity android:name=".frontend.MeasurementDetailsActivity" />
     </application>
 
 </manifest>
-
