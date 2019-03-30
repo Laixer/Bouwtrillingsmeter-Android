@@ -133,7 +133,7 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
      * Do not forget to add the @Override tag to this function!
      * TODO Lots of duplicate code
      *
-     * @param _dataInterval
+     * @param dataInterval
      */
     @Override
     public void onDataIntervalClosed(DataInterval dataInterval) {
