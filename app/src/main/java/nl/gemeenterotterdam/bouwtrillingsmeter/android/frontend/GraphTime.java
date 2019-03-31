@@ -1,9 +1,5 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.GridLabelRenderer;
-import com.jjoe64.graphview.LegendRenderer;
-import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -19,12 +15,10 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 public class GraphTime extends Graph {
 
     private int maxHorizontalRange = Utility.Resources.getInteger(R.integer.graphs_time_horizontal_axis_range_s);
-    private double lowestValue = 0;
-    private double highestValue = 0;
+    private int maxDataPointCount = Utility.Resources.getInteger(R.integer.graphs_max_datapoint_count);
+    private double marginMultiplier = Utility.Resources.getInteger(R.integer.graphs_axis_margins_multiplier_percentage) * 0.01;
 
-    private ArrayList<DataPoint> dataPointsX;
-    private ArrayList<DataPoint> dataPointsY;
-    private ArrayList<DataPoint> dataPointsZ;
+    private ArrayList<ArrayList<DataPoint>> dataPointsXYZ;
 
     /**
      * Constructor
@@ -38,128 +32,94 @@ public class GraphTime extends Graph {
         super(name, textAxisHorizontal, textAxisVertical);
 
         // Initialize variables
-        dataPointsX = new ArrayList<DataPoint>();
-        dataPointsY = new ArrayList<DataPoint>();
-        dataPointsZ = new ArrayList<DataPoint>();
+        dataPointsXYZ = new ArrayList<ArrayList<DataPoint>>();
+        for (int dimension = 0; dimension < 3; dimension++) {
+            dataPointsXYZ.add(new ArrayList<DataPoint>());
+        }
     }
 
     /**
      * Adds data to the series.
      * This skipps any data points that are overlapping with previous points.
-     * TODO This can be done more efficiently? Maybe series has an append range function?
-     * TODO Maybe not make this check every iteration for the lowest point
-     * TODO Maybe make this not check every iteration for updating our scale
+     * TODO Dit checkt nu niet voor overlap!
      *
-     * @param dataPoints A time based array of datapoints.
-     * @param dimension  Indicates x y or z. x=0, y=1, z=2
+     * @param graphPoints A time based arraylist with datapoints in 3 dimensions
      * @throws IllegalArgumentException If our dimension is incorrect.
      */
     @Override
-    public void sendNewDataToSeries(DataPoint[] dataPoints, int dimension) {
-        /**
-         * New version
-         * Seems to have no lagging issues
-         * We only display the latest data
-         * Y scaling does not work atm (this can be added in O(n) time)
-         */
-
-        if (graphView == null) {
-            return;
-        }
-
-        LineGraphSeries serie = series.get(dimension);
-        if (graphView.getSeries().contains(serie)) {
-            graphView.removeSeries(serie);
-        }
-        series.set(dimension, new LineGraphSeries<DataPoint>(dataPoints));
-
+    public void sendNewDataToSeries(ArrayList<ArrayList<DataPoint>> graphPoints) {
         for (int dimension = 0; dimension < 3; dimension++) {
-            if (getDataPoints(dimension).size() + )
+            // Check for overlap
+            ArrayList<DataPoint> currentList = dataPointsXYZ.get(dimension);
+            while (currentList.size() > 0 && graphPoints.get(dimension).get(0).getX() <= currentList.get(currentList.size() - 1).getX()) {
+                System.out.println("Removed overlapping points!");
+                currentList.remove(currentList.size() - 1);
+            }
+
+            // Remove some datapoints if we have too many
+            if (currentList.size() + graphPoints.get(dimension).size() > maxDataPointCount) {
+                int removeCount = graphPoints.get(dimension).size() - (maxDataPointCount - currentList.size());
+                dataPointsXYZ.set(dimension, new ArrayList<DataPoint>(currentList.subList(removeCount - 1, currentList.size())));
+            }
+
+            // Append
+            dataPointsXYZ.get(dimension).addAll(graphPoints.get(dimension));
         }
 
         // Push data to graph in the final dimension
-        if (dimension == 2) {
-            pushToGraph();
-        }
+        pushToGraph();
     }
 
     /**
      * This crops our datapoints list if required
      * Then gets all minima and maxima
      * Then pushes everything to our graphview
+     * TODO HorizontalMinMax kan effectiever
      */
     private void pushToGraph() {
         // Find minima and maxima (GraphView does this super inefficient.......)
-        double[] horizontalMin = new double[]{Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE};
-        double[] horizontalMax = new double[]{Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE};
-        double[] verticalMin = new double[]{Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE};
-        double[] verticalMax = new double[]{Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE};
+        double horizontalMin = Double.MAX_VALUE;
+        double horizontalMax = Double.MIN_VALUE;
+        double verticalMin = Double.MAX_VALUE;
+        double verticalMax = Double.MIN_VALUE;
         for (int dimension = 0; dimension < 3; dimension++) {
-            for (DataPoint dataPoint : getDataPoints(dimension)) {
+            for (DataPoint dataPoint : dataPointsXYZ.get(dimension)) {
                 // Horizontal
-                if (dataPoint.getX() < horizontalMin[dimension]) {
-                    horizontalMin[dimension] = dataPoint.getX();
-                } else if (dataPoint.getX() > horizontalMax[dimension]){
-                    horizontalMax[dimension] = dataPoint.getX();
+                if (dataPoint.getX() < horizontalMin) {
+                    horizontalMin = dataPoint.getX();
+                } else if (dataPoint.getX() > horizontalMax) {
+                    horizontalMax = dataPoint.getX();
                 }
 
                 // Vertical
-                if (dataPoint.getY() < verticalMin[dimension]) {
-                    verticalMin[dimension] = dataPoint.getY();
-                } else if (dataPoint.getY() > verticalMax[dimension]){
-                    verticalMax[dimension] = dataPoint.getY();
+                if (dataPoint.getY() < verticalMin) {
+                    verticalMin = dataPoint.getY();
+                } else if (dataPoint.getY() > verticalMax) {
+                    verticalMax = dataPoint.getY();
                 }
             }
         }
 
+
+        // Create new series
+        for (int dimension = 0; dimension < 3; dimension++) {
+            DataPoint[] d = dataPointsXYZ.get(dimension).toArray(new DataPoint[dataPointsXYZ.get(dimension).size()]);
+            series.set(dimension, new LineGraphSeries<DataPoint>(d));
+        }
+
+        // Remove any existing series and add the new ones
+        graphView.removeAllSeries();
         addAndStyleSeries(series.get(0), R.color.graph_series_color_x);
         addAndStyleSeries(series.get(1), R.color.graph_series_color_y);
         addAndStyleSeries(series.get(2), R.color.graph_series_color_z);
+
+        // Set the ranges we calculated with margins
+        horizontalMin = Math.max(horizontalMin, horizontalMax - maxHorizontalRange);
+        double range = Math.abs(verticalMax - verticalMin);
+        double margin = range * marginMultiplier;
+        verticalMin -= margin;
+        verticalMax += margin;
+        setHorizontalRange(horizontalMin, horizontalMax);
+        setVerticalRange(verticalMin, verticalMax);
     }
-
-
-    /**
-     * This is the old variant
-     * Here we had serious lagging issues
-     */
-
-    /*if (lowestValue == 0) {
-        lowestValue = dataPoints[0].getX();
-    }
-
-    LineGraphSeries serie = series.get(dimension);
-    for (DataPoint dataPoint : dataPoints) {
-        if (dataPoint.getX() > lastTimeValue[dimension]) {
-            serie.appendData(dataPoint, true, Utility.Resources.getInteger(R.integer.graphs_max_datapoint_count));
-            lastTimeValue[dimension] = dataPoint.getX();
-        }
-    }
-
-    // If we are the last update
-    if (dimension == 2) {
-        highestValue = dataPoints[dataPoints.length - 1].getX();
-        double left = Math.max(lowestValue, highestValue - maxHorizontalRange);
-        double right = serie.getHighestValueX();
-        setHorizontalRange(left, right);
-    }*/
-
-    /**
-     * Gets our arraylist of datapoints
-     *
-     * @param dimension The dimension. X=0, Y=1, Z=2.
-     * @return The arraylist.
-     */
-    private ArrayList<DataPoint> getDataPoints(int dimension) {
-        switch (dimension) {
-            case 0:
-                return dataPointsX;
-            case 1:
-                return dataPointsY;
-            case 2:
-                return dataPointsZ;
-        }
-
-        throw new IllegalArgumentException("Dimension can only be x=0, y=1, z=2.");
-    }
-
 }

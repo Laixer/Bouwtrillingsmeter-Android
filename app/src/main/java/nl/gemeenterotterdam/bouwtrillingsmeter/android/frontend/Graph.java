@@ -76,8 +76,8 @@ public abstract class Graph {
         viewport.setScalableY(true);
         viewport.setScrollable(true);
         viewport.setScrollableY(true);
-/*        viewport.setXAxisBoundsManual(true);
-        viewport.setYAxisBoundsManual(true);*/
+        viewport.setXAxisBoundsManual(true);
+        viewport.setYAxisBoundsManual(true);
 
         // Text and names
         // graphView.setTitle(graph.getName()); This is done with a separate label because it looked ugly
@@ -121,9 +121,6 @@ public abstract class Graph {
      * @param to
      */
     protected void setHorizontalRange(double from, double to) {
-        // Return if we are scaling manually
-        // TODO Implement
-
         if (from > to) {
             double temp = from;
             from = to;
@@ -136,7 +133,34 @@ public abstract class Graph {
         }
     }
 
-    abstract void sendNewDataToSeries(DataPoint[] dataPoints, int dimension);
+    /**
+     * Set our horizontal axis range.
+     * Only does so if we are not scaling the graph manually at that moment.
+     * Swaps if from > to.
+     *
+     * @param from
+     * @param to
+     */
+    protected void setVerticalRange(double from, double to) {
+        if (from > to) {
+            double temp = from;
+            from = to;
+            to = temp;
+        }
+
+        if (graphView != null) {
+            graphView.getViewport().setMinY(from);
+            graphView.getViewport().setMaxY(to);
+        }
+    }
+
+    /**
+     * This method is called when we want to append new datapoints to our graphs.
+     * Override this method.
+     *
+     * @param dataPoints The datapoints
+     */
+    abstract void sendNewDataToSeries(ArrayList<ArrayList<DataPoint>> dataPoints);
 
     /**
      * Getters.

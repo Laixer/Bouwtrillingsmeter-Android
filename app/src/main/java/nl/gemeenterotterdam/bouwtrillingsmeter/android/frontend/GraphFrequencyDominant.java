@@ -70,6 +70,10 @@ public class GraphFrequencyDominant extends Graph {
      * @param dimension Ignored in this case
      */
     @Override
+    public void sendNewDataToSeries(ArrayList<ArrayList<DataPoint>> graphPoints) {
+
+    }
+
     public void sendNewDataToSeries(DataPoint[] dataPoints, int dimension) {
         for (DataPoint dataPoint : dataPoints) {
             sortedDataPoints.add(dataPoint);

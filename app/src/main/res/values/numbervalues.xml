@@ -14,4 +14,5 @@
     <integer name="graphs_frequency_bound_min">0</integer>
     <integer name="graphs_frequency_bound_max">100</integer>
     <integer name="graphs_max_datapoint_count">1050</integer>
+    <integer name="graphs_axis_margins_multiplier_percentage">20</integer>
 </resources>

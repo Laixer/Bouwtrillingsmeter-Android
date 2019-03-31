@@ -4,6 +4,8 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.ArrayList;
+
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
 /**
@@ -53,6 +55,10 @@ public class GraphFrequency extends Graph {
      * @param dimension x=0, y=1, z=2
      */
     @Override
+    public void sendNewDataToSeries(ArrayList<ArrayList<DataPoint>> graphPoints) {
+
+    }
+
     public void sendNewDataToSeries(DataPoint[] dataPoints, int dimension) {
         // Set the frequency values back to 0
         lastFrequencyValue = new double[3];
