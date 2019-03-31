@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
 /**
  * TODO Doc
@@ -64,17 +65,28 @@ public class GraphFrequencyDominant extends Graph {
     }
 
     /**
-     * Add a single point to our point series
+     * This method sends datapoints3D to our graph.
+     * They get split and passed on to {@Link splitDataAndAppend}.
      *
-     * @param dataPoints XYZ Datapoint
-     * @param dimension Ignored in this case
+     * @param dataPoints3D The arraylist.
      */
     @Override
-    public void sendNewDataToSeries(ArrayList<ArrayList<DataPoint>> graphPoints) {
+    public <Double> void sendNewDataToSeries(ArrayList<DataPoint3D<Double>> dataPoints3D) {
 
     }
 
-    public void sendNewDataToSeries(DataPoint[] dataPoints, int dimension) {
+    /**
+     * This method is called when we want to append new datapoints to our graphs.
+     * Override this method.
+     *
+     * @param dataPoints The datapoints
+     */
+    @Override
+    protected void splitDataAndAppend(ArrayList<ArrayList<DataPoint>> dataPoints) {
+
+    }
+
+    public void splitDataAndAppend(DataPoint[] dataPoints, int dimension) {
         for (DataPoint dataPoint : dataPoints) {
             sortedDataPoints.add(dataPoint);
         }

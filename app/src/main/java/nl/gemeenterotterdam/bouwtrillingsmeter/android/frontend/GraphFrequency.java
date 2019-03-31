@@ -7,6 +7,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.util.ArrayList;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
 /**
  * TODO Doc
@@ -49,17 +50,29 @@ public class GraphFrequency extends Graph {
     }
 
     /**
-     * Replace all data in full
+     * This method sends datapoints3D to our graph.
+     * They get split and passed on to {@Link splitDataAndAppend}.
      *
-     * @param dataPoints The datapoints
-     * @param dimension x=0, y=1, z=2
+     * @param dataPoints3D The arraylist.
      */
     @Override
-    public void sendNewDataToSeries(ArrayList<ArrayList<DataPoint>> graphPoints) {
+    public <Double> void sendNewDataToSeries(ArrayList<DataPoint3D<Double>> dataPoints3D) {
 
     }
 
-    public void sendNewDataToSeries(DataPoint[] dataPoints, int dimension) {
+    /**
+     * This method is called when we want to append new datapoints to our graphs.
+     * Override this method.
+     *
+     * @param dataPoints The datapoints
+     */
+    @Override
+    protected void splitDataAndAppend(ArrayList<ArrayList<DataPoint>> dataPoints) {
+
+    }
+
+
+    private void splitDataAndAppend(DataPoint[] dataPoints, int dimension) {
         // Set the frequency values back to 0
         lastFrequencyValue = new double[3];
 

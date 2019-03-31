@@ -17,6 +17,7 @@ import java.util.Random;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataInterval;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClosedListener;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
 /**
  * TODO Doc
@@ -155,12 +156,20 @@ public abstract class Graph {
     }
 
     /**
+     * This method sends datapoints3D to our graph.
+     * They get split and passed on to {@Link splitDataAndAppend}.
+     *
+     * @param dataPoints3D The arraylist.
+     */
+    public abstract <T> void sendNewDataToSeries (ArrayList<DataPoint3D<T>> dataPoints3D);
+
+    /**
      * This method is called when we want to append new datapoints to our graphs.
      * Override this method.
      *
      * @param dataPoints The datapoints
      */
-    abstract void sendNewDataToSeries(ArrayList<ArrayList<DataPoint>> dataPoints);
+    protected abstract void splitDataAndAppend(ArrayList<ArrayList<DataPoint>> dataPoints);
 
     /**
      * Getters.

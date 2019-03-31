@@ -131,7 +131,6 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
      * This updates all graphs and thus is quite a big function.
      * This gets called when the {@link DataInterval} is closed.
      * Do not forget to add the @Override tag to this function!
-     * TODO Lots of duplicate code
      *
      * @param dataInterval
      */
@@ -144,53 +143,41 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
 
         long before = Calendar.getInstance().getTimeInMillis();
 
-        Graph graph;
-        ArrayList<DataPoint3D<Long>> dataPoints3DTime;
-        ArrayList<DataPoint3D<Double>> dataPoints3DFrequency;
-        DataPoint[] dataPoints1D;
-
         // TODO Deze splitsing by default in DAtaPoint3D bouwen scheelt best wel veel
         // TODO We moeten er wel altijd doorheen om de tijd te splitsen --> Kan dit in de graph axis gedaan worden?
         /**
          * Graph 1: Acceleration // time
-         */
-        graph = graphs[0];
-        dataPoints3DTime = dataInterval.dataPoints3DAcceleration;
-        ArrayList<ArrayList<DataPoint>> graphPoints = new ArrayList<ArrayList<DataPoint>>();
-        for (int dimension = 0; dimension < 3; dimension++) {
-            graphPoints.add(new ArrayList<DataPoint>());
-            for (int j = 0; j < dataPoints3DTime.size(); j++) {
-                graphPoints.get(dimension).add(new DataPoint(dataPoints3DTime.get(j).xAxisValue / 1000.0, dataPoints3DTime.get(j).values[dimension]));
-            }
-        }
-        graph.sendNewDataToSeries(graphPoints);
-
-        /**
          * Graph 2: Velocity // time
+         * Graph 3: Dominant frequency // time
          */
-        /*graph = graphs[1];
-        dataPoints3DTime = dataInterval.velocities;
+        graphs[0].sendNewDataToSeries(dataInterval.dataPoints3DAcceleration);
+        graphs[1].sendNewDataToSeries(dataInterval.velocities);
+        graphs[2].sendNewDataToSeries(dataInterval.getDominantFrequenciesAsDataPoints());
+
+
+        /*dataPoints3DTime = dataInterval.velocities;
         for (int dimension = 0; dimension < 3; dimension++) {
             dataPoints1D = new DataPoint[dataPoints3DTime.size()];
             for (int j = 0; j < dataPoints3DTime.size(); j++) {
                 dataPoints1D[j] = (new DataPoint(dataPoints3DTime.get(j).xAxisValue / 1000.0, dataPoints3DTime.get(j).values[dimension]));
             }
             graph.sendNewDataToSeries(dataPoints1D, dimension);
-        }*/
+        }
 
-        /**
-         * Graph 3: Dominant frequency // time
-         */
-        /*graph = graphs[2];
         double time = dataInterval.dataPoints3DAcceleration.get(0).xAxisValue / 1000.0;
         for (int dimension = 0; dimension < 3; dimension++) {
             dataPoints1D = new DataPoint[]{new DataPoint(time, dataInterval.dominantFrequencies.frequencies[dimension])};
             graph.sendNewDataToSeries(dataPoints1D, dimension);
         }*/
 
+
         /**
          * Graph 4: Amplitude // frequency
          */
+        /*ArrayList<DataPoint3D<Long>> dataPoints3DTime;
+        ArrayList<DataPoint3D<Double>> dataPoints3DFrequency;
+        DataPoint[] dataPoints1D;*/
+
         /*graph = graphs[3];
         dataPoints3DFrequency = dataInterval.frequencyAmplitudes;
         for (int dimension = 0; dimension < 3; dimension++) {

@@ -6,6 +6,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.util.ArrayList;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
 /**
  * TODO Doc
@@ -39,6 +40,27 @@ public class GraphTime extends Graph {
     }
 
     /**
+     * This method sends datapoints3D to our graph.
+     * They get split and passed on to {@Link splitDataAndAppend}.
+     *
+     * @param dataPoints3D The arraylist.
+     */
+    @Override
+    public <Long> void sendNewDataToSeries(ArrayList<DataPoint3D<Long>> dataPoints3D) {
+        ArrayList<ArrayList<DataPoint>> graphPoints = new ArrayList<ArrayList<DataPoint>>();
+        for (int dimension = 0; dimension < 3; dimension++) {
+            graphPoints.add(new ArrayList<DataPoint>());
+            for (int j = 0; j < dataPoints3D.size(); j++) {
+                Long value = dataPoints3D.get(j).xAxisValue;
+                double x = (long) value / 1000.0;
+                graphPoints.get(dimension).add(new DataPoint(x, dataPoints3D.get(j).values[dimension]));
+            }
+        }
+        splitDataAndAppend(graphPoints);
+    }
+
+
+    /**
      * Adds data to the series.
      * This skipps any data points that are overlapping with previous points.
      * TODO Dit checkt nu niet voor overlap!
@@ -47,7 +69,7 @@ public class GraphTime extends Graph {
      * @throws IllegalArgumentException If our dimension is incorrect.
      */
     @Override
-    public void sendNewDataToSeries(ArrayList<ArrayList<DataPoint>> graphPoints) {
+    protected void splitDataAndAppend(ArrayList<ArrayList<DataPoint>> graphPoints) {
         for (int dimension = 0; dimension < 3; dimension++) {
             // Check for overlap
             ArrayList<DataPoint> currentList = dataPointsXYZ.get(dimension);
@@ -77,6 +99,11 @@ public class GraphTime extends Graph {
      * TODO HorizontalMinMax kan effectiever
      */
     private void pushToGraph() {
+        // Edge case
+        if (graphView == null) {
+            return;
+        }
+
         // Find minima and maxima (GraphView does this super inefficient.......)
         double horizontalMin = Double.MAX_VALUE;
         double horizontalMax = Double.MIN_VALUE;

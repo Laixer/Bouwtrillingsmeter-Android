@@ -117,4 +117,16 @@ public class DataInterval {
         }
     }
 
+    /**
+     * This transforms our dominant frequency velocities into an arraylist of 1 datapoint
+     *
+     * @return The arraylist
+     */
+    public ArrayList<DataPoint3D<Long>> getDominantFrequenciesAsDataPoints() {
+        ArrayList<DataPoint3D<Long>> result = new ArrayList<DataPoint3D<Long>>();
+        long timeValue = dateStart.getTime() - MeasurementControl.getCurrentMeasurement().getStartTimeInMillis();
+        result.add(new DataPoint3D<Long>(timeValue, dominantFrequencies.velocities));
+        return result;
+    }
+
 }
