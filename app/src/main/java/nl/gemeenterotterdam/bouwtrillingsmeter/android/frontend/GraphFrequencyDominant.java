@@ -66,7 +66,7 @@ public class GraphFrequencyDominant extends Graph {
 
     /**
      * This method sends datapoints3D to our graph.
-     * They get split and passed on to {@Link splitDataAndAppend}.
+     * They get split and passed on to {@Link appendDataToList}.
      *
      * @param dataPoints3D The arraylist.
      */
@@ -82,7 +82,7 @@ public class GraphFrequencyDominant extends Graph {
      * @param dataPoints The datapoints
      */
     @Override
-    protected void splitDataAndAppend(ArrayList<ArrayList<DataPoint>> dataPoints) {
+    protected void appendDataToList(ArrayList<ArrayList<DataPoint>> dataPoints) {
 
     }
 

@@ -41,7 +41,7 @@ public class GraphTime extends Graph {
 
     /**
      * This method sends datapoints3D to our graph.
-     * They get split and passed on to {@Link splitDataAndAppend}.
+     * They get split and passed on to {@Link appendDataToList}.
      *
      * @param dataPoints3D The arraylist.
      */
@@ -56,9 +56,8 @@ public class GraphTime extends Graph {
                 graphPoints.get(dimension).add(new DataPoint(x, dataPoints3D.get(j).values[dimension]));
             }
         }
-        splitDataAndAppend(graphPoints);
+        appendDataToList(graphPoints);
     }
-
 
     /**
      * Adds data to the series.
@@ -69,7 +68,7 @@ public class GraphTime extends Graph {
      * @throws IllegalArgumentException If our dimension is incorrect.
      */
     @Override
-    protected void splitDataAndAppend(ArrayList<ArrayList<DataPoint>> graphPoints) {
+    protected void appendDataToList(ArrayList<ArrayList<DataPoint>> graphPoints) {
         for (int dimension = 0; dimension < 3; dimension++) {
             // Check for overlap
             ArrayList<DataPoint> currentList = dataPointsXYZ.get(dimension);
@@ -104,6 +103,9 @@ public class GraphTime extends Graph {
             return;
         }
 
+        // Clear
+        graphView.removeAllSeries();
+
         // Find minima and maxima (GraphView does this super inefficient.......)
         double horizontalMin = Double.MAX_VALUE;
         double horizontalMax = Double.MIN_VALUE;
@@ -125,27 +127,16 @@ public class GraphTime extends Graph {
                     verticalMax = dataPoint.getY();
                 }
             }
-        }
 
-
-        // Create new series
-        for (int dimension = 0; dimension < 3; dimension++) {
-            DataPoint[] d = dataPointsXYZ.get(dimension).toArray(new DataPoint[dataPointsXYZ.get(dimension).size()]);
+            // Create new series
+            DataPoint[] d = new DataPoint[dataPointsXYZ.get(dimension).size()];
+            d = dataPointsXYZ.get(dimension).toArray(d);
             series.set(dimension, new LineGraphSeries<DataPoint>(d));
+            addAndStyleSeries(series.get(dimension), Utility.getColorResourceFromDimension(dimension));
         }
-
-        // Remove any existing series and add the new ones
-        graphView.removeAllSeries();
-        addAndStyleSeries(series.get(0), R.color.graph_series_color_x);
-        addAndStyleSeries(series.get(1), R.color.graph_series_color_y);
-        addAndStyleSeries(series.get(2), R.color.graph_series_color_z);
 
         // Set the ranges we calculated with margins
         horizontalMin = Math.max(horizontalMin, horizontalMax - maxHorizontalRange);
-        double range = Math.abs(verticalMax - verticalMin);
-        double margin = range * marginMultiplier;
-        verticalMin -= margin;
-        verticalMax += margin;
         setHorizontalRange(horizontalMin, horizontalMax);
         setVerticalRange(verticalMin, verticalMax);
     }

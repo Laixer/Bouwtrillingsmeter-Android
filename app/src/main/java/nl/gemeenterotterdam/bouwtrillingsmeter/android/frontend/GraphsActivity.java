@@ -149,11 +149,12 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
          * Graph 1: Acceleration // time
          * Graph 2: Velocity // time
          * Graph 3: Dominant frequency // time
+         * Graph 4: Amplitude // frequency
          */
         graphs[0].sendNewDataToSeries(dataInterval.dataPoints3DAcceleration);
         graphs[1].sendNewDataToSeries(dataInterval.velocities);
         graphs[2].sendNewDataToSeries(dataInterval.getDominantFrequenciesAsDataPoints());
-
+        graphs[3].sendNewDataToSeries(dataInterval.frequencyAmplitudes);
 
         /*dataPoints3DTime = dataInterval.velocities;
         for (int dimension = 0; dimension < 3; dimension++) {

@@ -23,12 +23,20 @@ public class GraphFrequency extends Graph {
     private int axisMin = Utility.Resources.getInteger(R.integer.graphs_frequency_bound_min);
     private int axisMax = Utility.Resources.getInteger(R.integer.graphs_frequency_bound_max);
 
+    private ArrayList<ArrayList<DataPoint>> dataPointsXYZ;
+
     public GraphFrequency(String name, String textAxisHorizontal, String textAxisVertical) {
         // Call super
         super(name, textAxisHorizontal, textAxisVertical);
 
         // Initialize variables
-        lastFrequencyValue = new double[3];
+//        lastFrequencyValue = new double[3];
+
+        // Initialize variables
+        dataPointsXYZ = new ArrayList<ArrayList<DataPoint>>();
+        for (int dimension = 0; dimension < 3; dimension++) {
+            dataPointsXYZ.add(new ArrayList<DataPoint>());
+        }
     }
 
     /**
@@ -51,13 +59,22 @@ public class GraphFrequency extends Graph {
 
     /**
      * This method sends datapoints3D to our graph.
-     * They get split and passed on to {@Link splitDataAndAppend}.
+     * They get split and passed on to {@Link appendDataToList}.
      *
      * @param dataPoints3D The arraylist.
      */
     @Override
     public <Double> void sendNewDataToSeries(ArrayList<DataPoint3D<Double>> dataPoints3D) {
-
+        ArrayList<ArrayList<DataPoint>> graphPoints = new ArrayList<ArrayList<DataPoint>>();
+        for (int dimension = 0; dimension < 3; dimension++) {
+            graphPoints.add(new ArrayList<DataPoint>());
+            for (int j = 0; j < dataPoints3D.size(); j++) {
+                Double value = dataPoints3D.get(j).xAxisValue;
+                double x = (double) value;
+                graphPoints.get(dimension).add(new DataPoint(x, dataPoints3D.get(j).values[dimension]));
+            }
+        }
+        appendDataToList(graphPoints);
     }
 
     /**
@@ -67,44 +84,47 @@ public class GraphFrequency extends Graph {
      * @param dataPoints The datapoints
      */
     @Override
-    protected void splitDataAndAppend(ArrayList<ArrayList<DataPoint>> dataPoints) {
+    protected void appendDataToList(ArrayList<ArrayList<DataPoint>> dataPoints) {
+        // Append our data
+        for (int dimension = 0; dimension < 3; dimension++) {
+            dataPointsXYZ.set(dimension, dataPoints.get(dimension));
 
+        }
+
+        pushToGraph();
     }
 
+    /**
+     * Pushes everything
+     * TODO Lots of duplicate trough graphs
+     */
+    protected void pushToGraph() {
+        // Edge case
+        if (graphView == null) {
+            return;
+        }
 
-    private void splitDataAndAppend(DataPoint[] dataPoints, int dimension) {
-        // Set the frequency values back to 0
-        lastFrequencyValue = new double[3];
+        // Clear
+        graphView.removeAllSeries();
 
-        // Add all the points
-        LineGraphSeries serie = new LineGraphSeries<DataPoint>();
-        for (DataPoint dataPoint : dataPoints) {
-            if (dataPoint.getX() > lastFrequencyValue[dimension]) {
-                serie.appendData(dataPoint, true, Utility.Resources.getInteger(R.integer.graphs_max_datapoint_count));
-                lastFrequencyValue[dimension] = dataPoint.getX();
+        // Iterate trough all dimensions
+        double verticalMax = Double.MIN_VALUE;
+        for (int dimension = 0; dimension < 3; dimension++) {
+            for (DataPoint dataPoint : dataPointsXYZ.get(dimension)) {
+                // Vertical max only
+                if (dataPoint.getY() > verticalMax) {
+                    verticalMax = dataPoint.getY();
+                }
             }
+
+            // Create new series
+            DataPoint[] d = new DataPoint[dataPointsXYZ.get(dimension).size()];
+            d = dataPointsXYZ.get(dimension).toArray(d);
+            series.set(dimension, new LineGraphSeries<DataPoint>(d));
+            addAndStyleSeries(series.get(dimension), Utility.getColorResourceFromDimension(dimension));
         }
 
-        // Get the color
-        // TODO Ontbeun
-        int resource = -1;
-        switch (dimension) {
-            case 0:
-                resource = R.color.graph_series_color_x;
-                break;
-            case 1:
-                resource = R.color.graph_series_color_y;
-                break;
-            case 2:
-                resource = R.color.graph_series_color_z;
-                break;
-        }
-
-        // We overwrite the series in this case
-        if (graphView != null && graphView.getSeries().contains(series.get(dimension))) {
-            graphView.removeSeries(series.get(dimension));
-        }
-        series.set(dimension, serie);
-        addAndStyleSeries(serie, resource);
+        // Set the range we calculated
+        setVerticalRange(0, verticalMax);
     }
 }

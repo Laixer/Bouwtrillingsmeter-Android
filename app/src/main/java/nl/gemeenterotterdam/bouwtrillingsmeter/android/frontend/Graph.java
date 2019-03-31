@@ -138,6 +138,7 @@ public abstract class Graph {
      * Set our horizontal axis range.
      * Only does so if we are not scaling the graph manually at that moment.
      * Swaps if from > to.
+     * This also adds margin
      *
      * @param from
      * @param to
@@ -149,6 +150,11 @@ public abstract class Graph {
             to = temp;
         }
 
+        double range = Math.abs(from - to);
+        double margin = range * (0.01 * Utility.Resources.getInteger(R.integer.graphs_axis_margins_multiplier_percentage));
+        from -= margin;
+        to += margin;
+
         if (graphView != null) {
             graphView.getViewport().setMinY(from);
             graphView.getViewport().setMaxY(to);
@@ -157,7 +163,7 @@ public abstract class Graph {
 
     /**
      * This method sends datapoints3D to our graph.
-     * They get split and passed on to {@Link splitDataAndAppend}.
+     * They get split and passed on to {@Link appendDataToList}.
      *
      * @param dataPoints3D The arraylist.
      */
@@ -169,7 +175,13 @@ public abstract class Graph {
      *
      * @param dataPoints The datapoints
      */
-    protected abstract void splitDataAndAppend(ArrayList<ArrayList<DataPoint>> dataPoints);
+    protected abstract void appendDataToList(ArrayList<ArrayList<DataPoint>> dataPoints);
+
+    /**
+     * This pushes our datapoints onto the graph.
+     * Override this method.
+     */
+    protected abstract void pushToGraph();
 
     /**
      * Getters.

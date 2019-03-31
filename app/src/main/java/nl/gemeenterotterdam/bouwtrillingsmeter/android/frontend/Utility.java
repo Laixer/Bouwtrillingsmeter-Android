@@ -145,4 +145,22 @@ public class Utility {
         return Utility.Resources.getStringArray(R.array.category_dropdown_vibration)[vibrationCategory.ordinal()];
     }
 
+    /**
+     * Gets our color resource
+     *
+     * @param dimension x=0 y=1 z=2
+     * @return The resource id integer
+     */
+    public static int getColorResourceFromDimension(int dimension) {
+        switch (dimension) {
+            case 0:
+                return R.color.graph_series_color_x;
+            case 1:
+                return R.color.graph_series_color_y;
+            case 2:
+                return R.color.graph_series_color_z;
+        }
+        return -1;
+    }
+
 }
