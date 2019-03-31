@@ -19,9 +19,9 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 public class GraphFrequencyDominant extends Graph {
 
     // This might need to become a PQ
-    ArrayList<DataPoint> sortedDataPoints;
-    LineGraphSeries<DataPoint> constantLine;
-    PointsGraphSeries<DataPoint> pointSeries;
+    private ArrayList<DataPoint> sortedDataPoints;
+    private LineGraphSeries<DataPoint> constantLine;
+    private PointsGraphSeries<DataPoint> pointGraphSeries;
 
     public GraphFrequencyDominant(String name, String textAxisHorizontal, String textAxisVertical) {
         // Call super
@@ -37,7 +37,7 @@ public class GraphFrequencyDominant extends Graph {
 
         // Instantiate our sorted data points
         sortedDataPoints = new ArrayList<DataPoint>();
-        pointSeries = new PointsGraphSeries<DataPoint>();
+        pointGraphSeries = new PointsGraphSeries<DataPoint>();
     }
 
     /**
@@ -66,13 +66,36 @@ public class GraphFrequencyDominant extends Graph {
 
     /**
      * This method sends datapoints3D to our graph.
+     * All non-exceeding x and y values are set to -1
      * They get split and passed on to {@Link appendDataToList}.
      *
      * @param dataPoints3D The arraylist.
      */
     @Override
     public <Double> void sendNewDataToSeries(ArrayList<DataPoint3D<Double>> dataPoints3D) {
+        // Edge case
+        if (dataPoints3D.size() == 0) {
+            return;
+        }
 
+        // Iterate trough to get all relevant datapoints
+        ArrayList<ArrayList<DataPoint>> graphPoints = new ArrayList<ArrayList<DataPoint>>();
+        graphPoints.add(new ArrayList<DataPoint>());
+
+        for (DataPoint3D<Double> dataPoint3D : dataPoints3D) {
+            // Only the x value is used as a workaround
+            double value = dataPoint3D.values[0];
+            if (value > -1) {
+                Double xAxisValue = dataPoint3D.xAxisValue;
+                double x = (double) xAxisValue;
+                graphPoints.get(0).add(new DataPoint(x, value));
+            }
+        }
+
+        // Only push if we altered
+        if (graphPoints.get(0).size() > 0) {
+            appendDataToList(graphPoints);
+        }
     }
 
     /**
@@ -83,51 +106,80 @@ public class GraphFrequencyDominant extends Graph {
      */
     @Override
     protected void appendDataToList(ArrayList<ArrayList<DataPoint>> dataPoints) {
-
-    }
-
-    public void splitDataAndAppend(DataPoint[] dataPoints, int dimension) {
-        for (DataPoint dataPoint : dataPoints) {
+        // Add all data, only x is used to store
+        for (DataPoint dataPoint : dataPoints.get(0)) {
             sortedDataPoints.add(dataPoint);
         }
-        refreshPointSeries();
+
+        // Sort our data points
+        Collections.sort(sortedDataPoints, new Comparator<DataPoint>() {
+            @Override
+            public int compare(DataPoint o1, DataPoint o2) {
+                if (o1.getX() == o2.getX()) return 0;
+                return o1.getX() > o2.getX() ? 1 : -1;
+            }
+        });
+
+        // Push to graph
+        pushToGraph();
     }
 
+    /**
+     * This pushes our datapoints onto the graph.
+     * Override this method.
+     * TODO This does not nede to iterate since we never throw away data. Just check minmax on adding.
+     */
+    @Override
+    protected void pushToGraph() {
+        // Edge case
+        if (graphView == null) {
+            return;
+        }
+
+        // Clear
+        if (graphView.getSeries().contains(pointGraphSeries)) {
+            graphView.removeSeries(pointGraphSeries);
+        }
+
+        // Iterate trough all datapoints
+        double verticalMax = Double.MIN_VALUE;
+        for (DataPoint dataPoint : sortedDataPoints) {
+            // Vertical max only
+            if (dataPoint.getY() > verticalMax) {
+                verticalMax = dataPoint.getY();
+            }
+        }
+
+        // Create new series
+        DataPoint[] d = new DataPoint[sortedDataPoints.size()];
+        d = sortedDataPoints.toArray(d);
+        pointGraphSeries = new PointsGraphSeries<>(d);
+
+        // Set the range we calculated
+        verticalMax = Math.max(verticalMax, 20);
+        setVerticalRange(0, verticalMax, false, true);
+
+        // Add and style series
+        graphView.addSeries(pointGraphSeries);
+        pointGraphSeries.setColor(Utility.Resources.getColor(R.color.graph_series_color_point));
+        pointGraphSeries.setSize(7);
+    }
+}
 
     /**
      * Updates our point graph.
      * The points are also sorted to prevent any x-axis conflicts.
      * Returns if no graphview is present
-     */
-    private void refreshPointSeries() {
-        if (graphView == null) {
-            return;
-        }
-
-        // Delete current series if its present
-        // We overwrite the series in this case
-        if (graphView.getSeries().contains(pointSeries)) {
-            graphView.removeSeries(pointSeries);
-        }
-
-        // Sort our datapoints
-        Collections.sort(sortedDataPoints, new Comparator<DataPoint>() {
-            @Override
-            public int compare(DataPoint o1, DataPoint o2) {
-                if (o1.getX() == o2.getX()) return 0;
-                return o1.getX() > o2.getX()? 1 : -1;
-            }
-        });
-
+    private void refreshAndSortPointSeries() {
         // Instantiate and fill our point series
-        pointSeries = new PointsGraphSeries<DataPoint>();
+        pointGraphSeries = new PointsGraphSeries<DataPoint>();
         for (DataPoint sortedDataPoint : sortedDataPoints) {
-            pointSeries.appendData(sortedDataPoint, true, 1000);
+            pointGraphSeries.appendData(sortedDataPoint, true, 1000);
         }
 
         // Style point graph
-        graphView.addSeries(pointSeries);
-        pointSeries.setColor(Utility.Resources.getColor(R.color.graph_series_color_point));
-        pointSeries.setSize(5);
-    }
-}
+        graphView.addSeries(pointGraphSeries);
+        pointGraphSeries.setColor(Utility.Resources.getColor(R.color.graph_series_color_point));
+        pointGraphSeries.setSize(5);
+    }*/
+

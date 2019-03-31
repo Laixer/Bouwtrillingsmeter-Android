@@ -97,7 +97,7 @@ public class GraphTime extends Graph {
      * Then pushes everything to our graphview
      * TODO HorizontalMinMax kan effectiever
      */
-    private void pushToGraph() {
+    protected void pushToGraph() {
         // Edge case
         if (graphView == null) {
             return;
@@ -138,6 +138,6 @@ public class GraphTime extends Graph {
         // Set the ranges we calculated with margins
         horizontalMin = Math.max(horizontalMin, horizontalMax - maxHorizontalRange);
         setHorizontalRange(horizontalMin, horizontalMax);
-        setVerticalRange(verticalMin, verticalMax);
+        setVerticalRange(verticalMin, verticalMax, true, true);
     }
 }

@@ -88,7 +88,6 @@ public class GraphFrequency extends Graph {
         // Append our data
         for (int dimension = 0; dimension < 3; dimension++) {
             dataPointsXYZ.set(dimension, dataPoints.get(dimension));
-
         }
 
         pushToGraph();
@@ -125,6 +124,6 @@ public class GraphFrequency extends Graph {
         }
 
         // Set the range we calculated
-        setVerticalRange(0, verticalMax);
+        setVerticalRange(0, verticalMax, false, true);
     }
 }

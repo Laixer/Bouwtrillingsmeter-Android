@@ -143,74 +143,36 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
 
         long before = Calendar.getInstance().getTimeInMillis();
 
-        // TODO Deze splitsing by default in DAtaPoint3D bouwen scheelt best wel veel
-        // TODO We moeten er wel altijd doorheen om de tijd te splitsen --> Kan dit in de graph axis gedaan worden?
+        // TODO Deze splitsing by default in DataPoint3D bouwen scheelt best wel veel
+        // TODO We moeten er wel altijd doorheen om de tijd te scalen en overlap te voorkomen --> Kan dit in de graph axis gedaan worden?
         /**
          * Graph 1: Acceleration // time
          * Graph 2: Velocity // time
          * Graph 3: Dominant frequency // time
          * Graph 4: Amplitude // frequency
+         * Graph 5: Dominant frequency // frequency
          */
         graphs[0].sendNewDataToSeries(dataInterval.dataPoints3DAcceleration);
         graphs[1].sendNewDataToSeries(dataInterval.velocities);
         graphs[2].sendNewDataToSeries(dataInterval.getDominantFrequenciesAsDataPoints());
         graphs[3].sendNewDataToSeries(dataInterval.frequencyAmplitudes);
-
-        /*dataPoints3DTime = dataInterval.velocities;
-        for (int dimension = 0; dimension < 3; dimension++) {
-            dataPoints1D = new DataPoint[dataPoints3DTime.size()];
-            for (int j = 0; j < dataPoints3DTime.size(); j++) {
-                dataPoints1D[j] = (new DataPoint(dataPoints3DTime.get(j).xAxisValue / 1000.0, dataPoints3DTime.get(j).values[dimension]));
-            }
-            graph.sendNewDataToSeries(dataPoints1D, dimension);
-        }
-
-        double time = dataInterval.dataPoints3DAcceleration.get(0).xAxisValue / 1000.0;
-        for (int dimension = 0; dimension < 3; dimension++) {
-            dataPoints1D = new DataPoint[]{new DataPoint(time, dataInterval.dominantFrequencies.frequencies[dimension])};
-            graph.sendNewDataToSeries(dataPoints1D, dimension);
-        }*/
-
+        graphs[4].sendNewDataToSeries(dataInterval.getExceedingAsDataPoints());
 
         /**
-         * Graph 4: Amplitude // frequency
+         *
          */
-        /*ArrayList<DataPoint3D<Long>> dataPoints3DTime;
-        ArrayList<DataPoint3D<Double>> dataPoints3DFrequency;
-        DataPoint[] dataPoints1D;*/
-
-        /*graph = graphs[3];
-        dataPoints3DFrequency = dataInterval.frequencyAmplitudes;
-        for (int dimension = 0; dimension < 3; dimension++) {
-            dataPoints1D = new DataPoint[dataPoints3DFrequency.size()];
-            for (int j = 0; j < dataPoints3DFrequency.size(); j++) {
-                dataPoints1D[j] = (new DataPoint(dataPoints3DFrequency.get(j).xAxisValue, dataPoints3DFrequency.get(j).values[dimension]));
-            }
-            graph.sendNewDataToSeries(dataPoints1D, dimension);
-        }*/
-
-        /**
-         * Graph 5: Dominant frequency // frequency
-         */
-       /* graph = graphs[4];
-        ArrayList<DataPoint> tempDataPoints = new ArrayList<DataPoint>();
+        /*ArrayList<DataPoint3D<Double>> exceedingDataPoints3D = new ArrayList<DataPoint3D<Double>>();
         DominantFrequencies dominantFrequencies = dataInterval.dominantFrequencies;
         for (int dimension = 0; dimension < 3; dimension++) {
             if (dominantFrequencies.exceedsLimit[dimension]) {
-                double frequency = dominantFrequencies.frequencies[dimension];
-                double velocity = dominantFrequencies.velocities[dimension];
-                tempDataPoints.add(new DataPoint(frequency, velocity));
+               exceedingDataPoints3D.add(new DataPoint3D<Double>())
             }
         }
 
         // If we created new datapoints
         // This only adds exceeded datapoints to the graph
-        if (tempDataPoints.size() > 0) {
-            dataPoints1D = new DataPoint[tempDataPoints.size()];
-            for (int i = 0; i < tempDataPoints.size(); i++) {
-                dataPoints1D[i] = tempDataPoints.get(i);
-            }
-            graph.sendNewDataToSeries(dataPoints1D, 0);
+        if (exceedingDataPoints3D.size() > 0) {
+            graphs[4].sendNewDataToSeries(exceedingDataPoints3D);
         }*/
 
         long dt = Calendar.getInstance().getTimeInMillis() - before;

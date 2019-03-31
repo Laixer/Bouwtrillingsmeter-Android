@@ -143,17 +143,24 @@ public abstract class Graph {
      * @param from
      * @param to
      */
-    protected void setVerticalRange(double from, double to) {
+    protected void setVerticalRange(double from, double to, boolean addMarginLower, boolean addMarginHigher) {
         if (from > to) {
             double temp = from;
             from = to;
             to = temp;
         }
 
-        double range = Math.abs(from - to);
-        double margin = range * (0.01 * Utility.Resources.getInteger(R.integer.graphs_axis_margins_multiplier_percentage));
-        from -= margin;
-        to += margin;
+        if (addMarginLower || addMarginHigher) {
+            double range = Math.abs(from - to);
+            double margin = range * (0.01 * Utility.Resources.getInteger(R.integer.graphs_axis_margins_multiplier_percentage));
+            if (addMarginLower) {
+                from -= margin;
+            }
+
+            if (addMarginHigher) {
+                to += margin;
+            }
+        }
 
         if (graphView != null) {
             graphView.getViewport().setMinY(from);

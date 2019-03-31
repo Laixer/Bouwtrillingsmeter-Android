@@ -1,5 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
+import com.jjoe64.graphview.series.DataPoint;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -129,4 +131,31 @@ public class DataInterval {
         return result;
     }
 
+    /**
+     * This transforms our exceeding frequencies into datapoints.
+     * This is a workaround to conserve the graph abstract methods.
+     * If a dimension does not exceed any limits we set its x and y value to -1.
+     * TODO Maybe implement a non-workaround method.
+     *
+     * @return An arraylist containing these datapoints.
+     */
+    public ArrayList<DataPoint3D<Double>> getExceedingAsDataPoints() {
+        ArrayList<DataPoint3D<Double>> result = new ArrayList<DataPoint3D<Double>>();
+
+        for (int dimension = 0; dimension < 3; dimension++) {
+            double frequency = -1;
+            float[] velocities = new float[]{-1, -1, -1};
+
+            // If we exceed we create a datapoint
+            if (dominantFrequencies.exceedsLimit[dimension]) {
+                frequency = dominantFrequencies.frequencies[dimension];
+                velocities[0] = dominantFrequencies.velocities[dimension];
+            }
+
+            result.add(new DataPoint3D<Double>(frequency, velocities));
+        }
+
+        // Return result
+        return result;
+    }
 }
