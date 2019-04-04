@@ -21,9 +21,6 @@ public class DominantFrequencies {
         this.frequencies = frequencies;
         this.velocities = velocities;
         this.exceedsLimit = exceedsLimit;
-
-        // TODO Remove this debug
-        this.exceedsLimit[2] = true;
     }
 
     /**
