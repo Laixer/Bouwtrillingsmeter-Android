@@ -25,8 +25,8 @@ class Calculator {
 
     private static DataPoint3D<Long> accelerationPrevious;
     private static float[] velocity;
-    private static float yvPartialSafetyFactor = 0;
-    private static float ytPartialSafetyFactor = 0;
+    private static float yv = 0;
+    private static float yt = 0;
 
 
     /**
@@ -36,11 +36,14 @@ class Calculator {
      * This also determines our factors and limits.
      */
     public static void onStartMeasurementCalculations() {
+        // Used in our velocity calculations
         accelerationPrevious = new DataPoint3D<Long>((long) 0, new float[]{0, 0, 0});
         velocity = new float[]{0, 0, 0};
 
-        // TODO Implement this
-
+        // Get constants from limitconstants
+        Settings settings = MeasurementControl.getCurrentMeasurement().settings;
+        yt = LimitConstants.getYtFromSettings(settings);
+        yv = LimitConstants.getYvFromSettings(settings);
     }
 
     /**
@@ -80,13 +83,6 @@ class Calculator {
             // Store our datapoint as previous for the next iteration
             accelerationPrevious = data.get(i);
         }
-
-        // Add our margins for our safety factor
-        /*for (int dimension = 0; dimension < 3; dimension++) {
-            for (int i = 0; i < data.size(); i++) {
-                result.get(i).values[dimension] *= partialSafetyFactor;
-            }
-        }*/
 
         // Return our result
         return result;
