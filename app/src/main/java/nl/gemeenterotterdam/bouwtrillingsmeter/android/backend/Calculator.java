@@ -16,18 +16,11 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
  * All fourier calculations etc are done by this class.
  */
 class Calculator {
-    /**
-     * yv: margin on speeddata. Each speed value calculated is multiplied with this value.
-     * yt: margin on limitvalue.
-     * Determined by input of user on question:
-     * TODO Find out why we need these.
-     */
-
     private static DataPoint3D<Long> accelerationPrevious;
     private static float[] velocity;
     private static float yv = 0;
     private static float yt = 0;
-
+    private static float[][] limitAsFloatPoints;
 
     /**
      * This initializes the calculator.
@@ -44,6 +37,7 @@ class Calculator {
         Settings settings = MeasurementControl.getCurrentMeasurement().settings;
         yt = LimitConstants.getYtFromSettings(settings);
         yv = LimitConstants.getYvFromSettings(settings);
+        limitAsFloatPoints = LimitConstants.getLimitAsFloatPoints(settings);
     }
 
     /**

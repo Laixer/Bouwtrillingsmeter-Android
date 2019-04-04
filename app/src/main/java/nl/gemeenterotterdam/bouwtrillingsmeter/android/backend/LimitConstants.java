@@ -1,7 +1,4 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
-
-import android.graphics.Point;
-
 import com.jjoe64.graphview.series.DataPoint;
 
 import java.util.ArrayList;
@@ -133,4 +130,17 @@ public class LimitConstants {
         return result;
     }
 
+    /**
+     * Get our limit values as a 2d float array.
+     * Treat it as a point (x,y) by getting (result[i],result[i]).
+     * [0] = frequency value
+     * [1] = amplitude value
+     *
+     * @param settings The corresponding settings.
+     * @return Our 2d float array
+     */
+    static float[][] getLimitAsFloatPoints(Settings settings) {
+        float[] amplitudes = getLineBreakPointAmplitudesFromSettings(settings);
+        return new float[][]{lineBreakPointsFrequency, amplitudes};
+    }
 }
