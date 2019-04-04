@@ -25,12 +25,9 @@ class Calculator {
 
     private static DataPoint3D<Long> accelerationPrevious;
     private static float[] velocity;
+    private static float yvPartialSafetyFactor = 0;
+    private static float ytPartialSafetyFactor = 0;
 
-    private static final float partialSafetyFactorIndicative = (float) Utility.Resources.getInteger(R.integer.yv_partial_safety_factor_x10_indicative) / 10;
-    private static final float partialSafetyFactorLimited = (float) Utility.Resources.getInteger(R.integer.yv_partial_safety_factor_x10_limited) / 10;
-    private static final float partialSafetyFactorExtensive = (float) Utility.Resources.getInteger(R.integer.yv_partial_safety_factor_x10_extensive) / 10;
-
-    private static float partialSafetyFactor = 0;
 
     /**
      * This initializes the calculator.
@@ -42,8 +39,8 @@ class Calculator {
         accelerationPrevious = new DataPoint3D<Long>((long) 0, new float[]{0, 0, 0});
         velocity = new float[]{0, 0, 0};
 
-        // TODO Actually implement this
-        partialSafetyFactor = partialSafetyFactorExtensive;
+        // TODO Implement this
+
     }
 
     /**
