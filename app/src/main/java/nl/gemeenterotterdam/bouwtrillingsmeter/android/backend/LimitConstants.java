@@ -117,6 +117,7 @@ public class LimitConstants {
 
     /**
      * This gets our limit line as an arraylist of {@link DataPoint}s.
+     * Our Yv value is included in the result.
      *
      * @param settings The settings file
      * @return The DataPoint arraylist.
@@ -124,23 +125,30 @@ public class LimitConstants {
     public static ArrayList<DataPoint> getLimitAsDataPoints(Settings settings) {
         float[] amplitudes = getLineBreakPointAmplitudesFromSettings(settings);
         ArrayList<DataPoint> result = new ArrayList<DataPoint>(amplitudes.length);
+        float yt = getYvFromSettings(settings);
         for (int i = 0; i < lineBreakPointsFrequency.length; i++) {
-            result.add(new DataPoint(lineBreakPointsFrequency[i], amplitudes[i]));
+            result.add(new DataPoint(lineBreakPointsFrequency[i], amplitudes[i] * yt));
         }
         return result;
     }
 
     /**
      * Get our limit values as a 2d float array.
-     * Treat it as a point (x,y) by getting (result[i],result[i]).
-     * [0] = frequency value
-     * [1] = amplitude value
+     * Treat it as a point (x,y) by getting (result[i][0],result[i][1]).
+     * [i][0] = frequency value
+     * [i][1] = amplitude value
+     * TODO This is not bulletproof. Rethink
      *
      * @param settings The corresponding settings.
      * @return Our 2d float array
      */
     static float[][] getLimitAsFloatPoints(Settings settings) {
         float[] amplitudes = getLineBreakPointAmplitudesFromSettings(settings);
+        float yt = getYtFromSettings(settings);
+        for (int i = 0; i < amplitudes.length; i++) {
+            amplitudes[i] *= yt;
+
+        }
         return new float[][]{lineBreakPointsFrequency, amplitudes};
     }
 }

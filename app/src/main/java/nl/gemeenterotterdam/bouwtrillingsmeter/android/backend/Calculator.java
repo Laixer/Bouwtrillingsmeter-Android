@@ -4,9 +4,6 @@ import org.jtransforms.fft.FloatFFT_1D;
 
 import java.util.ArrayList;
 
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
-
 /**
  * @author Marijn Otte
  * @author Thomas Beckers
@@ -20,7 +17,7 @@ class Calculator {
     private static float[] velocity;
     private static float yv = 0;
     private static float yt = 0;
-    private static float[][] limitAsFloatPoints;
+    private static float[][] limitValuesAsFloatPoints;
 
     /**
      * This initializes the calculator.
@@ -28,7 +25,7 @@ class Calculator {
      * This is due to the correct starting boundary conditions for our velocity.
      * This also determines our factors and limits.
      */
-    public static void onStartMeasurementCalculations() {
+    static void onStartMeasurementCalculations() {
         // Used in our velocity calculations
         accelerationPrevious = new DataPoint3D<Long>((long) 0, new float[]{0, 0, 0});
         velocity = new float[]{0, 0, 0};
@@ -37,7 +34,7 @@ class Calculator {
         Settings settings = MeasurementControl.getCurrentMeasurement().settings;
         yt = LimitConstants.getYtFromSettings(settings);
         yv = LimitConstants.getYvFromSettings(settings);
-        limitAsFloatPoints = LimitConstants.getLimitAsFloatPoints(settings);
+        limitValuesAsFloatPoints = LimitConstants.getLimitAsFloatPoints(settings);
     }
 
     /**
@@ -51,7 +48,7 @@ class Calculator {
      * @param data values from acceleroMeter (retrieved for 1 second)
      * @return A new arraylist, with a velocity for each point. All time values will be the same as the input data.
      */
-    public static ArrayList<DataPoint3D<Long>> calculateVelocityFromAcceleration(ArrayList<DataPoint3D<Long>> data) {
+    static ArrayList<DataPoint3D<Long>> calculateVelocityFromAcceleration(ArrayList<DataPoint3D<Long>> data) {
         // Create a result array
         ArrayList<DataPoint3D<Long>> result = new ArrayList<DataPoint3D<Long>>();
 
@@ -113,7 +110,7 @@ class Calculator {
      * @param accelerations3D list of velocities obtained for 1 second
      * @return float frequency in x, y and z direction in range (0-50)Hz with corresponding magnitude
      */
-    public static ArrayList<DataPoint3D<Double>> fft(ArrayList<DataPoint3D<Long>> accelerations3D) {
+    static ArrayList<DataPoint3D<Double>> fft(ArrayList<DataPoint3D<Long>> accelerations3D) {
         // Calculate extraction constants
         // TODO df is incorrect? Overwritten as = 1 seems to work
         int n = accelerations3D.size();
@@ -157,7 +154,7 @@ class Calculator {
         return result;
     }
 
-    public static DominantFrequencies calculateDominantFrequencies(ArrayList<DataPoint3D<Double>> frequencyAmplitudes) {
+    static DominantFrequencies calculateDominantFrequencies(ArrayList<DataPoint3D<Double>> frequencyAmplitudes) {
         // Get the indexes (=frequencies) and the values
         int[] maxIndexes = getMaxIndexesInArray3D(frequencyAmplitudes);
         float[] maxValues = new float[3];
@@ -174,127 +171,37 @@ class Calculator {
     }
 
     /**
-     * Old functions - not used right now
+     * Checks if a given value is above our set limit for this settings.
+     * This simply linearly interpolates.
+     *
+     * @param frequency The frequency
+     * @param amplitude The amplitude
+     * @return True if we exceed the limit
      */
+    private static boolean isAboveLimit(float frequency, float amplitude) {
+        // Acquire our segment index
+        int segmentIndex = 0;
+        while (limitValuesAsFloatPoints[segmentIndex+1][0] < frequency && segmentIndex < limitValuesAsFloatPoints[0].length - 1) {
+            segmentIndex++;
+        }
 
-//
-//    /**
-//     * Adds margin to the maximum speed. See documentation for more information
-//     *
-//     * @param data maximum speed in x, y and z direction
-//     * @return float maximum speed multiplied with margin
-//     */
-//    public static float[] addMargin(float[] data) {
-//        data[0] *= yv;
-//        data[1] *= yv;
-//        data[2] *= yv;
-//        return data;
-//    }
-//
-//    /**
-//     * @param acc acceleration data in frequency xAxisValue (frequency + acceleration)
-//     * @return velocity data in frequency xAxisValue (frequency + velocity)
-//     */
-//    public static ArrayList<DataPoint3D<int[]>> calcVelocityFreqDomain(ArrayList<DataPoint3D<int[]>> acc) {
-//        float xVel = 0;
-//        float yVel = 0;
-//        float zVel = 0;
-//        float maxzvel = 0;
-//        ArrayList<DataPoint3D<int[]>> velocities = new ArrayList<DataPoint3D<int[]>>();
-//        for (DataPoint3D<int[]> dataPoint3D : acc) {
-//            float xAcc = dataPoint3D.values[0];
-//            float yAcc = dataPoint3D.values[1];
-//            float zAcc = dataPoint3D.values[2];
-//
-//            int xFreq = dataPoint3D.xAxisValue[0];
-//            int yFreq = dataPoint3D.xAxisValue[1];
-//            int zFreq = dataPoint3D.xAxisValue[2];
-//
-//            xVel = xAcc / (2f * (float) Math.PI * (float) xFreq);
-//            yVel = yAcc / (2f * (float) Math.PI * (float) yFreq);
-//            zVel = zAcc / (2f * (float) Math.PI * (float) zFreq);
-//            maxzvel = Math.max(zVel, maxzvel);
-//            velocities.add(new DataPoint3D<int[]>(new int[]{xFreq, yFreq, zFreq}, new float[]{xVel, yVel, zVel}));
-//        }
-//        velocities.remove(0);
-//        return velocities;
-//    }
-//
-//    /**
-//     * @param velocities list of velocities obtained for 1 second in frequency xAxisValue
-//     * @return limitValue (m/s) for each velocity
-//     */
-//
-//    public static ArrayList<DataPoint3D<int[]>> limitValue(ArrayList<DataPoint3D<int[]>> velocities) {
-//        ArrayList<DataPoint3D<int[]>> limitValues = new ArrayList<DataPoint3D<int[]>>();
-//        for (DataPoint3D<int[]> dataPoint3D : velocities) {
-//            int xfreq = dataPoint3D.xAxisValue[0];
-//            int yfreq = dataPoint3D.xAxisValue[1];
-//            int zfreq = dataPoint3D.xAxisValue[2];
-//
-//            float xLimit = findLimit(xfreq);
-//            float yLimit = findLimit(yfreq);
-//            float zLimit = findLimit(zfreq);
-//
-//            //add margin
-//            xLimit = xLimit / yt;
-//            yLimit = yLimit / yt;
-//            zLimit = zLimit / yt;
-//
-//            limitValues.add(new DataPoint3D<int[]>(new int[]{xfreq, yfreq, zfreq}, new float[]{xLimit, yLimit, zLimit}));
-//        }
-//        return limitValues;
-//    }
-//
-//    /**
-//     * @param freq frequency
-//     * @return limitValue corresponding to frequency obtained from LimitValueTable (see doc for more information)
-//     */
-//    private static float findLimit(int freq) {
-//        return LimitValueTable.getLimitValue(freq);
-//    }
-//
-//    /**
-//     * Calculates dominant frequency (highest ratio limitValue / velocity)
-//     *
-//     * @param limitValues array with limitValue for each frequency
-//     * @param velocities  array with velocity for each frequency
-//     * @return dominant frequency for each direction (x,y,z)
-//     */
-//    public static DominantFrequencies getDominantFrequencies(ArrayList<DataPoint3D<int[]>> limitValues, ArrayList<DataPoint3D<int[]>> velocities) {
-//        int domFreqX = -1;
-//        float ratioX = 0;
-//        float domVelX = -1;
-//        int domFreqY = -1;
-//        float ratioY = 0;
-//        float domVelY = -1;
-//        int domFreqZ = -1;
-//        float ratioZ = 0;
-//        float domVelZ = -1;
-//
-//        for (int i = 0; i < limitValues.size(); i++) {
-//            DataPoint3D<int[]> limitValue = limitValues.get(i);
-//            DataPoint3D<int[]> velocity = velocities.get(i);
-//
-//            if (velocity.values[0] / limitValue.values[0] > ratioX) {
-//                ratioX = velocity.values[0] / limitValue.values[0];
-//                domFreqX = limitValue.xAxisValue[0];
-//                domVelX = velocity.values[0];
-//            }
-//
-//            if (velocity.values[1] / limitValue.values[1] > ratioY) {
-//                ratioY = velocity.values[1] / limitValue.values[1];
-//                domFreqY = limitValue.xAxisValue[1];
-//                domVelY = velocity.values[1];
-//            }
-//
-//            if (velocity.values[2] / limitValue.values[2] > ratioZ) {
-//                ratioZ = velocity.values[2] / limitValue.values[2];
-//                domFreqZ = limitValue.xAxisValue[2];
-//                domVelZ = velocity.values[2];
-//            }
-//        }
-//        return new DominantFrequencies(new int[]{domFreqX, domFreqY, domFreqZ}, new float[]{domVelX, domVelY, domVelZ}, new boolean[]{ratioX > 1, ratioY > 1, ratioZ > 1});
-//    }
+        // Acquire our before and after points
+        float x1 = limitValuesAsFloatPoints[segmentIndex][0];
+        float y1 = limitValuesAsFloatPoints[segmentIndex][1];
+        float x2 = limitValuesAsFloatPoints[segmentIndex + 1][0];
+        float y2 = limitValuesAsFloatPoints[segmentIndex + 1][1];
+        float dx = x2 - x1;
+        float dy = y2 - y1;
+
+        // Edge case, division by 0
+        if (dx == 0) {
+            return amplitude >= limitValuesAsFloatPoints[segmentIndex][1];
+        }
+
+        // Calculate our new amplitude
+        float d = dy / dx;
+        float limitAmplitude = y1 + d*(frequency - x1);
+        return amplitude >= limitAmplitude;
+    }
 
 }
