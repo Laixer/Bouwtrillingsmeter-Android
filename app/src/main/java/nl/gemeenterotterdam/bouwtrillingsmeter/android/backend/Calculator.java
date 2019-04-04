@@ -85,12 +85,11 @@ class Calculator {
         }
 
         // Add our margins for our safety factor
-        for (int dimension = 0; dimension < 3; dimension++) {
+        /*for (int dimension = 0; dimension < 3; dimension++) {
             for (int i = 0; i < data.size(); i++) {
-                result.get(i).values[dimension] *= partialSafetyFactor;
+                result.get(i).values[dimension] /= partialSafetyFactor;
             }
-        }
-
+        }*/
 
         // Return our result
         return result;
