@@ -10,7 +10,9 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.LimitConstants;
 
 /**
  * TODO Doc
@@ -28,12 +30,12 @@ public class GraphFrequencyDominant extends Graph {
         super(name, textAxisHorizontal, textAxisVertical);
 
         // Create our constant line
-        // TODO Implement, this is hard coded now
-        constantLine = new LineGraphSeries<DataPoint>();
-        constantLine.appendData(new DataPoint(0, 0), true, 10);
-        constantLine.appendData(new DataPoint(0, 7.5), true, 10);
-        constantLine.appendData(new DataPoint(50, 7.5), true, 10);
-        constantLine.appendData(new DataPoint(150, 17.5), true, 10);
+        ArrayList<DataPoint> dataPointsList = LimitConstants.getLimitAsDataPoints(Backend.getCurrentMeasurement().settings);
+        DataPoint[] dataPoints = new DataPoint[dataPointsList.size()];
+        for (int i = 0; i < dataPointsList.size(); i++) {
+            dataPoints[i] = dataPointsList.get(i);
+        }
+        constantLine = new LineGraphSeries<DataPoint>(dataPoints);
 
         // Instantiate our sorted data points
         sortedDataPoints = new ArrayList<DataPoint>();
