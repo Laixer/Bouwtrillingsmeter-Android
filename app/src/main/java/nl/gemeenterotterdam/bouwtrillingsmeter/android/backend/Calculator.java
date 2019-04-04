@@ -79,31 +79,6 @@ class Calculator {
         return result;
     }
 
-
-    /**
-     * Finds the maximum values in our array in 3 dimensions
-     *
-     * @param dataPoints The datapoints
-     * @param <T>        The datapoint type
-     * @return A float[3] with the highest values
-     */
-    private static <T> int[] getMaxIndexesInArray3D(ArrayList<DataPoint3D<T>> dataPoints) {
-        float[] highestValue = new float[]{Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE};
-        int[] index = new int[]{-1, -1, -1};
-
-        for (int i = 0; i < dataPoints.size(); i++) {
-            for (int dimension = 0; dimension <= 2; dimension++) {
-                float value = dataPoints.get(i).values[dimension];
-                if (value > highestValue[dimension]) {
-                    highestValue[dimension] = value;
-                    index[dimension] = i;
-                }
-            }
-        }
-
-        return index;
-    }
-
     /**
      * Calculate fft
      *
@@ -154,6 +129,36 @@ class Calculator {
         return result;
     }
 
+    /**
+     * Finds the maximum values in our array in 3 dimensions
+     *
+     * @param dataPoints The datapoints
+     * @param <T>        The datapoint type
+     * @return A float[3] with the highest values
+     */
+    private static <T> int[] getMaxIndexesInArray3D(ArrayList<DataPoint3D<T>> dataPoints) {
+        float[] highestValue = new float[]{Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE};
+        int[] index = new int[]{-1, -1, -1};
+
+        for (int i = 0; i < dataPoints.size(); i++) {
+            for (int dimension = 0; dimension <= 2; dimension++) {
+                float value = dataPoints.get(i).values[dimension];
+                if (value > highestValue[dimension]) {
+                    highestValue[dimension] = value;
+                    index[dimension] = i;
+                }
+            }
+        }
+
+        return index;
+    }
+
+    /**
+     * Creates a new {@link DominantFrequencies} object based on our fft data.
+     *
+     * @param frequencyAmplitudes The frequency amplitudes against their frequency.
+     * @return The new object
+     */
     static DominantFrequencies calculateDominantFrequencies(ArrayList<DataPoint3D<Double>> frequencyAmplitudes) {
         // Get the indexes (=frequencies) and the values
         int[] maxIndexes = getMaxIndexesInArray3D(frequencyAmplitudes);
@@ -163,8 +168,12 @@ class Calculator {
         }
 
         // Check if we have exceeded any limits
-        // TODO Implement
         boolean[] exceeded = new boolean[3];
+        for (int dimension = 0; dimension < 3; dimension++) {
+            double xAxisValue = frequencyAmplitudes.get(maxIndexes[dimension]).xAxisValue;
+            float frequency = (float)xAxisValue;
+            exceeded[dimension] = isAboveLimit(frequency , maxValues[dimension]);
+        }
 
         // Return all as a new DominantFrequencies object
         return new DominantFrequencies(maxIndexes, maxValues, exceeded);
@@ -181,7 +190,7 @@ class Calculator {
     private static boolean isAboveLimit(float frequency, float amplitude) {
         // Acquire our segment index
         int segmentIndex = 0;
-        while (limitValuesAsFloatPoints[segmentIndex+1][0] < frequency && segmentIndex < limitValuesAsFloatPoints[0].length - 1) {
+        while (limitValuesAsFloatPoints[segmentIndex + 1][0] < frequency && segmentIndex < limitValuesAsFloatPoints[0].length - 1) {
             segmentIndex++;
         }
 
@@ -200,7 +209,7 @@ class Calculator {
 
         // Calculate our new amplitude
         float d = dy / dx;
-        float limitAmplitude = y1 + d*(frequency - x1);
+        float limitAmplitude = y1 + d * (frequency - x1);
         return amplitude >= limitAmplitude;
     }
 
