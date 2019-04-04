@@ -26,9 +26,9 @@ class Calculator {
     private static DataPoint3D<Long> accelerationPrevious;
     private static float[] velocity;
 
-    private static final float partialSafetyFactorIndicative = (float) Utility.Resources.getInteger(R.integer.partial_safety_factor_x10_indicative) / 10;
-    private static final float partialSafetyFactorLimited = (float) Utility.Resources.getInteger(R.integer.partial_safety_factor_x10_limited) / 10;
-    private static final float partialSafetyFactorExtensive = (float) Utility.Resources.getInteger(R.integer.partial_safety_factor_x10_extensive) / 10;
+    private static final float partialSafetyFactorIndicative = (float) Utility.Resources.getInteger(R.integer.yv_partial_safety_factor_x10_indicative) / 10;
+    private static final float partialSafetyFactorLimited = (float) Utility.Resources.getInteger(R.integer.yv_partial_safety_factor_x10_limited) / 10;
+    private static final float partialSafetyFactorExtensive = (float) Utility.Resources.getInteger(R.integer.yv_partial_safety_factor_x10_extensive) / 10;
 
     private static float partialSafetyFactor = 0;
 
@@ -87,7 +87,7 @@ class Calculator {
         // Add our margins for our safety factor
         /*for (int dimension = 0; dimension < 3; dimension++) {
             for (int i = 0; i < data.size(); i++) {
-                result.get(i).values[dimension] /= partialSafetyFactor;
+                result.get(i).values[dimension] *= partialSafetyFactor;
             }
         }*/
 
