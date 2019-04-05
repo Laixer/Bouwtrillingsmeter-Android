@@ -190,21 +190,21 @@ class Calculator {
     private static boolean isAboveLimit(float frequency, float amplitude) {
         // Acquire our segment index
         int segmentIndex = 0;
-        while (limitValuesAsFloatPoints[segmentIndex + 1][0] < frequency && segmentIndex < limitValuesAsFloatPoints[0].length - 1) {
+        while (limitValuesAsFloatPoints[0][segmentIndex + 1] < frequency && segmentIndex < limitValuesAsFloatPoints[0].length - 1) {
             segmentIndex++;
         }
 
         // Acquire our before and after points
-        float x1 = limitValuesAsFloatPoints[segmentIndex][0];
-        float y1 = limitValuesAsFloatPoints[segmentIndex][1];
-        float x2 = limitValuesAsFloatPoints[segmentIndex + 1][0];
-        float y2 = limitValuesAsFloatPoints[segmentIndex + 1][1];
+        float x1 = limitValuesAsFloatPoints[0][segmentIndex];
+        float y1 = limitValuesAsFloatPoints[1][segmentIndex];
+        float x2 = limitValuesAsFloatPoints[0][segmentIndex + 1];
+        float y2 = limitValuesAsFloatPoints[1][segmentIndex + 1];
         float dx = x2 - x1;
         float dy = y2 - y1;
 
         // Edge case, division by 0
         if (dx == 0) {
-            return amplitude >= limitValuesAsFloatPoints[segmentIndex][1];
+            return amplitude >= limitValuesAsFloatPoints[1][segmentIndex];
         }
 
         // Calculate our new amplitude

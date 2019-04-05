@@ -141,8 +141,6 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
             return;
         }
 
-        long before = Calendar.getInstance().getTimeInMillis();
-
         // TODO Deze splitsing by default in DataPoint3D bouwen scheelt best wel veel
         // TODO We moeten er wel altijd doorheen om de tijd te scalen en overlap te voorkomen --> Kan dit in de graph axis gedaan worden?
         /**
@@ -157,25 +155,5 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         graphs[2].sendNewDataToSeries(dataInterval.getDominantFrequenciesAsDataPoints());
         graphs[3].sendNewDataToSeries(dataInterval.frequencyAmplitudes);
         graphs[4].sendNewDataToSeries(dataInterval.getExceedingAsDataPoints());
-
-        /**
-         *
-         */
-        /*ArrayList<DataPoint3D<Double>> exceedingDataPoints3D = new ArrayList<DataPoint3D<Double>>();
-        DominantFrequencies dominantFrequencies = dataInterval.dominantFrequencies;
-        for (int dimension = 0; dimension < 3; dimension++) {
-            if (dominantFrequencies.exceedsLimit[dimension]) {
-               exceedingDataPoints3D.add(new DataPoint3D<Double>())
-            }
-        }
-
-        // If we created new datapoints
-        // This only adds exceeded datapoints to the graph
-        if (exceedingDataPoints3D.size() > 0) {
-            graphs[4].sendNewDataToSeries(exceedingDataPoints3D);
-        }*/
-
-        long dt = Calendar.getInstance().getTimeInMillis() - before;
-        System.out.println("Updating our graphs took " + dt + " milliseconds.");
     }
 }
