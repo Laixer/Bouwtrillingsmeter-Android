@@ -58,35 +58,17 @@ public class DataInterval {
     /**
      * Checks if we have exceeded any limits within our interval.
      * The checks are done on the {@link #dominantFrequencies}.
-     * TODO Remove the debug thingy with chance.
      *
      * @return True if we have exceeded any limits.
      */
     public boolean isExceedingLimit() {
-        if (index == 10) {
-            return true;
-        } else {
-            return false;
-        }
-
-        /**
-        if (dominantFrequencies == null) {
-            double chance = Math.random();
-            if (chance < 0.1) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
         for (boolean bool : dominantFrequencies.exceedsLimit) {
-           if (bool == true) {
+           if (bool) {
                return true;
            }
         }
 
         return false;
-         */
     }
 
     /**
