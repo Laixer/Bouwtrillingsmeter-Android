@@ -2,6 +2,7 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 import org.jtransforms.fft.FloatFFT_1D;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -160,37 +161,62 @@ class Calculator {
      * @return The new object
      */
     static DominantFrequencies calculateDominantFrequencies(ArrayList<DataPoint3D<Double>> frequencyAmplitudes) {
-        // Get the indexes (=frequencies) and the values
-        int[] maxIndexes = getMaxIndexesInArray3D(frequencyAmplitudes);
-        float[] maxValues = new float[3];
-        for (int dimension = 0; dimension < maxValues.length; dimension++) {
-            maxValues[dimension] = frequencyAmplitudes.get(maxIndexes[dimension]).values[dimension];
+        // Store our dominant frequency indexes
+        int[] maxIndexes = new int[]{0, 0, 0};
+
+        // Find the index of our dominant frequency in every dimension
+        for (int dimension = 0; dimension < 3; dimension++) {
+            float highestRatio = 0;
+
+            for (int i = 1; i < frequencyAmplitudes.size() - 1; i++) {
+                // Get our points values
+                double xAxisValue = frequencyAmplitudes.get(i).xAxisValue;
+                float frequency = (float) xAxisValue;
+                float amplitude = frequencyAmplitudes.get(i).values[dimension];
+
+                // If it's a local maximum
+                if (amplitude > frequencyAmplitudes.get(i - 1).values[dimension] && amplitude > frequencyAmplitudes.get(i + 1).values[dimension]) {
+                    // Get the limit amplitude and its corresponding ratio
+                    float limitAmplitude = getLimitAmplitudeFromFrequency(frequency);
+                    float ratio = amplitude / limitAmplitude;
+
+                    // If this point has a greater ratio
+                    if (ratio > highestRatio) {
+                        highestRatio = ratio;
+                        maxIndexes[dimension] = i;
+                    }
+                }
+            }
         }
 
-        // Check if we have exceeded any limits
-        boolean[] exceeded = new boolean[3];
+        // Prepare variables
+        float[] maxAmplitudes = new float[3];
+        float[] maxFrequencies = new float[3];
+        boolean[] exceeded = new boolean[]{false, false, false};
+
+        // Extract variables
         for (int dimension = 0; dimension < 3; dimension++) {
             double xAxisValue = frequencyAmplitudes.get(maxIndexes[dimension]).xAxisValue;
-            float frequency = (float)xAxisValue;
-            exceeded[dimension] = isAboveLimit(frequency , maxValues[dimension]);
+            maxFrequencies[dimension] = (float) xAxisValue;
+            maxAmplitudes[dimension] = frequencyAmplitudes.get(maxIndexes[dimension]).values[dimension];
+            exceeded[dimension] = maxAmplitudes[dimension] > getLimitAmplitudeFromFrequency(maxFrequencies[dimension]);
         }
 
         // Return all as a new DominantFrequencies object
-        return new DominantFrequencies(maxIndexes, maxValues, exceeded);
+        return new DominantFrequencies(maxFrequencies, maxAmplitudes, exceeded);
     }
 
     /**
-     * Checks if a given value is above our set limit for this settings.
+     * This gives us the exceed amplitude value for our frequency.
      * This simply linearly interpolates.
      *
      * @param frequency The frequency
-     * @param amplitude The amplitude
      * @return True if we exceed the limit
      */
-    private static boolean isAboveLimit(float frequency, float amplitude) {
+    private static float getLimitAmplitudeFromFrequency(float frequency) {
         // Acquire our segment index
         int segmentIndex = 0;
-        while (limitValuesAsFloatPoints[0][segmentIndex + 1] < frequency && segmentIndex < limitValuesAsFloatPoints[0].length - 1) {
+        while (limitValuesAsFloatPoints[0][segmentIndex + 1] < frequency && segmentIndex < limitValuesAsFloatPoints[0].length - 2) {
             segmentIndex++;
         }
 
@@ -204,13 +230,12 @@ class Calculator {
 
         // Edge case, division by 0
         if (dx == 0) {
-            return amplitude >= limitValuesAsFloatPoints[1][segmentIndex];
+            return limitValuesAsFloatPoints[1][segmentIndex];
         }
 
         // Calculate our new amplitude
         float d = dy / dx;
         float limitAmplitude = y1 + d * (frequency - x1);
-        return amplitude >= limitAmplitude;
+        return limitAmplitude;
     }
-
 }

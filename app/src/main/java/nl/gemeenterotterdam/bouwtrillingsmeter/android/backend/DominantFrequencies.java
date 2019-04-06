@@ -10,14 +10,14 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
  */
 public class DominantFrequencies {
 
-    public int[] frequencies;
+    public float[] frequencies;
     public float[] velocities;
     public boolean[] exceedsLimit;
 
     /**
      * Constructor
      */
-    public DominantFrequencies(int[] frequencies, float[] velocities, boolean[] exceedsLimit) {
+    public DominantFrequencies(float[] frequencies, float[] velocities, boolean[] exceedsLimit) {
         this.frequencies = frequencies;
         this.velocities = velocities;
         this.exceedsLimit = exceedsLimit;
