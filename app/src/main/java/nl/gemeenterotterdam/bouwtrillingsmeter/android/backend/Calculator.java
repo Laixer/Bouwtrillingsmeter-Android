@@ -44,7 +44,8 @@ class Calculator {
      * We calculate the area under the graph,
      * then add it to the total in order to get the
      * velocity for each point.
-     * TODO This does not seem to work properly.
+     * TODO This starts over for each interval
+     * TODO Check this, its buggy
      *
      * @param data values from acceleroMeter (retrieved for 1 second)
      * @return A new arraylist, with a velocity for each point. All time values will be the same as the input data.
@@ -52,17 +53,14 @@ class Calculator {
     static ArrayList<DataPoint3D<Long>> calculateVelocityFromAcceleration(ArrayList<DataPoint3D<Long>> data) {
         // Create a result array
         ArrayList<DataPoint3D<Long>> result = new ArrayList<DataPoint3D<Long>>();
+        double timePrevious = 0;
+        velocity = new float[]{0, 0, 0};
 
-        /**
-         * Differentiate based on our {@link accelerationPrevious} variable.
-         * Set this variable after each point.
-         * This ensures cross interval consistent boundary conditions.
-         */
+        // Differentiate
         for (int i = 0; i < data.size(); i++) {
             // Calculate dt [ms]
-            long timeCurrent = data.get(i).xAxisValue;
-            long timePrevious = accelerationPrevious.xAxisValue;
-            double dtSeconds = (timeCurrent - timePrevious) / 1000.0;
+            double timeCurrent = data.get(i).xAxisValue;
+            double dtSeconds = (timeCurrent - timePrevious) / 1000;
 
             // Compute the integral by adding each bit to the total velocity
             velocity[0] += data.get(i).values[0] * dtSeconds;
@@ -73,11 +71,31 @@ class Calculator {
             result.add(new DataPoint3D<Long>(data.get(i).xAxisValue, velocity));
 
             // Store our datapoint as previous for the next iteration
-            accelerationPrevious = data.get(i);
+            timePrevious = timeCurrent;
         }
 
         // Return our result
         return result;
+    }
+
+    /**
+     * This creates a new {@link DataPoint3D}.
+     * Its values contain the highest absolute velocity in each dimension.
+     * TODO Ontbeun het vinden van de time value
+     *
+     * @param data The velocities
+     * @return A new {@link DataPoint3D}
+     */
+    static DataPoint3D<Long> calculateVelocityAbsMaxFromVelocties(ArrayList<DataPoint3D<Long>> data) {
+        int[] absMaxIndexes = getAbsMaxIndexesInArray3D(data);
+        float[] values = new float[3];
+        for (int dimension = 0; dimension < 3; dimension++) {
+            values[dimension] = Math.abs(data.get(absMaxIndexes[dimension]).values[dimension]);
+        }
+
+        long time = data.get(0).xAxisValue;
+
+        return new DataPoint3D<Long>(time, values);
     }
 
     /**
@@ -131,19 +149,19 @@ class Calculator {
     }
 
     /**
-     * Finds the maximum values in our array in 3 dimensions
+     * Finds the indexes of our absolute maximum values in our array in 3 dimensions.
      *
      * @param dataPoints The datapoints
      * @param <T>        The datapoint type
      * @return A float[3] with the highest values
      */
-    private static <T> int[] getMaxIndexesInArray3D(ArrayList<DataPoint3D<T>> dataPoints) {
+    private static <T> int[] getAbsMaxIndexesInArray3D(ArrayList<DataPoint3D<T>> dataPoints) {
         float[] highestValue = new float[]{Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE};
         int[] index = new int[]{-1, -1, -1};
 
         for (int i = 0; i < dataPoints.size(); i++) {
             for (int dimension = 0; dimension <= 2; dimension++) {
-                float value = dataPoints.get(i).values[dimension];
+                float value = Math.abs(dataPoints.get(i).values[dimension]);
                 if (value > highestValue[dimension]) {
                     highestValue[dimension] = value;
                     index[dimension] = i;
@@ -238,4 +256,5 @@ class Calculator {
         float limitAmplitude = y1 + d * (frequency - x1);
         return limitAmplitude;
     }
+
 }

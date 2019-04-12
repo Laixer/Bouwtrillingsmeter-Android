@@ -220,7 +220,9 @@ public class DataHandler implements AccelerometerListener {
 
                 // Calculate time-domain velocities
                 ArrayList<DataPoint3D<Long>> velocities = Calculator.calculateVelocityFromAcceleration(thisDataInterval.dataPoints3DAcceleration);
+                DataPoint3D<Long> velocitiesAbsMax = Calculator.calculateVelocityAbsMaxFromVelocties(velocities);
                 thisDataInterval.velocities = velocities;
+                thisDataInterval.velocitiesAbsMax = velocitiesAbsMax;
 
                 // Calculate fft for the acceleration
                 ArrayList<DataPoint3D<Double>> frequencyAmplitudes = Calculator.fft(thisDataInterval.dataPoints3DAcceleration);

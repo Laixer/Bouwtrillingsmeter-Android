@@ -132,7 +132,7 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
      * This gets called when the {@link DataInterval} is closed.
      * Do not forget to add the @Override tag to this function!
      *
-     * @param dataInterval
+     * @param dataInterval The data interval that was closed
      */
     @Override
     public void onDataIntervalClosed(DataInterval dataInterval) {
@@ -144,14 +144,14 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         // TODO Deze splitsing by default in DataPoint3D bouwen scheelt best wel veel
         // TODO We moeten er wel altijd doorheen om de tijd te scalen en overlap te voorkomen --> Kan dit in de graph axis gedaan worden?
         /**
-         * Graph 1: Acceleration // time
-         * Graph 2: Velocity // time
-         * Graph 3: Dominant frequency // time
-         * Graph 4: Amplitude // frequency
-         * Graph 5: Dominant frequency // frequency
+         * Graph 1: Acceleration // time (line)
+         * Graph 2: Highest velocity // time (block)
+         * Graph 3: Dominant frequency // time (block)
+         * Graph 4: Amplitude // frequency (line)
+         * Graph 5: Dominant frequency // frequency (point)
          */
         graphs[0].sendNewDataToSeries(dataInterval.dataPoints3DAcceleration);
-        graphs[1].sendNewDataToSeries(dataInterval.velocities);
+        graphs[1].sendNewDataToSeries(dataInterval.getVelocitiesAbsMaxAsDataPoints());
         graphs[2].sendNewDataToSeries(dataInterval.getDominantFrequenciesAsDataPoints());
         graphs[3].sendNewDataToSeries(dataInterval.frequencyAmplitudes);
         graphs[4].sendNewDataToSeries(dataInterval.getExceedingAsDataPoints());

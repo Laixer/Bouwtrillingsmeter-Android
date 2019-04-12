@@ -21,6 +21,7 @@ public class DataInterval {
     public Date dateEnd;
 
     public ArrayList<DataPoint3D<Long>> velocities;
+    public DataPoint3D<Long> velocitiesAbsMax;
     public ArrayList<DataPoint3D<Double>> frequencyAmplitudes;
     public DominantFrequencies dominantFrequencies;
 
@@ -63,9 +64,9 @@ public class DataInterval {
      */
     public boolean isExceedingLimit() {
         for (boolean bool : dominantFrequencies.exceedsLimit) {
-           if (bool) {
-               return true;
-           }
+            if (bool) {
+                return true;
+            }
         }
 
         return false;
@@ -93,9 +94,7 @@ public class DataInterval {
     public boolean attemptDeleteDataPoints() {
         if (isLockedByThread) {
             return false;
-        }
-
-        else {
+        } else {
             dataPoints3DAcceleration.clear();
             return true;
         }
@@ -140,4 +139,17 @@ public class DataInterval {
         // Return result
         return result;
     }
+
+    /**
+     * Converts our max velocity datapoint3d to an arraylist of datapoints3d with size 1.
+     * This is implemented for consistent graph usage.
+     *
+     * @return The "arraylist"
+     */
+    public ArrayList<DataPoint3D<Long>> getVelocitiesAbsMaxAsDataPoints() {
+        ArrayList<DataPoint3D<Long>> result = new ArrayList<DataPoint3D<Long>>(1);
+        result.add(velocitiesAbsMax);
+        return result;
+    }
+
 }
