@@ -168,20 +168,3 @@ public class GraphFrequencyDominant extends Graph {
     }
 }
 
-    /**
-     * Updates our point graph.
-     * The points are also sorted to prevent any x-axis conflicts.
-     * Returns if no graphview is present
-    private void refreshAndSortPointSeries() {
-        // Instantiate and fill our point series
-        pointGraphSeries = new PointsGraphSeries<DataPoint>();
-        for (DataPoint sortedDataPoint : sortedDataPoints) {
-            pointGraphSeries.appendData(sortedDataPoint, true, 1000);
-        }
-
-        // Style point graph
-        graphView.addSeries(pointGraphSeries);
-        pointGraphSeries.setColor(Utility.Resources.getColor(R.color.graph_series_color_point));
-        pointGraphSeries.setSize(5);
-    }*/
-

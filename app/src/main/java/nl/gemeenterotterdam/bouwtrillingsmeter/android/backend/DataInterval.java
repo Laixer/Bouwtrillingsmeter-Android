@@ -148,6 +148,8 @@ public class DataInterval {
      */
     public ArrayList<DataPoint3D<Long>> getVelocitiesAbsMaxAsDataPoints() {
         ArrayList<DataPoint3D<Long>> result = new ArrayList<DataPoint3D<Long>>(1);
+        long timeValue = dateStart.getTime() - MeasurementControl.getCurrentMeasurement().getStartTimeInMillis();
+        velocitiesAbsMax.xAxisValue = timeValue;
         result.add(velocitiesAbsMax);
         return result;
     }

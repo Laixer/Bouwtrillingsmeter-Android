@@ -100,13 +100,13 @@ public class LimitConstants {
         float[] amplitudes;
         switch (vibrationIndex) {
             case 1:
-                amplitudes = lineBreakPointsVibrationShort[buildingIndex];
+                amplitudes = lineBreakPointsVibrationShort[buildingIndex - 1];
                 break;
             case 2:
-                amplitudes = lineBreakPointsVibrationShortRepeated[buildingIndex];
+                amplitudes = lineBreakPointsVibrationShortRepeated[buildingIndex - 1];
                 break;
             case 3:
-                amplitudes = getLineBreakPointsVibrationContinuous[buildingIndex];
+                amplitudes = getLineBreakPointsVibrationContinuous[buildingIndex - 1];
                 break;
             default:
                 throw new IllegalArgumentException("Could not compute limit values");

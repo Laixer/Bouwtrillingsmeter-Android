@@ -4,8 +4,8 @@ Nu:
 TODO Graph haper check
 
 Later:
+TODO Graph slaat niet op als je hem wegklikt en opnieuw opent.
 TODO Graph scaling alleen als je hem niet aanraakt.
-TODO
 TODO Text measurement cycle mooi
 TODO Graph unlock
 TODO Graph datapoints --> dit is ook veel data. Wat doen we hiermee?

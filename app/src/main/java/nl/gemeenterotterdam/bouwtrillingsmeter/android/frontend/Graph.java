@@ -29,6 +29,8 @@ public abstract class Graph {
     private String textAxisVertical;
     protected GraphView graphView;
 
+    private boolean scaleOnHold = false;
+
     /**
      * This has to be an ArrayList, since our LineGraphSeries is generic.
      * Java does not support arrays of generic types.
@@ -122,6 +124,10 @@ public abstract class Graph {
      * @param to
      */
     protected void setHorizontalRange(double from, double to) {
+        if (scaleOnHold) {
+            return;
+        }
+
         if (from > to) {
             double temp = from;
             from = to;
@@ -144,6 +150,10 @@ public abstract class Graph {
      * @param to
      */
     protected void setVerticalRange(double from, double to, boolean addMarginLower, boolean addMarginHigher) {
+        if (scaleOnHold) {
+            return;
+        }
+
         if (from > to) {
             double temp = from;
             from = to;

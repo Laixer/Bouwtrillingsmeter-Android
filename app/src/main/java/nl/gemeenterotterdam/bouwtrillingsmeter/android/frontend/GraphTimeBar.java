@@ -1,7 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 
@@ -13,13 +13,15 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
  * TODO Optimize by saving our own data list
  * TODO Optimize by only writing if we are visible
  */
-public class GraphTime extends Graph {
+public class GraphTimeBar extends Graph {
 
-    private int maxHorizontalRange = Utility.Resources.getInteger(R.integer.graphs_time_line_horizontal_axis_range_max_s);
-    private int maxDataPointCount = Utility.Resources.getInteger(R.integer.graphs_line_max_datapoint_count);
+    private int maxHorizontalRange = Utility.Resources.getInteger(R.integer.graphs_time_bar_horizontal_axis_range_max_s);
+    private int minHorizontalRange = Utility.Resources.getInteger(R.integer.graphs_time_bar_horizontal_axis_range_min_s);
+    private int maxDataPointCount = Utility.Resources.getInteger(R.integer.graphs_bar_max_datapoint_count);
     private double marginMultiplier = Utility.Resources.getInteger(R.integer.graphs_axis_margins_multiplier_percentage) * 0.01;
 
     private ArrayList<ArrayList<DataPoint>> dataPointsXYZ;
+    private ArrayList<BarGraphSeries<DataPoint>> barSeries;
 
     /**
      * Constructor
@@ -28,14 +30,18 @@ public class GraphTime extends Graph {
      * @param textAxisHorizontal Horizontal axis text
      * @param textAxisVertical   Vertical axis text
      */
-    public GraphTime(String name, String textAxisHorizontal, String textAxisVertical) {
+    public GraphTimeBar(String name, String textAxisHorizontal, String textAxisVertical) {
         // Call super
         super(name, textAxisHorizontal, textAxisVertical);
 
         // Initialize variables
-        dataPointsXYZ = new ArrayList<ArrayList<DataPoint>>();
+        dataPointsXYZ = new ArrayList<ArrayList<DataPoint>>(3);
+        barSeries = new ArrayList<BarGraphSeries<DataPoint>>(3);
+
+        // Fill
         for (int dimension = 0; dimension < 3; dimension++) {
             dataPointsXYZ.add(new ArrayList<DataPoint>());
+            barSeries.add(new BarGraphSeries<DataPoint>());
         }
     }
 
@@ -70,14 +76,9 @@ public class GraphTime extends Graph {
     @Override
     protected void appendDataToList(ArrayList<ArrayList<DataPoint>> graphPoints) {
         for (int dimension = 0; dimension < 3; dimension++) {
-            // Check for overlap
-            ArrayList<DataPoint> currentList = dataPointsXYZ.get(dimension);
-            while (currentList.size() > 0 && graphPoints.get(dimension).get(0).getX() <= currentList.get(currentList.size() - 1).getX()) {
-                System.out.println("Removed overlapping points!");
-                currentList.remove(currentList.size() - 1);
-            }
 
             // Remove some datapoints if we have too many
+            ArrayList<DataPoint> currentList = dataPointsXYZ.get(dimension);
             if (currentList.size() + graphPoints.get(dimension).size() > maxDataPointCount) {
                 int removeCount = graphPoints.get(dimension).size() - (maxDataPointCount - currentList.size());
                 dataPointsXYZ.set(dimension, new ArrayList<DataPoint>(currentList.subList(removeCount - 1, currentList.size())));
@@ -95,7 +96,7 @@ public class GraphTime extends Graph {
      * This crops our datapoints list if required
      * Then gets all minima and maxima
      * Then pushes everything to our graphview
-     * TODO HorizontalMinMax kan effectiever
+     * TODO VerticalMinMax kan effectiever
      */
     protected void pushToGraph() {
         // Edge case
@@ -106,37 +107,58 @@ public class GraphTime extends Graph {
         // Clear
         graphView.removeAllSeries();
 
+        // Get total datapoint count
+        int dataPointTotalCount = dataPointsXYZ.get(0).size();
+
         // Find minima and maxima (GraphView does this super inefficient.......)
-        double horizontalMin = Double.MAX_VALUE;
-        double horizontalMax = Double.MIN_VALUE;
-        double verticalMin = Double.MAX_VALUE;
+        double horizontalMin = dataPointsXYZ.get(0).get(0).getX();
+        double horizontalMax = dataPointsXYZ.get(0).get(dataPointTotalCount - 1).getX();
+        double verticalMin = 0;
         double verticalMax = Double.MIN_VALUE;
+        horizontalMin = Math.max(horizontalMin, horizontalMax - maxHorizontalRange);
+
+        // Apply minimum range
+        double range = horizontalMax - horizontalMin;
+        if (range < minHorizontalRange) {
+            horizontalMax += (minHorizontalRange - range);
+        }
+
+        // Get starting index
+        // TODO Nu hard coded op 1 seconde interval tijd
+        int startIndex = 0;
+        if (dataPointsXYZ.get(0).size() > maxHorizontalRange) {
+            startIndex = Math.max(0, (int)horizontalMax - maxHorizontalRange);
+        }
+
+        // Iterate trough each dimension
         for (int dimension = 0; dimension < 3; dimension++) {
-            for (DataPoint dataPoint : dataPointsXYZ.get(dimension)) {
-                // Horizontal
-                if (dataPoint.getX() < horizontalMin) {
-                    horizontalMin = dataPoint.getX();
-                } else if (dataPoint.getX() > horizontalMax) {
-                    horizontalMax = dataPoint.getX();
-                }
+            for (int i = startIndex; i < dataPointTotalCount; i++) {
+                DataPoint dataPoint = dataPointsXYZ.get(dimension).get(i);
 
                 // Vertical
-                if (dataPoint.getY() < verticalMin) {
-                    verticalMin = dataPoint.getY();
-                } else if (dataPoint.getY() > verticalMax) {
+                if (dataPoint.getY() > verticalMax) {
                     verticalMax = dataPoint.getY();
                 }
             }
 
-            // Create new series
-            DataPoint[] d = new DataPoint[dataPointsXYZ.get(dimension).size()];
-            d = dataPointsXYZ.get(dimension).toArray(d);
-            series.set(dimension, new LineGraphSeries<DataPoint>(d));
-            addAndStyleSeries(series.get(dimension), Utility.getColorResourceFromDimension(dimension));
+            // Get indexes
+            int dataPointShowCount = Math.min(dataPointsXYZ.get(0).size(), maxHorizontalRange);
+            int indexFrom = Math.max(0, dataPointTotalCount - maxHorizontalRange);
+
+            // Transfer sublist
+            DataPoint[] d = new DataPoint[dataPointShowCount];
+            d = dataPointsXYZ.get(dimension).subList(indexFrom, dataPointTotalCount).toArray(d);
+            barSeries.set(dimension, new BarGraphSeries<DataPoint>(d));
+
+            // Add to the graphview
+            if (graphView != null) {
+                graphView.addSeries(barSeries.get(dimension));
+                int colorResourceAsInteger = Utility.getColorResourceFromDimension(dimension);
+                barSeries.get(dimension).setColor(Utility.ApplicationContext.getResources().getColor(colorResourceAsInteger));
+            }
         }
 
         // Set the ranges we calculated with margins
-        horizontalMin = Math.max(horizontalMin, horizontalMax - maxHorizontalRange);
         setHorizontalRange(horizontalMin, horizontalMax);
         setVerticalRange(verticalMin, verticalMax, true, true);
     }

@@ -101,30 +101,17 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
      */
     private void createAllGraphs() {
         // Get constants
-        int graphCount = Utility.Resources.getInteger(R.integer.graphs_count);
-        graphs = new Graph[graphCount];
+        String[] title = getResources().getStringArray(R.array.graph_title);
+        String[] axisHorizontal = getResources().getStringArray(R.array.graph_axis_horizontal);
+        String[] axisVertical = getResources().getStringArray(R.array.graph_axis_vertical);
 
-        // Create all graphs
-        for (int i = 0; i < graphCount; i++) {
-            // Get text
-            String title = getResources().getStringArray(R.array.graph_title)[i];
-            String axisHorizontal = getResources().getStringArray(R.array.graph_axis_horizontal)[i];
-            String axisVertical = getResources().getStringArray(R.array.graph_axis_vertical)[i];
-
-            // Iterate trough
-            for (int j = 0; j < graphCount; j++) {
-                int resourceValue = Utility.Resources.getIntArray(R.array.graphs_0_time_1_frequency_2_fdom)[i];
-                if (resourceValue == 0) {
-                    graphs[i] = new GraphTime(title, axisHorizontal, axisVertical);
-                } else if (resourceValue == 1) {
-                    graphs[i] = new GraphFrequency(title, axisHorizontal, axisVertical);
-                } else if (resourceValue == 2) {
-                    graphs[i] = new GraphFrequencyDominant(title, axisHorizontal, axisVertical);
-                } else {
-                    throw new UnsupportedOperationException("The value in our resources indicating wether we are dealing with a frequency or time graph can only be 1 or 0!");
-                }
-            }
-        }
+        // Create graphs
+        graphs = new Graph[5];
+        graphs[0] = new GraphTime(title[0], axisHorizontal[0], axisVertical[0]);
+        graphs[1] = new GraphTimeBar(title[1], axisHorizontal[1], axisVertical[1]);
+        graphs[2] = new GraphTimeBar(title[2], axisHorizontal[2], axisVertical[2]);
+        graphs[3] = new GraphFrequency(title[3], axisHorizontal[3], axisVertical[3]);
+        graphs[4] = new GraphFrequencyDominant(title[4], axisHorizontal[4], axisVertical[4]);
     }
 
     /**
