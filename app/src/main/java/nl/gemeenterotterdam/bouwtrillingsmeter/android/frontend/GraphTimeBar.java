@@ -1,5 +1,9 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.view.MotionEvent;
+import android.view.View;
+
+import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
@@ -43,6 +47,12 @@ public class GraphTimeBar extends Graph {
             dataPointsXYZ.add(new ArrayList<DataPoint>());
             barSeries.add(new BarGraphSeries<DataPoint>());
         }
+    }
+
+    @Override
+    protected void onCreatedGraphView(GraphView graphView, boolean addSeriesXYZ) {
+        super.onCreatedGraphView(graphView, addSeriesXYZ);
+        graphView.getViewport().setScalableY(false);
     }
 
     /**
@@ -160,6 +170,6 @@ public class GraphTimeBar extends Graph {
 
         // Set the ranges we calculated with margins
         setHorizontalRange(horizontalMin, horizontalMax);
-        setVerticalRange(verticalMin, verticalMax, true, true);
+        setVerticalRange(verticalMin, verticalMax, false, true);
     }
 }

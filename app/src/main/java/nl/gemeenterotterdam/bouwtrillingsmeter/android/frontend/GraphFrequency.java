@@ -124,6 +124,7 @@ public class GraphFrequency extends Graph {
         }
 
         // Set the range we calculated
+        setHorizontalRange(axisMin, axisMax);
         setVerticalRange(0, verticalMax, false, true);
     }
 }

@@ -100,6 +100,10 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
      * Creates all the graphs.
      */
     private void createAllGraphs() {
+        if (graphs != null) {
+            return;
+        }
+
         // Get constants
         String[] title = getResources().getStringArray(R.array.graph_title);
         String[] axisHorizontal = getResources().getStringArray(R.array.graph_axis_horizontal);

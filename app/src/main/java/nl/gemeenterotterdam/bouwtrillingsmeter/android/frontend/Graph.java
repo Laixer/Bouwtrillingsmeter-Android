@@ -1,6 +1,9 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.jjoe64.graphview.GraphView;
@@ -12,6 +15,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.Series;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Random;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
@@ -30,11 +34,7 @@ public abstract class Graph {
     protected GraphView graphView;
 
     private boolean scaleOnHold = false;
-
-    /**
-     * This has to be an ArrayList, since our LineGraphSeries is generic.
-     * Java does not support arrays of generic types.
-     */
+    private long previousTouch = 0;
     protected ArrayList<LineGraphSeries<DataPoint>> series;
 
     /**
@@ -96,6 +96,34 @@ public abstract class Graph {
         LegendRenderer legendRenderer = graphView.getLegendRenderer();
         legendRenderer.setVisible(true);
         legendRenderer.setAlign(LegendRenderer.LegendAlign.TOP);
+
+        setupTouchListener();
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setupTouchListener() {
+        graphView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // Drag check
+                if (event.getPointerCount() > 1) {
+                    scaleOnHold = true;
+                }
+
+                // Double tap check
+                long currentTouch = Calendar.getInstance().getTimeInMillis();
+                if (previousTouch > 0) {
+                    long dt = currentTouch - previousTouch;
+                    int doubleTouchMin = Utility.Resources.getInteger(R.integer.double_touch_ms_min);
+                    int doubleTouchMax = Utility.Resources.getInteger(R.integer.double_touch_ms_max);
+                    if (dt > doubleTouchMin && dt < doubleTouchMax) {
+                        scaleOnHold = false;
+                    }
+                }
+                previousTouch = currentTouch;
+                return false;
+            }
+        });
     }
 
     /**
@@ -179,12 +207,21 @@ public abstract class Graph {
     }
 
     /**
+     * Gesture bit
+     */
+
+
+    /**
+     * Abstract methods
+     */
+
+    /**
      * This method sends datapoints3D to our graph.
      * They get split and passed on to {@Link appendDataToList}.
      *
      * @param dataPoints3D The arraylist.
      */
-    public abstract <T> void sendNewDataToSeries (ArrayList<DataPoint3D<T>> dataPoints3D);
+    public abstract <T> void sendNewDataToSeries(ArrayList<DataPoint3D<T>> dataPoints3D);
 
     /**
      * This method is called when we want to append new datapoints to our graphs.
