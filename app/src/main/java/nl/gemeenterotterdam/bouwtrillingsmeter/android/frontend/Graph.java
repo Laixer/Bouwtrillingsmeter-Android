@@ -117,13 +117,17 @@ public abstract class Graph {
                     int doubleTouchMin = Utility.Resources.getInteger(R.integer.double_touch_ms_min);
                     int doubleTouchMax = Utility.Resources.getInteger(R.integer.double_touch_ms_max);
                     if (dt > doubleTouchMin && dt < doubleTouchMax) {
-                        scaleOnHold = false;
+                        scaleOnHold = !scaleOnHold;
                     }
                 }
                 previousTouch = currentTouch;
                 return false;
             }
         });
+    }
+
+    public void forceScaleOffHold() {
+        scaleOnHold = false;
     }
 
     /**
@@ -209,6 +213,7 @@ public abstract class Graph {
     /**
      * Gesture bit
      */
+
 
 
     /**

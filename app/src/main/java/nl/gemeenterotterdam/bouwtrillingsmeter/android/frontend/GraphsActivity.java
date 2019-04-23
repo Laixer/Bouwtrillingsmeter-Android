@@ -1,5 +1,6 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +27,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DominantFrequenci
 public class GraphsActivity extends AppCompatActivity implements DataIntervalClosedListener {
 
     ViewPager viewPager;
-    private Graph[] graphs;
+    private static Graph[] graphs;
     private GraphsSlideAdapter graphSlideAdapter;
     private DataInterval previousDataInterval;
 
@@ -38,11 +39,17 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphs);
 
-        // Add this as a listener for interval close events and datapoint events
-        DataHandler.addDataIntervalClosedListener(this);
-
         // Create all graphs
-        createAllGraphs();
+        // Add this as a listener for interval close events and datapoint events
+        if (graphs == null) {
+            DataHandler.addDataIntervalClosedListener(this);
+            createAllGraphs();
+        } else {
+            for (Graph g : graphs) {
+                g.forceScaleOffHold();
+                g.pushToGraph();
+            }
+        }
 
         // Viewpager for the tutorial
         // Also link the adapter
@@ -146,5 +153,27 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         graphs[2].sendNewDataToSeries(dataInterval.getDominantFrequenciesAsDataPoints());
         graphs[3].sendNewDataToSeries(dataInterval.frequencyAmplitudes);
         graphs[4].sendNewDataToSeries(dataInterval.getExceedingAsDataPoints());
+    }
+
+    /**
+     * Override the back button pressed to only hide this activity.
+     * It will not close so we can reopen it later.
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MeasuringActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+    }
+
+    /**
+     * Override for when this activity is closed
+     * TODO Make this not trigger when we only rotate!
+     */
+    @Override
+    public void finish() {
+        super.finish();
+        graphs = null;
+        DataHandler.removeDataIntervalClosedListener(this);
     }
 }

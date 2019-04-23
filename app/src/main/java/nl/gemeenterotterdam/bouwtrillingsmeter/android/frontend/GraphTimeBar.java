@@ -52,7 +52,7 @@ public class GraphTimeBar extends Graph {
     @Override
     protected void onCreatedGraphView(GraphView graphView, boolean addSeriesXYZ) {
         super.onCreatedGraphView(graphView, addSeriesXYZ);
-        graphView.getViewport().setScalableY(false);
+//        graphView.getViewport().setScalableY(false);
     }
 
     /**
@@ -137,7 +137,7 @@ public class GraphTimeBar extends Graph {
         // TODO Nu hard coded op 1 seconde interval tijd
         int startIndex = 0;
         if (dataPointsXYZ.get(0).size() > maxHorizontalRange) {
-            startIndex = Math.max(0, (int)horizontalMax - maxHorizontalRange);
+            startIndex = Math.max(0, (int) horizontalMax - maxHorizontalRange);
         }
 
         // Iterate trough each dimension
@@ -171,5 +171,7 @@ public class GraphTimeBar extends Graph {
         // Set the ranges we calculated with margins
         setHorizontalRange(horizontalMin, horizontalMax);
         setVerticalRange(verticalMin, verticalMax, false, true);
+
+        BarGraphSeries<DataPoint> g = new BarGraphSeries<>();
     }
 }

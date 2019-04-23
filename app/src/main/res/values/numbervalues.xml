@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Graphs-->
-    <integer name="graphs_time_line_horizontal_axis_range_max_s">10</integer>
-    <integer name="graphs_time_bar_horizontal_axis_range_max_s">100</integer>
-    <integer name="graphs_time_bar_horizontal_axis_range_min_s">25</integer>
+    <integer name="graphs_time_line_horizontal_axis_range_max_s">5</integer>
+    <integer name="graphs_time_bar_horizontal_axis_range_max_s">10</integer>
+    <integer name="graphs_time_bar_horizontal_axis_range_min_s">3</integer>
     <integer name="graphs_frequency_bound_min">0</integer>
     <integer name="graphs_frequency_bound_max">100</integer>
-    <integer name="graphs_line_max_datapoint_count">3000</integer>
+    <integer name="graphs_line_max_datapoint_count">1050</integer>
     <integer name="graphs_bar_max_datapoint_count">1050</integer>
     <integer name="graphs_axis_margins_multiplier_percentage">20</integer>
 
