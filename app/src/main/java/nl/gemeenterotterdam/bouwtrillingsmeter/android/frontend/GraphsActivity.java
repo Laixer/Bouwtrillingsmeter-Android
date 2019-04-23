@@ -26,8 +26,10 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DominantFrequenci
  */
 public class GraphsActivity extends AppCompatActivity implements DataIntervalClosedListener {
 
+    private static GraphsActivity graphsActivity = null;
+    private static Graph[] graphs = null;
+
     ViewPager viewPager;
-    private static Graph[] graphs;
     private GraphsSlideAdapter graphSlideAdapter;
     private DataInterval previousDataInterval;
 
@@ -41,7 +43,8 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
 
         // Create all graphs
         // Add this as a listener for interval close events and datapoint events
-        if (graphs == null) {
+        if (graphsActivity == null) {
+            graphsActivity = this;
             DataHandler.addDataIntervalClosedListener(this);
             createAllGraphs();
         } else {
@@ -108,7 +111,7 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
      */
     private void createAllGraphs() {
         if (graphs != null) {
-            return;
+            throw new IllegalArgumentException("Creating graphs when graphs is not null.");
         }
 
         // Get constants
@@ -167,13 +170,17 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
     }
 
     /**
-     * Override for when this activity is closed
-     * TODO Make this not trigger when we only rotate!
+     * This finishes the existing activity,
+     * clears the graphs and
+     * removes it as listener.
      */
-    @Override
-    public void finish() {
-        super.finish();
+    public static void forceFinish() {
+        // Call
+        DataHandler.removeDataIntervalClosedListener(graphsActivity);
+        graphsActivity.finish();
+
+        // Set null
         graphs = null;
-        DataHandler.removeDataIntervalClosedListener(this);
+        graphsActivity = null;
     }
 }

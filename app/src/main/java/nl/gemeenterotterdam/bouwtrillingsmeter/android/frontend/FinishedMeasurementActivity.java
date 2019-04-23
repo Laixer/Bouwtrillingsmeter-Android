@@ -15,7 +15,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 /**
  * TODO Javadoc
  */
-public class FinishedMeasurement extends AppCompatActivity {
+public class FinishedMeasurementActivity extends AppCompatActivity {
 
     /**
      * On create.

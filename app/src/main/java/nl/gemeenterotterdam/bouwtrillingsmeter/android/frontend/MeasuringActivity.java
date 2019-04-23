@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import java.util.Date;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
+
 /**
  * @author Thomas Beckers
  * @since 1.0
@@ -118,10 +120,9 @@ public class MeasuringActivity extends AppCompatActivity {
 
                     // Check for (new) backend exceedings
                     // Our iterations pause for one cycle
-                    boolean isCurremtMeasurementExceeded = Backend.isCurrentMeasurementExceeded();
                     Date dateLastExceeding = Backend.getTimeLastExceeding();
                     long millisLastExceeding = 0;
-                    if (dateLastExceeding!= null) {
+                    if (dateLastExceeding != null) {
                         millisLastExceeding = dateLastExceeding.getTime();
                     }
                     long millisCurrent = Calendar.getInstance().getTimeInMillis();
@@ -149,6 +150,7 @@ public class MeasuringActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             textViewMeasuringCenter.setText(textAsFinal);
+                            textViewMeasuringCenter.setGravity(Gravity.CENTER);
                         }
                     });
 
@@ -161,9 +163,7 @@ public class MeasuringActivity extends AppCompatActivity {
 
                 }
             }
-        }).
-
-                start();
+        }).start();
 
     }
 
@@ -237,10 +237,13 @@ public class MeasuringActivity extends AppCompatActivity {
     public void onStopMeasuring() {
         Backend.onPickUpPhoneWhileMeasuring();
 
-        Intent intent = new Intent(getApplicationContext(), FinishedMeasurement.class);
+        Intent intent = new Intent(getApplicationContext(), FinishedMeasurementActivity.class);
         startActivity(intent);
 
         // Close this activity
         finish();
+
+        // Close the graphs activity
+        GraphsActivity.forceFinish();
     }
 }

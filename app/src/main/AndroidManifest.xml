@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".frontend.FinishedMeasurement" />
+        <activity android:name=".frontend.FinishedMeasurementActivity" />
         <activity android:name=".frontend.GraphsActivity" />
         <activity android:name=".frontend.SettingsPageActivity" />
         <activity android:name=".frontend.zSettingsWidgetFinalActivity" />
