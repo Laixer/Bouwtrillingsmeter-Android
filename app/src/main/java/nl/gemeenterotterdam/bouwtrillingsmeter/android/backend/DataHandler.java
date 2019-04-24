@@ -71,8 +71,6 @@ public class DataHandler implements AccelerometerListener {
     public static void removeDataIntervalClosedListener(DataIntervalClosedListener listener) {
         if (dataIntervalClosedListeners.contains(listener)) {
             dataIntervalClosedListeners.remove(listener);
-        } else {
-            throw new IllegalArgumentException("Listener that must be removed was not present in the listeners arraylist.");
         }
     }
 

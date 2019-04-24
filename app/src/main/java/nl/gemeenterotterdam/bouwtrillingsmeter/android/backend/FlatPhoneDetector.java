@@ -26,6 +26,15 @@ class FlatPhoneDetector implements AccelerometerListener {
     }
 
     /**
+     * This gets called when we enter the {@link BackendState#AWAITING_PHONE_FLAT} state.
+     * In this way we double check if we really are flat.
+     * We also trigger the {@link Backend#onPhoneFlat()} event.
+     */
+    static void forceFlatOnTableToFalse() {
+        flatOnTable = false;
+    }
+
+    /**
      * This gets called when our accelerometer measures data.
      * The data does NOT have to be different from the previous dataset.
      * This will just get called every "tick".

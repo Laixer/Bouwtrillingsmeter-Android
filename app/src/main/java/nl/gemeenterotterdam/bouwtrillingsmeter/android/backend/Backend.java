@@ -85,6 +85,7 @@ public class Backend {
                 break;
 
             case AWAITING_PHONE_FLAT:
+                FlatPhoneDetector.forceFlatOnTableToFalse();
                 break;
 
             case MEASURING:

@@ -177,7 +177,9 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
     public static void forceFinish() {
         // Call
         DataHandler.removeDataIntervalClosedListener(graphsActivity);
-        graphsActivity.finish();
+        if (graphsActivity != null) {
+            graphsActivity.finish();
+        }
 
         // Set null
         graphs = null;
