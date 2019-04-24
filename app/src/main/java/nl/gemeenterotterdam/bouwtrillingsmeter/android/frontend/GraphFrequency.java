@@ -20,8 +20,8 @@ public class GraphFrequency extends Graph {
      * TODO Do we need this in the frequency graph?
      */
     private double[] lastFrequencyValue;
-    private int axisMin = Utility.Resources.getInteger(R.integer.graphs_frequency_bound_min);
-    private int axisMax = Utility.Resources.getInteger(R.integer.graphs_frequency_bound_max);
+    private int axisMin = Utility.resources.getInteger(R.integer.graphs_frequency_bound_min);
+    private int axisMax = Utility.resources.getInteger(R.integer.graphs_frequency_bound_max);
 
     private ArrayList<ArrayList<DataPoint>> dataPointsXYZ;
 

@@ -1,9 +1,6 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 import android.content.Context;
-import android.os.Environment;
-
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,8 +8,6 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
 
 /**
  * @author Thomas Beckers
@@ -34,7 +29,6 @@ class StorageControl {
 
         ArrayList<Measurement> measurements = new ArrayList<Measurement>(files.length);
 
-        System.out.println(String.format("We have %s files.", files.length));
         for (File file : files) {
             System.out.println(file.getName());
             Object object = readObject(file.getName());

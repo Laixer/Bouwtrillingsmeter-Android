@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Initialize the utility frontend
-        Utility.ApplicationContext = getApplicationContext();
-        Utility.Resources = getResources();
+        Utility.applicationContext = getApplicationContext();
+        Utility.resources = getResources();
         PreferenceManager.fetchSharedPreferences(this);
 
         // Initialize the backend.

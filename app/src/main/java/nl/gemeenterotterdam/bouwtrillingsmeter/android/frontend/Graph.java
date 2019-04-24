@@ -1,8 +1,6 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -12,15 +10,11 @@ import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import com.jjoe64.graphview.series.Series;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Random;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataInterval;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClosedListener;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
 /**
@@ -52,7 +46,7 @@ public abstract class Graph {
         series = new ArrayList<LineGraphSeries<DataPoint>>();
         for (int i = 0; i < 3; i++) {
             series.add(new LineGraphSeries<DataPoint>());
-            series.get(i).setTitle(Utility.Resources.getStringArray(R.array.graph_legend_xyz_names)[i]);
+            series.get(i).setTitle(Utility.resources.getStringArray(R.array.graph_legend_xyz_names)[i]);
         }
     }
 
@@ -114,8 +108,8 @@ public abstract class Graph {
                 long currentTouch = Calendar.getInstance().getTimeInMillis();
                 if (previousTouch > 0) {
                     long dt = currentTouch - previousTouch;
-                    int doubleTouchMin = Utility.Resources.getInteger(R.integer.double_touch_ms_min);
-                    int doubleTouchMax = Utility.Resources.getInteger(R.integer.double_touch_ms_max);
+                    int doubleTouchMin = Utility.resources.getInteger(R.integer.double_touch_ms_min);
+                    int doubleTouchMax = Utility.resources.getInteger(R.integer.double_touch_ms_max);
                     if (dt > doubleTouchMin && dt < doubleTouchMax) {
                         scaleOnHold = !scaleOnHold;
                     }
@@ -143,7 +137,7 @@ public abstract class Graph {
 
             // Series and line styling
             series.setThickness(4);
-            series.setColor(Utility.ApplicationContext.getResources().getColor(colorResourceAsInteger));
+            series.setColor(Utility.applicationContext.getResources().getColor(colorResourceAsInteger));
         }
     }
 
@@ -194,7 +188,7 @@ public abstract class Graph {
 
         if (addMarginLower || addMarginHigher) {
             double range = Math.abs(from - to);
-            double margin = range * (0.01 * Utility.Resources.getInteger(R.integer.graphs_axis_margins_multiplier_percentage));
+            double margin = range * (0.01 * Utility.resources.getInteger(R.integer.graphs_axis_margins_multiplier_percentage));
             if (addMarginLower) {
                 from -= margin;
             }

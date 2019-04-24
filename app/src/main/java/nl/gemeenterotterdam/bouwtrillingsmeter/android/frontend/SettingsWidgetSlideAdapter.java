@@ -72,8 +72,8 @@ public class SettingsWidgetSlideAdapter extends PagerAdapter {
             Button buttonNo = (Button) view.findViewById(R.id.buttonSettingsSlideNo);
 
             // Assign variables
-            textViewMain.setText(Utility.Resources.getStringArray(R.array.widget_text_main)[position]);
-            textViewExtra.setText(Utility.Resources.getStringArray(R.array.widget_text_extra)[position]);
+            textViewMain.setText(Utility.resources.getStringArray(R.array.widget_text_main)[position]);
+            textViewExtra.setText(Utility.resources.getStringArray(R.array.widget_text_extra)[position]);
 
             // Onclick listeners
             buttonYes.setOnClickListener(new View.OnClickListener() {
@@ -127,8 +127,8 @@ public class SettingsWidgetSlideAdapter extends PagerAdapter {
     public void updateFinalPage() {
         Settings settings = SettingsGenerator.getCurrentSettings();
         int i = 0;
-        textViewsFinalPage[0].setText(Utility.Resources.getStringArray(R.array.category_dropdown_building)[settings.buildingCategory.ordinal()]);
-        textViewsFinalPage[1].setText(Utility.Resources.getStringArray(R.array.category_dropdown_vibration)[settings.vibrationCategory.ordinal()]);
-        textViewsFinalPage[2].setText(Utility.Resources.getString(settings.vibrationSensitive ? R.string.default_yes : R.string.default_no));
+        textViewsFinalPage[0].setText(Utility.resources.getStringArray(R.array.category_dropdown_building)[settings.buildingCategory.ordinal()]);
+        textViewsFinalPage[1].setText(Utility.resources.getStringArray(R.array.category_dropdown_vibration)[settings.vibrationCategory.ordinal()]);
+        textViewsFinalPage[2].setText(Utility.resources.getString(settings.vibrationSensitive ? R.string.default_yes : R.string.default_no));
     }
 }

@@ -2,8 +2,6 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 import java.util.ArrayList;
 
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
-
 /**
  * @author Thomas Beckers
  * @since 1.0

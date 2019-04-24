@@ -20,18 +20,18 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory
  * <p>
  * This class contains some utility functions used throughout the frontend.
  * <p>
- * The application context pointer is stored as {@link #ApplicationContext}.
+ * The application context pointer is stored as {@link #applicationContext}.
  * The application resources pointer is stored as {@link Resources}.
  * Some scripts that are not {@link android.app.Activity} based need these pointers.
  * <p>
  * Image scaling is also implemented in here, since this is reused throughout multiple scripts.
  */
-public class Utility {
+class Utility {
 
     // These get set a startup since using these pointers is becoming a hassle
     // TODO Rethink this design pattern
-    public static Context ApplicationContext;
-    public static Resources Resources;
+    public static Context applicationContext;
+    public static Resources resources;
 
     /**
      * Checks if our screen is in landscape or portrait mode
@@ -39,7 +39,7 @@ public class Utility {
      * @param context The context from which we are checking
      * @return True if portrait, false if landscape
      */
-    public static boolean IsScreenInPortraitMode(Context context) {
+    public static boolean isScreenInPortraitMode(Context context) {
         final int screenOrientation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
         switch (screenOrientation) {
             case Surface.ROTATION_0:
@@ -59,7 +59,7 @@ public class Utility {
      * @param context The context from which we are checking
      * @return The screen width in pixels
      */
-    public static int GetScreenWidth(Context context) {
+    public static int getScreenWidth(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -73,7 +73,7 @@ public class Utility {
      * @param context The context from which we are checking
      * @return The screen height in pixels
      */
-    public static int GetScreenHeight(Context context) {
+    public static int getScreenHeight(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -87,25 +87,25 @@ public class Utility {
      * @param imageView The imageview to update
      * @param bitmap    The bitmap to scale
      */
-    public static void UpdateScaledPhoto(ImageView imageView, Bitmap bitmap) {
+    public static void updateScaledPhoto(ImageView imageView, Bitmap bitmap) {
         // If we have no bitmap we call the default bitmap function
         if (bitmap == null) {
-            UpdateScaledPhotoMissing(imageView);
+            updateScaledPhotoMissing(imageView);
             return;
         }
 
         // Get the ratio as a value between 0 and 1
         double ratio = 0;
-        if (Utility.IsScreenInPortraitMode(ApplicationContext)) {
-            ratio = Resources.getInteger(R.integer.measurement_details_photo_portrait);
+        if (Utility.isScreenInPortraitMode(applicationContext)) {
+            ratio = resources.getInteger(R.integer.measurement_details_photo_portrait);
         } else {
-            ratio = Resources.getInteger(R.integer.measurement_details_photo_landscape);
+            ratio = resources.getInteger(R.integer.measurement_details_photo_landscape);
         }
         ratio = ratio / 100;
 
         // Set the pixel values
-        int desiredWidth = GetScreenWidth(ApplicationContext);
-        int desiredHeight = (int) ((double) (Utility.GetScreenHeight(ApplicationContext) * ratio));
+        int desiredWidth = getScreenWidth(applicationContext);
+        int desiredHeight = (int) ((double) (Utility.getScreenHeight(applicationContext) * ratio));
         imageView.setMaxHeight(desiredHeight);
 
         // Scale image
@@ -120,8 +120,8 @@ public class Utility {
      *
      * @param imageView The image view to update
      */
-    public static void UpdateScaledPhotoMissing(ImageView imageView) {
-        Drawable drawable = Resources.getDrawable(R.drawable.ic_image_not_present);
+    public static void updateScaledPhotoMissing(ImageView imageView) {
+        Drawable drawable = resources.getDrawable(R.drawable.ic_image_not_present);
         imageView.setImageDrawable(drawable);
     }
 
@@ -132,7 +132,7 @@ public class Utility {
      * @return Our string according to the resources: {@link R.array#category_dropdown_building}.
      */
     public static String getBuildingCategoryString(BuildingCategory buildingCategory) {
-        return Utility.Resources.getStringArray(R.array.category_dropdown_building)[buildingCategory.ordinal()];
+        return Utility.resources.getStringArray(R.array.category_dropdown_building)[buildingCategory.ordinal()];
     }
 
     /**
@@ -142,7 +142,7 @@ public class Utility {
      * @return Our string according to the resources: {@link R.array#category_dropdown_vibration}.
      */
     public static String getVibrationCategoryString(VibrationCategory vibrationCategory) {
-        return Utility.Resources.getStringArray(R.array.category_dropdown_vibration)[vibrationCategory.ordinal()];
+        return Utility.resources.getStringArray(R.array.category_dropdown_vibration)[vibrationCategory.ordinal()];
     }
 
     /**

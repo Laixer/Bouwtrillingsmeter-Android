@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
-
 /**
  * @author Thomas Beckers
  * @since 1.0

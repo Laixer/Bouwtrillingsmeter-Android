@@ -12,7 +12,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 
 /**
@@ -67,7 +66,7 @@ public class MainActivityMeasurementListAdapter extends BaseAdapter {
         // Add an actionlistener to this to attempt to take a photo
         // TODO Remove photo bar at all when none is present
         Bitmap photo = measurements.get(position).getPhoto();
-        Utility.UpdateScaledPhoto(imageViewPhoto, photo);
+        Utility.updateScaledPhoto(imageViewPhoto, photo);
 
         return view;
     }

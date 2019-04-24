@@ -1,18 +1,14 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
-import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Settings;
 
 /**
  * TODO Doc
@@ -37,7 +33,7 @@ public class SettingsWidgetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings_widget);
 
         // Calculate variables
-        questionCount = Utility.Resources.getStringArray(R.array.widget_text_main).length;
+        questionCount = Utility.resources.getStringArray(R.array.widget_text_main).length;
         slideCount = questionCount + 1;
         answers = new boolean[questionCount];
         questionsAnsweredCount = 0;

@@ -57,8 +57,8 @@ public class GraphFrequencyDominant extends Graph {
         addAndStyleSeries(constantLine, R.color.graph_dominant_constant_line);
 
         // Fix axis permanently
-        int axisMin = Utility.Resources.getInteger(R.integer.graphs_frequency_bound_min);
-        int axisMax = Utility.Resources.getInteger(R.integer.graphs_frequency_bound_max);
+        int axisMin = Utility.resources.getInteger(R.integer.graphs_frequency_bound_min);
+        int axisMax = Utility.resources.getInteger(R.integer.graphs_frequency_bound_max);
         setHorizontalRange(axisMin, axisMax);
         graphView.getViewport().setMinY(0);
 
@@ -163,7 +163,7 @@ public class GraphFrequencyDominant extends Graph {
 
         // Add and style series
         graphView.addSeries(pointGraphSeries);
-        pointGraphSeries.setColor(Utility.Resources.getColor(R.color.graph_series_color_point));
+        pointGraphSeries.setColor(Utility.resources.getColor(R.color.graph_series_color_point));
         pointGraphSeries.setSize(7);
     }
 }

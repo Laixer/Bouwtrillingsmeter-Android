@@ -6,10 +6,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import java.util.Calendar;
-
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
-
 /**
  * @author Thomas Beckers
  * @since 1.0
@@ -34,7 +30,7 @@ class Accelerometer implements SensorEventListener {
      * @throws UnsupportedOperationException Thrown when the hardware is not supported on this phone.
      */
     public Accelerometer() {
-        sensorManager = (SensorManager) Utility.ApplicationContext.getSystemService(Context.SENSOR_SERVICE);
+        sensorManager = (SensorManager) Backend.applicationContext.getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(sensorType);
         if (sensor != null) {
             sensorManager.registerListener(this, sensor, sensorDelay);

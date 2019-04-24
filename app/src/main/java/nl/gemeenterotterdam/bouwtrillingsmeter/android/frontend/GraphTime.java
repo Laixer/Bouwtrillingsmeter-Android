@@ -15,9 +15,9 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
  */
 public class GraphTime extends Graph {
 
-    private int maxHorizontalRange = Utility.Resources.getInteger(R.integer.graphs_time_line_horizontal_axis_range_max_s);
-    private int maxDataPointCount = Utility.Resources.getInteger(R.integer.graphs_line_max_datapoint_count);
-    private double marginMultiplier = Utility.Resources.getInteger(R.integer.graphs_axis_margins_multiplier_percentage) * 0.01;
+    private int maxHorizontalRange = Utility.resources.getInteger(R.integer.graphs_time_line_horizontal_axis_range_max_s);
+    private int maxDataPointCount = Utility.resources.getInteger(R.integer.graphs_line_max_datapoint_count);
+    private double marginMultiplier = Utility.resources.getInteger(R.integer.graphs_axis_margins_multiplier_percentage) * 0.01;
 
     private ArrayList<ArrayList<DataPoint>> dataPointsXYZ;
 

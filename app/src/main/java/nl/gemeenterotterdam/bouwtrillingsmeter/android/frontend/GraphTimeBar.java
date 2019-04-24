@@ -1,8 +1,5 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
-import android.view.MotionEvent;
-import android.view.View;
-
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
@@ -19,10 +16,10 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
  */
 public class GraphTimeBar extends Graph {
 
-    private int maxHorizontalRange = Utility.Resources.getInteger(R.integer.graphs_time_bar_horizontal_axis_range_max_s);
-    private int minHorizontalRange = Utility.Resources.getInteger(R.integer.graphs_time_bar_horizontal_axis_range_min_s);
-    private int maxDataPointCount = Utility.Resources.getInteger(R.integer.graphs_bar_max_datapoint_count);
-    private double marginMultiplier = Utility.Resources.getInteger(R.integer.graphs_axis_margins_multiplier_percentage) * 0.01;
+    private int maxHorizontalRange = Utility.resources.getInteger(R.integer.graphs_time_bar_horizontal_axis_range_max_s);
+    private int minHorizontalRange = Utility.resources.getInteger(R.integer.graphs_time_bar_horizontal_axis_range_min_s);
+    private int maxDataPointCount = Utility.resources.getInteger(R.integer.graphs_bar_max_datapoint_count);
+    private double marginMultiplier = Utility.resources.getInteger(R.integer.graphs_axis_margins_multiplier_percentage) * 0.01;
 
     private ArrayList<ArrayList<DataPoint>> dataPointsXYZ;
     private ArrayList<BarGraphSeries<DataPoint>> barSeries;
@@ -164,7 +161,7 @@ public class GraphTimeBar extends Graph {
             if (graphView != null) {
                 graphView.addSeries(barSeries.get(dimension));
                 int colorResourceAsInteger = Utility.getColorResourceFromDimension(dimension);
-                barSeries.get(dimension).setColor(Utility.ApplicationContext.getResources().getColor(colorResourceAsInteger));
+                barSeries.get(dimension).setColor(Utility.applicationContext.getResources().getColor(colorResourceAsInteger));
             }
         }
 
