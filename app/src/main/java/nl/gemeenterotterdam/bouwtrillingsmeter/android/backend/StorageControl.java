@@ -14,8 +14,7 @@ import java.util.ArrayList;
  * @since 1.0
  * <p>
  * This class reads and writes files to and from the phones internal storage.
- * TODO Make private, we only need this to clear the saved measurements
- * TODO Implement Query Free Space
+ * TODO Make private, we only need this public for now to clear the saved measurements
  * TODO Implement failsafe handling for measurements if we cant save it for some reason.
  */
 public class StorageControl {
