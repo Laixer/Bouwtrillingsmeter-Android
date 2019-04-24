@@ -1,6 +1,5 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -8,9 +7,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -33,11 +32,12 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
  */
 public class MeasuringActivity extends AppCompatActivity {
 
-    private Activity thisActivity;
     private TextView textViewMeasuringCenter;
     private Button buttonMeasuringShowGraphs;
-    private ProgressBar progressBarMeasuring;
     private boolean isMeasuring;
+    private boolean hasUnlockedGraphs;
+    private long timePreviousTouch = 0;
+    private int totalTapCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +46,17 @@ public class MeasuringActivity extends AppCompatActivity {
 
         // Link elements
         textViewMeasuringCenter = (TextView) findViewById(R.id.textViewMeasuringCenter);
-        progressBarMeasuring = (ProgressBar) findViewById(R.id.progressBarMeasuring);
         buttonMeasuringShowGraphs = (Button) findViewById(R.id.buttonMeasuringShowGraphs);
+        buttonMeasuringShowGraphs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickShowGraphs();
+            }
+        });
 
+        // Set bools
         isMeasuring = false;
+        hasUnlockedGraphs = PreferenceManager.readBooleanPreference(R.string.pref_graph_unlocked_before);
 
         ChangePageToState();
 
@@ -71,14 +78,44 @@ public class MeasuringActivity extends AppCompatActivity {
             }
         });
 
-        // Link show graph
-        Button buttonShowGraphs = (Button) findViewById(R.id.buttonMeasuringShowGraphs);
-        buttonShowGraphs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickShowGraphs();
+    }
+
+    /**
+     * Used to check for the 7 click unlock for the graphs
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
+        if (e.getAction() == MotionEvent.ACTION_DOWN) {
+            System.out.println("TAPcount = " + totalTapCount);
+            long timeCurrentTouch = Calendar.getInstance().getTimeInMillis();
+            long dt = timeCurrentTouch - timePreviousTouch;
+
+            // Reset tap count after not having tapped for 1 second
+            if (dt > 1000) {
+                totalTapCount = 0;
             }
-        });
+
+            // Increment tap count
+            else {
+                totalTapCount++;
+
+                // If we have enough taps, act accordingly
+                if (totalTapCount >= 7) {
+                    PreferenceManager.writeBooleanPreference(R.string.pref_graph_unlocked_before, true);
+                    hasUnlockedGraphs = true;
+
+                    if (isMeasuring) {
+                        buttonMeasuringShowGraphs.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            // Save time
+            timePreviousTouch = timeCurrentTouch;
+        }
+
+        super.onTouchEvent(e);
+        return true;
     }
 
     /**
@@ -88,8 +125,9 @@ public class MeasuringActivity extends AppCompatActivity {
     private void ChangePageToState() {
         // Measuring state
         if (isMeasuring) {
-            buttonMeasuringShowGraphs.setVisibility(View.VISIBLE);
-//            textViewMeasuringCenter.setText(getResources().getString(R.string.measuring_cycle_measuring_now));
+            if (hasUnlockedGraphs) {
+                buttonMeasuringShowGraphs.setVisibility(View.VISIBLE);
+            }
             Backend.debugOnPhoneFlat();
             startMeasuringTextCycle();
         }
@@ -158,7 +196,7 @@ public class MeasuringActivity extends AppCompatActivity {
                     try {
                         Thread.sleep(Constants.measuringTextCycleSleepTimeInMilis);
                     } catch (Exception e) {
-                        System.out.println("Error while sleeping text cycle thread. Message: " + e.getMessage());
+                        //
                     }
 
                 }

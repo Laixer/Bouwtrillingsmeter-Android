@@ -12,7 +12,9 @@
     <string name="default_cancel">Annuleren</string>
 
     <!--User saved variables-->
-    <string name="pref_has_visited_before"></string>
+    <string name="shared_preferences">sharedPreferencesBouwtrillingsmeterAndroid</string>
+    <string name="pref_has_visited_before">hasVisitedBefore</string>
+    <string name="pref_graph_unlocked_before">graphUnlockedBefore</string>
 
     <!--Everything regarding the measurements list-->
     <string name="measurement_list_empty">Je hebt nog geen opgeslagen metingen</string>

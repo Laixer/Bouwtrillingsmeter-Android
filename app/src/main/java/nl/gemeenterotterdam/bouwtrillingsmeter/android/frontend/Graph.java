@@ -211,12 +211,6 @@ public abstract class Graph {
     }
 
     /**
-     * Gesture bit
-     */
-
-
-
-    /**
      * Abstract methods
      */
 

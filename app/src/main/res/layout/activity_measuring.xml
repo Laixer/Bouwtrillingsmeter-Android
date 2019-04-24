@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".frontend.MeasuringActivity">
 
+    android:id="@+id/activityMeasuringMain"
+
     <Button
         android:id="@+id/buttonDebugDeciveOnTable"
         android:layout_width="wrap_content"

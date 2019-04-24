@@ -1,15 +1,12 @@
 Frontend todos
 
 Nu:
-TODO Graph haper check
 
 Later:
+TODO Graph scaling soepel
 TODO Graph slaat niet op als je hem wegklikt en opnieuw opent.
 TODO Graph slaat niet op als je draait
-TODO Graph scaling alleen als je hem niet aanraakt.
-TODO Text measurement cycle mooi
-TODO Graph unlock
-TODO Graph datapoints --> dit is ook veel data. Wat doen we hiermee?
+TODO Graph haper mini check
 TODO Wat als je geen settings file kan creëren met de huidige instellingen?
 TODO Widget opnieuw?
 TODO Grafiek linken aan data!

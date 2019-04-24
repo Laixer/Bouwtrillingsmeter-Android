@@ -28,7 +28,7 @@ public class PreferenceManager {
      */
     public static void fetchSharedPreferences(Context _context) {
         context = _context;
-        sharedPreferences = context.getSharedPreferences(_context.getString(R.string.pref_has_visited_before), Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(_context.getString(R.string.shared_preferences), Context.MODE_PRIVATE);
     }
 
     /**
@@ -55,10 +55,10 @@ public class PreferenceManager {
      */
     public static boolean readBooleanPreference(int resourceID) {
         if (sharedPreferences == null || context == null) {
-            throw new IllegalArgumentException("Our preference manager was never initialized!");
+            throw new IllegalArgumentException("Our preference manager was never initialized.");
         }
 
-        String preference = sharedPreferences.getString(context.getString(R.string.pref_has_visited_before), defaultNull);
+        String preference = sharedPreferences.getString(context.getString(resourceID), defaultNull);
         if (preference.equals(defaultNull) || preference.equals(defaultFalse)) {
             return false;
         } else {
@@ -71,7 +71,7 @@ public class PreferenceManager {
      */
     public static void clearAllPreferences() {
         if (sharedPreferences == null || context == null) {
-            throw new IllegalArgumentException("Our preference manager was never initialized!");
+            throw new IllegalArgumentException("Our preference manager was never initialized.");
         }
 
         sharedPreferences.edit().clear().apply();

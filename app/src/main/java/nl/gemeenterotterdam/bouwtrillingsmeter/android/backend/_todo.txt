@@ -1,4 +1,5 @@
 Nu:
+TODO Neerleggen + oppakken
 
 Daarna:
 TODO Waarom hapert de accelerometer graph steeds?
