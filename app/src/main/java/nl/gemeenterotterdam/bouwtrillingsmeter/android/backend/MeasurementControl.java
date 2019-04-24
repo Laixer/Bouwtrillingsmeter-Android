@@ -18,8 +18,8 @@ class MeasurementControl {
     /**
      * initializes the class for static use
      */
-    public static void initialize() {
-        allMeasurements = new ArrayList<Measurement>();
+    static void initialize() {
+        allMeasurements = StorageControl.retrieveAllSavedMeasurements();
     }
 
     /**
@@ -27,7 +27,7 @@ class MeasurementControl {
      *
      * @return The current measurement
      */
-    public static Measurement getCurrentMeasurement() {
+    static Measurement getCurrentMeasurement() {
         return currentMeasurement;
     }
 
@@ -36,7 +36,7 @@ class MeasurementControl {
      *
      * @return The arraylist containing all measurements
      */
-    public static ArrayList<Measurement> getAllMeasurements() {
+    static ArrayList<Measurement> getAllMeasurements() {
         return allMeasurements;
     }
 
@@ -45,9 +45,8 @@ class MeasurementControl {
      * The UID for this measurement is created by the measuremetn class
      * Also sets this measurement as currentMeasurement
      */
-    public static void createNewMeasurement() {
-        Measurement measurement = new Measurement();
-        currentMeasurement = measurement;
+    static void createNewMeasurement() {
+        currentMeasurement = new Measurement();
     }
 
     /**
@@ -56,7 +55,7 @@ class MeasurementControl {
      * Our {@link #currentMeasurement} stays the same for future reference!
      * This is only overwritten if we redo the entire measurement creation process.
      */
-    public static void onFinishMeasurement() {
+    static void onFinishMeasurement() {
         currentMeasurement.onStopMeasuring();
         allMeasurements.add(currentMeasurement);
     }
@@ -64,7 +63,7 @@ class MeasurementControl {
     /**
      * This aborts our current measurement, then deletes it.
      */
-    public static void abortCurrentMeasurement() {
+    static void abortCurrentMeasurement() {
         if (!currentMeasurement.isClosed()) {
             currentMeasurement.onStopMeasuring();
         }

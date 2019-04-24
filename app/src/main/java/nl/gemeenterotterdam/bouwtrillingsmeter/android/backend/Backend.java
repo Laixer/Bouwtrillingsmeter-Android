@@ -44,7 +44,6 @@ public class Backend {
             AccelerometerControl.initialize();
             DataHandler.initialize();
             FlatPhoneDetector.initialize();
-            StorageControl.retrieveAllSavedMeasurements();
 
             changeBackendState(BackendState.BROWSING_APP);
 
