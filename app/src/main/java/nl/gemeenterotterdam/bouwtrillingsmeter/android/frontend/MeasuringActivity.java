@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ import java.util.Date;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendState;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendStateListener;
 
 /**
  * @author Thomas Beckers
@@ -30,10 +33,11 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
  * When the phone is flat, we begin our measurements.
  * TODO Implement this call to the backend.
  */
-public class MeasuringActivity extends AppCompatActivity {
+public class MeasuringActivity extends AppCompatActivity implements BackendStateListener {
 
     private TextView textViewMeasuringCenter;
     private Button buttonMeasuringShowGraphs;
+    private ProgressBar progressBarMeasuring;
     private boolean isMeasuring;
     private boolean hasUnlockedGraphs;
     private long timePreviousTouch = 0;
@@ -44,6 +48,9 @@ public class MeasuringActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measuring);
 
+        // Set this as listener
+        Backend.addBackendStateListener(this);
+
         // Link elements
         textViewMeasuringCenter = (TextView) findViewById(R.id.textViewMeasuringCenter);
         buttonMeasuringShowGraphs = (Button) findViewById(R.id.buttonMeasuringShowGraphs);
@@ -53,31 +60,13 @@ public class MeasuringActivity extends AppCompatActivity {
                 onClickShowGraphs();
             }
         });
+        progressBarMeasuring = (ProgressBar) findViewById(R.id.progressBarMeasuring);
 
         // Set bools
         isMeasuring = false;
         hasUnlockedGraphs = PreferenceManager.readBooleanPreference(R.string.pref_graph_unlocked_before);
 
-        ChangePageToState();
-
-        // DEBUG
-        // TODO Remove this
-        Button buttonDebugFlat = (Button) findViewById(R.id.buttonDebugDeciveOnTable);
-        buttonDebugFlat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isMeasuring = !isMeasuring;
-                ChangePageToState();
-            }
-        });
-        Button buttonDebugStopMeasuring = (Button) findViewById(R.id.buttonDebugStopMeasuring);
-        buttonDebugStopMeasuring.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onStopMeasuring();
-            }
-        });
-
+        UpdatePageState();
     }
 
     /**
@@ -86,7 +75,6 @@ public class MeasuringActivity extends AppCompatActivity {
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
-            System.out.println("TAPcount = " + totalTapCount);
             long timeCurrentTouch = Calendar.getInstance().getTimeInMillis();
             long dt = timeCurrentTouch - timePreviousTouch;
 
@@ -101,11 +89,11 @@ public class MeasuringActivity extends AppCompatActivity {
 
                 // If we have enough taps, act accordingly
                 if (totalTapCount >= 7) {
-                    PreferenceManager.writeBooleanPreference(R.string.pref_graph_unlocked_before, true);
-                    hasUnlockedGraphs = true;
+                    hasUnlockedGraphs = !hasUnlockedGraphs;
+                    PreferenceManager.writeBooleanPreference(R.string.pref_graph_unlocked_before, hasUnlockedGraphs);
 
                     if (isMeasuring) {
-                        buttonMeasuringShowGraphs.setVisibility(View.VISIBLE);
+                        buttonMeasuringShowGraphs.setVisibility(hasUnlockedGraphs ? View.VISIBLE : View.GONE);
                     }
                 }
             }
@@ -122,13 +110,13 @@ public class MeasuringActivity extends AppCompatActivity {
      * This controls the UI elements and text
      * If isMeasuring: True if we are measuring, false if we are waiting for the device to be placed on the table
      */
-    private void ChangePageToState() {
+    private void UpdatePageState() {
         // Measuring state
         if (isMeasuring) {
             if (hasUnlockedGraphs) {
                 buttonMeasuringShowGraphs.setVisibility(View.VISIBLE);
             }
-            Backend.debugOnPhoneFlat();
+            progressBarMeasuring.setVisibility(View.VISIBLE);
             startMeasuringTextCycle();
         }
 
@@ -136,6 +124,7 @@ public class MeasuringActivity extends AppCompatActivity {
         else {
             textViewMeasuringCenter.setText(getResources().getString(R.string.measuring_place_device_on_table));
             buttonMeasuringShowGraphs.setVisibility(View.GONE);
+            progressBarMeasuring.setVisibility(View.GONE);
         }
     }
 
@@ -202,15 +191,6 @@ public class MeasuringActivity extends AppCompatActivity {
                 }
             }
         }).start();
-
-    }
-
-    /**
-     * This gets called when the device is ready to start measuring
-     */
-    public void OnDevicePlacedOnTable() {
-        isMeasuring = true;
-        ChangePageToState();
     }
 
     /**
@@ -269,19 +249,36 @@ public class MeasuringActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO Javadoc
-     * TODO Remove debug statement here (backend call)
+     * Gets called when the backend state changes
+     * @param newBackendState The new Backend State
      */
-    public void onStopMeasuring() {
-        Backend.onPickUpPhoneWhileMeasuring();
+    @Override
+    public void onBackendStateChanged(BackendState newBackendState) {
+        switch (newBackendState) {
+            case MEASURING:
+                isMeasuring = true;
+                UpdatePageState();
+                break;
 
-        Intent intent = new Intent(getApplicationContext(), FinishedMeasurementActivity.class);
-        startActivity(intent);
+            case FINISHED_MEASUREMENT:
+                Intent intent = new Intent(getApplicationContext(), FinishedMeasurementActivity.class);
+                startActivity(intent);
 
-        // Close this activity
-        finish();
+                // Close this activity
+                finish();
 
-        // Close the graphs activity
-        GraphsActivity.forceFinish();
+                // Close the graphs activity
+                GraphsActivity.forceFinish();
+                break;
+        }
+    }
+
+    /**
+     * Remove this as a listener
+     */
+    @Override
+    public void finish() {
+        Backend.removeBackendStateListener(this);
+        super.finish();
     }
 }

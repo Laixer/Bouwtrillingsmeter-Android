@@ -123,6 +123,7 @@ public class SettingsPageActivity extends AppCompatActivity {
         SettingsGenerator.createSettingsFromCategoryPage(buildingCategory, vibrationCategory, vibrationSensitive);
 
         // Go and remove this from stack
+        Backend.onClickCompleteSettingsSetup();
         Intent intent = new Intent(getApplicationContext(), MeasuringActivity.class);
         startActivity(intent);
         finish();

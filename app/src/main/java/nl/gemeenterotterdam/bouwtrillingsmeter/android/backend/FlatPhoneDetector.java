@@ -8,7 +8,7 @@ import java.util.Calendar;
  */
 class FlatPhoneDetector implements AccelerometerListener {
 
-    private static final float maxDeltaToDetermineFlat = 0.2f;
+    private static final float maxDeltaToDetermineFlat = 0.3f;
     private static final float minDeltaToDeterminePickup = 3;
     private static final long periodInMillis = 300;
     private static final FlatPhoneDetector flatPhoneDetector = new FlatPhoneDetector();
@@ -55,12 +55,11 @@ class FlatPhoneDetector implements AccelerometerListener {
             // Determine
             if (!flatOnTable && d < maxDeltaToDetermineFlat) {
                 flatOnTable = true;
-                System.out.println("Set to true!");
+                Backend.onPhoneFlat();
             } else if (flatOnTable && d > minDeltaToDeterminePickup) {
                 flatOnTable = false;
-                System.out.println("Set to false!");
+                Backend.onPhonePickup();
             }
-//            System.out.println(String.format("Flat on table is now %s. d = %s Min = [%s, %s, %s]. Max = [%s, %s, %s].", flatOnTable, d, periodMin[0], periodMin[1], periodMin[2], periodMax[0], periodMax[1], periodMax[2]));
 
             // Reset the bunch
             periodMin = new float[3];

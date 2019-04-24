@@ -6,25 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".frontend.MeasuringActivity">
 
-    android:id="@+id/activityMeasuringMain"
-
-    <Button
-        android:id="@+id/buttonDebugDeciveOnTable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="[DEBUG] Ready"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/buttonDebugStopMeasuring"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:text="[DEBUG] STOP MEASURING"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <TextView
         android:id="@+id/textViewMeasuringCenter"
         android:layout_width="wrap_content"

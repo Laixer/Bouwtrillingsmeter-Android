@@ -53,6 +53,17 @@ public class Backend {
     }
 
     /**
+     * Removes a given listener
+     *
+     * @param listener The listener
+     */
+    public static void removeBackendStateListener(BackendStateListener listener) {
+        if (backendStateListeners.contains(listener)) {
+            backendStateListeners.remove(listener);
+        }
+    }
+
+    /**
      * Changes the backend state.
      *
      * @param newState The new state.
@@ -74,7 +85,6 @@ public class Backend {
                 break;
 
             case AWAITING_PHONE_FLAT:
-
                 break;
 
             case MEASURING:
@@ -103,7 +113,7 @@ public class Backend {
         // Call all the listeners.
         for (BackendStateListener listener : backendStateListeners) {
             if (listener != null) {
-                 listener.onBackendStateChanged(newState);
+                listener.onBackendStateChanged(newState);
             }
         }
 
@@ -175,13 +185,6 @@ public class Backend {
      */
     public static void onClickCompleteSettingsSetup() {
         changeBackendState(BackendState.AWAITING_PHONE_FLAT);
-    }
-
-    /**
-     * This attempts to end the measurement.
-     */
-    public static void onPickUpPhoneWhileMeasuring() {
-        changeBackendState(BackendState.FINISHED_MEASUREMENT);
     }
 
     /**
@@ -277,9 +280,26 @@ public class Backend {
     }
 
     /**
-     * TODO Remove this debug function.
+     * These are the events called by the backend
      */
-    public static void debugOnPhoneFlat() {
-        changeBackendState(BackendState.MEASURING);
+
+    /**
+     * This is called by our {@link FlatPhoneDetector} when the phone is lying on the table.
+     */
+    static void onPhoneFlat() {
+        if (backendState == BackendState.AWAITING_PHONE_FLAT) {
+            changeBackendState(BackendState.MEASURING);
+        }
     }
+
+    /**
+     * This is called by our {@link FlatPhoneDetector} when the phone is picked up again.
+     */
+    static void onPhonePickup() {
+        if (backendState == BackendState.MEASURING) {
+            changeBackendState(BackendState.FINISHED_MEASUREMENT);
+        }
+    }
+
+
 }
