@@ -58,6 +58,7 @@ class MeasurementControl {
     static void onFinishMeasurement() {
         currentMeasurement.onStopMeasuring();
         allMeasurements.add(currentMeasurement);
+        StorageControl.writeObject(currentMeasurement, currentMeasurement.getUID());
     }
 
     /**
@@ -68,14 +69,6 @@ class MeasurementControl {
             currentMeasurement.onStopMeasuring();
         }
         currentMeasurement = null;
-    }
-
-    /**
-     * This adds the current measurement to the measurement list
-     * This also attempts to save the current measurement to the cache
-     */
-    public static void saveCurrentMeasurement() {
-        StorageControl.writeObject(currentMeasurement, currentMeasurement.getUID());
     }
 
     /**

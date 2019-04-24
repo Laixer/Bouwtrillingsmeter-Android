@@ -13,10 +13,12 @@ import java.util.ArrayList;
  * @author Thomas Beckers
  * @since 1.0
  * <p>
- * This class reads and writes files to and from the phone memory.
+ * This class reads and writes files to and from the phones internal storage.
+ * TODO Make private, we only need this to clear the saved measurements
  * TODO Implement Query Free Space
+ * TODO Implement failsafe handling for measurements if we cant save it for some reason.
  */
-class StorageControl {
+public class StorageControl {
 
     /**
      * This retrieves all saved measurements.
@@ -90,6 +92,19 @@ class StorageControl {
         }
 
         return object;
+    }
+
+    /**
+     * This removes all our internal storage
+     * TODO We might never ever need this
+     */
+    public static void removeAllInternalStorage() {
+        File internalStorage = Backend.applicationContext.getFilesDir();
+        File[] files = internalStorage.listFiles();
+
+        for (File file : files) {
+            Backend.applicationContext.deleteFile(file.getName());
+        }
     }
 
 }

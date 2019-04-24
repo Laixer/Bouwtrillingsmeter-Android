@@ -2,6 +2,7 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 import com.jjoe64.graphview.series.DataPoint;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.Date;
  * This class holds a reference to all {@link DataPoint3D}s within a given time interval.
  * This also holds all result values of calculations (fft etc)
  */
-public class DataInterval {
+public class DataInterval implements Serializable {
 
     public int index;
     public ArrayList<DataPoint3D<Long>> dataPoints3DAcceleration;

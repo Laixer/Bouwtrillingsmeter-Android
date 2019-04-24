@@ -1,5 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
+import java.io.Serializable;
+
 /**
  * @author Thomas Beckers
  * @since 1.0
@@ -8,7 +10,7 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
  * The created instance is also stored in said {@link DataInterval}.
  * It's nothing more than an elegant way of storing data.
  */
-public class DominantFrequencies {
+public class DominantFrequencies implements Serializable {
 
     public float[] frequencies;
     public float[] velocities;

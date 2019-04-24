@@ -158,6 +158,13 @@ public class Backend {
     }
 
     /**
+     * Call this when the application shuts down
+     */
+    public static void onApplicationShutdown() {
+        MeasurementControl.onApplicationShutdown();
+    }
+
+    /**
      * This stops the current measurement.
      */
     protected static void stopMeasuring() {
@@ -195,14 +202,6 @@ public class Backend {
      */
     public static void onClickCompleteSettingsSetup() {
         changeBackendState(BackendState.AWAITING_PHONE_FLAT);
-    }
-
-    /**
-     * This gets called when the user presses the back button or something like that.
-     * TODO Implement some kind of catch mechanism, maybe a popup message?
-     */
-    public static void onUserForceStopMeasurement() {
-        changeBackendState(BackendState.FINISHED_MEASUREMENT);
     }
 
     /**

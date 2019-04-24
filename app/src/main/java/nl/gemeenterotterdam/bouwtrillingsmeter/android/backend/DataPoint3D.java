@@ -1,6 +1,8 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 
+import java.io.Serializable;
+
 /**
  * @author Thomas Beckers
  * @since 1.0
@@ -11,7 +13,7 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
  * All other functions regarding data use an ArrayList of these datapoints.
  */
 
-public class DataPoint3D<X> {
+public class DataPoint3D<X> implements Serializable {
 
     public X xAxisValue;
     public float[] values;

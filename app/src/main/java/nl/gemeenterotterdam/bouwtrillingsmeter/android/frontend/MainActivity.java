@@ -19,6 +19,7 @@ import me.toptas.fancyshowcase.FancyShowCaseView;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageControl;
 
 /**
  * @author Thomas Beckers
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
     // TODO Remove this
     public void onClickDebugClearAppdata(View view) {
         PreferenceManager.clearAllPreferences();
+        StorageControl.removeAllInternalStorage();
     }
 
     /**
