@@ -24,7 +24,7 @@ public class Backend {
     /**
      * Initialize the backend.
      * This has a failsafe so that we can only call this once.
-     * The only way this might happen is if our {@link nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.MainActivity} gets droppoed from memory
+     * The only way this might happen is if our {@link nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.MainActivity} gets dropped from memory
      * in the case of low phone memory.
      */
     public static void initialize() {
@@ -34,6 +34,7 @@ public class Backend {
             MeasurementControl.initialize();
             AccelerometerControl.initialize();
             DataHandler.initialize();
+            FlatPhoneDetector.initialize();
 
             changeBackendState(BackendState.BROWSING_APP);
 

@@ -6,4 +6,4 @@ TODO Een miljoen unittests schrijven
 TODO De backend roept de frontend utility aan. Dit is niet verstandig.
 
 Details
-TODO How to deal with widget x memory clearup deleting the settingspages page?
+TODO How to deal with widget x memory clear-up deleting the settingspages page?
