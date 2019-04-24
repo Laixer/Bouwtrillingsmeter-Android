@@ -1,15 +1,20 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
+import android.content.Context;
+import android.content.res.Resources;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.Utility;
 
 /**
  * @author Thomas Beckers
  * @since 1.0
  * <p>
- * This is used as a main communication unit between the frontend and the backend
- * This will onStartMeasurementCalculations all backend components in one go by firing {@link #initialize()}.
+ * This is used as a main communication unit between the frontend and the backend.
+ * This initializes all in {@link #initialize(Context, Resources)}.
  * <p>
  * TODO Consistency with where we put the edge cases (exception throwers) in the backend state.
  */
@@ -21,20 +26,27 @@ public class Backend {
     private static boolean currentMeasurementExceeded;
     private static Date timeLastExceeding;
 
+    protected static Context applicationContext;
+    protected static Resources resources;
+
     /**
      * Initialize the backend.
      * This has a failsafe so that we can only call this once.
      * The only way this might happen is if our {@link nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.MainActivity} gets dropped from memory
      * in the case of low phone memory.
      */
-    public static void initialize() {
+    public static void initialize(Context applicationContext, Resources resources) {
         if (!initialized) {
+            Backend.applicationContext = applicationContext;
+            Backend.resources = resources;
+
             backendStateListeners = new ArrayList<BackendStateListener>();
 
             MeasurementControl.initialize();
             AccelerometerControl.initialize();
             DataHandler.initialize();
             FlatPhoneDetector.initialize();
+            StorageControl.retrieveAllSavedMeasurements();
 
             changeBackendState(BackendState.BROWSING_APP);
 

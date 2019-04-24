@@ -77,12 +77,9 @@ class MeasurementControl {
      * This adds the current measurement to the measurement list
      * This also attempts to save the current measurement to the cache
      */
-    public static boolean saveCurrentMeasurement() {
-        boolean hasExported = ReadWrite.TryWriteMeasurement(Utility.ApplicationContext, currentMeasurement, currentMeasurement.getUID());
-        return hasExported;
+    public static void saveCurrentMeasurement() {
+        StorageControl.writeObject(currentMeasurement, currentMeasurement.getUID());
     }
-
-
 
     /**
      * This gets called when the program exits
@@ -90,18 +87,8 @@ class MeasurementControl {
      */
     public static void onApplicationShutdown() {
         for (Measurement measurement : allMeasurements) {
-            ReadWrite.TryWriteMeasurement(Utility.ApplicationContext, currentMeasurement, currentMeasurement.getUID());
+            StorageControl.writeObject(measurement, measurement.getUID());
         }
-    }
-
-    /**
-     * Used for DEBUG purposes.
-     * TODO Remove this
-     */
-    public static void setDebugMeasurementList() {
-        allMeasurements = new ArrayList<Measurement>();
-        allMeasurements.add(new Measurement());
-        allMeasurements.add(new Measurement());
     }
 
 }

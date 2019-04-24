@@ -1,5 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
+import java.io.Serializable;
+
 /**
  * @author Thomas Beckers
  * @since 1.0
@@ -7,9 +9,8 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
  * This class holds the settings for our current measurement.
  * These settings are determined in the settings widget, containing:
  * {@link BuildingCategory}, {@link VibrationCategory} and a boolean to indicate if we are {@link #vibrationSensitive}.
- * When checking if we exceed the norms we use these settings in our {@link LimitValueTable} lookup table.
  */
-public class Settings {
+public class Settings implements Serializable {
 
     public static Settings settings;
 

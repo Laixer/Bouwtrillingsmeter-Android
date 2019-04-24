@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialize the backend.
         // This is failsaved, so that we can only do this once.
         // This might only be relevant if we drop our mainactivity from memory in the case of low phone memory.
-        Backend.initialize();
+        Backend.initialize(getApplicationContext(), getResources());
 
         // Toolbar
         toolbar = findViewById(R.id.toolbar);
