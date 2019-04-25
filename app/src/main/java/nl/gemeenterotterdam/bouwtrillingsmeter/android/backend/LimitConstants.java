@@ -47,7 +47,6 @@ public class LimitConstants {
      * Gets our Yv based on the current settings.
      * This is used to correct our velocity.
      * For more info on this, see the SBR Guideline A.
-     * TODO Implement this properly.
      *
      * @param settings The determined settings object
      * @return Yv
@@ -137,7 +136,6 @@ public class LimitConstants {
      * Treat it as a point (x,y) by getting (result[i][0],result[i][1]).
      * [i][0] = frequency value
      * [i][1] = amplitude value
-     * TODO This is not bulletproof. Rethink
      *
      * @param settings The corresponding settings.
      * @return Our 2d float array

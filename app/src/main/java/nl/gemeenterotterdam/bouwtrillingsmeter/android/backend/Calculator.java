@@ -44,8 +44,7 @@ class Calculator {
      * We calculate the area under the graph,
      * then add it to the total in order to get the
      * velocity for each point.
-     * TODO This starts over for each interval
-     * TODO Check this, its buggy
+     * TODO This might make calculation errors
      *
      * @param data values from acceleroMeter (retrieved for 1 second)
      * @return A new arraylist, with a velocity for each point. All time values will be the same as the input data.
@@ -81,19 +80,16 @@ class Calculator {
     /**
      * This creates a new {@link DataPoint3D}.
      * Its values contain the highest absolute velocity in each dimension.
-     * TODO Ontbeun het vinden van de time value
      *
      * @param data The velocities
      * @return A new {@link DataPoint3D}
      */
-    static DataPoint3D<Long> calculateVelocityAbsMaxFromVelocties(ArrayList<DataPoint3D<Long>> data) {
+    static DataPoint3D<Long> calculateVelocityAbsMaxFromVelocties(long time, ArrayList<DataPoint3D<Long>> data) {
         int[] absMaxIndexes = getAbsMaxIndexesInArray3D(data);
         float[] values = new float[3];
         for (int dimension = 0; dimension < 3; dimension++) {
             values[dimension] = Math.abs(data.get(absMaxIndexes[dimension]).values[dimension]);
         }
-
-        long time = data.get(0).xAxisValue;
 
         return new DataPoint3D<Long>(time, values);
     }
@@ -106,7 +102,6 @@ class Calculator {
      */
     static ArrayList<DataPoint3D<Double>> fft(ArrayList<DataPoint3D<Long>> accelerations3D) {
         // Calculate extraction constants
-        // TODO df is incorrect? Overwritten as = 1 seems to work
         int n = accelerations3D.size();
         double sampleRate = n / ((double) Constants.intervalInMilliseconds / 1000);
 

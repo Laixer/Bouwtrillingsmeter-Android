@@ -1,7 +1,5 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
-import com.jjoe64.graphview.series.DataPoint;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -25,7 +23,6 @@ public class DataHandler implements AccelerometerListener {
     private static ArrayList<Integer> indexesToBeCleared;
 
     private static ArrayList<DataIntervalClosedListener> dataIntervalClosedListeners;
-    private static ArrayList<DataPointAccelerometerCreatedListener> dataPointAccelerometerCreatedListeners;
 
     /**
      * This is used as a workaround to implement the {@link AccelerometerListener} interface
@@ -44,7 +41,6 @@ public class DataHandler implements AccelerometerListener {
         listenerInstance = new DataHandler();
 
         dataIntervalClosedListeners = new ArrayList<DataIntervalClosedListener>();
-        dataPointAccelerometerCreatedListeners = new ArrayList<DataPointAccelerometerCreatedListener>();
 
         AccelerometerControl.addListener(listenerInstance);
     }
@@ -74,19 +70,6 @@ public class DataHandler implements AccelerometerListener {
         }
     }
 
-    /**
-     * Adds a {@link DataPointAccelerometerCreatedListener} listener.
-     * This will be called every time a data interval is closed.
-     *
-     * @param listener The listener object. Don't forget to @Override!
-     */
-    public static void addDataPointAccelerometerCreatedListeners(DataPointAccelerometerCreatedListener listener) {
-        if (listener == null) {
-            throw new IllegalArgumentException("Listener to be added to data point created listeners can not be null.");
-        }
-
-        dataPointAccelerometerCreatedListeners.add(listener);
-    }
 
     /**
      * This triggers all listeners, which have the
@@ -98,20 +81,6 @@ public class DataHandler implements AccelerometerListener {
         for (DataIntervalClosedListener listener : dataIntervalClosedListeners) {
             if (listener != null) {
                 listener.onDataIntervalClosed(dataInterval);
-            }
-        }
-    }
-
-    /**
-     * This triggers all listeners, which have the
-     * {@link DataPointAccelerometerCreatedListener} interface.
-     *
-     * @param dataPoint3DTime The datapoint created.
-     */
-    private static void triggerPointAccelerometerCreatedEvent(DataPoint3D<Long> dataPoint3DTime) {
-        for (DataPointAccelerometerCreatedListener listener : dataPointAccelerometerCreatedListeners) {
-            if (listener != null) {
-                listener.onDataPointAccelerometerCreated(dataPoint3DTime);
             }
         }
     }
@@ -159,7 +128,9 @@ public class DataHandler implements AccelerometerListener {
         MeasurementControl.getCurrentMeasurement().addDataInterval(currentDataInterval);
 
         // Clear abundant datapoints in our current measurement.
-        clearAbundantDataPoints();
+        if (Constants.clearAbundantDataPoints) {
+            clearAbundantDataPoints();
+        }
 
         currentDataInterval = new DataInterval(currentDataIntervalIndex);
         currentDataIntervalIndex += 1;
@@ -212,11 +183,10 @@ public class DataHandler implements AccelerometerListener {
      * <p>
      * This also checks if we exceeded any limit.
      * If so, this calls {@link Backend#onExceedLimit()}.
-     * TODO Will this break if we attempt to delete any datapoints while calculations are in progress?
      *
      * @param dataInterval The data interval.
      */
-    private static void performIntervalCalculations(DataInterval dataInterval) {
+    private static void performIntervalCalculations(final DataInterval dataInterval) {
         // Edge cases
         if (dataInterval.dataPoints3DAcceleration.size() == 0) {
             throw new IllegalArgumentException("No datapoints were added to this interval.");
@@ -229,9 +199,12 @@ public class DataHandler implements AccelerometerListener {
                 // Lock dataInterval
                 thisDataInterval.onThreadCalculationsStart();
 
+                // Get time
+                long dataIntervalStartTime = dataInterval.dateStart.getTime();
+
                 // Calculate time-domain velocities
                 ArrayList<DataPoint3D<Long>> velocities = Calculator.calculateVelocityFromAcceleration(thisDataInterval.dataPoints3DAcceleration);
-                DataPoint3D<Long> velocitiesAbsMax = Calculator.calculateVelocityAbsMaxFromVelocties(velocities);
+                DataPoint3D<Long> velocitiesAbsMax = Calculator.calculateVelocityAbsMaxFromVelocties(dataIntervalStartTime, velocities);
                 thisDataInterval.velocities = velocities;
                 thisDataInterval.velocitiesAbsMax = velocitiesAbsMax;
 
@@ -282,9 +255,6 @@ public class DataHandler implements AccelerometerListener {
             // Push the datapoint
             DataPoint3D<Long> dataPoint3DTime = new DataPoint3D<Long>(dataPointTime, x, y, z);
             currentDataInterval.addDataPoint3D(dataPoint3DTime);
-
-            // Trigger datapoint event
-            triggerPointAccelerometerCreatedEvent(dataPoint3DTime);
         }
     }
 

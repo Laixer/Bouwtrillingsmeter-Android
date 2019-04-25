@@ -160,7 +160,6 @@ public class Backend {
 
     /**
      * Call this when the application shuts down
-     * TODO Implement
      */
     public static void onApplicationShutdown() {
         MeasurementControl.onApplicationShutdown();

@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
         // Temporarily disable the fab
         fab.setEnabled(false);
 
+        // Launch the next activity
         Intent intent;
         if (!PreferenceManager.readBooleanPreference(R.string.pref_has_visited_before)) {
             intent = new Intent(getApplicationContext(), FirstVisitTutorialActivity.class);
