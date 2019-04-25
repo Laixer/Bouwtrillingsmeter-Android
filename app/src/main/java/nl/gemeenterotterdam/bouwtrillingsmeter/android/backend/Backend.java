@@ -128,6 +128,9 @@ public class Backend {
             }
         }
 
+        // TODO Remove this
+        System.out.println(String.format("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tChanged from %s to %s", oldState, newState));
+
     }
 
     /**

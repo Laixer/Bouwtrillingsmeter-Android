@@ -82,13 +82,13 @@ public class SettingsPageActivity extends AppCompatActivity {
         });
 
         // Push settings
-        pushGeneratedSettings();
+        setFieldsToGeneratedSettings();
     }
 
     /**
      * This pushes our parameters from the widget once we confirm the widget.
      */
-    private void pushGeneratedSettings() {
+    private void setFieldsToGeneratedSettings() {
         if (SettingsGenerator.getCurrentSettings() != null) {
             spinnerCategoryBuilding.setSelection(SettingsGenerator.getCurrentSettings().buildingCategory.ordinal(), true);
             spinnerCategoryVibration.setSelection(SettingsGenerator.getCurrentSettings().vibrationCategory.ordinal(), true);
@@ -193,6 +193,6 @@ public class SettingsPageActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        pushGeneratedSettings();
+        setFieldsToGeneratedSettings();
     }
 }

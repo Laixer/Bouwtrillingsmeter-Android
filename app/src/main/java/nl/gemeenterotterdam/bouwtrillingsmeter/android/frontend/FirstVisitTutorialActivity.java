@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 
 public class FirstVisitTutorialActivity extends AppCompatActivity {
 
@@ -120,11 +121,13 @@ public class FirstVisitTutorialActivity extends AppCompatActivity {
      * This gets called when we skip, finish or swipe out of our tutorial.
      * This also saves that we have seen the tutorial at least once.
      * This closes this activity so it does not end up in the back stack.
-     *
      */
     private void onCompleteTutorial() {
         // Write our preference
         PreferenceManager.writeBooleanPreference(R.string.pref_has_visited_before, true);
+
+        // Tell the backend we are creating a new measurement
+        Backend.onClickCreateNewMeasurement();
 
         // Launch next intent
         Intent intent = new Intent(getApplicationContext(), SettingsPageActivity.class);

@@ -40,9 +40,15 @@ public class SettingsGenerator {
      * @param buildingCategory   The building category as enum
      * @param vibrationCategory  The vibration category as enum
      * @param vibrationSensitive A boolean indicating if we are dealing with a vibration sensitive building
+     * @return true if a new valid settings file was created and stored
      */
-    public static void createSettingsFromCategoryPage(BuildingCategory buildingCategory, VibrationCategory vibrationCategory, boolean vibrationSensitive) {
+    public static boolean createSettingsFromCategoryPage(BuildingCategory buildingCategory, VibrationCategory vibrationCategory, boolean vibrationSensitive) {
+        if (buildingCategory == BuildingCategory.NONE || vibrationCategory == VibrationCategory.NONE) {
+            return false;
+        }
+
         setCurrentSettings(new Settings(buildingCategory, vibrationCategory, vibrationSensitive));
+        return true;
     }
 
     /**

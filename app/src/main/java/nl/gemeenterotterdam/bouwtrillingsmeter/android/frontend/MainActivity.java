@@ -156,8 +156,10 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
         startActivity(intent);
     }
 
-    // Gets called when the clear preference debug button is clicked
-    // TODO Remove this
+    /**
+     * Gets called when the clear preference debug button is clicked
+     * TODO Remove this
+     */
     public void onClickDebugClearAppdata(View view) {
         PreferenceManager.clearAllPreferences();
         StorageControl.removeAllInternalStorage();

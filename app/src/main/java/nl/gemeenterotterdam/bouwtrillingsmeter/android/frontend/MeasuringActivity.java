@@ -38,7 +38,6 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
 
     private TextView textViewMeasuringCenter;
     private Button buttonMeasuringShowGraphs;
-    private ProgressBar progressBarMeasuring;
     private boolean isMeasuring;
     private boolean hasUnlockedGraphs;
     private long timePreviousTouch = 0;
@@ -61,7 +60,6 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
                 onClickShowGraphs();
             }
         });
-        progressBarMeasuring = (ProgressBar) findViewById(R.id.progressBarMeasuring);
 
         // Set bools
         isMeasuring = false;
@@ -103,6 +101,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
                     Snackbar.make(view, getResources().getString(resource), Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
+                    // Reset the total tap count
                     totalTapCount = 0;
                 }
             }
