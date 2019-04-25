@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -95,10 +96,18 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
                     if (isMeasuring) {
                         buttonMeasuringShowGraphs.setVisibility(hasUnlockedGraphs ? View.VISIBLE : View.GONE);
                     }
+
+                    // Show snackbar
+                    View view = findViewById(R.id.textViewMeasuringCenter);
+                    int resource = hasUnlockedGraphs ? R.string.measuring_snackbar_unlocked_graphs : R.string.measuring_snackbar_relocked_graphs;
+                    Snackbar.make(view, getResources().getString(resource), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+
+                    totalTapCount = 0;
                 }
             }
 
-            // Save time
+            // Save the time
             timePreviousTouch = timeCurrentTouch;
         }
 
@@ -116,7 +125,6 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
             if (hasUnlockedGraphs) {
                 buttonMeasuringShowGraphs.setVisibility(View.VISIBLE);
             }
-            progressBarMeasuring.setVisibility(View.VISIBLE);
             startMeasuringTextCycle();
         }
 
@@ -124,7 +132,6 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
         else {
             textViewMeasuringCenter.setText(getResources().getString(R.string.measuring_place_device_on_table));
             buttonMeasuringShowGraphs.setVisibility(View.GONE);
-            progressBarMeasuring.setVisibility(View.GONE);
         }
     }
 
@@ -250,6 +257,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
 
     /**
      * Gets called when the backend state changes
+     *
      * @param newBackendState The new Backend State
      */
     @Override

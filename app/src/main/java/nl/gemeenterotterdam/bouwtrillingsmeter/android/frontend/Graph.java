@@ -20,6 +20,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 /**
  * This class holds an abstract for a graph.
  * It is used to avoid loads of duplicate code.
+ * TODO This only updates graphs upon receiving new data
  * TODO Optimize by only writing if we are visible
  */
 public abstract class Graph {

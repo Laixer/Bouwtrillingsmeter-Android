@@ -90,6 +90,8 @@
     <string name="measuring_cycle_exceeding_detected_now">Overschrijding gedecteerd! Laat de telefoon liggen...</string>
     <string name="measuring_show_graphs">Laat grafieken zien</string>
     <string name="measuring_alert_dialog">Wilt u de meting annuleren?</string>
+    <string name="measuring_snackbar_unlocked_graphs">Grafieken zijn ingeschakeld.</string>
+    <string name="measuring_snackbar_relocked_graphs">Grafieken zijn uitgeschakeld.</string>
 
     <!--FinishedMeasurementActivity page-->
     <string name="finished_measurement_completed">Meting voltooid!</string>
