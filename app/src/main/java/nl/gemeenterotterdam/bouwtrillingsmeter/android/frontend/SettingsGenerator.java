@@ -46,7 +46,6 @@ public class SettingsGenerator {
     }
 
     /**
-     * Overwrites our current settings file based on the outcome our {@link zSettingsAndTutorialPagesControl}.
      * This calls the {@link nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend} to attempt to overwrite the settings.
      * TODO Implement this. Remove placeholder Settings parameters.
      *

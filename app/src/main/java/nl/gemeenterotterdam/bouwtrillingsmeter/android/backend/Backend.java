@@ -13,13 +13,11 @@ import java.util.Date;
  * <p>
  * This is used as a main communication unit between the frontend and the backend.
  * This initializes all in {@link #initialize(Context, Resources)}.
- * <p>
- * TODO Consistency with where we put the edge cases (exception throwers) in the backend state.
  */
 public class Backend {
 
     private static BackendState backendState;
-    private static ArrayList<BackendStateListener> backendStateListeners = new ArrayList<BackendStateListener>();
+    private static ArrayList<BackendListener> backendListeners = new ArrayList<BackendListener>();
     private static boolean initialized = false;
     private static boolean currentMeasurementExceeded;
     private static Date timeLastExceeding;
@@ -53,11 +51,11 @@ public class Backend {
      * Adds a backend state listener.
      * Do not forget to override the interface method!
      *
-     * @param backendStateListener The object that implements the {@link BackendStateListener} interface.
+     * @param backendListener The object that implements the {@link BackendListener} interface.
      */
-    public static void addBackendStateListener(BackendStateListener backendStateListener) {
-        if (backendStateListener != null) {
-            backendStateListeners.add(backendStateListener);
+    public static void addBackendStateListener(BackendListener backendListener) {
+        if (backendListener != null) {
+            backendListeners.add(backendListener);
         }
     }
 
@@ -66,9 +64,9 @@ public class Backend {
      *
      * @param listener The listener
      */
-    public static void removeBackendStateListener(BackendStateListener listener) {
-        if (backendStateListeners.contains(listener)) {
-            backendStateListeners.remove(listener);
+    public static void removeBackendStateListener(BackendListener listener) {
+        if (backendListeners.contains(listener)) {
+            backendListeners.remove(listener);
         }
     }
 
@@ -124,7 +122,7 @@ public class Backend {
         }
 
         // Call all the listeners.
-        for (BackendStateListener listener : backendStateListeners) {
+        for (BackendListener listener : backendListeners) {
             if (listener != null) {
                 listener.onBackendStateChanged(newState);
             }
@@ -162,34 +160,14 @@ public class Backend {
 
     /**
      * Call this when the application shuts down
+     * TODO Implement
      */
     public static void onApplicationShutdown() {
         MeasurementControl.onApplicationShutdown();
     }
 
     /**
-     * This stops the current measurement.
-     */
-    protected static void stopMeasuring() {
-        // Edge cases
-        if (MeasurementControl.getCurrentMeasurement() == null) {
-            throw new IllegalStateException("No measurement object was present.");
-        }
-
-        if (MeasurementControl.getCurrentMeasurement().isClosed()) {
-            throw new IllegalStateException("The current measurement object is already closed. Closing it again is not possible.");
-        }
-
-        changeBackendState(BackendState.FINISHED_MEASUREMENT);
-    }
-
-    /**
-     * These functions are called from the frontend
-     * TODO Make sure all are in the right place, some functions are internal.
-     */
-
-    /**
-     * TODO Javadoc
+     * This gets called when we click a "create new measurement" button in the frontend.
      */
     public static void onClickCreateNewMeasurement() {
         if (MeasurementControl.getCurrentMeasurement() != null && !MeasurementControl.getCurrentMeasurement().isClosed()) {
@@ -200,8 +178,8 @@ public class Backend {
     }
 
     /**
-     * TODO Javadoc
-     * TODO Implement failsafe for invalid settings file
+     * This gets called when our frontend created a settings file.
+     * We assume that this settings file is always valid.
      */
     public static void onClickCompleteSettingsSetup() {
         changeBackendState(BackendState.AWAITING_PHONE_FLAT);
@@ -214,11 +192,6 @@ public class Backend {
     public static void onDoneWithMeasurement() {
         changeBackendState(BackendState.BROWSING_APP);
     }
-
-    /**
-     * These are the getters called by the frontend
-     * TODO Move the measuremnet things to measurementcontrol?
-     */
 
     /**
      * @return True if our current measurement has exceeded a limit.
@@ -283,17 +256,16 @@ public class Backend {
     /**
      * This gets called by the {@link DataHandler} if we exceed a limit.
      * The frontend should refer to this function in some way.
-     * TODO Make this an event for the frontend?
      */
     protected static void onExceedLimit() {
         System.out.println("Exceeded limit!");
         currentMeasurementExceeded = true;
         timeLastExceeding = Calendar.getInstance().getTime();
-    }
 
-    /**
-     * These are the events called by the backend
-     */
+        for (BackendListener listener : backendListeners) {
+            listener.onExceededLimit();
+        }
+    }
 
     /**
      * This is called by our {@link FlatPhoneDetector} when the phone is lying on the table.

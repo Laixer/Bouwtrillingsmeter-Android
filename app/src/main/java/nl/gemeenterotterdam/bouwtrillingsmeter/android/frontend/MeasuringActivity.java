@@ -20,7 +20,7 @@ import java.util.Date;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendState;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendStateListener;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendListener;
 
 /**
  * @author Thomas Beckers
@@ -33,7 +33,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendStateListe
  * When the phone is flat, we begin our measurements.
  * TODO Implement this call to the backend.
  */
-public class MeasuringActivity extends AppCompatActivity implements BackendStateListener {
+public class MeasuringActivity extends AppCompatActivity implements BackendListener {
 
     private TextView textViewMeasuringCenter;
     private Button buttonMeasuringShowGraphs;
@@ -271,6 +271,10 @@ public class MeasuringActivity extends AppCompatActivity implements BackendState
                 GraphsActivity.forceFinish();
                 break;
         }
+    }
+
+    @Override
+    public void onExceededLimit() {
     }
 
     /**

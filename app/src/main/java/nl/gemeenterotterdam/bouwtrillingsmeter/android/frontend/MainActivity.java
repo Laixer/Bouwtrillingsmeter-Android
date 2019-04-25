@@ -22,7 +22,7 @@ import me.toptas.fancyshowcase.FancyShowCaseView;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendState;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendStateListener;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendListener;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageControl;
 
@@ -39,7 +39,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageControl;
  * <p>
  * Our first visit will highlight the '+ fab' using the {@link #showcaseFirstVisit()} function.
  */
-public class MainActivity extends AppCompatActivity implements BackendStateListener {
+public class MainActivity extends AppCompatActivity implements BackendListener {
 
     /**
      * TODO This is a hacky fix. Clean this up
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements BackendStateListe
 
     Toolbar toolbar;
     ListView listViewMeasurements;
+    FloatingActionButton fab;
     MainActivityMeasurementListAdapter listViewMeasurementsAdapter;
     ArrayList<Measurement> measurements;
 
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements BackendStateListe
         setSupportActionBar(toolbar);
 
         // Floating action button to start a new measurement
-        FloatingActionButton fab = findViewById(R.id.fabNewMeasurement);
+        fab = findViewById(R.id.fabNewMeasurement);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,12 +133,16 @@ public class MainActivity extends AppCompatActivity implements BackendStateListe
     public void onResume() {
         super.onResume();
         listViewMeasurementsAdapter.onDatasetChanged();
+        fab.setEnabled(true);
     }
 
     /**
      * This starts our tutorial OR starts our settings widget
      */
     public void onClickCreateNewMeasurementFab() {
+        // Temporarily disable the fab
+        fab.setEnabled(false);
+
         Intent intent;
         if (!PreferenceManager.readBooleanPreference(R.string.pref_has_visited_before)) {
             intent = new Intent(getApplicationContext(), FirstVisitTutorialActivity.class);
@@ -217,6 +222,10 @@ public class MainActivity extends AppCompatActivity implements BackendStateListe
                 }
             });
         }
+    }
+
+    @Override
+    public void onExceededLimit() {
     }
 
     /**

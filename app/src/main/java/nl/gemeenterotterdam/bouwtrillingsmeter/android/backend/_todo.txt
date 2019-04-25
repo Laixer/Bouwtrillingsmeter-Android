@@ -3,6 +3,7 @@ Nu:
 Daarna:
 TODO Waarom hapert de accelerometer graph steeds?
 TODO Hoe gaan we om met een gepasseerd interval zonder dat er een datapoint binnen komt? Dit wordt niet gecalled dan!
+TODO Bitmap serialize
+
+Details:
 TODO Optimize for arraylist size x datapoints per interval
-TODO Save bitmaps
-TODO Load bitmaps
