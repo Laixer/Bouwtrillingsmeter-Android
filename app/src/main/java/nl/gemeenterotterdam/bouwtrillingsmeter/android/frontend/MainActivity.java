@@ -41,11 +41,6 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageControl;
  */
 public class MainActivity extends AppCompatActivity implements BackendListener {
 
-    /**
-     * TODO This is a hacky fix. Clean this up
-     */
-    public static MainActivity mainActivity;
-
     Toolbar toolbar;
     ListView listViewMeasurements;
     FloatingActionButton fab;
@@ -53,8 +48,6 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mainActivity = this;
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -133,6 +126,13 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
         super.onResume();
         listViewMeasurementsAdapter.onDatasetChanged();
         fab.setEnabled(true);
+
+        // Push snackbar if we just closed a measurement
+        if (PreferenceManager.readBooleanPreference(R.string.pref_internal_measurement_finished)) {
+            Snackbar.make(listViewMeasurements, getResources().getString(R.string.finished_measurement_exit_save_confirm), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            PreferenceManager.writeBooleanPreference(R.string.pref_internal_measurement_finished, false);
+        }
     }
 
     /**
@@ -179,20 +179,6 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
         showCaseView.backgroundColor(getResources().getColor(R.color.first_visit_popup_background));
 
         showCaseView.build().show();
-    }
-
-    /**
-     * TODO This is a hacky fix
-     * Pushes a snackbar onto our activity.
-     *
-     * @param message The message to display.
-     */
-    public static void pushSnackbar(String message) {
-        // Push a snackbar
-
-        View view = mainActivity.findViewById(R.id.listViewMeasurements);
-        Snackbar.make(view, mainActivity.getResources().getString(R.string.finished_measurement_exit_save_confirm), Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
     }
 
     /**

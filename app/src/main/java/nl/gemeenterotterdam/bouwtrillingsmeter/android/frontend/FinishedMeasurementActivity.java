@@ -60,14 +60,14 @@ public class FinishedMeasurementActivity extends AppCompatActivity {
     private void onExitThisActivity() {
         Backend.onDoneWithMeasurement();
 
+        // Flag the mainactivity so it displays a snackbar
+        PreferenceManager.writeBooleanPreference(R.string.pref_internal_measurement_finished, true);
+
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
 
         // Close this activity
         finish();
-
-        // Trigger snackbar
-        MainActivity.pushSnackbar(getResources().getString(R.string.finished_measurement_exit_save_confirm));
     }
 }
