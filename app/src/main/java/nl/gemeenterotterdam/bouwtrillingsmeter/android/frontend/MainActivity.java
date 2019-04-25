@@ -1,5 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +21,8 @@ import java.util.ArrayList;
 import me.toptas.fancyshowcase.FancyShowCaseView;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendState;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendStateListener;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageControl;
 
@@ -34,10 +39,10 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageControl;
  * <p>
  * Our first visit will highlight the '+ fab' using the {@link #showcaseFirstVisit()} function.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BackendStateListener {
 
     /**
-     * TODO This is a hacky fix. Make this clean.
+     * TODO This is a hacky fix. Clean this up
      */
     public static MainActivity mainActivity;
 
@@ -53,15 +58,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initialize the backend and set this as a listener
+        Backend.addBackendStateListener(this);
+        Backend.initialize(getApplicationContext(), getResources());
+
         // Initialize the utility frontend
         Utility.applicationContext = getApplicationContext();
         Utility.resources = getResources();
         PreferenceManager.fetchSharedPreferences(this);
-
-        // Initialize the backend.
-        // This is failsaved, so that we can only do this once.
-        // This might only be relevant if we drop our mainactivity from memory in the case of low phone memory.
-        Backend.initialize(getApplicationContext(), getResources());
 
         // Toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -184,4 +188,43 @@ public class MainActivity extends AppCompatActivity {
                 .setAction("Action", null).show();
     }
 
+    /**
+     * This checks if we have the proper sensors in our phone.
+     * This only responds to {@link BackendState#UNSUPPORTED_HARDWARE}.
+     *
+     * @param newBackendState The backend state
+     */
+    @Override
+    public void onBackendStateChanged(BackendState newBackendState) {
+        if (newBackendState == BackendState.UNSUPPORTED_HARDWARE) {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = this.getLayoutInflater();
+
+            View dialogView = inflater.inflate(R.layout.alert_dialog_unsupported_hardware, null);
+            dialogBuilder.setView(dialogView);
+
+            dialogBuilder.setTitle(getResources().getString(R.string.alert_dialog_unsupported_hardware));
+            final Dialog dialog = dialogBuilder.create();
+            dialog.show();
+
+            // Buttons
+            dialogView.findViewById(R.id.buttonAlertDialogUnsupportedHardwareOk).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    finish();
+                    System.exit(0);
+                }
+            });
+        }
+    }
+
+    /**
+     * This removes the mainactivity as a backend listener.
+     */
+    @Override
+    public void finish() {
+        Backend.removeBackendStateListener(this);
+        super.finish();
+    }
 }

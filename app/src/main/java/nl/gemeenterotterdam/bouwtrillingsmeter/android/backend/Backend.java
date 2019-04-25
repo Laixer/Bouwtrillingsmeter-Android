@@ -19,7 +19,7 @@ import java.util.Date;
 public class Backend {
 
     private static BackendState backendState;
-    private static ArrayList<BackendStateListener> backendStateListeners;
+    private static ArrayList<BackendStateListener> backendStateListeners = new ArrayList<BackendStateListener>();
     private static boolean initialized = false;
     private static boolean currentMeasurementExceeded;
     private static Date timeLastExceeding;
@@ -37,8 +37,6 @@ public class Backend {
         if (!initialized) {
             Backend.applicationContext = applicationContext;
             Backend.resources = resources;
-
-            backendStateListeners = new ArrayList<BackendStateListener>();
 
             MeasurementControl.initialize();
             AccelerometerControl.initialize();
@@ -58,7 +56,9 @@ public class Backend {
      * @param backendStateListener The object that implements the {@link BackendStateListener} interface.
      */
     public static void addBackendStateListener(BackendStateListener backendStateListener) {
-        backendStateListeners.add(backendStateListener);
+        if (backendStateListener != null) {
+            backendStateListeners.add(backendStateListener);
+        }
     }
 
     /**
@@ -117,6 +117,9 @@ public class Backend {
             case FINISHED_MEASUREMENT:
                 DataHandler.stopMeasuring();
                 MeasurementControl.onFinishMeasurement();
+                break;
+
+            case UNSUPPORTED_HARDWARE:
                 break;
         }
 
@@ -310,5 +313,12 @@ public class Backend {
         }
     }
 
+    /**
+     * This triggers when we don't have sufficient hardware.
+     *
+     */
+    static void onUnsupportedHardware() {
+        changeBackendState(BackendState.UNSUPPORTED_HARDWARE);
+    }
 
 }

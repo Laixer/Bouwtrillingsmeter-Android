@@ -1,5 +1,4 @@
 Nu:
-TODO Proper file storage
 
 Daarna:
 TODO Waarom hapert de accelerometer graph steeds?

@@ -15,7 +15,7 @@
         tools:layout_editor_absoluteX="8dp">
 
         <Button
-            android:id="@+id/buttonAlertDialogYes"
+            android:id="@+id/buttonAlertDialogCancelMeasurementYes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
@@ -26,7 +26,7 @@
             tools:layout_editor_absoluteY="493dp" />
 
         <Button
-            android:id="@+id/buttonAlertDialogNo"
+            android:id="@+id/buttonAlertDialogCancelMeasurementNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"

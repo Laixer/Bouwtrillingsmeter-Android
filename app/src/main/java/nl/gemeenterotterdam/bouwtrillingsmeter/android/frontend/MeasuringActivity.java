@@ -211,22 +211,22 @@ public class MeasuringActivity extends AppCompatActivity implements BackendState
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
 
-        View dialogView = inflater.inflate(R.layout.alert_dialog, null);
+        View dialogView = inflater.inflate(R.layout.alert_dialog_cancel_measurement, null);
         dialogBuilder.setView(dialogView);
 
-        dialogBuilder.setTitle(getResources().getString(R.string.measuring_backbutton_text));
+        dialogBuilder.setTitle(getResources().getString(R.string.measuring_alert_dialog));
         final Dialog dialog = dialogBuilder.create();
         dialog.show();
 
         // Buttons
-        dialogView.findViewById(R.id.buttonAlertDialogYes).setOnClickListener(new View.OnClickListener() {
+        dialogView.findViewById(R.id.buttonAlertDialogCancelMeasurementYes).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onCancelMeasurement();
                 dialog.dismiss();
             }
         });
-        dialogView.findViewById(R.id.buttonAlertDialogNo).setOnClickListener(new View.OnClickListener() {
+        dialogView.findViewById(R.id.buttonAlertDialogCancelMeasurementNo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();

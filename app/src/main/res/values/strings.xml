@@ -17,7 +17,7 @@
     <string name="pref_graph_unlocked_before">graphUnlockedBefore</string>
 
     <!--Everything regarding the measurements list-->
-    <string name="measurement_list_empty">Je hebt nog geen opgeslagen metingen</string>
+    <string name="measurement_list_empty">U heeft nog geen opgeslagen metingen,</string>
 
     <!--Everything regarding the measurement properties-->
     <string name="measurement_name_default">Naam van de meting</string>
@@ -89,7 +89,7 @@
     <string name="measuring_cycle_exceeding_detected">Er zijn overschrijdingen gedetecteerd...</string>
     <string name="measuring_cycle_exceeding_detected_now">Overschrijding gedecteerd! Laat de telefoon liggen...</string>
     <string name="measuring_show_graphs">Laat grafieken zien</string>
-    <string name="measuring_backbutton_text">Wilt u de meting annuleren?</string>
+    <string name="measuring_alert_dialog">Wilt u de meting annuleren?</string>
 
     <!--FinishedMeasurementActivity page-->
     <string name="finished_measurement_completed">Meting voltooid!</string>
@@ -125,4 +125,8 @@
         <item>Y</item>
         <item>Z</item>
     </string-array>
+
+    <!--Unsupported Hardware-->
+    <string name="alert_dialog_unsupported_hardware">Uw telefoon mist essentiële hardware. De applicatie zal nu sluiten.</string>
+
 </resources>
