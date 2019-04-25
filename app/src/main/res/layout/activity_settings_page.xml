@@ -41,7 +41,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:checked="false"
-        android:thumbTint="@color/colorPrimary"
+        android:theme="@style/SwitchColor"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewCategoryVibrationSensitive"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textViewCategoryVibrationSensitive" />
 

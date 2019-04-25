@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
     ListView listViewMeasurements;
     FloatingActionButton fab;
     MainActivityMeasurementListAdapter listViewMeasurementsAdapter;
-    ArrayList<Measurement> measurements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
