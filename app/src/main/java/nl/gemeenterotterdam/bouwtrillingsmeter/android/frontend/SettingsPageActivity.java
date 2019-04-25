@@ -26,6 +26,7 @@ public class SettingsPageActivity extends AppCompatActivity {
     Spinner spinnerCategoryVibration;
     Switch switchVibrationSensitive;
     FloatingActionButton fabCategoryConfirm;
+    Button buttonIDontKnow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,7 @@ public class SettingsPageActivity extends AppCompatActivity {
         switchVibrationSensitive = (Switch) findViewById(R.id.switchCategoryVibrationSensitive);
 
         // Button
-        Button buttonIDontKnow = (Button) findViewById(R.id.buttonSettingsIDontKnow);
+        buttonIDontKnow = (Button) findViewById(R.id.buttonSettingsIDontKnow);
         buttonIDontKnow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +117,9 @@ public class SettingsPageActivity extends AppCompatActivity {
             return;
         }
 
+        // Temporarily disable the FAB
+        fabCategoryConfirm.setEnabled(false);
+
         // If we have completed our form
         BuildingCategory buildingCategory = BuildingCategory.values()[buildingIndex];
         VibrationCategory vibrationCategory = VibrationCategory.values()[vibrationIndex];
@@ -127,6 +131,7 @@ public class SettingsPageActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), MeasuringActivity.class);
         startActivity(intent);
         finish();
+
     }
 
     /**
@@ -143,6 +148,9 @@ public class SettingsPageActivity extends AppCompatActivity {
      * Starts the widget
      */
     private void onClickCategoryIDontKnow() {
+        // Temporarily disable button
+        buttonIDontKnow.setEnabled(false);
+
         Intent intent = new Intent(getApplicationContext(), SettingsWidgetActivity.class);
         startActivity(intent);
     }
@@ -194,5 +202,9 @@ public class SettingsPageActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         setFieldsToGeneratedSettings();
+
+        // Enable fab
+        fabCategoryConfirm.setEnabled(true);
+        buttonIDontKnow.setEnabled(true);
     }
 }
