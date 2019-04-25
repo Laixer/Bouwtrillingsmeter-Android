@@ -65,7 +65,7 @@ public class MainActivityMeasurementListAdapter extends BaseAdapter {
         // Set the photo
         // Add an actionlistener to this to attempt to take a photo
         // TODO Remove photo bar at all when none is present
-        Bitmap photo = measurements.get(position).getPhoto();
+        Bitmap photo = measurements.get(position).getBitmap();
         Utility.updateScaledPhoto(imageViewPhoto, photo);
 
         return view;

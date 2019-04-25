@@ -18,6 +18,7 @@ import java.util.UUID;
  * All calculated values (done by our {@link Calculator}) are also stored in said {@link DataInterval}.
  * <p>
  * This class can be sent to the database for analysis.
+ * TODO Implement bitmap load & save
  */
 public class Measurement implements Serializable {
 
@@ -31,7 +32,7 @@ public class Measurement implements Serializable {
     private String datetime;
     private String location;
     private String description;
-    private Bitmap photo;
+    private transient Bitmap bitmap;
 
     private boolean closed;
 
@@ -58,7 +59,7 @@ public class Measurement implements Serializable {
         datetime = "15-02-2019 20:23";
         location = "Grote Markt, Delft";
         description = "Een hele mooie omschrijving jawel!";
-        photo = null;
+        bitmap = null;
 
         // Create public variables
         settings = new Settings();
@@ -136,28 +137,30 @@ public class Measurement implements Serializable {
 
     }
 
-    /**
-     * All setters
-     */
-    public void setName(String name) {
+    public void setLeName(String name) {
         this.name = name;
+        onMetadataChanged();
     }
 
     public void setDateTime(String datetime) {
         this.datetime = datetime;
+        onMetadataChanged();
     }
 
     public void setLocation(String location) {
         this.location = location;
+        onMetadataChanged();
     }
 
     public void setDescription(String description) {
         this.description = description;
+        onMetadataChanged();
     }
 
-    /**
-     * All getters
-     */
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+        onMetadataChanged();
+    }
 
     public String getUID() {
         return this.uid;
@@ -180,27 +183,25 @@ public class Measurement implements Serializable {
     }
 
     /**
-     * Add a photo to the measurement
-     *
-     * @param photo The photo to add
-     */
-    public void updatePhoto(Bitmap photo) {
-        this.photo = photo;
-    }
-
-    /**
-     * Returns the photo
+     * Returns the bitmap
      * The "no picture present" handling is NOT done by this class
      *
-     * @return A photo in Bitmap format, null if there is no photo
+     * @return A bitmap in Bitmap format, null if there is no bitmap
      */
-    public Bitmap getPhoto() {
-        if (photo == null) {
+    public Bitmap getBitmap() {
+        if (bitmap == null) {
             System.out.println("Photo is null, fix this.");
             return null;
         }
 
-        return photo;
+        return bitmap;
     }
 
+    /**
+     * This writes the new metadata to disk
+     * TODO Potential problem: this can take very long with big data sets
+     */
+    private void onMetadataChanged() {
+        StorageControl.writeObject(this, uid);
+    }
 }

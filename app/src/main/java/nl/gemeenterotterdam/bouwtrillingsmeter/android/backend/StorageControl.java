@@ -31,7 +31,6 @@ public class StorageControl {
         ArrayList<Measurement> measurements = new ArrayList<Measurement>(files.length);
 
         for (File file : files) {
-            System.out.println(file.getName());
             Object object = readObject(file.getName());
 
             // Try to convert to measurement

@@ -12,6 +12,7 @@ TODO Widget opnieuw?
 TODO Grafiek linken aan data!
 TODO User preferences even goed doen
 TODO Foto OPSLAAN bij klikken op "foto mist" icon
+TODO Foto crash voorkomen zodra je foto maken annuleert
 TODO Highlight first visit mooi maken
 TODO Wait icon groen -> niet elke API!
 TODO Switch achtergrond ook groen (check API version!)

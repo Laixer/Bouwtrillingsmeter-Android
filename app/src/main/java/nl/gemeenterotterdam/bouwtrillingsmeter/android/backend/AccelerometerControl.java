@@ -25,7 +25,6 @@ public class AccelerometerControl {
 
         try {
             accelerometer = new Accelerometer();
-            Backend.onUnsupportedHardware();
         } catch (UnsupportedOperationException e) {
             System.out.println(e.getMessage());
             Backend.onUnsupportedHardware();

@@ -3,12 +3,6 @@ Nu:
 Daarna:
 TODO Waarom hapert de accelerometer graph steeds?
 TODO Hoe gaan we om met een gepasseerd interval zonder dat er een datapoint binnen komt? Dit wordt niet gecalled dan!
-TODO Wat als er geen accelerometer is?
 TODO Optimize for arraylist size x datapoints per interval
-
-Storage & bitmaps
-TODO Storage
 TODO Save bitmaps
 TODO Load bitmaps
-TODO Make structure to load and save measurement object
-TODO Make sure that the frontend knows when we have read all measurements (for the listview)
