@@ -82,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Temporarily disable all items
+                // TODO Implement
+
                 Intent intentShowMeasurementDetails = new Intent(getApplicationContext(), MeasurementDetailsActivity.class);
 
                 // TODO Reconsider measurement linking structure
@@ -133,6 +136,9 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
                     .setAction("Action", null).show();
             PreferenceManager.writeBooleanPreference(R.string.pref_internal_measurement_finished, false);
         }
+
+        // Enable all items again
+        // TODO Implement
     }
 
     /**

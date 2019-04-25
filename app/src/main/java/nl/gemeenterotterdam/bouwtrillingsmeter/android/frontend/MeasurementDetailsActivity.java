@@ -24,7 +24,6 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
  */
 public class MeasurementDetailsActivity extends AppCompatActivity {
 
-
     TextView textViewName;
     TextView textViewDateTime;
     TextView textViewLocation;
