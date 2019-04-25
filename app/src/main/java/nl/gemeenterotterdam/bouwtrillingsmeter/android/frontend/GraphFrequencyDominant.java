@@ -15,8 +15,9 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.LimitConstants;
 
 /**
- * TODO Doc
- * TODO This duplicated the GraphFrequency to some extend, maybe do some trickery
+ * This manages a {@link GraphView} with frequency on the x-axis and dominant frequency on the y-axis.
+ * This contains a line indicating the limit.
+ * This contains dots indicating individual exceeding cases.
  */
 public class GraphFrequencyDominant extends Graph {
 
@@ -25,7 +26,7 @@ public class GraphFrequencyDominant extends Graph {
     private LineGraphSeries<DataPoint> constantLine;
     private PointsGraphSeries<DataPoint> pointGraphSeries;
 
-    public GraphFrequencyDominant(String name, String textAxisHorizontal, String textAxisVertical) {
+    GraphFrequencyDominant(String name, String textAxisHorizontal, String textAxisVertical) {
         // Call super
         super(name, textAxisHorizontal, textAxisVertical);
 
@@ -69,7 +70,7 @@ public class GraphFrequencyDominant extends Graph {
     /**
      * This method sends datapoints3D to our graph.
      * All non-exceeding x and y values are set to -1
-     * They get split and passed on to {@Link appendDataToList}.
+     * They get split and passed on to {@link #appendDataToList(ArrayList)}
      *
      * @param dataPoints3D The arraylist.
      */
@@ -109,9 +110,7 @@ public class GraphFrequencyDominant extends Graph {
     @Override
     protected void appendDataToList(ArrayList<ArrayList<DataPoint>> dataPoints) {
         // Add all data, only x is used to store
-        for (DataPoint dataPoint : dataPoints.get(0)) {
-            sortedDataPoints.add(dataPoint);
-        }
+        sortedDataPoints.addAll(dataPoints.get(0));
 
         // Sort our data points
         Collections.sort(sortedDataPoints, new Comparator<DataPoint>() {

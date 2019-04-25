@@ -13,7 +13,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 
 /**
- * TODO Javadoc
+ * This activity launches when we successfully complete our measurement.
  */
 public class FinishedMeasurementActivity extends AppCompatActivity {
 

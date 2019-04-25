@@ -10,9 +10,8 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
 /**
- * TODO Doc
- * TODO Optimize by saving our own data list
- * TODO Optimize by only writing if we are visible
+ * This manages a {@link GraphView} with time on the x-axis and some value on the y-axis.
+ * It contains a bar graph.
  */
 public class GraphTimeBar extends Graph {
 
@@ -21,7 +20,6 @@ public class GraphTimeBar extends Graph {
     private int maxDataPointCount = Utility.resources.getInteger(R.integer.graphs_bar_max_datapoint_count);
     private double marginMultiplier = Utility.resources.getInteger(R.integer.graphs_axis_margins_multiplier_percentage) * 0.01;
 
-    private ArrayList<ArrayList<DataPoint>> dataPointsXYZ;
     private ArrayList<BarGraphSeries<DataPoint>> barSeries;
 
     /**
@@ -31,7 +29,7 @@ public class GraphTimeBar extends Graph {
      * @param textAxisHorizontal Horizontal axis text
      * @param textAxisVertical   Vertical axis text
      */
-    public GraphTimeBar(String name, String textAxisHorizontal, String textAxisVertical) {
+    GraphTimeBar(String name, String textAxisHorizontal, String textAxisVertical) {
         // Call super
         super(name, textAxisHorizontal, textAxisVertical);
 
@@ -46,15 +44,9 @@ public class GraphTimeBar extends Graph {
         }
     }
 
-    @Override
-    protected void onCreatedGraphView(GraphView graphView, boolean addSeriesXYZ) {
-        super.onCreatedGraphView(graphView, addSeriesXYZ);
-//        graphView.getViewport().setScalableY(false);
-    }
-
     /**
      * This method sends datapoints3D to our graph.
-     * They get split and passed on to {@Link appendDataToList}.
+     * They get split and passed on to {@link #appendDataToList(ArrayList)}
      *
      * @param dataPoints3D The arraylist.
      */

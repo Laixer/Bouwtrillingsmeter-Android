@@ -18,7 +18,9 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
 /**
- * TODO Doc
+ * This class holds an abstract for a graph.
+ * It is used to avoid loads of duplicate code.
+ * TODO Optimize by only writing if we are visible
  */
 public abstract class Graph {
 
@@ -29,7 +31,9 @@ public abstract class Graph {
 
     private boolean scaleOnHold = false;
     private long previousTouch = 0;
-    protected ArrayList<LineGraphSeries<DataPoint>> series;
+
+    ArrayList<ArrayList<DataPoint>> dataPointsXYZ;
+    ArrayList<LineGraphSeries<DataPoint>> series;
 
     /**
      * Constructor
@@ -94,7 +98,9 @@ public abstract class Graph {
         setupTouchListener();
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    /**
+     * Implements the dragging gestures
+     */
     private void setupTouchListener() {
         graphView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -120,17 +126,19 @@ public abstract class Graph {
         });
     }
 
-    public void forceScaleOffHold() {
+    /**
+     * This forces our scale to un-hold
+     */
+    void forceScaleOffHold() {
         scaleOnHold = false;
     }
 
     /**
      * Call this to style the series
-     * TODO Ontbeun graphview not null
      *
-     * @param series
+     * @param series The series
      */
-    protected void addAndStyleSeries(LineGraphSeries series, int colorResourceAsInteger) {
+    void addAndStyleSeries(LineGraphSeries series, int colorResourceAsInteger) {
         if (graphView != null) {
             // Add to the graphview, or we won't see anything
             graphView.addSeries(series);
@@ -138,6 +146,8 @@ public abstract class Graph {
             // Series and line styling
             series.setThickness(4);
             series.setColor(Utility.applicationContext.getResources().getColor(colorResourceAsInteger));
+        } else {
+            System.out.println("Graph.addAndStyleSeries() graphview = null");
         }
     }
 
@@ -146,10 +156,10 @@ public abstract class Graph {
      * Only does so if we are not scaling the graph manually at that moment.
      * Swaps if from > to.
      *
-     * @param from
-     * @param to
+     * @param from Range from
+     * @param to Range to
      */
-    protected void setHorizontalRange(double from, double to) {
+    void setHorizontalRange(double from, double to) {
         if (scaleOnHold) {
             return;
         }
@@ -172,10 +182,10 @@ public abstract class Graph {
      * Swaps if from > to.
      * This also adds margin
      *
-     * @param from
-     * @param to
+     * @param from Range from
+     * @param to Range to
      */
-    protected void setVerticalRange(double from, double to, boolean addMarginLower, boolean addMarginHigher) {
+    void setVerticalRange(double from, double to, boolean addMarginLower, boolean addMarginHigher) {
         if (scaleOnHold) {
             return;
         }
@@ -205,12 +215,8 @@ public abstract class Graph {
     }
 
     /**
-     * Abstract methods
-     */
-
-    /**
      * This method sends datapoints3D to our graph.
-     * They get split and passed on to {@Link appendDataToList}.
+     * They get split and passed on to {@link #appendDataToList(ArrayList)}.
      *
      * @param dataPoints3D The arraylist.
      */
@@ -230,26 +236,21 @@ public abstract class Graph {
      */
     protected abstract void pushToGraph();
 
-    /**
-     * Getters.
-     */
-
-    /** */
-    public String getName() {
+    String getName() {
         if (name == null) {
             name = "default name";
         }
         return name;
     }
 
-    public String getTextAxisHorizontal() {
+    private String getTextAxisHorizontal() {
         if (textAxisHorizontal == null) {
             textAxisHorizontal = "Default horizontal axis";
         }
         return textAxisHorizontal;
     }
 
-    public String getTextAxisVertical() {
+    private String getTextAxisVertical() {
         if (textAxisVertical == null) {
             textAxisVertical = "Default vertical axis";
         }

@@ -10,22 +10,15 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
 /**
- * TODO Doc
+ * This manages a {@link GraphView} with frequency on the x-axis and some value on the y-axis.
+ * It contains a line graph.
  */
 public class GraphFrequency extends Graph {
 
-    /**
-     * This holds our previous time value, to prevent points from overlapping.
-     * TODO This is a lot of extra comparison. This might be solvable in a more elegant way.
-     * TODO Do we need this in the frequency graph?
-     */
-    private double[] lastFrequencyValue;
     private int axisMin = Utility.resources.getInteger(R.integer.graphs_frequency_bound_min);
     private int axisMax = Utility.resources.getInteger(R.integer.graphs_frequency_bound_max);
 
-    private ArrayList<ArrayList<DataPoint>> dataPointsXYZ;
-
-    public GraphFrequency(String name, String textAxisHorizontal, String textAxisVertical) {
+    GraphFrequency(String name, String textAxisHorizontal, String textAxisVertical) {
         // Call super
         super(name, textAxisHorizontal, textAxisVertical);
 
@@ -59,7 +52,7 @@ public class GraphFrequency extends Graph {
 
     /**
      * This method sends datapoints3D to our graph.
-     * They get split and passed on to {@Link appendDataToList}.
+     * They get split and passed on to {@link #appendDataToList(ArrayList)}
      *
      * @param dataPoints3D The arraylist.
      */
@@ -95,7 +88,6 @@ public class GraphFrequency extends Graph {
 
     /**
      * Pushes everything
-     * TODO Lots of duplicate trough graphs
      */
     protected void pushToGraph() {
         // Edge case

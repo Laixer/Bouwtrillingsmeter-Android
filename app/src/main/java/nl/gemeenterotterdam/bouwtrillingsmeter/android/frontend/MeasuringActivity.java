@@ -157,7 +157,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
 
                     if (Backend.isCurrentMeasurementExceeded()
                             && (Backend.getTimeLastExceeding() == null
-                            || -Backend.getTimeLastExceeding().getTime() + Calendar.getInstance().getTimeInMillis() > Constants.minimumTimeInMilisBetweenExceedings)) {
+                            || -Backend.getTimeLastExceeding().getTime() + Calendar.getInstance().getTimeInMillis() > Constants.minimumTimeInMillisBetweenExceedings)) {
                         text = getResources().getString(R.string.measuring_cycle_measuring_now);
                     }
 
@@ -183,7 +183,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
 
                     // Set timer
                     try {
-                        Thread.sleep(Constants.measuringTextCycleSleepTimeInMilis);
+                        Thread.sleep(Constants.measuringTextCycleSleepTimeInMillis);
                     } catch (Exception e) {
                         //
                     }

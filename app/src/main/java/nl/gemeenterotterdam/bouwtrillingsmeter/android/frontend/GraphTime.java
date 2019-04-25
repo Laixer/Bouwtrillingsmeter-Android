@@ -9,17 +9,14 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
 /**
- * TODO Doc
- * TODO Optimize by saving our own data list
- * TODO Optimize by only writing if we are visible
+ * This manages a {@link com.jjoe64.graphview.GraphView} with time on the x-axis and some value on the y-axis.
+ * It contains a line graph.
  */
 public class GraphTime extends Graph {
 
     private int maxHorizontalRange = Utility.resources.getInteger(R.integer.graphs_time_line_horizontal_axis_range_max_s);
     private int maxDataPointCount = Utility.resources.getInteger(R.integer.graphs_line_max_datapoint_count);
     private double marginMultiplier = Utility.resources.getInteger(R.integer.graphs_axis_margins_multiplier_percentage) * 0.01;
-
-    private ArrayList<ArrayList<DataPoint>> dataPointsXYZ;
 
     /**
      * Constructor
@@ -28,7 +25,7 @@ public class GraphTime extends Graph {
      * @param textAxisHorizontal Horizontal axis text
      * @param textAxisVertical   Vertical axis text
      */
-    public GraphTime(String name, String textAxisHorizontal, String textAxisVertical) {
+    GraphTime(String name, String textAxisHorizontal, String textAxisVertical) {
         // Call super
         super(name, textAxisHorizontal, textAxisVertical);
 
@@ -41,7 +38,7 @@ public class GraphTime extends Graph {
 
     /**
      * This method sends datapoints3D to our graph.
-     * They get split and passed on to {@Link appendDataToList}.
+     * They get split and passed on to {@link #appendDataToList(ArrayList)}.
      *
      * @param dataPoints3D The arraylist.
      */
