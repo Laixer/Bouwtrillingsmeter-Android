@@ -7,3 +7,8 @@ TODO Bitmap serialize
 
 Details:
 TODO Optimize for arraylist size x datapoints per interval
+
+Uitzoeken:
+TODO Uitzoeken of je achtergrond sync kan doen op android
+TODO ? Uitzoeken wifi etc consistency bij fouten en grote bestanden
+TODO Supernauwkeurige locatie unit

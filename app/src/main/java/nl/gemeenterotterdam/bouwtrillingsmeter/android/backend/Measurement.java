@@ -24,6 +24,8 @@ public class Measurement implements Serializable {
 
     public Settings settings;
     public ArrayList<DataInterval> dataIntervals;
+
+    // TODO ISO 8601
     private Date dateStart;
     private Date dateEnd;
 
@@ -31,6 +33,9 @@ public class Measurement implements Serializable {
     private String name;
     private String datetime;
     private String location;
+    // TODO Location
+    private double[] locationCoordinates;
+    private double locationPrecision;
     private String description;
     private transient Bitmap bitmap;
 

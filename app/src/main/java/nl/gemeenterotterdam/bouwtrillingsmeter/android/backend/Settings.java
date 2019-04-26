@@ -18,6 +18,10 @@ public class Settings implements Serializable {
     public VibrationCategory vibrationCategory;
     public boolean vibrationSensitive;
 
+    // TODO yv yt
+    public double yv;
+    public double yt;
+
     /**
      * Constructor
      */

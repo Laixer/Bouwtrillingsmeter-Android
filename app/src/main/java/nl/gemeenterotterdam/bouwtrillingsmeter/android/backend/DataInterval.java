@@ -17,10 +17,10 @@ import java.util.Date;
 public class DataInterval implements Serializable {
 
     public int index;
-    public ArrayList<DataPoint3D<Long>> dataPoints3DAcceleration;
     public Date dateStart;
     public Date dateEnd;
 
+    public ArrayList<DataPoint3D<Long>> dataPoints3DAcceleration;
     public ArrayList<DataPoint3D<Long>> velocities;
     public DataPoint3D<Long> velocitiesAbsMax;
     public ArrayList<DataPoint3D<Double>> frequencyAmplitudes;
