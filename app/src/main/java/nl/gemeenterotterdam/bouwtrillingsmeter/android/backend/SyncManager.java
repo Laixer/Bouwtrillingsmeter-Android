@@ -5,21 +5,26 @@ import java.util.ArrayList;
 /**
  * This class handles the synchronization of our measurements.
  * It communicates with the {@link SyncConnectionManager} class.
- * TODO Don't we want to push everything we have if we are connected to wifi?
+ * TODO Implement shutdown serialize what we have not sent yet
+ * TODO If we now push after measuring while disconnected, we send EVERYTHING at once.
  */
 class SyncManager implements DataIntervalClosedListener {
 
+    private static final int intervalCountBeforePushing = 30;
     private static final int essentialsCountBeforePushing = 30;
     private static SyncManager syncManager;
 
-    private static ArrayList<DataIntervalEssentials> allDataIntervalEssentials;
+    private static ArrayList<DataInterval> unpushedDataIntervals;
+    private static ArrayList<DataIntervalEssentials> unpushedDataIntervalEssentials;
 
     /**
      * Initializes the instance
      */
     static void initialize() {
-        allDataIntervalEssentials = new ArrayList<DataIntervalEssentials>();
+        unpushedDataIntervals = new ArrayList<DataInterval>();
+        unpushedDataIntervalEssentials = new ArrayList<DataIntervalEssentials>();
         DataHandler.addDataIntervalClosedListener(new SyncManager());
+        startSync();
     }
 
     /**
@@ -48,7 +53,7 @@ class SyncManager implements DataIntervalClosedListener {
      */
     static void onMeasurementFinished(Measurement measurement) {
         SyncConnectionManager.pushMeasurementMetadata(measurement);
-        SyncConnectionManager.pushMeasurementDataIntervals(measurement);
+        SyncConnectionManager.pushDataIntervalsList(measurement.dataIntervals);
     }
 
     /**
@@ -61,18 +66,32 @@ class SyncManager implements DataIntervalClosedListener {
     @Override
     public void onDataIntervalClosed(DataInterval dataInterval) {
         String measurementUID = MeasurementControl.getCurrentMeasurement().getUID();
-        DataIntervalEssentials dataIntervalEssentials = new DataIntervalEssentials(measurementUID, dataInterval.index, dataInterval.velocitiesAbsMax, dataInterval.dominantFrequencies);
-        allDataIntervalEssentials.add(dataIntervalEssentials);
+        ConnectionType connectionType = SyncConnectionManager.getConnectionType();
 
-        // Push and reset if we have enough
-        if (allDataIntervalEssentials.size() > essentialsCountBeforePushing) {
-            SyncConnectionManager.pushAllDataIntervalEssentials(measurementUID, allDataIntervalEssentials);
-            allDataIntervalEssentials = new ArrayList<DataIntervalEssentials>();
+        // Send everything if we have wifi
+        if (connectionType == ConnectionType.WIFI || connectionType == ConnectionType.WIFI_AND_G) {
+            unpushedDataIntervals.add(dataInterval);
+            // Push and reset if we have enough
+            if (unpushedDataIntervals.size() > intervalCountBeforePushing) {
+                SyncConnectionManager.pushDataIntervalsList(unpushedDataIntervals);
+                unpushedDataIntervals = new ArrayList<DataInterval>();
+            }
+        }
+
+        // Only send the essentials if we have no wifi
+        else if (connectionType == ConnectionType.G) {
+            DataIntervalEssentials dataIntervalEssentials = new DataIntervalEssentials(measurementUID, dataInterval.index, dataInterval.velocitiesAbsMax, dataInterval.dominantFrequencies);
+            unpushedDataIntervalEssentials.add(dataIntervalEssentials);
+            // Push and reset if we have enough
+            if (unpushedDataIntervalEssentials.size() > essentialsCountBeforePushing) {
+                SyncConnectionManager.pushDataIntervalEssentialsList(measurementUID, unpushedDataIntervalEssentials);
+                unpushedDataIntervalEssentials = new ArrayList<DataIntervalEssentials>();
+            }
         }
     }
 
     private static void startSync() {
-
+        ConnectionType connectionType = SyncConnectionManager.getConnectionType();
     }
 
     private static void stopSync() {

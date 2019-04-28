@@ -1,6 +1,25 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
+import android.os.Build;
+
+import java.sql.Connection;
 import java.util.ArrayList;
+
+/**
+ * Connection type enum
+ */
+enum ConnectionType {
+    NONE,
+    WIFI,
+    WIFI_AND_G,
+    G
+}
 
 /**
  * This class handles all our connections to WIFI and 3G/4G/5G.
@@ -45,18 +64,46 @@ class SyncConnectionManager {
      * @param allDataIntervalEssentials All the data interval essentials
      * @return True if successful
      */
-    static boolean pushAllDataIntervalEssentials(String measurementUID, ArrayList<DataIntervalEssentials> allDataIntervalEssentials) {
+    static boolean pushDataIntervalEssentialsList(String measurementUID, ArrayList<DataIntervalEssentials> allDataIntervalEssentials) {
         return true;
     }
 
     /**
      * Push all dataintervals that belong to a measurement
      *
-     * @param measurement The measurement
+     * @param dataIntervals The dataintervals to send
      * @return True if successful
      */
-    static boolean pushMeasurementDataIntervals(Measurement measurement) {
+    static boolean pushDataIntervalsList(ArrayList<DataInterval> dataIntervals) {
         return true;
+    }
+
+    /**
+     * This gets our type of connection, being one of {@link ConnectionType}.
+     * TODO This uses depricated methods.
+     *
+     * @return Result
+     */
+    static ConnectionType getConnectionType() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) Backend.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (networkInfo == null) {
+            return ConnectionType.NONE;
+        }
+
+        boolean wifi = networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
+        boolean g = networkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+
+        if (wifi && g) {
+            return ConnectionType.WIFI_AND_G;
+        } else if (wifi && !g) {
+            return ConnectionType.WIFI;
+        } else if (!wifi && g) {
+            return ConnectionType.G;
+        } else {
+            return ConnectionType.NONE;
+        }
     }
 
 }

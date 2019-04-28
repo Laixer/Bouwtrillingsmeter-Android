@@ -40,7 +40,7 @@ public class StorageControl {
                     measurements.add(measurement);
                 }
             } catch (IllegalArgumentException e) {
-                System.out.println(e.toString());
+                System.out.println("StorageControl.retrieveAllSavedMeasurements: " + e.toString());
             }
         }
 
@@ -64,7 +64,7 @@ public class StorageControl {
             objectOutputStream.close();
             fileOutputStream.close();
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println("StorageControl.writeObject: " + e.toString());
         }
     }
 
@@ -86,7 +86,7 @@ public class StorageControl {
             fileInputStream.close();
             objectInputStream.close();
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println("StorageControl.readObject: " + e.toString());
         }
 
         return object;

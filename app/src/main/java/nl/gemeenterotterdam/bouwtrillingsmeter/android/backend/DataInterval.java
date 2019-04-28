@@ -16,6 +16,7 @@ import java.util.Date;
  */
 public class DataInterval implements Serializable {
 
+    public String measurementUID;
     public int index;
     public Date dateStart;
     public Date dateEnd;
@@ -31,7 +32,8 @@ public class DataInterval implements Serializable {
     /**
      * Constructor
      */
-    public DataInterval(int index) {
+    public DataInterval(String measurementUID, int index) {
+        this.measurementUID = measurementUID;
         this.index = index;
 
         dataPoints3DAcceleration = new ArrayList<DataPoint3D<Long>>();
