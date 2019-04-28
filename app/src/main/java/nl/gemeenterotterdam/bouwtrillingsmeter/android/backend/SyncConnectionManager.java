@@ -85,16 +85,28 @@ class SyncConnectionManager {
      * @return Result
      */
     static ConnectionType getConnectionType() {
+        // Get access to our connectivity manager
         ConnectivityManager connectivityManager = (ConnectivityManager) Backend.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        if (networkInfo == null) {
-            return ConnectionType.NONE;
+        // Wifi
+        NetworkInfo networkInfoWifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        boolean wifi;
+        if (networkInfoWifi == null) {
+            wifi = false;
+        } else {
+            wifi = networkInfoWifi.isConnected();
         }
 
-        boolean wifi = networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
-        boolean g = networkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+        // G
+        NetworkInfo networkInfoG = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        boolean g;
+        if (networkInfoG == null) {
+            g = false;
+        } else {
+            g = networkInfoG.isConnected();
+        }
 
+        // Return
         if (wifi && g) {
             return ConnectionType.WIFI_AND_G;
         } else if (wifi && !g) {

@@ -1,10 +1,12 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
+import java.io.Serializable;
+
 /**
  * This class contains only those parameters of our {@link DataInterval}
  * that we wish to send to our server as soon as possible.
  */
-class DataIntervalEssentials {
+class DataIntervalEssentials implements Serializable {
 
     private String measurementUID;
     private int dataIntervalIndex;

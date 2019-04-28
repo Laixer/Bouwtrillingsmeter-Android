@@ -171,6 +171,7 @@ public class Backend {
      */
     public static void onApplicationShutdown() {
         MeasurementControl.onApplicationShutdown();
+        SyncManager.onApplicationShutdown();
     }
 
     /**

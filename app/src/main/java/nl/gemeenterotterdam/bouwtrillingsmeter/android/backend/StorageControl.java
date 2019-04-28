@@ -48,6 +48,31 @@ public class StorageControl {
     }
 
     /**
+     * Retrieves an array list based on a name.
+     * This returns an empty arraylist if we could not find the file or if it is incompatiable.
+     *
+     * @param fileName The filename
+     * @param <T> The type of our arraylist objects
+     * @return The arraylist. It's empty if we can't find it or if we get a casting error.
+     */
+    static <T> ArrayList<T> retrieveArrayList(String fileName) {
+        try {
+            Object object = readObject(fileName);
+            ArrayList<T> result = (ArrayList<T>) object;
+            if (result == null) {
+                return new ArrayList<T>();
+            } else {
+                return result;
+            }
+        } catch (Exception e) {
+            System.out.println("StorageControl.retrieveArrayList: " + e.getMessage());
+        }
+
+        return new ArrayList<T>();
+    }
+
+
+    /**
      * Writes an object to the internal storage.
      * Always overwrites.
      *

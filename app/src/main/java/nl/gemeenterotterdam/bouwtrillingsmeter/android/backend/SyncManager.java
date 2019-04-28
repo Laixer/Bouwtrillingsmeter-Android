@@ -10,6 +10,8 @@ import java.util.ArrayList;
  */
 class SyncManager implements DataIntervalClosedListener {
 
+    private static final String nameUnpushedDataIntervalsList = "unpushed_data_intervals";
+    private static final String nameUnpushedDataIntervalEssentialsList = "unpushed_data_interval_essentials";
     private static final int intervalCountBeforePushing = 30;
     private static final int essentialsCountBeforePushing = 30;
     private static SyncManager syncManager;
@@ -21,10 +23,20 @@ class SyncManager implements DataIntervalClosedListener {
      * Initializes the instance
      */
     static void initialize() {
-        unpushedDataIntervals = new ArrayList<DataInterval>();
-        unpushedDataIntervalEssentials = new ArrayList<DataIntervalEssentials>();
+        unpushedDataIntervals = StorageControl.<DataInterval>retrieveArrayList(nameUnpushedDataIntervalsList);
+        unpushedDataIntervalEssentials = StorageControl.<DataIntervalEssentials>retrieveArrayList(nameUnpushedDataIntervalEssentialsList);
+
         DataHandler.addDataIntervalClosedListener(new SyncManager());
         startSync();
+    }
+
+    /**
+     * This should be called when our application shuts down.
+     * It stores our unpushed data intervals and data interval essentials.
+     */
+    static void onApplicationShutdown() {
+        StorageControl.writeObject(unpushedDataIntervals, nameUnpushedDataIntervalsList);
+        StorageControl.writeObject(unpushedDataIntervalEssentials, nameUnpushedDataIntervalEssentialsList);
     }
 
     /**
