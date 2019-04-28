@@ -113,11 +113,13 @@ public class Backend {
                 Calculator.onStartMeasurementCalculations();
                 MeasurementControl.getCurrentMeasurement().onStartMeasuring();
                 DataHandler.startMeasuring();
+                SyncManager.onMeasurementStart(MeasurementControl.getCurrentMeasurement());
                 break;
 
             case FINISHED_MEASUREMENT:
                 DataHandler.stopMeasuring();
                 MeasurementControl.onFinishMeasurement();
+                SyncManager.onMeasurementFinished(MeasurementControl.getCurrentMeasurement());
                 break;
 
             case UNSUPPORTED_HARDWARE:

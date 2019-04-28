@@ -17,19 +17,31 @@ class SyncConnectionManager {
     }
 
     /**
-     * Push a measurements metadata
+     * Push a measurements metadata.
+     * This overwrites anything existing on the server, so we can
+     * use this as an update function.
      *
      * @param measurement The measurement
      * @return True if successful
      */
-    static boolean pushMeasurementCreation(Measurement measurement) {
+    static boolean pushMeasurementMetadata(Measurement measurement) {
+        return true;
+    }
+
+    /**
+     * Tells the server that our measurement was aborted.
+     *
+     * @param measurement The measurement
+     * @return True if successful
+     */
+    static boolean pushMeasurementAborted(Measurement measurement) {
         return true;
     }
 
     /**
      * Push data interval essentials
      *
-     * @param measurementUID The measurement UID
+     * @param measurementUID            The measurement UID
      * @param allDataIntervalEssentials All the data interval essentials
      * @return True if successful
      */
@@ -38,13 +50,12 @@ class SyncConnectionManager {
     }
 
     /**
-     * Push an entire data interval
+     * Push all dataintervals that belong to a measurement
      *
-     * @param measurementUID The measurement UID
-     * @param dataInterval The data interval
+     * @param measurement The measurement
      * @return True if successful
      */
-    static boolean pushDataInterval(String measurementUID, DataInterval dataInterval) {
+    static boolean pushMeasurementDataIntervals(Measurement measurement) {
         return true;
     }
 

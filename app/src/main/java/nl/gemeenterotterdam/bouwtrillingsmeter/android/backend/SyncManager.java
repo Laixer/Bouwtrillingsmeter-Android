@@ -17,7 +17,7 @@ class SyncManager implements DataIntervalClosedListener {
     /**
      * Initializes the instance
      */
-    public static void initialize() {
+    static void initialize() {
         allDataIntervalEssentials = new ArrayList<DataIntervalEssentials>();
         DataHandler.addDataIntervalClosedListener(new SyncManager());
     }
@@ -27,8 +27,8 @@ class SyncManager implements DataIntervalClosedListener {
      *
      * @param measurement The measurement
      */
-    public static void onMeasurementStart(Measurement measurement) {
-
+    static void onMeasurementStart(Measurement measurement) {
+        SyncConnectionManager.pushMeasurementMetadata(measurement);
     }
 
     /**
@@ -36,8 +36,8 @@ class SyncManager implements DataIntervalClosedListener {
      *
      * @param measurement The measurement
      */
-    public static void onMeasurementAborted(Measurement measurement) {
-
+    static void onMeasurementAborted(Measurement measurement) {
+        SyncConnectionManager.pushMeasurementAborted(measurement);
     }
 
     /**
@@ -46,8 +46,9 @@ class SyncManager implements DataIntervalClosedListener {
      *
      * @param measurement The measurement
      */
-    public static void onMeasurementClosed(Measurement measurement) {
-
+    static void onMeasurementFinished(Measurement measurement) {
+        SyncConnectionManager.pushMeasurementMetadata(measurement);
+        SyncConnectionManager.pushMeasurementDataIntervals(measurement);
     }
 
     /**
@@ -60,7 +61,7 @@ class SyncManager implements DataIntervalClosedListener {
     @Override
     public void onDataIntervalClosed(DataInterval dataInterval) {
         String measurementUID = MeasurementControl.getCurrentMeasurement().getUID();
-        DataIntervalEssentials dataIntervalEssentials = new DataIntervalEssentials(measurementUID, dataInterval.velocitiesAbsMax, dataInterval.dominantFrequencies);
+        DataIntervalEssentials dataIntervalEssentials = new DataIntervalEssentials(measurementUID, dataInterval.index, dataInterval.velocitiesAbsMax, dataInterval.dominantFrequencies);
         allDataIntervalEssentials.add(dataIntervalEssentials);
 
         // Push and reset if we have enough
@@ -77,6 +78,5 @@ class SyncManager implements DataIntervalClosedListener {
     private static void stopSync() {
 
     }
-
 
 }

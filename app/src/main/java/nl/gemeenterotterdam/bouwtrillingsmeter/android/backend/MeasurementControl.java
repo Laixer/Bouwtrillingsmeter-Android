@@ -67,6 +67,7 @@ class MeasurementControl {
     static void abortCurrentMeasurement() {
         if (!currentMeasurement.isClosed()) {
             currentMeasurement.onStopMeasuring();
+            SyncManager.onMeasurementAborted(currentMeasurement);
         }
         currentMeasurement = null;
     }
@@ -75,7 +76,7 @@ class MeasurementControl {
      * This gets called when the program exits
      * This attempts to write all measurements to the program cache
      */
-    public static void onApplicationShutdown() {
+    static void onApplicationShutdown() {
         for (Measurement measurement : allMeasurements) {
             StorageControl.writeObject(measurement, measurement.getUID());
         }
