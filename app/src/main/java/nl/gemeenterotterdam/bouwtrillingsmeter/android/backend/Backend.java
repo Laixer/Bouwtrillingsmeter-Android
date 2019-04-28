@@ -41,6 +41,9 @@ public class Backend {
             DataHandler.initialize();
             FlatPhoneDetector.initialize();
 
+            SyncManager.initialize();
+            SyncConnectionManager.initialize();
+
             changeBackendState(BackendState.BROWSING_APP);
 
             initialized = true;
