@@ -58,7 +58,7 @@ class MeasurementControl {
     static void onFinishMeasurement() {
         currentMeasurement.onStopMeasuring();
         allMeasurements.add(currentMeasurement);
-        StorageControl.writeObject(currentMeasurement, currentMeasurement.getUID());
+        StorageControl.writeMeasurement(currentMeasurement);
     }
 
     /**
@@ -78,7 +78,7 @@ class MeasurementControl {
      */
     static void onApplicationShutdown() {
         for (Measurement measurement : allMeasurements) {
-            StorageControl.writeObject(measurement, measurement.getUID());
+            StorageControl.writeMeasurement(measurement);
         }
     }
 

@@ -230,4 +230,15 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
         Backend.removeBackendStateListener(this);
         super.finish();
     }
+
+    /**
+     * Should only be called when the app is killed.
+     * TODO This triggers also on minimizing!
+     */
+    @Override
+    public void onDestroy() {
+        System.out.println("Assuming that our application is closing in onDestroy()....");
+        Backend.onApplicationShutdown();
+        super.onDestroy();
+    }
 }

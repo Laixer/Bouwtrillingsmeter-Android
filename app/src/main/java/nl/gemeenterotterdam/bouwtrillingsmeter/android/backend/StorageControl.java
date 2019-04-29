@@ -16,8 +16,22 @@ import java.util.ArrayList;
  * This class reads and writes files to and from the phones internal storage.
  * TODO Make private, we only need this public for now to clear the saved measurements
  * TODO Implement failsafe handling for measurements if we cant save it for some reason.
+ * TODO Now all files are in the sample place, might not want to do that
  */
 public class StorageControl {
+
+    /**
+     * Initializes our folder structure
+     * TODO Do we need this?
+     */
+    static void initialize() {
+//        File internalStorage = Backend.applicationContext.getFilesDir();
+//        File folderMeasurements = new File(internalStorage, folderNameMeasurements);
+//        folderMeasurements.mkdir();
+//
+//        File folderLists = new File(internalStorage, folderNameArrayLists);
+//        folderLists.mkdir();
+    }
 
     /**
      * This retrieves all saved measurements.
@@ -39,7 +53,9 @@ public class StorageControl {
                 if (measurement != null) {
                     measurements.add(measurement);
                 }
-            } catch (IllegalArgumentException e) {
+            } catch (ClassCastException e) {
+                System.out.println("Not a measurement but this is not a problem: " + file.getName());
+            } catch (Exception e) {
                 System.out.println("StorageControl.retrieveAllSavedMeasurements: " + e.toString());
             }
         }
@@ -52,18 +68,17 @@ public class StorageControl {
      * This returns an empty arraylist if we could not find the file or if it is incompatiable.
      *
      * @param fileName The filename
-     * @param <T> The type of our arraylist objects
+     * @param <T>      The type of our arraylist objects
      * @return The arraylist. It's empty if we can't find it or if we get a casting error.
      */
     static <T> ArrayList<T> retrieveArrayList(String fileName) {
         try {
             Object object = readObject(fileName);
-            ArrayList<T> result = (ArrayList<T>) object;
-            if (result == null) {
+            if (object == null) {
                 return new ArrayList<T>();
-            } else {
-                return result;
             }
+            ArrayList<T> result = (ArrayList<T>) object;
+            return result;
         } catch (Exception e) {
             System.out.println("StorageControl.retrieveArrayList: " + e.getMessage());
         }
@@ -71,6 +86,25 @@ public class StorageControl {
         return new ArrayList<T>();
     }
 
+    /**
+     * Writes a measurement to the internal memory
+     *
+     * @param measurement The measurement to write
+     */
+    static void writeMeasurement(Measurement measurement) {
+        writeObject(measurement, measurement.getUID());
+    }
+
+    /**
+     * Writes an arraylist to our internal memory
+     *
+     * @param arrayList The arraylist
+     * @param fileName  The filename
+     * @param <T>       The type of the arraylist
+     */
+    static <T> void writeArrayList(ArrayList<T> arrayList, String fileName) {
+        writeObject(arrayList, fileName);
+    }
 
     /**
      * Writes an object to the internal storage.
@@ -79,7 +113,7 @@ public class StorageControl {
      * @param object   The object
      * @param fileName The filename
      */
-    static void writeObject(Object object, String fileName) {
+    private static void writeObject(Object object, String fileName) {
         try {
             FileOutputStream fileOutputStream = Backend.applicationContext.openFileOutput(fileName, Context.MODE_PRIVATE);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
@@ -122,6 +156,8 @@ public class StorageControl {
      * TODO We might never ever need this
      */
     public static void removeAllInternalStorage() {
+        System.out.println("StorageControl.removeAllInternalStorage() called");
+
         File internalStorage = Backend.applicationContext.getFilesDir();
         File[] files = internalStorage.listFiles();
 

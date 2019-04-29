@@ -2,8 +2,8 @@
 <resources>
     <!--Graphs-->
     <integer name="graphs_time_line_horizontal_axis_range_max_s">5</integer>
-    <integer name="graphs_time_bar_horizontal_axis_range_max_s">10</integer>
-    <integer name="graphs_time_bar_horizontal_axis_range_min_s">3</integer>
+    <integer name="graphs_time_bar_horizontal_axis_range_max_s">50</integer>
+    <integer name="graphs_time_bar_horizontal_axis_range_min_s">18</integer>
     <integer name="graphs_frequency_bound_min">0</integer>
     <integer name="graphs_frequency_bound_max">100</integer>
     <integer name="graphs_line_max_datapoint_count">1050</integer>

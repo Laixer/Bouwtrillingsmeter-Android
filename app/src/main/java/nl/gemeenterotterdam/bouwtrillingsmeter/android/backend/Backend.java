@@ -36,6 +36,8 @@ public class Backend {
             Backend.applicationContext = applicationContext;
             Backend.resources = resources;
 
+            StorageControl.initialize();
+
             MeasurementControl.initialize();
             AccelerometerControl.initialize();
             DataHandler.initialize();
