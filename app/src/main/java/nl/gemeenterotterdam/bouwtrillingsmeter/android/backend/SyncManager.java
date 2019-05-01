@@ -79,9 +79,12 @@ class SyncManager implements DataIntervalClosedListener {
     public void onDataIntervalClosed(DataInterval dataInterval) {
         String measurementUID = MeasurementControl.getCurrentMeasurement().getUID();
 <<<<<<< HEAD
+<<<<<<< HEAD
         DataIntervalEssentials dataIntervalEssentials = new DataIntervalEssentials(measurementUID, dataInterval.index, dataInterval.velocitiesAbsMax, dataInterval.dominantFrequencies);
         allDataIntervalEssentials.add(dataIntervalEssentials);
 =======
+=======
+>>>>>>> c94249e91586c04a0de95e61599eb28ca73d6758
         ConnectionType connectionType = SyncConnectionManager.getConnectionType();
 
         // Send everything if we have wifi
@@ -93,7 +96,12 @@ class SyncManager implements DataIntervalClosedListener {
                 unpushedDataIntervals = new ArrayList<DataInterval>();
             }
         }
+<<<<<<< HEAD
 >>>>>>> master
+=======
+        DataIntervalEssentials dataIntervalEssentials = new DataIntervalEssentials(measurementUID, dataInterval.index, dataInterval.velocitiesAbsMax, dataInterval.dominantFrequencies);
+        allDataIntervalEssentials.add(dataIntervalEssentials);
+>>>>>>> c94249e91586c04a0de95e61599eb28ca73d6758
 
         // Only send the essentials if we have no wifi
         else if (connectionType == ConnectionType.G) {
