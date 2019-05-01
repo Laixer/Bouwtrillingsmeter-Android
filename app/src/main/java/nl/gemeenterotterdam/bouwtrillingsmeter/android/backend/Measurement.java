@@ -207,6 +207,6 @@ public class Measurement implements Serializable {
      * TODO Potential problem: this can take very long with big data sets
      */
     private void onMetadataChanged() {
-        StorageControl.writeObject(this, uid);
+        StorageControl.writeMeasurement(this);
     }
 }
