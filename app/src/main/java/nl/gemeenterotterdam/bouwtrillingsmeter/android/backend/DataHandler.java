@@ -109,7 +109,7 @@ public class DataHandler implements AccelerometerListener {
         currentDataIntervalIndex = 0;
         lastExceedingIndex = -1;
         indexesToBeCleared = new ArrayList<Integer>();
-        currentDataInterval = new DataInterval(currentDataIntervalIndex);
+        currentDataInterval = new DataInterval(MeasurementControl.getCurrentMeasurement().getUID(), currentDataIntervalIndex);
     }
 
     /**
@@ -132,7 +132,7 @@ public class DataHandler implements AccelerometerListener {
             clearAbundantDataPoints();
         }
 
-        currentDataInterval = new DataInterval(currentDataIntervalIndex);
+        currentDataInterval = new DataInterval(MeasurementControl.getCurrentMeasurement().getUID(), currentDataIntervalIndex);
         currentDataIntervalIndex += 1;
 
         // Trigger our interval closed event

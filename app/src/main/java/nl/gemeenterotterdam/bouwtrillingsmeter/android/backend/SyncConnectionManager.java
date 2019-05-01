@@ -1,6 +1,25 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
+import android.os.Build;
+
+import java.sql.Connection;
 import java.util.ArrayList;
+
+/**
+ * Connection type enum
+ */
+enum ConnectionType {
+    NONE,
+    WIFI,
+    WIFI_AND_G,
+    G
+}
 
 /**
  * This class handles all our connections to WIFI and 3G/4G/5G.
@@ -17,35 +36,86 @@ class SyncConnectionManager {
     }
 
     /**
-     * Push a measurements metadata
+     * Push a measurements metadata.
+     * This overwrites anything existing on the server, so we can
+     * use this as an update function.
      *
      * @param measurement The measurement
      * @return True if successful
      */
-    static boolean pushMeasurementCreation(Measurement measurement) {
+    static boolean pushMeasurementMetadata(Measurement measurement) {
+        return true;
+    }
+
+    /**
+     * Tells the server that our measurement was aborted.
+     *
+     * @param measurement The measurement
+     * @return True if successful
+     */
+    static boolean pushMeasurementAborted(Measurement measurement) {
         return true;
     }
 
     /**
      * Push data interval essentials
      *
-     * @param measurementUID The measurement UID
+     * @param measurementUID            The measurement UID
      * @param allDataIntervalEssentials All the data interval essentials
      * @return True if successful
      */
-    static boolean pushAllDataIntervalEssentials(String measurementUID, ArrayList<DataIntervalEssentials> allDataIntervalEssentials) {
+    static boolean pushDataIntervalEssentialsList(String measurementUID, ArrayList<DataIntervalEssentials> allDataIntervalEssentials) {
         return true;
     }
 
     /**
-     * Push an entire data interval
+     * Push all dataintervals that belong to a measurement
      *
-     * @param measurementUID The measurement UID
-     * @param dataInterval The data interval
+     * @param dataIntervals The dataintervals to send
      * @return True if successful
      */
-    static boolean pushDataInterval(String measurementUID, DataInterval dataInterval) {
+    static boolean pushDataIntervalsList(ArrayList<DataInterval> dataIntervals) {
         return true;
+    }
+
+    /**
+     * This gets our type of connection, being one of {@link ConnectionType}.
+     * TODO This uses depricated methods.
+     *
+     * @return Result
+     */
+    static ConnectionType getConnectionType() {
+        // Get access to our connectivity manager
+        ConnectivityManager connectivityManager = (ConnectivityManager) Backend.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Wifi
+        NetworkInfo networkInfoWifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        boolean wifi;
+        if (networkInfoWifi == null) {
+            wifi = false;
+        } else {
+            wifi = networkInfoWifi.isConnected();
+        }
+
+        // G
+        NetworkInfo networkInfoG = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        boolean g;
+        if (networkInfoG == null) {
+            g = false;
+        } else {
+            g = networkInfoG.isConnected();
+        }
+
+        // Return
+        if (wifi && g) {
+            return ConnectionType.WIFI_AND_G;
+        } else if (wifi && !g) {
+            return ConnectionType.WIFI;
+        } else if (!wifi && g) {
+            return ConnectionType.G;
+        } else {
+            return ConnectionType.NONE;
+        }
     }
 
 }

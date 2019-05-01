@@ -36,6 +36,8 @@ public class Backend {
             Backend.applicationContext = applicationContext;
             Backend.resources = resources;
 
+            StorageControl.initialize();
+
             MeasurementControl.initialize();
             AccelerometerControl.initialize();
             DataHandler.initialize();
@@ -113,11 +115,13 @@ public class Backend {
                 Calculator.onStartMeasurementCalculations();
                 MeasurementControl.getCurrentMeasurement().onStartMeasuring();
                 DataHandler.startMeasuring();
+                SyncManager.onMeasurementStart(MeasurementControl.getCurrentMeasurement());
                 break;
 
             case FINISHED_MEASUREMENT:
                 DataHandler.stopMeasuring();
                 MeasurementControl.onFinishMeasurement();
+                SyncManager.onMeasurementFinished(MeasurementControl.getCurrentMeasurement());
                 break;
 
             case UNSUPPORTED_HARDWARE:
@@ -169,6 +173,7 @@ public class Backend {
      */
     public static void onApplicationShutdown() {
         MeasurementControl.onApplicationShutdown();
+        SyncManager.onApplicationShutdown();
     }
 
     /**
