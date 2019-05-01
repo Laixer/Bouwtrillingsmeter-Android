@@ -60,7 +60,7 @@ class SyncManager implements DataIntervalClosedListener {
     @Override
     public void onDataIntervalClosed(DataInterval dataInterval) {
         String measurementUID = MeasurementControl.getCurrentMeasurement().getUID();
-        DataIntervalEssentials dataIntervalEssentials = new DataIntervalEssentials(measurementUID, dataInterval.velocitiesAbsMax, dataInterval.dominantFrequencies);
+        DataIntervalEssentials dataIntervalEssentials = new DataIntervalEssentials(measurementUID, dataInterval.index, dataInterval.velocitiesAbsMax, dataInterval.dominantFrequencies);
         allDataIntervalEssentials.add(dataIntervalEssentials);
 
         // Push and reset if we have enough

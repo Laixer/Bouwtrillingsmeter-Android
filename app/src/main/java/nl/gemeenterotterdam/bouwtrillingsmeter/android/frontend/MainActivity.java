@@ -16,14 +16,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
 import me.toptas.fancyshowcase.FancyShowCaseView;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendState;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendListener;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageControl;
 
 /**
@@ -127,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
     @Override
     public void onResume() {
         super.onResume();
-        listViewMeasurementsAdapter.onDatasetChanged();
+        listViewMeasurementsAdapter.onDataSetChanged();
         fab.setEnabled(true);
 
         // Push snackbar if we just closed a measurement
