@@ -23,8 +23,8 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
  */
 public class MainActivityMeasurementListAdapter extends BaseAdapter {
 
-    LayoutInflater mLayoutInflater;
-    ArrayList<Measurement> measurements;
+    private LayoutInflater mLayoutInflater;
+    private ArrayList<Measurement> measurements;
 
     /**
      * Class constructor for our list view controller
@@ -66,7 +66,11 @@ public class MainActivityMeasurementListAdapter extends BaseAdapter {
         // Add an actionlistener to this to attempt to take a photo
         // TODO Remove photo bar at all when none is present
         Bitmap photo = measurements.get(position).getBitmap();
-        Utility.updateScaledPhoto(imageViewPhoto, photo);
+        if (photo == null) {
+            imageViewPhoto.setMaxHeight(0);
+        } else {
+            Utility.updateScaledPhoto(imageViewPhoto, photo);
+        }
 
         return view;
     }
@@ -74,7 +78,7 @@ public class MainActivityMeasurementListAdapter extends BaseAdapter {
     /**
      * Forces the adapter to update
      */
-    public void onDatasetChanged() {
+    public void onDataSetChanged() {
         this.notifyDataSetChanged();
     }
 

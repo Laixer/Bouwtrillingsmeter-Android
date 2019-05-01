@@ -82,7 +82,8 @@ class Utility {
     }
 
     /**
-     * Scales a bitmap and pushes it onto an imageview
+     * Scales a bitmap and pushes it onto an imageview.
+     * TODO Remove missing photo bit here
      *
      * @param imageView The imageview to update
      * @param bitmap    The bitmap to scale

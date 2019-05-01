@@ -89,6 +89,8 @@ class SyncManager implements DataIntervalClosedListener {
                 unpushedDataIntervals = new ArrayList<DataInterval>();
             }
         }
+        DataIntervalEssentials dataIntervalEssentials = new DataIntervalEssentials(measurementUID, dataInterval.index, dataInterval.velocitiesAbsMax, dataInterval.dominantFrequencies);
+        allDataIntervalEssentials.add(dataIntervalEssentials);
 
         // Only send the essentials if we have no wifi
         else if (connectionType == ConnectionType.G) {
