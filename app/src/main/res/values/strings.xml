@@ -99,6 +99,7 @@
     <string name="finished_measurement_not_exceeded">Er is geen overschrijding gedetecteerd.</string>
     <string name="finished_measurement_exceeded">Er is een overschrijding gedecteerd!</string>
     <string name="finished_measurement_exit_save_confirm">Uw meting is opgeslagen en verstuurd</string>
+    <string name="finished_measurement_description_default">Voeg een beschrijving toe...</string>
 
     <!--Graphs-->
     <string-array name="graph_title">
