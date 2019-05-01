@@ -4,17 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textViewListMeasurementName"
+    <ImageView
+        android:id="@+id/imageViewListMeasurementPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="144dp"
+        android:contentDescription="@string/measurement_name_default"
+        android:scaleType="center" />
+
+    <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageViewListMeasurementPhoto"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="16dp"
-        android:text="@string/measurement_name_default"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:layout_below="@+id/textViewListMeasurementDateTime"
+        android:layout_marginTop="48dp"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/textViewListMeasurementDateTime"
@@ -33,16 +35,16 @@
         android:text="@string/measurement_datetime_default"
         android:textSize="18sp" />
 
-    <ImageView
-        android:id="@+id/imageViewListMeasurementPhoto"
-        android:layout_width="match_parent"
-        android:layout_height="144dp"
-        android:contentDescription="@string/measurement_name_default"
-        android:scaleType="center" />
-
-    <Space
+    <TextView
+        android:id="@+id/textViewListMeasurementName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewListMeasurementDateTime"
-        android:layout_marginTop="48dp" />
+        android:layout_below="@+id/imageViewListMeasurementPhoto"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/measurement_name_default"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
 </RelativeLayout>

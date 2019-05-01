@@ -72,12 +72,13 @@ class SyncManager implements DataIntervalClosedListener {
      * This gets called when the {@link DataInterval} is closed.
      * All listeners get called from the {@link DataHandler} class.
      * Do not forget to add the @Override tag to this function!
+     * TODO Ik weet niet wat ik hier mis heb gedaan maar FIX!
      *
      * @param dataInterval The datainterval
      */
     @Override
     public void onDataIntervalClosed(DataInterval dataInterval) {
-        String measurementUID = MeasurementControl.getCurrentMeasurement().getUID();
+        /*String measurementUID = MeasurementControl.getCurrentMeasurement().getUID();
         ConnectionType connectionType = SyncConnectionManager.getConnectionType();
 
         // Send everything if we have wifi
@@ -99,7 +100,7 @@ class SyncManager implements DataIntervalClosedListener {
                 SyncConnectionManager.pushDataIntervalEssentialsList(measurementUID, unpushedDataIntervalEssentials);
                 unpushedDataIntervalEssentials = new ArrayList<DataIntervalEssentials>();
             }
-        }
+        }*/
     }
 
     private static void startSync() {
