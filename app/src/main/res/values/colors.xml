@@ -26,4 +26,7 @@
     <color name="graph_series_color_point">#00AC5C</color>
     <color name="graph_dominant_constant_line">#000000</color>
 
+    <!--Backgrounds-->
+    <color name="listview_item_background">#efefef</color>
+
 </resources>
