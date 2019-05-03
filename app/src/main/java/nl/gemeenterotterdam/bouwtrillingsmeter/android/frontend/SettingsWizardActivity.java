@@ -59,6 +59,7 @@ public class SettingsWizardActivity extends AppCompatActivity {
         ((FloatingActionButton) findViewById(R.id.fabWizardConfirm)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SettingsPageActivity.onWizardCreatedValidSettings(settings);
                 finish();
             }
         });
@@ -268,8 +269,6 @@ public class SettingsWizardActivity extends AppCompatActivity {
     private void onReachedWizardFinish(Outcome outcome) {
         switchLayout(true);
         if (settings.isValid()) {
-            SettingsPageActivity.onWizardCreatedValidSettings(settings);
-
             setFinishTextViewsVisibilities(true);
             textViewTop.setText(getResources().getString(R.string.widget_final_top_success));
             textViewBuildingCategory.setText(getResources().getStringArray(R.array.category_dropdown_building)[settings.buildingCategory.ordinal()]);
