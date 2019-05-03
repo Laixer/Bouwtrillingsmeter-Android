@@ -29,7 +29,7 @@ public class SettingsWidgetSlideAdapter extends PagerAdapter {
     /**
      * Constructor for this adapter
      */
-    public SettingsWidgetSlideAdapter(Context context, SettingsWidgetActivity parent, int slideCount) {
+    SettingsWidgetSlideAdapter(Context context, SettingsWidgetActivity parent, int slideCount) {
         // Save pointer
         this.context = context;
         this.parent = parent;
@@ -72,8 +72,8 @@ public class SettingsWidgetSlideAdapter extends PagerAdapter {
             Button buttonNo = (Button) view.findViewById(R.id.buttonSettingsSlideNo);
 
             // Assign variables
-            textViewMain.setText(Utility.resources.getStringArray(R.array.widget_text_main)[position]);
-            textViewExtra.setText(Utility.resources.getStringArray(R.array.widget_text_extra)[position]);
+            textViewMain.setText(Utility.resources.getStringArray(R.array.wizard_question_text_main)[position]);
+            textViewExtra.setText(Utility.resources.getStringArray(R.array.wizard_question_text_extra)[position]);
 
             // Onclick listeners
             buttonYes.setOnClickListener(new View.OnClickListener() {

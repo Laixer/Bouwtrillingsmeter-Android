@@ -33,7 +33,7 @@ public class SettingsWidgetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings_widget);
 
         // Calculate variables
-        questionCount = Utility.resources.getStringArray(R.array.widget_text_main).length;
+        questionCount = Utility.resources.getStringArray(R.array.wizard_question_text_main).length;
         slideCount = questionCount + 1;
         answers = new boolean[questionCount];
         questionsAnsweredCount = 0;

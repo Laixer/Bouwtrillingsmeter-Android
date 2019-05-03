@@ -41,18 +41,43 @@
     <string name="first_visit_slide_3_description">Je raadt het nooit - Nog meer beschrijvingen!</string>
     <string name="title_activity_alleen_constraints">AlleenConstraints</string>
 
-    <!--Widget-->
-    <string-array name="widget_text_main">
-        <item>Bestaat het gebouw waarin u wilt meten uit een betonnen bebouwing met metselwerk of gevelbekleding?</item>
-        <item>Betreft de bebouwing een monument of beschermd stadsgezicht?</item>
-        <item>Zijn de trillingen die u wilt meten afkomstig van één van de onderstaande bronnen: \n-Explosies \n-Botsingen \n-Het van hoogte legen van kraanbakken \n-Het met de kraan breken van beton \n-Storten van puin in een container(bak)</item>
-        <item>Is het pand gefundeerd op houten funderingspalen of is het gebouw op staal gefundeerd?</item>
+    <!--Wizard-->
+    <string-array name="wizard_question_text_main">
+        <!--Question 0--> <item>Bestaat het pand waarin u wilt meten uit een betonnen bebouwing met metselwerk of gevelbekleding.</item>
+        <!--Question 1--> <item>Bestaat het pand waarin u wilt meten uit gemetselde wanden?</item>
+        <!--Question 2--> <item>Bestaat het pand uit een stalenskelet, glas als gevelbekleding of hout?</item>
+        <!--Question 3--> <item>Betreft de bebouwing een monument of beschermd stadsgezicht?</item>
+        <!--Question 4--> <item>Verkeerd het pand in slechte bouwkundige staat?</item>
+        <!--Question 5--> <item>Betreft de bebouwing een monument of beschermd stadsgezicht?</item>
+        <!--Question 6--> <item>Zijn de trillingen die u wilt meten afkomstig van een van onderstaande bronnen:\n- explosies\n- botsingen\n- Het van hoogte legen van kraanbakken\n- Het met de kraan breken van beton\n- Storten van puin in container(bak)</item>
+        <!--Question 7--> <item>Zijn de trillingen die u wilt meten afkomstig van een van onderstaande bronnen:\n- weg of railverkeer\n- heiwerkzaamheden\nHet rijden shovel en kranen</item>
+        <!--Question 8--> <item>Zijn de trillingen die u wilt meten afkomstig van een van onderstaande bronnen:\n- Intrillen van damwanden\n- trilwalsen en trilplaten</item>
+        <!--Question 9--> <item>Is het pand gefundeerd op houten funderingspalen of is het pand op staal gefundeerde?</item>
     </string-array>
-    <string-array name="widget_text_extra">
-        <item>Veel bebouwing na 1970 valt in deze categorie</item>
-        <item></item>
-        <item></item>
-        <item></item>
+    <string-array name="wizard_question_text_extra">
+        <!--Question 0--> <item>Veel bebouwing na 1970 valt in deze categorie.</item>
+        <!--Question 1--> <item>Veel bebouwing van voor 1970 valt in deze categorie.</item>
+        <!--Question 2--> <item>Bijvoorbeeld Kantoor gebouwen met grote glazen gevels of houten schuurtjes.</item>
+        <!--Question 3--> <item></item>
+        <!--Question 4--> <item>Zijn er bijvoorbeeld scheuren of kieren of andere schade aan het pand aanwezig.</item>
+        <!--Question 5--> <item></item>
+        <!--Question 6--> <item></item>
+        <!--Question 7--> <item></item>
+        <!--Question 8--> <item></item>
+        <!--Question 9--> <item></item>
+    </string-array>
+    <string-array name="wizard_outcome_text">
+        <!--Outcome 0--> <item>Het pand kan niet worden in gedeeld in een categorie van de SBR-A richtlijn.</item>
+        <!--Outcome 1--> <item>Het pand behoort in categorie 3 van de SBR-A richtlijn.</item>
+        <!--Outcome 2--> <item>Er is geen kwalificatie voor het type bebouwing kunnen maken.</item>
+        <!--Outcome 3--> <item>Het pand behoort in categorie 1 van de SBR-A richtlijn.</item>
+        <!--Outcome 4--> <item>Het pand behoort in categorie 2 van de SBR-A richtlijn.</item>
+        <!--Outcome 5--> <item>Er is geen kwalificatie voor het type trilling kunnen maken.</item>
+        <!--Outcome 6--> <item>De trillingen zijn conform de SBR-A richtlijn geclassificeerd als "kortdurende trillingen"</item>
+        <!--Outcome 7--> <item>De trillingen zijn conform de SBR-A richtlijn geclassificeerd als "herhaald kortdurende trillingen"</item>
+        <!--Outcome 8--> <item>De trillingen zijn conform de SBR-A richtlijn geclassificeerd als "continue trillingen"</item>
+        <!--Outcome 9--> <item>Het pand is niet geclassificeerd als trillingsgevoelig volgens de SBR-A richtlijn.</item>
+        <!--Outcome 10--> <item>het pand is geclassificeerd als trillingsgevoelig volgens de SBR-A richtlijn.</item>
     </string-array>
 
     <string name="widget_final_top">Aan de hand van uw antwoorden is het volgende bepaald:</string>

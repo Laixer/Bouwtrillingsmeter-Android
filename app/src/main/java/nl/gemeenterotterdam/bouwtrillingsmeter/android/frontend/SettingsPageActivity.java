@@ -151,7 +151,7 @@ public class SettingsPageActivity extends AppCompatActivity {
         // Temporarily disable button
         buttonIDontKnow.setEnabled(false);
 
-        Intent intent = new Intent(getApplicationContext(), SettingsWidgetActivity.class);
+        Intent intent = new Intent(getApplicationContext(), SettingsWizardActivity.class);
         startActivity(intent);
     }
 

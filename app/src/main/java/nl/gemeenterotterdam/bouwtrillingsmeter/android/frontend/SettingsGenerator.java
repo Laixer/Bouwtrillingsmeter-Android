@@ -29,7 +29,7 @@ public class SettingsGenerator {
      *
      * @return Our current settings object.
      */
-    public static Settings getCurrentSettings() {
+    static Settings getCurrentSettings() {
         return currentSettings;
     }
 
@@ -42,7 +42,7 @@ public class SettingsGenerator {
      * @param vibrationSensitive A boolean indicating if we are dealing with a vibration sensitive building
      * @return true if a new valid settings file was created and stored
      */
-    public static boolean createSettingsFromCategoryPage(BuildingCategory buildingCategory, VibrationCategory vibrationCategory, boolean vibrationSensitive) {
+    static boolean createSettingsFromCategoryPage(BuildingCategory buildingCategory, VibrationCategory vibrationCategory, boolean vibrationSensitive) {
         if (buildingCategory == BuildingCategory.NONE || vibrationCategory == VibrationCategory.NONE) {
             return false;
         }
