@@ -5,8 +5,11 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Bundle;
 
 import java.util.Calendar;
+
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
 /**
  * This class detects if we have our phone flat on the table.
@@ -14,90 +17,87 @@ import java.util.Calendar;
  */
 class FlatPhoneDetector implements SensorEventListener {
 
-    private static final int sensorType = Sensor.TYPE_ROTATION_VECTOR;
-    private static final int sensorDelay = SensorManager.SENSOR_DELAY_NORMAL;
-    private static final float maxDeltaToDetermineFlat = 0.01f;
-    private static final float minDeltaToDeterminePickup = 0.02f;
-    private static final long periodInMillis = 300;
+    private static final float maxDeltaToDetermineFlat = 0.025f;
+    private static final float maxDeltaToDetermineAbsoluteFlat = 0.05f;
+    private static final float minDeltaToDeterminePickup = 0.06f;
 
-    private SensorManager sensorManager;
-    private Sensor sensor;
-    private boolean flatOnTable = false;
-    private float[] periodMin = new float[3];
-    private float[] periodMax = new float[3];
-    private float[] orientationFlat = new float[3];
-    private long lastTimeInMillis = 0;
+    private boolean flat = false;
+    private final float[] orientationFlat = new float[]{0, 0, 0};
+    private float[] orientationComparing = new float[3];
 
+    private final float[] accelerometerReading = new float[3];
+    private final float[] magnetometerReading = new float[3];
+    private final float[] rotationMatrix = new float[9];
+    private final float[] orientationAngles = new float[3];
+
+    /**
+     * Constructor
+     */
     FlatPhoneDetector() {
-        sensorManager = (SensorManager) Backend.applicationContext.getSystemService(Context.SENSOR_SERVICE);
-        sensor = sensorManager.getDefaultSensor(sensorType);
-        if (sensor != null) {
-            sensorManager.registerListener(this, sensor, sensorDelay);
-        } else {
-            throw new UnsupportedOperationException("No accelerometer available");
+        SensorManager sensorManager = (SensorManager) Backend.applicationContext.getSystemService(Context.SENSOR_SERVICE);
+        Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        if (accelerometer != null) {
+            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+        }
+        Sensor magneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        if (magneticField != null) {
+            sensorManager.registerListener(this, magneticField, SensorManager.SENSOR_DELAY_UI);
         }
     }
 
     /**
-     * This gets called when we enter the {@link BackendState#AWAITING_PHONE_FLAT} state.
-     * In this way we double check if we really are flat.
-     * We also trigger the {@link Backend#onPhoneFlat()} event.
-     */
-    void forceFlatOnTableToFalse() {
-        flatOnTable = false;
-    }
-
-    /**
-     * Gets called when we get new sensor data.
-     * values[0] is pointed east
-     * values[1] is pointed north
-     * values[2] is pointed up
-     * TODO Implement that we are facing upwards?
-     * @param event the {@link SensorEvent SensorEvent}.
+     * Gets called when we receive new sensor data.
+     *
+     * @param event The event
      */
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // Get values
-        float x = event.values[0];
-        float y = event.values[1];
-        float z = event.values[2];
-//        System.out.println(String.format("%s %s %s", x, y, z));
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            System.arraycopy(event.values, 0, accelerometerReading, 0, accelerometerReading.length);
+            updateOrientationAngles();
+        } else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+            System.arraycopy(event.values, 0, magnetometerReading, 0, magnetometerReading.length);
 
-        // Get min and max
-        periodMin[0] = Math.min(periodMin[0], x);
-        periodMin[1] = Math.min(periodMin[1], y);
-        periodMin[2] = Math.min(periodMin[2], z);
-        periodMax[0] = Math.max(periodMax[0], x);
-        periodMax[1] = Math.max(periodMax[1], y);
-        periodMax[2] = Math.max(periodMax[2], z);
-
-        // If our period is over
-        if (Calendar.getInstance().getTimeInMillis() - lastTimeInMillis > periodInMillis) {
-            // Get highest delta
-            float d = 0;
-            for (int dimension = 0; dimension < 3; dimension++) {
-                d = Math.max(periodMax[dimension] - periodMin[dimension], d);
-            }
-
-            System.out.println(String.format("Max delta = %s", d));
-
-            // Determine
-            if (!flatOnTable && d < maxDeltaToDetermineFlat) {
-                flatOnTable = true;
-                orientationFlat = new float[]{x, y, z};
-//                Backend.onPhoneFlat();
-                System.out.println("FLAT!");
-            } else if (flatOnTable && d > minDeltaToDeterminePickup) {
-                flatOnTable = false;
-//                Backend.onPhonePickup();
-                System.out.println("PICKUP!");
-            }
-
-            // Reset the bunch
-            periodMin = new float[3];
-            periodMax = new float[3];
-            lastTimeInMillis = Calendar.getInstance().getTimeInMillis();
         }
+    }
+
+    /**
+     * Calculate the orientation angles.
+     */
+    private void updateOrientationAngles() {
+        // Calculate orientation
+        SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerReading, magnetometerReading);
+        float[] orientation = SensorManager.getOrientation(rotationMatrix, orientationAngles);
+//        System.out.println(String.format("%s %s %s", orientation[0], orientation[1], orientation[2]));
+
+        // Do some maths to determine flat or pickup position
+        float dx = Math.abs(orientation[0] - orientationComparing[0]);
+        float dy = Math.abs(orientation[1] - orientationComparing[1]);
+        float dz = Math.abs(orientation[2] - orientationComparing[2]);
+        float d = Math.max(dx, Math.max(dy, dz));
+        System.out.print("d = " + d);
+
+        if (!flat && d < maxDeltaToDetermineFlat) {
+            dx = Math.abs(orientation[0] - orientationFlat[0]);
+            dy = Math.abs(orientation[1] - orientationFlat[1]);
+            dz = Math.abs(orientation[2] - orientationFlat[2]);
+            d = Math.max(dx, Math.max(dy, dz));
+            System.out.println(",   d 000 = " + d);
+            if (d < maxDeltaToDetermineAbsoluteFlat) {
+                System.out.println("FLAT!");
+                flat = true;
+            }
+        } else if (flat && d > minDeltaToDeterminePickup) {
+            System.out.println("PICKUP!");
+            flat = false;
+        }
+
+        // Save orientation if we are not flat
+        if (!flat) {
+            orientationComparing = new float[]{orientation[0], orientation[1], orientation[2]};
+        }
+
+        System.out.println("");
     }
 
     @Override
