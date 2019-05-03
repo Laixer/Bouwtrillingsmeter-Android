@@ -1,11 +1,14 @@
+/*
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 import java.util.Calendar;
 
+*/
 /**
  * This class detects if we have our phone flat on the table.
  * It also detects when we pick it up again.
- */
+ *//*
+
 class FlatPhoneDetectorAccelerometer implements AccelerometerListener {
 
     private static final float maxDeltaToDetermineFlat = 0.3f;
@@ -18,23 +21,28 @@ class FlatPhoneDetectorAccelerometer implements AccelerometerListener {
     private static float[] periodMax = new float[3];
     private static long lastTimeInMillis = 0;
 
-    /**
+    */
+/**
      * Initializes this class
-     */
+     *//*
+
     static void initialize() {
         AccelerometerControl.addListener(flatPhoneDetector);
     }
 
-    /**
+    */
+/**
      * This gets called when we enter the {@link BackendState#AWAITING_PHONE_FLAT} state.
      * In this way we double check if we really are flat.
      * We also trigger the {@link Backend#onPhoneFlat()} event.
-     */
+     *//*
+
     static void forceFlatOnTableToFalse() {
         flatOnTable = false;
     }
 
-    /**
+    */
+/**
      * This gets called when our accelerometer measures data.
      * The data does NOT have to be different from the previous dataset.
      * This will just get called every "tick".
@@ -42,7 +50,8 @@ class FlatPhoneDetectorAccelerometer implements AccelerometerListener {
      * @param x The acceleration in the x direction.
      * @param y The acceleration in the y direction.
      * @param z The acceleration in the z direction.
-     */
+     *//*
+
     @Override
     public void onReceivedData(float x, float y, float z) {
         // Get min and max
@@ -77,3 +86,4 @@ class FlatPhoneDetectorAccelerometer implements AccelerometerListener {
         }
     }
 }
+*/

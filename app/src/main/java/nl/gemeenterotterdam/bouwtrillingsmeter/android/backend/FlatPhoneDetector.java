@@ -14,6 +14,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 /**
  * This class detects if we have our phone flat on the table.
  * It also detects when we pick it up again.
+ * TODO Make this unsubscribe and not calculate when we are not measuring
  */
 class FlatPhoneDetector implements SensorEventListener {
 
@@ -68,40 +69,42 @@ class FlatPhoneDetector implements SensorEventListener {
         // Calculate orientation
         SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerReading, magnetometerReading);
         float[] orientation = SensorManager.getOrientation(rotationMatrix, orientationAngles);
-//        System.out.println(String.format("%s %s %s", orientation[0], orientation[1], orientation[2]));
 
         // Do some maths to determine flat or pickup position
         float dx = Math.abs(orientation[0] - orientationComparing[0]);
         float dy = Math.abs(orientation[1] - orientationComparing[1]);
         float dz = Math.abs(orientation[2] - orientationComparing[2]);
         float d = Math.max(dx, Math.max(dy, dz));
-        System.out.print("d = " + d);
 
         if (!flat && d < maxDeltaToDetermineFlat) {
             dx = Math.abs(orientation[0] - orientationFlat[0]);
             dy = Math.abs(orientation[1] - orientationFlat[1]);
             dz = Math.abs(orientation[2] - orientationFlat[2]);
             d = Math.max(dx, Math.max(dy, dz));
-            System.out.println(",   d 000 = " + d);
             if (d < maxDeltaToDetermineAbsoluteFlat) {
-                System.out.println("FLAT!");
                 flat = true;
+                Backend.onPhoneFlat();
             }
         } else if (flat && d > minDeltaToDeterminePickup) {
-            System.out.println("PICKUP!");
             flat = false;
+            Backend.onPhonePickup();
         }
 
         // Save orientation if we are not flat
         if (!flat) {
             orientationComparing = new float[]{orientation[0], orientation[1], orientation[2]};
         }
-
-        System.out.println("");
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Not used
+    }
+
+    /**
+     * Sets flat on table to false to enable our event calls again.
+     */
+    void forceFlatToFalse() {
+        flat = false;
     }
 }

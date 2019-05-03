@@ -21,6 +21,7 @@ public class Backend {
     private static boolean initialized = false;
     private static boolean currentMeasurementExceeded;
     private static Date timeLastExceeding;
+    private static FlatPhoneDetector flatPhoneDetector;
 
     protected static Context applicationContext;
     protected static Resources resources;
@@ -41,8 +42,7 @@ public class Backend {
             MeasurementControl.initialize();
             AccelerometerControl.initialize();
             DataHandler.initialize();
-            FlatPhoneDetectorAccelerometer.initialize();
-            FlatPhoneDetector flatPhoneDetector = new FlatPhoneDetector();
+            flatPhoneDetector = new FlatPhoneDetector();
 
             SyncManager.initialize();
             SyncConnectionManager.initialize();
@@ -98,7 +98,7 @@ public class Backend {
                 break;
 
             case AWAITING_PHONE_FLAT:
-                FlatPhoneDetectorAccelerometer.forceFlatOnTableToFalse();
+                flatPhoneDetector.forceFlatToFalse();
                 break;
 
             case MEASURING:
