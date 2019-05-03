@@ -26,10 +26,8 @@ class Accelerometer implements SensorEventListener {
     /**
      * Constructor.
      * This attempts to connect to the hardware present.
-     *
-     * @throws UnsupportedOperationException Thrown when the hardware is not supported on this phone.
      */
-    public Accelerometer() {
+    Accelerometer() {
         sensorManager = (SensorManager) Backend.applicationContext.getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(sensorType);
         if (sensor != null) {

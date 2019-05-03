@@ -41,7 +41,8 @@ public class Backend {
             MeasurementControl.initialize();
             AccelerometerControl.initialize();
             DataHandler.initialize();
-            FlatPhoneDetector.initialize();
+            FlatPhoneDetectorAccelerometer.initialize();
+            FlatPhoneDetector flatPhoneDetector = new FlatPhoneDetector();
 
             SyncManager.initialize();
             SyncConnectionManager.initialize();
@@ -97,7 +98,7 @@ public class Backend {
                 break;
 
             case AWAITING_PHONE_FLAT:
-                FlatPhoneDetector.forceFlatOnTableToFalse();
+                FlatPhoneDetectorAccelerometer.forceFlatOnTableToFalse();
                 break;
 
             case MEASURING:
