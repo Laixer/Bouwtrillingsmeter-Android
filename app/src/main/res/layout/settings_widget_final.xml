@@ -7,7 +7,7 @@
     tools:context=".frontend.zSettingsWidgetFinalActivity">
 
     <TextView
-        android:id="@+id/textViewWidgetFinalVibrationSensitive"
+        android:id="@+id/textViewWizardVibrationSensitive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -15,10 +15,10 @@
         android:text="@string/default_text"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textViewWidgetFinalTrillingsgevoelig" />
+        app:layout_constraintTop_toTopOf="@+id/textViewWizardStaticVibrationSensitive" />
 
     <TextView
-        android:id="@+id/textViewWidgetFinalBuildingCategory"
+        android:id="@+id/textViewWizardBuildingCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -26,10 +26,10 @@
         android:text="@string/default_text"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textViewWidgetFinalStaticCategoriePand" />
+        app:layout_constraintTop_toTopOf="@+id/textViewWizardStaticBuildingCategory" />
 
     <TextView
-        android:id="@+id/textViewWidgetFinalVibrationCategory"
+        android:id="@+id/textViewWizardVibrationCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -37,10 +37,10 @@
         android:text="@string/default_text"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textViewWidgetFinalStaticCategorieTrilling" />
+        app:layout_constraintTop_toTopOf="@+id/textViewWizardStaticVibrationCategory" />
 
     <TextView
-        android:id="@+id/textViewWidgetFinalTop"
+        android:id="@+id/textViewWizardTop"
         android:layout_width="395dp"
         android:layout_height="43dp"
         android:layout_marginStart="32dp"
@@ -48,7 +48,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:text="@string/widget_final_top"
+        android:text="@string/widget_final_top_success"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +56,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textViewWidgetFinalStaticCategoriePand"
+        android:id="@+id/textViewWizardStaticBuildingCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -66,10 +66,10 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewWidgetFinalTop" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewWizardTop" />
 
     <TextView
-        android:id="@+id/textViewWidgetFinalStaticCategorieTrilling"
+        android:id="@+id/textViewWizardStaticVibrationCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -79,10 +79,10 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewWidgetFinalStaticCategoriePand" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewWizardStaticBuildingCategory" />
 
     <TextView
-        android:id="@+id/textViewWidgetFinalTrillingsgevoelig"
+        android:id="@+id/textViewWizardStaticVibrationSensitive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -92,10 +92,10 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewWidgetFinalStaticCategorieTrilling" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewWizardStaticVibrationCategory" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabWidgetFinalConfirm"
+        android:id="@+id/fabWizardConfirm"
         android:layout_width="wrap_content"
         android:layout_height="56dp"
         android:layout_margin="@dimen/fab_margin"

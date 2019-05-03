@@ -42,6 +42,7 @@
     <string name="title_activity_alleen_constraints">AlleenConstraints</string>
 
     <!--Wizard-->
+    <string name="wizard_button_try_again">Opnieuw</string>
     <string-array name="wizard_question_text_main">
         <!--Question 0--> <item>Bestaat het pand waarin u wilt meten uit een betonnen bebouwing met metselwerk of gevelbekleding.</item>
         <!--Question 1--> <item>Bestaat het pand waarin u wilt meten uit gemetselde wanden?</item>
@@ -80,7 +81,7 @@
         <!--Outcome 10--> <item>het pand is geclassificeerd als trillingsgevoelig volgens de SBR-A richtlijn.</item>
     </string-array>
 
-    <string name="widget_final_top">Aan de hand van uw antwoorden is het volgende bepaald:</string>
+    <string name="widget_final_top_success">Aan de hand van uw antwoorden is het volgende bepaald:</string>
     <string name="widget_final_categorie_gebouw">Categorie pand</string>
     <string name="widget_final_categorie_trilling">Categorie trilling</string>
     <string name="widget_final_trillingsgevoelig">Trillingsgevoelig</string>

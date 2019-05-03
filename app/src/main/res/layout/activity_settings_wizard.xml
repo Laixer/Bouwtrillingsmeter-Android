@@ -6,61 +6,193 @@
     android:layout_height="match_parent"
     tools:context=".frontend.SettingsWizardActivity">
 
-    <TextView
-        android:id="@+id/textViewSettingsWizardMain"
-        android:layout_width="395dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="@string/default_text"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/layoutWidgetQuestions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
-    <TextView
-        android:id="@+id/textViewSettingsWizardExtra"
-        android:layout_width="395dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="@string/default_text"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSettingsWizardMain" />
+        <TextView
+            android:id="@+id/textViewWizardExtra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/default_text"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewWizardMain" />
 
-    <Button
-        android:id="@+id/buttonSettingsWizardYes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/default_yes"
-        app:layout_constraintBottom_toTopOf="@+id/buttonSettingsWizardNo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/buttonWizardNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/default_no"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonWizardYes" />
 
-    <Button
-        android:id="@+id/buttonSettingsWizardNo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/default_no"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSettingsWizardExtra"
-        app:layout_constraintVertical_bias="0.81" />
+        <Button
+            android:id="@+id/buttonWizardYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/default_yes"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewWizardExtra"
+            app:layout_constraintVertical_bias="0.7" />
+
+        <TextView
+            android:id="@+id/textViewWizardMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/default_text"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/layoutWidgetCompleted"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".frontend.zSettingsWidgetFinalActivity"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/textViewWizardVibrationSensitive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/default_text"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textViewWizardStaticVibrationSensitive" />
+
+        <TextView
+            android:id="@+id/textViewWizardBuildingCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/default_text"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textViewWizardStaticBuildingCategory" />
+
+        <TextView
+            android:id="@+id/textViewWizardVibrationCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/default_text"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textViewWizardStaticVibrationCategory" />
+
+        <TextView
+            android:id="@+id/textViewWizardTop"
+            android:layout_width="395dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:text="@string/widget_final_top_success"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewWizardStaticBuildingCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/widget_final_categorie_gebouw"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewWizardTop" />
+
+        <TextView
+            android:id="@+id/textViewWizardStaticVibrationCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/widget_final_categorie_trilling"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewWizardStaticBuildingCategory" />
+
+        <TextView
+            android:id="@+id/textViewWizardStaticVibrationSensitive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/widget_final_trillingsgevoelig"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewWizardStaticVibrationCategory" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabWizardConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/fab_checkmark" />
+
+        <Button
+            android:id="@+id/buttonWizardTryAgain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/wizard_button_try_again"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.75" />
+
+    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

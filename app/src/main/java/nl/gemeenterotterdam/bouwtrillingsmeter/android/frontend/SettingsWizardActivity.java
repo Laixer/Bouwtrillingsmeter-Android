@@ -1,6 +1,10 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.content.Intent;
+import android.opengl.Visibility;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -18,10 +22,21 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory
  */
 public class SettingsWizardActivity extends AppCompatActivity {
 
+    private ConstraintLayout layoutQuestion;
+    private ConstraintLayout layoutFinish;
+
+    // Question
     private TextView textViewMain;
     private TextView textViewExtra;
-    private Button buttonYes;
-    private Button buttonNo;
+
+    // Finish
+    private TextView textViewTop;
+    private TextView textViewBuildingCategory;
+    private TextView textViewVibrationCategory;
+    private TextView textViewVibrationSensitive;
+    private TextView textViewStaticBuildingCategory;
+    private TextView textViewStaticVibrationCategory;
+    private TextView textViewStaticVibrationSensitive;
 
     private SettingsWizard settingsWizard;
     private Question currentQuestion;
@@ -39,16 +54,26 @@ public class SettingsWizardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings_wizard);
 
         // Link all elements
-        textViewMain = (TextView) findViewById(R.id.textViewSettingsWizardMain);
-        textViewExtra = (TextView) findViewById(R.id.textViewSettingsWizardExtra);
-        buttonYes = (Button) findViewById(R.id.buttonSettingsWizardYes);
+        layoutQuestion = (ConstraintLayout) findViewById(R.id.layoutWidgetQuestions);
+        layoutFinish = (ConstraintLayout) findViewById(R.id.layoutWidgetCompleted);
+        ((FloatingActionButton) findViewById(R.id.fabWizardConfirm)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        // Question
+        textViewMain = (TextView) findViewById(R.id.textViewWizardMain);
+        textViewExtra = (TextView) findViewById(R.id.textViewWizardExtra);
+        Button buttonYes = (Button) findViewById(R.id.buttonWizardYes);
         buttonYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onAnswered(true);
             }
         });
-        buttonNo = (Button) findViewById(R.id.buttonSettingsWizardNo);
+        Button buttonNo = (Button) findViewById(R.id.buttonWizardNo);
         buttonNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,10 +81,29 @@ public class SettingsWizardActivity extends AppCompatActivity {
             }
         });
 
+        // Finish
+        textViewTop = (TextView) findViewById(R.id.textViewWizardTop);
+        textViewBuildingCategory = (TextView) findViewById(R.id.textViewWizardBuildingCategory);
+        textViewVibrationCategory = (TextView) findViewById(R.id.textViewWizardVibrationCategory);
+        textViewVibrationSensitive = (TextView) findViewById(R.id.textViewWizardVibrationSensitive);
+        textViewStaticBuildingCategory = (TextView) findViewById(R.id.textViewWizardStaticBuildingCategory);
+        textViewStaticVibrationCategory = (TextView) findViewById(R.id.textViewWizardStaticVibrationCategory);
+        textViewStaticVibrationSensitive = (TextView) findViewById(R.id.textViewWizardStaticVibrationSensitive);
+
         // Setup wizard
         settings = new Settings();
         settingsWizard = createQuestionWizard();
         currentQuestion = settingsWizard.getStartQuestion();
+        Button buttonTryAgain = (Button) findViewById(R.id.buttonWizardTryAgain);
+        buttonTryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickTryAgain();
+            }
+        });
+
+        // Change layout
+        switchLayout(false);
         pushQuestionToScreen(currentQuestion);
     }
 
@@ -135,6 +179,20 @@ public class SettingsWizardActivity extends AppCompatActivity {
     }
 
     /**
+     * Either shows the question layout or the finish layout.
+     * @param finished True if we are in the finish tab.
+     */
+    private void switchLayout(boolean finished) {
+        if (finished) {
+            layoutQuestion.setVisibility(View.GONE);
+            layoutFinish.setVisibility(View.VISIBLE);
+        } else {
+            layoutQuestion.setVisibility(View.VISIBLE);
+            layoutFinish.setVisibility(View.GONE);
+        }
+    }
+
+    /**
      * This pushes a question to the screen.
      *
      * @param question The question to push
@@ -165,13 +223,23 @@ public class SettingsWizardActivity extends AppCompatActivity {
 
             // Get out of here if the outcome is an endpoint
             if (nextQuestion == null) {
-                onReachedWizardFinish();
+                onReachedWizardFinish(outcome);
                 return;
             }
         }
 
         currentQuestion = nextQuestion;
         pushQuestionToScreen(currentQuestion);
+    }
+
+    /**
+     * Gets called when we want to try the wizard again.
+     * TODO Implement
+     */
+    private void onClickTryAgain() {
+        Intent intent = new Intent(getApplicationContext(), SettingsWizardActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     /**
@@ -195,16 +263,36 @@ public class SettingsWizardActivity extends AppCompatActivity {
 
     /**
      * Gets called when we reach an endpoint in the flowchart.
+     * @param outcome The outcome
      */
-    private void onReachedWizardFinish() {
+    private void onReachedWizardFinish(Outcome outcome) {
+        switchLayout(true);
         if (settings.isValid()) {
             SettingsPageActivity.onWizardCreatedValidSettings(settings);
-            System.out.println("VALID");
-        } else {
-            System.out.println("INVALID");
-        }
 
-        finish();
+            setFinishTextViewsVisibilities(true);
+            textViewTop.setText(getResources().getString(R.string.widget_final_top_success));
+            textViewBuildingCategory.setText(getResources().getStringArray(R.array.category_dropdown_building)[settings.buildingCategory.ordinal()]);
+            textViewVibrationCategory.setText(getResources().getStringArray(R.array.category_dropdown_vibration)[settings.vibrationCategory.ordinal()]);
+            textViewVibrationSensitive.setText(settings.vibrationSensitive ? getResources().getString(R.string.default_yes) : getResources().getString(R.string.default_no));
+        } else {
+            setFinishTextViewsVisibilities(false);
+            textViewTop.setText(getResources().getStringArray(R.array.wizard_outcome_text)[outcome.getIndex()]);
+        }
+    }
+
+    /**
+     * Changes our outcome text visibility.
+     * @param visible True if visible, false if not
+     */
+    private void setFinishTextViewsVisibilities(boolean visible) {
+        int visibility = visible ? View.VISIBLE : View.GONE;
+        textViewBuildingCategory.setVisibility(visibility);
+        textViewVibrationCategory.setVisibility(visibility);
+        textViewVibrationSensitive.setVisibility(visibility);
+        textViewStaticBuildingCategory.setVisibility(visibility);
+        textViewStaticVibrationCategory.setVisibility(visibility);
+        textViewStaticVibrationSensitive.setVisibility(visibility);
     }
 
     /**
