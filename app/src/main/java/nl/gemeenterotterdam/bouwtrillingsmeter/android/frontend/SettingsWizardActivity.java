@@ -15,17 +15,16 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory
 
 /**
  * This holds our settings wizard.
- * TODO Who holds the settings file?
  */
 public class SettingsWizardActivity extends AppCompatActivity {
-
-    private SettingsWizard settingsWizard;
 
     private TextView textViewMain;
     private TextView textViewExtra;
     private Button buttonYes;
     private Button buttonNo;
 
+    private SettingsPageActivity settingsPageActivity;
+    private SettingsWizard settingsWizard;
     private Question currentQuestion;
     private Settings settings;
 
@@ -63,6 +62,14 @@ public class SettingsWizardActivity extends AppCompatActivity {
         settingsWizard = createQuestionWizard();
         currentQuestion = settingsWizard.getStartQuestion();
         pushQuestionToScreen(currentQuestion);
+    }
+
+    /**
+     * Make a link to push back the created settings file.
+     * @param settingsPageActivity The settings page activity that opened this activity.
+     */
+    void linkToSettingsPageActivity(SettingsPageActivity settingsPageActivity) {
+        this.settingsPageActivity = settingsPageActivity;
     }
 
     /**
@@ -162,14 +169,14 @@ public class SettingsWizardActivity extends AppCompatActivity {
             Outcome outcome = (Outcome) nextQuestion;
             nextQuestion = outcome.getNextQuestion();
 
+            // Save our outcome
+            saveOutcome(outcome);
+
             // Get out of here if the outcome is an endpoint
             if (nextQuestion == null) {
                 onReachedWizardFinish();
                 return;
             }
-
-            // Save our outcome
-            saveOutcome(outcome);
         }
 
         currentQuestion = nextQuestion;
@@ -195,8 +202,21 @@ public class SettingsWizardActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Gets called when we reach an endpoint in the flowchart.
+     */
     private void onReachedWizardFinish() {
         System.out.println("FINISH REACHED");
+
+        
+    }
+
+    /**
+     * Gets called when we press the back button while in this activity.
+     */
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
 }

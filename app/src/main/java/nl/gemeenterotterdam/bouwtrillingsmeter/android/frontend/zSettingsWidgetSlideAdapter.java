@@ -16,9 +16,9 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Settings;
 /**
  * TODO Doc
  */
-public class SettingsWidgetSlideAdapter extends PagerAdapter {
+public class zSettingsWidgetSlideAdapter extends PagerAdapter {
 
-    private SettingsWidgetActivity parent;
+    private zSettingsWidgetActivity parent;
     private int[] layouts;
     private LayoutInflater layoutInflater;
     private Context context;
@@ -29,7 +29,7 @@ public class SettingsWidgetSlideAdapter extends PagerAdapter {
     /**
      * Constructor for this adapter
      */
-    SettingsWidgetSlideAdapter(Context context, SettingsWidgetActivity parent, int slideCount) {
+    zSettingsWidgetSlideAdapter(Context context, zSettingsWidgetActivity parent, int slideCount) {
         // Save pointer
         this.context = context;
         this.parent = parent;

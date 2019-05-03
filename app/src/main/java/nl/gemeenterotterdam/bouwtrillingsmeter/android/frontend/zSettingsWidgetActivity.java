@@ -14,10 +14,10 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
  * TODO Doc
  * TODO Implement non hacky fix for skipping the widget
  */
-public class SettingsWidgetActivity extends AppCompatActivity {
+public class zSettingsWidgetActivity extends AppCompatActivity {
 
     ViewPager mViewPager;
-    SettingsWidgetSlideAdapter mSlideAdapter;
+    zSettingsWidgetSlideAdapter mSlideAdapter;
 
     private LinearLayout dotsLayout;
     ImageView[] dots;
@@ -40,7 +40,7 @@ public class SettingsWidgetActivity extends AppCompatActivity {
 
         // Also link the adapter
         mViewPager = findViewById(R.id.viewPagerSettingsWidget);
-        mSlideAdapter = new SettingsWidgetSlideAdapter(this, this, slideCount);
+        mSlideAdapter = new zSettingsWidgetSlideAdapter(this, this, slideCount);
         mViewPager.setAdapter(mSlideAdapter);
 
         // Viewpager dots
