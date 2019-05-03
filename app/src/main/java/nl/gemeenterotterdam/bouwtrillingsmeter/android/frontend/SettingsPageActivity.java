@@ -15,6 +15,7 @@ import android.widget.Switch;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BuildingCategory;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Settings;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory;
 
 /**
@@ -22,11 +23,13 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory
  */
 public class SettingsPageActivity extends AppCompatActivity {
 
-    Spinner spinnerCategoryBuilding;
-    Spinner spinnerCategoryVibration;
-    Switch switchVibrationSensitive;
-    FloatingActionButton fabCategoryConfirm;
-    Button buttonIDontKnow;
+    private Spinner spinnerCategoryBuilding;
+    private Spinner spinnerCategoryVibration;
+    private Switch switchVibrationSensitive;
+    private FloatingActionButton fabCategoryConfirm;
+    private Button buttonIDontKnow;
+
+    private static Settings settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,19 +84,16 @@ public class SettingsPageActivity extends AppCompatActivity {
                 onClickCategoryIDontKnow();
             }
         });
-
-        // Push settings
-        setFieldsToGeneratedSettings();
     }
 
     /**
      * This pushes our parameters from the widget once we confirm the widget.
      */
-    private void setFieldsToGeneratedSettings() {
-        if (SettingsGenerator.getCurrentSettings() != null) {
-            spinnerCategoryBuilding.setSelection(SettingsGenerator.getCurrentSettings().buildingCategory.ordinal(), true);
-            spinnerCategoryVibration.setSelection(SettingsGenerator.getCurrentSettings().vibrationCategory.ordinal(), true);
-            switchVibrationSensitive.setChecked(SettingsGenerator.getCurrentSettings().vibrationSensitive);
+    private void pushCurrentSettingsToFields() {
+        if (settings != null) {
+            spinnerCategoryBuilding.setSelection(settings.buildingCategory.ordinal(), true);
+            spinnerCategoryVibration.setSelection(settings.vibrationCategory.ordinal(), true);
+            switchVibrationSensitive.setChecked(settings.vibrationSensitive);
         }
     }
 
@@ -124,14 +124,14 @@ public class SettingsPageActivity extends AppCompatActivity {
         BuildingCategory buildingCategory = BuildingCategory.values()[buildingIndex];
         VibrationCategory vibrationCategory = VibrationCategory.values()[vibrationIndex];
         boolean vibrationSensitive = switchVibrationSensitive.isSelected();
-        SettingsGenerator.createSettingsFromCategoryPage(buildingCategory, vibrationCategory, vibrationSensitive);
+        settings = new Settings(buildingCategory, vibrationCategory, vibrationSensitive);
+        Backend.onGeneratedNewSettings(settings);
 
         // Go and remove this from stack
         Backend.onClickCompleteSettingsSetup();
         Intent intent = new Intent(getApplicationContext(), MeasuringActivity.class);
         startActivity(intent);
         finish();
-
     }
 
     /**
@@ -187,6 +187,14 @@ public class SettingsPageActivity extends AppCompatActivity {
     }
 
     /**
+     * When we successfully exit the wizard.
+     * @param settings The created and already validated settings file
+     */
+    public static void onWizardCreatedValidSettings(Settings settings) {
+        SettingsPageActivity.settings = settings;
+    }
+
+    /**
      * This gets called when we press the back button.
      */
     @Override
@@ -201,10 +209,21 @@ public class SettingsPageActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        setFieldsToGeneratedSettings();
+
+        // Push settings to fields
+        pushCurrentSettingsToFields();
 
         // Enable fab
         fabCategoryConfirm.setEnabled(true);
         buttonIDontKnow.setEnabled(true);
+    }
+
+    /**
+     * Override to prevent memory leak.
+     */
+    @Override
+    public void finish() {
+        super.finish();
+        settings = null;
     }
 }

@@ -23,7 +23,6 @@ public class SettingsWizardActivity extends AppCompatActivity {
     private Button buttonYes;
     private Button buttonNo;
 
-    private SettingsPageActivity settingsPageActivity;
     private SettingsWizard settingsWizard;
     private Question currentQuestion;
     private Settings settings;
@@ -62,14 +61,6 @@ public class SettingsWizardActivity extends AppCompatActivity {
         settingsWizard = createQuestionWizard();
         currentQuestion = settingsWizard.getStartQuestion();
         pushQuestionToScreen(currentQuestion);
-    }
-
-    /**
-     * Make a link to push back the created settings file.
-     * @param settingsPageActivity The settings page activity that opened this activity.
-     */
-    void linkToSettingsPageActivity(SettingsPageActivity settingsPageActivity) {
-        this.settingsPageActivity = settingsPageActivity;
     }
 
     /**
@@ -206,9 +197,14 @@ public class SettingsWizardActivity extends AppCompatActivity {
      * Gets called when we reach an endpoint in the flowchart.
      */
     private void onReachedWizardFinish() {
-        System.out.println("FINISH REACHED");
+        if (settings.isValid()) {
+            SettingsPageActivity.onWizardCreatedValidSettings(settings);
+            System.out.println("VALID");
+        } else {
+            System.out.println("INVALID");
+        }
 
-        
+        finish();
     }
 
     /**
