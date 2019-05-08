@@ -1,9 +1,9 @@
 General todos
-TODO haxm
+TODO Locatie erin bouwen
+
 TODO Als je je measurement nooit start moet hij worden weggegooid
 TODO Oude widget instellignen opslaan?
 TODO Een miljoen unittests schrijven
-TODO De backend roept de frontend utility aan. Dit is niet verstandig.
 
 Details
 TODO How to deal with widget x memory clear-up deleting the settingspages page?
