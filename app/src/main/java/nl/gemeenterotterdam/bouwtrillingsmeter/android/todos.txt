@@ -7,3 +7,5 @@ TODO Een miljoen unittests schrijven
 
 Details
 TODO How to deal with widget x memory clear-up deleting the settingspages page?
+TODO Google play services wordt helemaal gebruikt. Dit kan partial om ruimte te besparen.
+TODO Check build.gradle voor app --> error in versie.
