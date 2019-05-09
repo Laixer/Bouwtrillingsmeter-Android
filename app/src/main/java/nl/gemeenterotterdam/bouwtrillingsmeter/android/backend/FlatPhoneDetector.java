@@ -5,11 +5,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Bundle;
 
 import java.util.Calendar;
-
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
 /**
  * This class detects if we have our phone flat on the table.
@@ -18,11 +15,19 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
  */
 class FlatPhoneDetector implements SensorEventListener {
 
-    private static final float maxDeltaToDetermineFlat = 0.025f;
-    private static final float maxDeltaToDetermineAbsoluteFlat = 0.05f;
-    private static final float minDeltaToDeterminePickup = 0.06f;
+    private static final float MAX_DELTA_ROTATION_TO_DETERMINE_FLAT = 0.04f;
+    private static final float MIN_DELTA_ROTATION_TO_DETERMINE_PICKUP = 0.06f;
+    private static final long PERIOD_FLAT_IN_MILLIS = 500;
 
+    private boolean flatPending = false;
     private boolean flat = false;
+    private long periodStart;
+
+    /**
+     * This is used to check whether or not the phone is flat.
+     * Only the y and z are relevant.
+     * X can be whatever.
+     */
     private final float[] orientationFlat = new float[]{0, 0, 0};
     private float[] orientationComparing = new float[3];
 
@@ -64,35 +69,58 @@ class FlatPhoneDetector implements SensorEventListener {
 
     /**
      * Calculate the orientation angles.
+     * orientation[0] = rotation while upright, irrelevant for upright. Range = [-pi, pi]
+     * orientation[1] = 0 when screen faces up. Range = [-pi, pi]
+     * orientation[2] = 0 when screen faces up. Range = [-pi, pi]
      */
     private void updateOrientationAngles() {
         // Calculate orientation
         SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerReading, magnetometerReading);
         float[] orientation = SensorManager.getOrientation(rotationMatrix, orientationAngles);
 
-        // Do some maths to determine flat or pickup position
-        float dx = Math.abs(orientation[0] - orientationComparing[0]);
-        float dy = Math.abs(orientation[1] - orientationComparing[1]);
-        float dz = Math.abs(orientation[2] - orientationComparing[2]);
-        float d = Math.max(dx, Math.max(dy, dz));
+        if(!flat) {
+            float dy = Math.abs(orientation[1] - orientationFlat[1]);
+            float dz = Math.abs(orientation[2] - orientationFlat[2]);
+            float d = Math.max(dy, dz);
 
-        if (!flat && d < maxDeltaToDetermineFlat) {
-            dx = Math.abs(orientation[0] - orientationFlat[0]);
-            dy = Math.abs(orientation[1] - orientationFlat[1]);
-            dz = Math.abs(orientation[2] - orientationFlat[2]);
-            d = Math.max(dx, Math.max(dy, dz));
-            if (d < maxDeltaToDetermineAbsoluteFlat) {
-                flat = true;
-                Backend.onPhoneFlat();
+            if (d < MAX_DELTA_ROTATION_TO_DETERMINE_FLAT) {
+                // If we are within the bounds
+                if (!flatPending) {
+                    // Start of a period
+                    flatPending = true;
+                    periodStart = Calendar.getInstance().getTimeInMillis();
+                } else {
+                    // In period
+                    long dt = Calendar.getInstance().getTimeInMillis() - periodStart;
+
+                    if (dt > PERIOD_FLAT_IN_MILLIS) {
+                        // If the time limit exceeds we are flat
+                        flat = true;
+                        flatPending = false;
+                        Backend.onPhoneFlat();
+                        System.out.println("FLAT");
+                        orientationComparing = new float[]{orientation[0], orientation[1], orientation[2]};
+                    }
+                }
+            } else {
+                // If we are not within the bounds and pending, we no longer are pending
+                if (flatPending) {
+                    flatPending = false;
+                }
             }
-        } else if (flat && d > minDeltaToDeterminePickup) {
-            flat = false;
-            Backend.onPhonePickup();
-        }
+        } else if (flat) {
+            // If we are already flat we check for pickup / orientation changes
+            float dx = Math.abs(orientation[0] - orientationComparing[0]);
+            float dy = Math.abs(orientation[1] - orientationComparing[1]);
+            float dz = Math.abs(orientation[2] - orientationComparing[2]);
+            float d = Math.max(dx, Math.max(dy, dz));
 
-        // Save orientation if we are not flat
-        if (!flat) {
-            orientationComparing = new float[]{orientation[0], orientation[1], orientation[2]};
+            if (d > MIN_DELTA_ROTATION_TO_DETERMINE_PICKUP) {
+                flat = false;
+                flatPending = false;
+                Backend.onPhonePickup();
+                System.out.println("PICKUP");
+            }
         }
     }
 
