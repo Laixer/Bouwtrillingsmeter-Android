@@ -21,8 +21,8 @@
 
     <!--Graphs-->
     <color name="graph_series_color_x">#ff0000</color>
-    <color name="graph_series_color_y">#00ff00</color>
-    <color name="graph_series_color_z">#0000ff</color>
+    <color name="graph_series_color_y">#0000ff</color>
+    <color name="graph_series_color_z">#00ff00</color>
     <color name="graph_series_color_point">#00AC5C</color>
     <color name="graph_dominant_constant_line">#000000</color>
 
