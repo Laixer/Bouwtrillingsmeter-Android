@@ -2,6 +2,7 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.location.Location;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,6 +27,8 @@ public class Backend {
     protected static Context applicationContext;
     protected static Resources resources;
 
+    private static LocationHandler locationHandler;
+
     /**
      * Initialize the backend.
      * This has a failsafe so that we can only call this once.
@@ -36,10 +39,7 @@ public class Backend {
         if (!initialized) {
             Backend.applicationContext = applicationContext;
             Backend.resources = resources;
-
-            // TODO Remove this debug
-            LocationHandler locationHandler = new LocationHandler();
-            locationHandler.fetchCurrentLocation();
+            locationHandler = new LocationHandler();
 
             StorageControl.initialize();
 

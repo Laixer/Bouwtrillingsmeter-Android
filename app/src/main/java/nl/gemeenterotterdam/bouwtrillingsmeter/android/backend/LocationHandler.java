@@ -23,15 +23,16 @@ import pl.edu.icm.jlargearrays.Utilities;
  */
 class LocationHandler {
 
-
     /**
-     * Static instance of the location service.
+     * Static instance of the location manager.
      */
     private static LocationManager locationManager;
 
-
-    void initialize() {
-
+    /**
+     * Loads the instance.
+     */
+    LocationHandler() {
+        locationManager = (LocationManager) Backend.applicationContext.getSystemService(Context.LOCATION_SERVICE);
     }
 
     /**
@@ -39,7 +40,6 @@ class LocationHandler {
      * TODO Implement exception handling.
      */
     void fetchCurrentLocation() {
-        locationManager = (LocationManager) Backend.applicationContext.getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
