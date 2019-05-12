@@ -72,26 +72,25 @@ public class LocationHandler {
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                System.out.println(location.toString());
+                if (location != null) {
+                    MeasurementControl.onNewLocationFetched(location);
+                }
             }
 
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {
-
             }
 
             @Override
             public void onProviderEnabled(String provider) {
-
             }
 
             @Override
             public void onProviderDisabled(String provider) {
-
             }
         };
         try {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, locationListener);
             System.out.println("Requested");
         } catch (SecurityException e) {
             System.out.println(e.toString());

@@ -1,5 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
+import android.location.Location;
+
 import java.util.ArrayList;
 
 /**
@@ -79,6 +81,17 @@ class MeasurementControl {
     static void onApplicationShutdown() {
         for (Measurement measurement : allMeasurements) {
             StorageControl.writeMeasurement(measurement);
+        }
+    }
+
+    /**
+     * Saves our current location to the current measurement.
+     *
+     * @param location The location
+     */
+    static void onNewLocationFetched(Location location) {
+        if (currentMeasurement.getLocationLongitude() == Double.MAX_VALUE) {
+            currentMeasurement.setLocation(location);
         }
     }
 

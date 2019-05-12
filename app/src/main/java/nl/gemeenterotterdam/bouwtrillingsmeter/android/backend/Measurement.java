@@ -1,6 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 import android.graphics.Bitmap;
+import android.location.Location;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,10 +33,9 @@ public class Measurement implements Serializable {
     private String uid;
     private String name;
     private String datetime;
-    private String location;
-    // TODO Location
-    private double[] locationCoordinates;
-    private double locationPrecision;
+    private double longitude;
+    private double latitude;
+    private double locationAccuracy;
     private String description;
     private transient Bitmap bitmap;
 
@@ -62,9 +62,10 @@ public class Measurement implements Serializable {
         // Also create default data
         this.name = name;
         datetime = "15-02-2019 20:23";
-        location = "Grote Markt, Delft";
         description = "Een hele mooie omschrijving jawel!";
         bitmap = null;
+        longitude = Double.MAX_VALUE;
+        latitude = Double.MAX_VALUE;
 
         // Create public variables
         settings = new Settings();
@@ -142,7 +143,7 @@ public class Measurement implements Serializable {
 
     }
 
-    public void setLeName(String name) {
+    public void setName(String name) {
         this.name = name;
         onMetadataChanged();
     }
@@ -152,8 +153,10 @@ public class Measurement implements Serializable {
         onMetadataChanged();
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    void setLocation(Location location) {
+        longitude = location.getLongitude();
+        latitude = location.getLatitude();
+        locationAccuracy = location.getAccuracy();
         onMetadataChanged();
     }
 
@@ -179,12 +182,20 @@ public class Measurement implements Serializable {
         return this.datetime;
     }
 
-    public String getLocation() {
-        return this.location;
-    }
-
     public String getDescription() {
         return this.description;
+    }
+
+    public double getLocationLongitude() {
+        return this.longitude;
+    }
+
+    public double getLocationLatitude() {
+        return this.latitude;
+    }
+
+    public double getLocationAccuracy() {
+        return this.locationAccuracy;
     }
 
     /**

@@ -98,7 +98,7 @@ public class MeasurementDetailsActivity extends AppCompatActivity {
     public void onUpdateMeasurementTexts() {
         textViewName.setText(measurement.getName());
         textViewDateTime.setText(measurement.getDateTime());
-        textViewLocation.setText(measurement.getLocation());
+        textViewLocation.setText(Double.toString(measurement.getLocationLongitude()) + ", " + Double.toString(measurement.getLocationLatitude()));
         textViewDescription.setText(measurement.getDescription());
     }
 

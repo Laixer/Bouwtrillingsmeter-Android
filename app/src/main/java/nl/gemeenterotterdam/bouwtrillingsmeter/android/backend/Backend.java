@@ -121,6 +121,7 @@ public class Backend {
                 MeasurementControl.getCurrentMeasurement().onStartMeasuring();
                 DataHandler.startMeasuring();
                 SyncManager.onMeasurementStart(MeasurementControl.getCurrentMeasurement());
+                locationHandler.fetchCurrentLocation();
                 break;
 
             case FINISHED_MEASUREMENT:
