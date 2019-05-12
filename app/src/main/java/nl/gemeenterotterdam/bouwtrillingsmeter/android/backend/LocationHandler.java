@@ -1,11 +1,15 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -33,6 +37,31 @@ class LocationHandler {
      */
     LocationHandler() {
         locationManager = (LocationManager) Backend.applicationContext.getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    /**
+     * Check if we have the proper location permissions.
+     *
+     * @param activity The activity from which to check.
+     * @return True if we have
+     */
+    public static boolean hasPermissionToFetchLocation(Activity activity) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        } else if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Checks if GPS is enabled.
+     *
+     * @return True if enabled
+     */
+    public static boolean isLocationEnabled() {
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     /**
