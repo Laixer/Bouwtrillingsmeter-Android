@@ -4,23 +4,18 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-
-import pl.edu.icm.jlargearrays.Utilities;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * This class extracts our current location.
@@ -32,11 +27,14 @@ public class LocationHandler {
      */
     private static LocationManager locationManager;
 
+    private static Geocoder geocoder;
+
     /**
      * Loads the instance.
      */
     LocationHandler() {
         locationManager = (LocationManager) Backend.applicationContext.getSystemService(Context.LOCATION_SERVICE);
+        geocoder = new Geocoder(Backend.applicationContext, Locale.getDefault());
     }
 
     /**
@@ -95,5 +93,38 @@ public class LocationHandler {
         } catch (SecurityException e) {
             System.out.println(e.toString());
         }
+    }
+
+    /**
+     * Converts a location to an address.
+     *
+     * @param longitude The longitude
+     * @param latitude The latitude
+     * @return The address. Null if error or none found
+     */
+    public static Address coordinatesToAddress(double longitude, double latitude) {
+        List<Address> addresses = new ArrayList<Address>();
+        try {
+            addresses = geocoder.getFromLocation(longitude, latitude, 1);
+        } catch (IOException e) {
+            System.out.println("Network / io problem: " + e.toString());
+            return null;
+        } catch (IllegalArgumentException e) {
+            System.out.println("Our location object contains invalid values.");
+            return null;
+        }
+
+        if (addresses == null) {
+            System.out.println("No address list was created.");
+            return null;
+        }
+
+        if (addresses.size() == 0) {
+            System.out.println("No address could be found for our location object.");
+            return null;
+        }
+
+        Address address = addresses.get(0);
+        return address;
     }
 }
