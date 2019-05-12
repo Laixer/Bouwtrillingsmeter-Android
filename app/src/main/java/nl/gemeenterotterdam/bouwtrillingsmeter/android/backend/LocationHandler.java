@@ -14,11 +14,14 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
+import pl.edu.icm.jlargearrays.Utilities;
 
 /**
  * This class extracts our current location.
  */
-class LocationHandler implements LocationListener, OnSuccessListener {
+class LocationHandler {
 
 
     /**
@@ -36,98 +39,33 @@ class LocationHandler implements LocationListener, OnSuccessListener {
      * TODO Implement exception handling.
      */
     void fetchCurrentLocation() {
-        /*
-        // Attempt
-        try {
-            FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(Backend.applicationContext);
-            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this);
-        } catch (SecurityException e) {
-            //
-        }*/
-
-
-        // New attempt
-        final LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(1000);
-
-        LocationCallback locationCallback = new LocationCallback() {
+        locationManager = (LocationManager) Backend.applicationContext.getSystemService(Context.LOCATION_SERVICE);
+        LocationListener locationListener = new LocationListener() {
             @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    return;
-                }
+            public void onLocationChanged(Location location) {
+                System.out.println(location.toString());
+            }
 
-                for (Location location : locationResult.getLocations()) {
-                    if (location != null) {
-                        double latitude = location.getLatitude();
-                        double longitude = location.getLongitude();
-                        System.out.println(String.format("Location @ %s, %s", longitude, latitude));
-                    }
-                }
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
             }
         };
-
         try {
-            FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(Backend.applicationContext);
-            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+            System.out.println("Requested");
         } catch (SecurityException e) {
-            //
+            System.out.println(e.toString());
         }
-
-
-        // Get the location manager if we havent already
-        /*if (locationManager == null) {
-            locationManager = (LocationManager) Backend.applicationContext.getSystemService(Context.LOCATION_SERVICE);
-        }
-
-        // Request new location
-        try {
-            Criteria criteria = new Criteria();
-            criteria.setPowerRequirement(Criteria.POWER_HIGH);
-            criteria.setAltitudeRequired(false);
-            criteria.setSpeedRequired(false);
-            criteria.setCostAllowed(true);
-            criteria.setBearingRequired(false);
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
-            criteria.setVerticalAccuracy(Criteria.ACCURACY_HIGH);
-
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
-
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        } catch (SecurityException e) {
-            System.out.println("No permission to save location. Handle this.");
-        }*/
-    }
-
-    /**
-     * Called when the location has changed.
-     *
-     * <p> There are no restrictions on the use of the supplied Location object.
-     *
-     * @param location The new location, as a Location object.
-     */
-    @Override
-    public void onLocationChanged(Location location) {
-        int i = 0;
-    }
-
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        //
-    }
-
-    public void onProviderEnabled(String provider) {
-        //
-    }
-
-    public void onProviderDisabled(String provider) {
-        //
-    }
-
-    @Override
-    public void onSuccess(Object o) {
-        int i = 0;
     }
 }

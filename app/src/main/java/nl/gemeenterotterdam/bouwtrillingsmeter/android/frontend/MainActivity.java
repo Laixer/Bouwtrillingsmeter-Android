@@ -1,11 +1,18 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.VersionedPackage;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -15,6 +22,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import java.util.ArrayList;
 
 import me.toptas.fancyshowcase.FancyShowCaseView;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
@@ -47,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Request permissions
+        Utility.askForPermissions(this);
 
         // Initialize the backend and set this as a listener
         Backend.addBackendStateListener(this);
@@ -238,4 +250,5 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
         Backend.onApplicationShutdown();
         super.onDestroy();
     }
+
 }

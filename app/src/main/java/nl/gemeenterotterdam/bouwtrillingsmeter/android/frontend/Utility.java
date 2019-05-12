@@ -1,10 +1,14 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.ActivityCompat;
 import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
@@ -39,7 +43,7 @@ class Utility {
      * @param context The context from which we are checking
      * @return True if portrait, false if landscape
      */
-    public static boolean isScreenInPortraitMode(Context context) {
+    static boolean isScreenInPortraitMode(Context context) {
         final int screenOrientation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
         switch (screenOrientation) {
             case Surface.ROTATION_0:
@@ -48,6 +52,8 @@ class Utility {
                 return false;
             case Surface.ROTATION_180:
                 return true;
+            case Surface.ROTATION_270:
+                return false;
             default:
                 return false;
         }
@@ -73,7 +79,7 @@ class Utility {
      * @param context The context from which we are checking
      * @return The screen height in pixels
      */
-    public static int getScreenHeight(Context context) {
+    static int getScreenHeight(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -88,7 +94,7 @@ class Utility {
      * @param imageView The imageview to update
      * @param bitmap    The bitmap to scale
      */
-    public static void updateScaledPhoto(ImageView imageView, Bitmap bitmap) {
+    static void updateScaledPhoto(ImageView imageView, Bitmap bitmap) {
         // If we have no bitmap we call the default bitmap function
         if (bitmap == null) {
             updateScaledPhotoMissing(imageView);
@@ -121,7 +127,7 @@ class Utility {
      *
      * @param imageView The image view to update
      */
-    public static void updateScaledPhotoMissing(ImageView imageView) {
+    static void updateScaledPhotoMissing(ImageView imageView) {
         Drawable drawable = resources.getDrawable(R.drawable.ic_image_not_present);
         imageView.setImageDrawable(drawable);
     }
@@ -152,7 +158,7 @@ class Utility {
      * @param dimension x=0 y=1 z=2
      * @return The resource id integer
      */
-    public static int getColorResourceFromDimension(int dimension) {
+    static int getColorResourceFromDimension(int dimension) {
         switch (dimension) {
             case 0:
                 return R.color.graph_series_color_x;
@@ -162,6 +168,24 @@ class Utility {
                 return R.color.graph_series_color_z;
         }
         return -1;
+    }
+
+    /**
+     * Requests all our permissions.
+     * TODO Add error handling
+     * TODO Add permission denied handling
+     *
+     * @param activity The activity from which we call this
+     */
+    static void askForPermissions(Activity activity) {
+        try {
+            // Get our permissions
+            PackageInfo packageInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), PackageManager.GET_PERMISSIONS);
+            String[] requestedPermissions = packageInfo.requestedPermissions;
+            ActivityCompat.requestPermissions(activity, requestedPermissions, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            System.out.println("Package with name " + activity.getPackageName() + " not found.");
+        }
     }
 
 }
