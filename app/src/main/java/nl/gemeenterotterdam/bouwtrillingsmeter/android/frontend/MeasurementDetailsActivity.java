@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 
@@ -97,7 +99,7 @@ public class MeasurementDetailsActivity extends AppCompatActivity {
      */
     public void onUpdateMeasurementTexts() {
         textViewName.setText(measurement.getName());
-        textViewDateTime.setText(measurement.getDateTime());
+        textViewDateTime.setText(measurement.getDateTime().toString());
         textViewLocation.setText(Double.toString(measurement.getLocationLongitude()) + ", " + Double.toString(measurement.getLocationLatitude()));
         textViewDescription.setText(measurement.getDescription());
     }

@@ -32,7 +32,7 @@ public class Measurement implements Serializable {
 
     private String uid;
     private String name;
-    private String datetime;
+    private Date datetime;
     private double longitude;
     private double latitude;
     private double locationAccuracy;
@@ -60,9 +60,10 @@ public class Measurement implements Serializable {
 
         // Link all data
         // Also create default data
+        // TODO Remove default debug data
         this.name = name;
-        datetime = "15-02-2019 20:23";
-        description = "Een hele mooie omschrijving jawel!";
+        datetime = Calendar.getInstance().getTime();
+        description = "";
         bitmap = null;
         longitude = Double.MAX_VALUE;
         latitude = Double.MAX_VALUE;
@@ -148,11 +149,6 @@ public class Measurement implements Serializable {
         onMetadataChanged();
     }
 
-    public void setDateTime(String datetime) {
-        this.datetime = datetime;
-        onMetadataChanged();
-    }
-
     void setLocation(Location location) {
         longitude = location.getLongitude();
         latitude = location.getLatitude();
@@ -178,7 +174,7 @@ public class Measurement implements Serializable {
         return this.name;
     }
 
-    public String getDateTime() {
+    public Date getDateTime() {
         return this.datetime;
     }
 

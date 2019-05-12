@@ -90,7 +90,7 @@ public class LocationHandler {
             }
         };
         try {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
             System.out.println("Requested");
         } catch (SecurityException e) {
             System.out.println(e.toString());

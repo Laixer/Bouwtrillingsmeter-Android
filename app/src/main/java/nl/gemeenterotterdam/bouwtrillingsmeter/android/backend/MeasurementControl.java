@@ -90,7 +90,7 @@ class MeasurementControl {
      * @param location The location
      */
     static void onNewLocationFetched(Location location) {
-        if (currentMeasurement.getLocationLongitude() == Double.MAX_VALUE) {
+        if (!currentMeasurement.isClosed() && currentMeasurement.getLocationLongitude() == Double.MAX_VALUE) {
             currentMeasurement.setLocation(location);
         }
     }
