@@ -37,6 +37,10 @@ public class Backend {
             Backend.applicationContext = applicationContext;
             Backend.resources = resources;
 
+            // TODO Remove this debug
+            LocationHandler locationHandler = new LocationHandler();
+            locationHandler.fetchCurrentLocation();
+
             StorageControl.initialize();
 
             MeasurementControl.initialize();
