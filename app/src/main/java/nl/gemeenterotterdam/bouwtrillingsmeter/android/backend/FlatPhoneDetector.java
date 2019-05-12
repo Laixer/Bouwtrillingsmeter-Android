@@ -15,8 +15,8 @@ import java.util.Calendar;
  */
 class FlatPhoneDetector implements SensorEventListener {
 
-    private static final float MAX_DELTA_ROTATION_TO_DETERMINE_FLAT = 0.04f;
-    private static final float MIN_DELTA_ROTATION_TO_DETERMINE_PICKUP = 0.06f;
+    private static final float MAX_DELTA_ROTATION_TO_DETERMINE_FLAT = 0.08f;
+    private static final float MIN_DELTA_ROTATION_TO_DETERMINE_PICKUP = 0.1f;
     private static final long PERIOD_FLAT_IN_MILLIS = 500;
 
     private boolean flatPending = false;

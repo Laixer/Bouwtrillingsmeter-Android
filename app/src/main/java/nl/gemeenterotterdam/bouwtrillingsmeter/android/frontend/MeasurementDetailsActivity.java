@@ -78,7 +78,7 @@ public class MeasurementDetailsActivity extends AppCompatActivity {
         Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
     }
 
-    /**
+    /**o meas
      * This gets called when we succesfully take a picture
      * TODO Save a pointer to the image in some way!
      */
