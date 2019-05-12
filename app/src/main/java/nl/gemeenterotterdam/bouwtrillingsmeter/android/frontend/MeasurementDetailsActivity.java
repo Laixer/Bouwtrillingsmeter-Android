@@ -2,6 +2,7 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Address;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -99,8 +100,16 @@ public class MeasurementDetailsActivity extends AppCompatActivity {
     public void onUpdateMeasurementTexts() {
         textViewName.setText(measurement.getName());
         textViewDateTime.setText(measurement.getDateTime().toString());
-        textViewLocation.setText(LocationHandler.coordinatesToAddress(measurement.getLocationLongitude(), measurement.getLocationLatitude()).toString());
         textViewDescription.setText(measurement.getDescription());
+
+        // TODO Clean up
+        // Long and Lat appear switched, this yields correct behaviour. Don't change this.
+        Address address = LocationHandler.coordinatesToAddress(measurement.getLocationLatitude(), measurement.getLocationLongitude());
+        if (address == null) {
+            textViewLocation.setText(Double.toString(measurement.getLocationLongitude()) + ", " + measurement.getLocationLatitude());
+        } else {
+            textViewLocation.setText(address.getAddressLine(0));
+        }
     }
 
 }

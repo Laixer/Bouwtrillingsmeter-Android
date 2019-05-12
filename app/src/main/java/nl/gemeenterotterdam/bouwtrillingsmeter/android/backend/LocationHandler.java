@@ -71,6 +71,7 @@ public class LocationHandler {
             @Override
             public void onLocationChanged(Location location) {
                 if (location != null) {
+                    System.out.println("Got location!");
                     MeasurementControl.onNewLocationFetched(location);
                 }
             }
