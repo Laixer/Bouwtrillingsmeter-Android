@@ -25,7 +25,7 @@ import pl.edu.icm.jlargearrays.Utilities;
 /**
  * This class extracts our current location.
  */
-class LocationHandler {
+public class LocationHandler {
 
     /**
      * Static instance of the location manager.

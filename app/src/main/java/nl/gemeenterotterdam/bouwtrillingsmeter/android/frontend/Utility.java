@@ -133,26 +133,6 @@ class Utility {
     }
 
     /**
-     * Transform our {@link BuildingCategory} enum to the correct text.
-     *
-     * @param buildingCategory
-     * @return Our string according to the resources: {@link R.array#category_dropdown_building}.
-     */
-    public static String getBuildingCategoryString(BuildingCategory buildingCategory) {
-        return Utility.resources.getStringArray(R.array.category_dropdown_building)[buildingCategory.ordinal()];
-    }
-
-    /**
-     * Transform our {@link VibrationCategory} enum to the correct text.
-     *
-     * @param vibrationCategory
-     * @return Our string according to the resources: {@link R.array#category_dropdown_vibration}.
-     */
-    public static String getVibrationCategoryString(VibrationCategory vibrationCategory) {
-        return Utility.resources.getStringArray(R.array.category_dropdown_vibration)[vibrationCategory.ordinal()];
-    }
-
-    /**
      * Gets our color resource
      *
      * @param dimension x=0 y=1 z=2

@@ -86,7 +86,8 @@
     <string name="widget_final_categorie_trilling">Categorie trilling</string>
     <string name="widget_final_trillingsgevoelig">Trillingsgevoelig</string>
 
-    <!--Category page-->
+    <!--Settings page-->
+    <string name="alert_dialog_enable_location">Schakel uw locatie in om verder te gaan.</string>
     <string name="category_vibration_sensitive">Trillingsgevoelig gebouw</string>
     <string name="category_i_dont_know">Ik weet het niet</string>
 

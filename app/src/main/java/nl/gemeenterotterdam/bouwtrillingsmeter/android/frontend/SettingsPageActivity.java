@@ -1,5 +1,8 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -15,6 +18,7 @@ import android.widget.Switch;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BuildingCategory;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.LocationHandler;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Settings;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory;
 
@@ -114,6 +118,27 @@ public class SettingsPageActivity extends AppCompatActivity {
         }
         if (vibrationIndex == 0) {
             requireFormCompletion(view, getResources().getString(R.string.category_notyetselected_vibration));
+            return;
+        }
+
+        // If we don't have the correct location permissions
+        if (!LocationHandler.hasPermissionToFetchLocation(this)) {
+            Utility.askForPermissions(this);
+            return;
+        }
+
+        // If location is enabled
+        if (!LocationHandler.isLocationEnabled()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+            builder.setMessage(getResources().getString(R.string.alert_dialog_enable_location));
+            builder.setPositiveButton(getResources().getString(R.string.default_ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //
+                }
+            });
+            Dialog dialog = builder.create();
+            dialog.show();
             return;
         }
 
