@@ -80,10 +80,10 @@ class SyncManager implements DataIntervalClosedListener {
     @Override
     public void onDataIntervalClosed(DataInterval dataInterval) {
         /*String measurementUID = MeasurementControl.getCurrentMeasurement().getUID();
-        ConnectionType connectionType = SyncConnectionManager.getConnectionType();
+        SyncConnectionType connectionType = SyncConnectionManager.getConnectionType();
 
         // Send everything if we have wifi
-        if (connectionType == ConnectionType.WIFI || connectionType == ConnectionType.WIFI_AND_G) {
+        if (connectionType == SyncConnectionType.WIFI || connectionType == SyncConnectionType.WIFI_AND_G) {
             unpushedDataIntervals.add(dataInterval);
             // Push and reset if we have enough
             if (unpushedDataIntervals.size() > intervalCountBeforePushing) {
@@ -93,7 +93,7 @@ class SyncManager implements DataIntervalClosedListener {
         }
 
         // Only send the essentials if we have no wifi
-        else if (connectionType == ConnectionType.G) {
+        else if (connectionType == SyncConnectionType.G) {
             DataIntervalEssentials dataIntervalEssentials = new DataIntervalEssentials(measurementUID, dataInterval.index, dataInterval.velocitiesAbsMax, dataInterval.dominantFrequencies);
             unpushedDataIntervalEssentials.add(dataIntervalEssentials);
             // Push and reset if we have enough
@@ -105,7 +105,7 @@ class SyncManager implements DataIntervalClosedListener {
     }
 
     private static void startSync() {
-        ConnectionType connectionType = SyncConnectionManager.getConnectionType();
+        SyncConnectionType syncConnectionType = SyncConnectionManager.getConnectionType();
     }
 
     private static void stopSync() {

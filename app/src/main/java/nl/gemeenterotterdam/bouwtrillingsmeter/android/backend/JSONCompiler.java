@@ -19,13 +19,14 @@ class JSONCompiler {
     /**
      * Converts our user uid to a JSON object.
      *
+     * @param userUID The user UID
      * @return The JSON object
      */
-    static JSONObject compileUserUID() {
+    static JSONObject compileUserUID(String userUID) {
         JSONObject object = new JSONObject();
 
         try {
-            object.put("userUID", Backend.getUserUID());
+            object.put("userUID", userUID);
         } catch (JSONException e) {
             //
         }

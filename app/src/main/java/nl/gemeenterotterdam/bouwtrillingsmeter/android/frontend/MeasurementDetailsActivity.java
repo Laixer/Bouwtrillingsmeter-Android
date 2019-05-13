@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.LocationHandler;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.ConstantsLimits;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 
 /**
@@ -104,7 +104,7 @@ public class MeasurementDetailsActivity extends AppCompatActivity {
 
         // TODO Clean up
         // Long and Lat appear switched, this yields correct behaviour. Don't change this.
-        Address address = LocationHandler.coordinatesToAddress(measurement.getLocationLatitude(), measurement.getLocationLongitude());
+        Address address = ConstantsLimits.coordinatesToAddress(measurement.getLocationLatitude(), measurement.getLocationLongitude());
         if (address == null) {
             textViewLocation.setText(Double.toString(measurement.getLocationLongitude()) + ", " + measurement.getLocationLatitude());
         } else {

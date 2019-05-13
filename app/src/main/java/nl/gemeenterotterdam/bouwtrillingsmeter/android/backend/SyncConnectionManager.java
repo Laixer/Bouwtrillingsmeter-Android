@@ -1,31 +1,41 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 import android.content.Context;
+import android.media.Image;
 import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
-import android.os.Build;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 
 /**
  * This class handles all our connections to WIFI and 3G/4G/5G.
  * It communicates with the {@link SyncManager} class.
- * TODO Implement feedback that indicates if we have successfully pushed something.
  */
 class SyncConnectionManager {
 
     /**
      * Initializes the instance
      */
-    public static void initialize() {
+    static void initialize() {
 
+    }
+
+    /**
+     * Push our registered user uid to the API.
+     * This should only be done once.
+     *
+     * @param userUID The user UID
+     * @return True if successful
+     */
+    static boolean pushUserUID(String userUID) {
+        JSONObject object = JSONCompiler.compileUserUID(userUID);
+
+        // TODO Send
+
+        return true;
     }
 
     /**
@@ -74,12 +84,27 @@ class SyncConnectionManager {
     }
 
     /**
-     * This gets our type of connection, being one of {@link ConnectionType}.
+     * Push an image to the API.
+     *
+     * @param measurementUID The measurement UID that belongs to the image
+     * @param image The image
+     * @return True if successful
+     */
+    static boolean pushImage(String measurementUID, Image image) {
+        JSONObject object = JSONCompiler.compileImage(measurementUID, image);
+
+        // TODO Send
+
+        return true;
+    }
+
+    /**
+     * This gets our type of connection, being one of {@link SyncConnectionType}.
      * TODO This uses depricated methods.
      *
      * @return Result
      */
-    static ConnectionType getConnectionType() {
+    static SyncConnectionType getConnectionType() {
         // Get access to our connectivity manager
         ConnectivityManager connectivityManager = (ConnectivityManager) Backend.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -103,13 +128,13 @@ class SyncConnectionManager {
 
         // Return
         if (wifi && g) {
-            return ConnectionType.WIFI_AND_G;
+            return SyncConnectionType.WIFI_AND_G;
         } else if (wifi && !g) {
-            return ConnectionType.WIFI;
+            return SyncConnectionType.WIFI;
         } else if (!wifi && g) {
-            return ConnectionType.G;
+            return SyncConnectionType.G;
         } else {
-            return ConnectionType.NONE;
+            return SyncConnectionType.NONE;
         }
     }
 

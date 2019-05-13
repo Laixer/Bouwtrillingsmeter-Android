@@ -20,7 +20,7 @@ import java.util.Locale;
 /**
  * This class extracts our current location.
  */
-public class LocationHandler {
+public class ConstantsLimits {
 
     /**
      * Static instance of the location manager.
@@ -32,7 +32,7 @@ public class LocationHandler {
     /**
      * Loads the instance.
      */
-    LocationHandler() {
+    ConstantsLimits() {
         locationManager = (LocationManager) Backend.applicationContext.getSystemService(Context.LOCATION_SERVICE);
         geocoder = new Geocoder(Backend.applicationContext, Locale.getDefault());
     }

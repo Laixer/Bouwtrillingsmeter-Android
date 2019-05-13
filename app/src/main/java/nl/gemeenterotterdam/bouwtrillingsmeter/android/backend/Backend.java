@@ -2,7 +2,6 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.location.Location;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,7 +29,7 @@ public class Backend {
     protected static Context applicationContext;
     protected static Resources resources;
 
-    private static LocationHandler locationHandler;
+    private static ConstantsLimits constantsLimits;
 
     /**
      * Initialize the backend.
@@ -42,7 +41,7 @@ public class Backend {
         if (!initialized) {
             Backend.applicationContext = applicationContext;
             Backend.resources = resources;
-            locationHandler = new LocationHandler();
+            constantsLimits = new ConstantsLimits();
 
             StorageControl.initialize();
 
@@ -124,7 +123,7 @@ public class Backend {
                 MeasurementControl.getCurrentMeasurement().onStartMeasuring();
                 DataHandler.startMeasuring();
                 SyncManager.onMeasurementStart(MeasurementControl.getCurrentMeasurement());
-                locationHandler.fetchCurrentLocation();
+                constantsLimits.fetchCurrentLocation();
                 break;
 
             case FINISHED_MEASUREMENT:

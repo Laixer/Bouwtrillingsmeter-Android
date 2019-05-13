@@ -18,7 +18,7 @@ import android.widget.Switch;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BuildingCategory;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.LocationHandler;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.ConstantsLimits;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Settings;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory;
 
@@ -122,13 +122,13 @@ public class SettingsPageActivity extends AppCompatActivity {
         }
 
         // If we don't have the correct location permissions
-        if (!LocationHandler.hasPermissionToFetchLocation(this)) {
+        if (!ConstantsLimits.hasPermissionToFetchLocation(this)) {
             Utility.askForPermissions(this);
             return;
         }
 
         // If location is enabled
-        if (!LocationHandler.isLocationEnabled()) {
+        if (!ConstantsLimits.isLocationEnabled()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
             builder.setMessage(getResources().getString(R.string.alert_dialog_enable_location));
             builder.setPositiveButton(getResources().getString(R.string.default_ok), new DialogInterface.OnClickListener() {
