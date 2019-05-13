@@ -19,8 +19,8 @@ public class Settings implements Serializable {
     private BuildingCategory buildingCategory;
     private VibrationCategory vibrationCategory;
     private Boolean vibrationSensitive;
-    private double yv;
-    private double yt;
+    private Double yv;
+    private Double yt;
 
     /**
      * Constructor
@@ -29,8 +29,8 @@ public class Settings implements Serializable {
         buildingCategory = BuildingCategory.NONE;
         vibrationCategory = VibrationCategory.NONE;
         vibrationSensitive = null;
-        yv = -1;
-        yt = -1;
+        yv = null;
+        yt = null;
     }
 
     /**
@@ -75,11 +75,20 @@ public class Settings implements Serializable {
     }
 
     void setYv(double yv) {
-        this.yv = yv;
+        if (this.yv == null) {
+            this.yv = yv;
+        } else {
+            throw new IllegalArgumentException("Can't change yv once it has been set.");
+
+        }
     }
 
     void setYt(double yt) {
-        this.yt = yt;
+        if (this.yt == null) {
+            this.yt = yt;
+        } else {
+            throw new IllegalArgumentException("Can't change yt once it has been set.");
+        }
     }
 
     public BuildingCategory getBuildingCategory() {
