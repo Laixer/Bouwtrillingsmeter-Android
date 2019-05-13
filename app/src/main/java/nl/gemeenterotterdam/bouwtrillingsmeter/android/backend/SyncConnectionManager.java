@@ -8,6 +8,8 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 
+import org.json.JSONObject;
+
 import java.sql.Connection;
 import java.util.ArrayList;
 
@@ -44,16 +46,10 @@ class SyncConnectionManager {
      * @return True if successful
      */
     static boolean pushMeasurementMetadata(Measurement measurement) {
-        return true;
-    }
+        JSONObject object = JSONCompiler.compileMeasurement(measurement);
 
-    /**
-     * Tells the server that our measurement was aborted.
-     *
-     * @param measurement The measurement
-     * @return True if successful
-     */
-    static boolean pushMeasurementAborted(Measurement measurement) {
+        // TODO send
+
         return true;
     }
 
@@ -65,6 +61,8 @@ class SyncConnectionManager {
      * @return True if successful
      */
     static boolean pushDataIntervalEssentialsList(String measurementUID, ArrayList<DataIntervalEssentials> allDataIntervalEssentials) {
+
+
         return true;
     }
 

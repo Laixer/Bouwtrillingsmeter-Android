@@ -60,12 +60,63 @@ public class JSONCompiler {
     }
 
     /**
+     * Converts a list of {@link DataIntervalEssentials} to a {@link JSONArray}.
+     *
+     * @return The JSON array
+     */
+    public static JSONArray compileDataIntervalEssentialsList(ArrayList<DataIntervalEssentials> list) {
+        JSONArray array = new JSONArray();
+
+        for (DataIntervalEssentials item : list) {
+            array.put(compileDataIntervalEssentials(item));
+        }
+
+        return array;
+    }
+
+    /**
+     * Converts a list of {@link DataInterval} to a {@link JSONArray}.
+     *
+     * @return The JSON array
+     */
+    public static JSONArray compileDataIntervalList(ArrayList<DataInterval> list) {
+        JSONArray array = new JSONArray();
+
+        for (DataInterval item : list) {
+            array.put(compileDataInterval(item));
+        }
+
+        return array;
+    }
+
+    /**
+     * Converts our {@link Image} to a JSON object.
+     *
+     * @param measurementUID The measurement UID corresponding to the image
+     * @param image          The {@link Image} to convert
+     * @return The JSON object
+     */
+    public static JSONObject compileImage(String measurementUID, Image image) {
+        JSONObject object = new JSONObject();
+
+        try {
+            object.put("measurementUID", measurementUID);
+            object.put("image", "to be determined");
+        } catch (JSONException e) {
+            System.out.println("Error while compiling image");
+        }
+
+        return object;
+    }
+
+    /**
      * Converts our {@link DataIntervalEssentials} to a JSON object.
      *
      * @param dataIntervalEssentials The {@link DataIntervalEssentials} to convert.
      * @return The JSON object
      */
-    public static JSONObject compileDataIntervalEssentials(DataIntervalEssentials dataIntervalEssentials) {
+    private static JSONObject compileDataIntervalEssentials(DataIntervalEssentials
+                                                                    dataIntervalEssentials) {
         JSONObject object = new JSONObject();
 
         try {
@@ -86,7 +137,7 @@ public class JSONCompiler {
      * @param dataInterval The {@link DataInterval} to convert.
      * @return The JSON object
      */
-    public static JSONObject compileDataInterval(DataInterval dataInterval) {
+    private static JSONObject compileDataInterval(DataInterval dataInterval) {
         JSONObject object = new JSONObject();
 
         try {
@@ -102,26 +153,6 @@ public class JSONCompiler {
             object.put("dominantFrequencies", compileDominantFrequencies(dataInterval.getDominantFrequencies()));
         } catch (JSONException e) {
             System.out.println("Error while compiling dataInterval");
-        }
-
-        return object;
-    }
-
-    /**
-     * Converts our {@link Image} to a JSON object.
-     *
-     * @param measurementUID The measurement UID corresponding to the image
-     * @param image The {@link Image} to convert
-     * @return The JSON object
-     */
-    public static JSONObject compileImage(String measurementUID, Image image) {
-        JSONObject object = new JSONObject();
-
-        try {
-            object.put("measurementUID", measurementUID);
-            object.put("image", "to be determined");
-        } catch (JSONException e) {
-            System.out.println("Error while compiling image");
         }
 
         return object;
@@ -155,7 +186,8 @@ public class JSONCompiler {
      * @param dominantFrequencies The {@link DominantFrequencies} to convert.
      * @return The JSON object
      */
-    private static JSONObject compileDominantFrequencies(DominantFrequencies dominantFrequencies) {
+    private static JSONObject compileDominantFrequencies(DominantFrequencies
+                                                                 dominantFrequencies) {
         JSONObject object = new JSONObject();
 
         try {
@@ -175,7 +207,8 @@ public class JSONCompiler {
      * @param dataPoints3D The data points
      * @return The JSON object
      */
-    private static <T> JSONObject compileDataPoints3D(ArrayList<DataPoint3D<T>> dataPoints3D) {
+    private static <T> JSONObject
+    compileDataPoints3D(ArrayList<DataPoint3D<T>> dataPoints3D) {
         JSONObject object = new JSONObject();
 
         try {
