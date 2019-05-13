@@ -7,15 +7,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.ArrayList;
+
 /**
  * This class compiles JSON object for us.
  * TODO Error handling
  * TODO String door user -> is dit veilig?
  */
-public class JSONManager {
+public class JSONCompiler {
 
     /**
-     * Converts our user id to a JSON object.
+     * Converts our user uid to a JSON object.
      *
      * @return The JSON object
      */
@@ -58,9 +60,9 @@ public class JSONManager {
     }
 
     /**
-     * Converts our measurement to a JSON object.
+     * Converts our {@link DataIntervalEssentials} to a JSON object.
      *
-     * @param dataIntervalEssentials The measurement to convert.
+     * @param dataIntervalEssentials The {@link DataIntervalEssentials} to convert.
      * @return The JSON object
      */
     public static JSONObject compileDataIntervalEssentials(DataIntervalEssentials dataIntervalEssentials) {
@@ -79,16 +81,25 @@ public class JSONManager {
     }
 
     /**
-     * Converts our measurement to a JSON object.
+     * Converts our {@link DataInterval} to a JSON object.
      *
-     * @param dataInterval The measurement to convert.
+     * @param dataInterval The {@link DataInterval} to convert.
      * @return The JSON object
      */
     public static JSONObject compileDataInterval(DataInterval dataInterval) {
         JSONObject object = new JSONObject();
 
         try {
-            object.put("userUID", Backend.getUserUID());
+            object.put("measurementUID", dataInterval.getMeasurementUID());
+            object.put("index", Integer.valueOf(dataInterval.getIndex()));
+            object.put("millisRelativeStart", Long.valueOf(dataInterval.getMillisRelativeStart()));
+            object.put("millisRelativeEnd", Long.valueOf(dataInterval.getMillisRelativeEnd()));
+            object.put("dataPoints3DAcceleration", compileDataPoints3D(dataInterval.getDataPoints3DAcceleration()));
+            object.put("velocities", compileDataPoints3D(dataInterval.getVelocities()));
+            object.put("frequencyAmplitudes", compileDataPoints3D(dataInterval.getFrequencyAmplitudes()));
+
+            object.put("velocitiesAbsoluteMax", compileToJSONArray(ArrayUtils.toObject(dataInterval.getVelocitiesAbsoluteMax().values)));
+            object.put("dominantFrequencies", compileDominantFrequencies(dataInterval.getDominantFrequencies()));
         } catch (JSONException e) {
             System.out.println("Error while compiling dataInterval");
         }
@@ -97,10 +108,10 @@ public class JSONManager {
     }
 
     /**
-     * Converts our measurement to a JSON object.
+     * Converts our {@link Image} to a JSON object.
      *
      * @param measurementUID The measurement UID corresponding to the image
-     * @param image The image to convert
+     * @param image The {@link Image} to convert
      * @return The JSON object
      */
     public static JSONObject compileImage(String measurementUID, Image image) {
@@ -117,9 +128,9 @@ public class JSONManager {
     }
 
     /**
-     * Converts our measurement to a JSON object.
+     * Converts our {@link Settings} to a JSON object.
      *
-     * @param settings The measurement to convert.
+     * @param settings The {@link Settings} to convert.
      * @return The JSON object
      */
     private static JSONObject compileSettings(Settings settings) {
@@ -139,9 +150,9 @@ public class JSONManager {
     }
 
     /**
-     * Converts our measurement to a JSON object.
+     * Converts our {@link DominantFrequencies} to a JSON object.
      *
-     * @param dominantFrequencies The measurement to convert.
+     * @param dominantFrequencies The {@link DominantFrequencies} to convert.
      * @return The JSON object
      */
     private static JSONObject compileDominantFrequencies(DominantFrequencies dominantFrequencies) {
@@ -159,11 +170,44 @@ public class JSONManager {
     }
 
     /**
-     * Creates an array compatible with JSON.
+     * Converts our arraylist of {@link DataPoint3D}'s to a {@link JSONObject} containing 4 {@link JSONArray}s.
+     *
+     * @param dataPoints3D The data points
+     * @return The JSON object
+     */
+    private static <T> JSONObject compileDataPoints3D(ArrayList<DataPoint3D<T>> dataPoints3D) {
+        JSONObject object = new JSONObject();
+
+        try {
+            JSONArray t = new JSONArray();
+            JSONArray x = new JSONArray();
+            JSONArray y = new JSONArray();
+            JSONArray z = new JSONArray();
+
+            for (DataPoint3D<T> dataPoint3D : dataPoints3D) {
+                t.put(dataPoint3D.xAxisValue);
+                x.put(dataPoint3D.values[0]);
+                y.put(dataPoint3D.values[1]);
+                z.put(dataPoint3D.values[2]);
+            }
+
+            object.put("t", t);
+            object.put("x", x);
+            object.put("y", y);
+            object.put("z", z);
+        } catch (JSONException e) {
+            System.out.println("Error while compiling dominantFrequencies");
+        }
+
+        return object;
+    }
+
+    /**
+     * Creates a {@link JSONArray} from an array.
      *
      * @param values The values
      * @param <T>    The type of the values
-     * @return Array JSON object
+     * @return JSON array object
      */
     private static <T> JSONArray compileToJSONArray(T[] values) {
         JSONArray array = new JSONArray();

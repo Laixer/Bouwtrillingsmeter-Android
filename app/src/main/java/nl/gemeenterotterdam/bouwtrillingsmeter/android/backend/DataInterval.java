@@ -66,7 +66,7 @@ public class DataInterval implements Serializable {
      * @return True if we have exceeded any limits.
      */
     public boolean isExceedingLimit() {
-        for (boolean bool : dominantFrequencies.exceedsLimit) {
+        for (boolean bool : dominantFrequencies.getExceedsLimit()) {
             if (bool) {
                 return true;
             }
@@ -110,7 +110,7 @@ public class DataInterval implements Serializable {
      */
     public ArrayList<DataPoint3D<Long>> getDominantFrequenciesAsDataPoints() {
         ArrayList<DataPoint3D<Long>> result = new ArrayList<DataPoint3D<Long>>();
-        result.add(new DataPoint3D<Long>(millisRelativeStart, dominantFrequencies.velocities));
+        result.add(new DataPoint3D<Long>(millisRelativeStart, dominantFrequencies.getVelocities()));
         return result;
     }
 
@@ -130,9 +130,9 @@ public class DataInterval implements Serializable {
             float[] velocities = new float[]{-1, -1, -1};
 
             // If we exceed we create a datapoint
-            if (dominantFrequencies.exceedsLimit[dimension]) {
-                frequency = dominantFrequencies.frequencies[dimension];
-                velocities[0] = dominantFrequencies.velocities[dimension];
+            if (dominantFrequencies.getExceedsLimit()[dimension]) {
+                frequency = dominantFrequencies.getFrequencies()[dimension];
+                velocities[0] = dominantFrequencies.getVelocities()[dimension];
             }
 
             result.add(new DataPoint3D<Double>(frequency, velocities));
