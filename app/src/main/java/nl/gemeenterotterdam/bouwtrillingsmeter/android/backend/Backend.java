@@ -17,6 +17,9 @@ import java.util.Date;
  */
 public class Backend {
 
+    // TODO Implement
+    private static String userUID = "user_id";
+
     private static BackendState backendState;
     private static ArrayList<BackendListener> backendListeners = new ArrayList<BackendListener>();
     private static boolean initialized = false;
@@ -307,6 +310,10 @@ public class Backend {
      */
     static void onUnsupportedHardware() {
         changeBackendState(BackendState.UNSUPPORTED_HARDWARE);
+    }
+
+    public static String getUserUID() {
+        return userUID;
     }
 
 }
