@@ -65,7 +65,7 @@ class SyncManager implements DataIntervalClosedListener {
      */
     static void onMeasurementFinished(Measurement measurement) {
         SyncConnectionManager.pushMeasurementMetadata(measurement);
-        SyncConnectionManager.pushDataIntervalsList(measurement.dataIntervals);
+        SyncConnectionManager.pushDataIntervalsList(measurement.getDataIntervals());
     }
 
     /**

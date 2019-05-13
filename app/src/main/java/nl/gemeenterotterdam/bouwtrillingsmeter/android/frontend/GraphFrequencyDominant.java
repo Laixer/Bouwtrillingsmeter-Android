@@ -31,7 +31,7 @@ public class GraphFrequencyDominant extends Graph {
         super(name, textAxisHorizontal, textAxisVertical);
 
         // Create our constant line
-        ArrayList<DataPoint> dataPointsList = LimitConstants.getLimitAsDataPoints(Backend.getCurrentMeasurement().settings);
+        ArrayList<DataPoint> dataPointsList = LimitConstants.getLimitAsDataPoints(Backend.getCurrentMeasurement().getSettings());
         DataPoint[] dataPoints = new DataPoint[dataPointsList.size()];
         for (int i = 0; i < dataPointsList.size(); i++) {
             dataPoints[i] = dataPointsList.get(i);

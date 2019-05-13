@@ -40,6 +40,13 @@ public class SettingsWizardActivity extends AppCompatActivity {
 
     private SettingsWizard settingsWizard;
     private Question currentQuestion;
+
+    // Settings object and variables
+    private BuildingCategory buildingCategory = BuildingCategory.NONE;
+    private VibrationCategory vibrationCategory = VibrationCategory.NONE;
+    private Boolean vibrationSensitive = null;
+    private Double yv = null;
+    private Double yt = null;
     private Settings settings;
 
     /**
@@ -59,8 +66,10 @@ public class SettingsWizardActivity extends AppCompatActivity {
         ((FloatingActionButton) findViewById(R.id.fabWizardConfirm)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SettingsPageActivity.onWizardCreatedValidSettings(settings);
-                finish();
+                if (settings != null && settings.isValid()) {
+                    SettingsPageActivity.onWizardCreatedValidSettings(settings);
+                    finish();
+                }
             }
         });
 
@@ -92,7 +101,6 @@ public class SettingsWizardActivity extends AppCompatActivity {
         textViewStaticVibrationSensitive = (TextView) findViewById(R.id.textViewWizardStaticVibrationSensitive);
 
         // Setup wizard
-        settings = new Settings();
         settingsWizard = createQuestionWizard();
         currentQuestion = settingsWizard.getStartQuestion();
         Button buttonTryAgain = (Button) findViewById(R.id.buttonWizardTryAgain);
@@ -251,14 +259,11 @@ public class SettingsWizardActivity extends AppCompatActivity {
     private void saveOutcome(Outcome outcome) {
         Type type = outcome.getType();
         if (type == BuildingCategory.class) {
-            settings.buildingCategory = (BuildingCategory) outcome.getOutcome();
-            System.out.println("BC = " + settings.buildingCategory);
+            buildingCategory = (BuildingCategory) outcome.getOutcome();
         } else if (type == VibrationCategory.class) {
-            settings.vibrationCategory = (VibrationCategory) outcome.getOutcome();
-            System.out.println("VC = " + settings.vibrationCategory);
+            vibrationCategory = (VibrationCategory) outcome.getOutcome();
         } else if (type == Boolean.class) {
-            settings.vibrationSensitive = (Boolean) outcome.getOutcome();
-            System.out.println("VS = " + settings.vibrationSensitive);
+            vibrationSensitive = (Boolean) outcome.getOutcome();
         }
     }
 
@@ -268,6 +273,9 @@ public class SettingsWizardActivity extends AppCompatActivity {
      */
     private void onReachedWizardFinish(Outcome outcome) {
         switchLayout(true);
+
+        settings = new Settings(buildingCategory, vibrationCategory, vibrationSensitive);
+
         if (settings.isValid()) {
             setFinishTextViewsVisibilities(true);
             textViewTop.setText(getResources().getString(R.string.widget_final_top_success));

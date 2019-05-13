@@ -266,7 +266,7 @@ public class Backend {
             throw new IllegalStateException("We are NOT in the PREPARING_MEASUREMENT state. No settings object can be created at the moment.");
         }
 
-        getCurrentMeasurement().settings = settings;
+        getCurrentMeasurement().overwriteSettings(settings);
     }
 
     /**

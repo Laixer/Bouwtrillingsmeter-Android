@@ -23,9 +23,6 @@ import java.util.UUID;
  */
 public class Measurement implements Serializable {
 
-    public Settings settings;
-    public ArrayList<DataInterval> dataIntervals;
-
     // TODO ISO 8601
     private Date dateStart;
     private Date dateEnd;
@@ -39,12 +36,16 @@ public class Measurement implements Serializable {
     private String description;
     private transient Bitmap bitmap;
 
+    private boolean open;
     private boolean closed;
+
+    private Settings settings;
+    private ArrayList<DataInterval> dataIntervals;
 
     /**
      * Simplified constructor for this class
      */
-    public Measurement() {
+    Measurement() {
         this("default name");
     }
 
@@ -54,7 +55,7 @@ public class Measurement implements Serializable {
      *
      * @param name The name for this measurement
      */
-    public Measurement(String name) {
+    Measurement(String name) {
         // Generate a random uid for this measurement
         uid = UUID.randomUUID().toString();
 
@@ -68,10 +69,11 @@ public class Measurement implements Serializable {
         longitude = Double.MAX_VALUE;
         latitude = Double.MAX_VALUE;
 
-        // Create public variables
-        settings = new Settings();
+        // Create variables
+        settings = null;
         dataIntervals = new ArrayList<DataInterval>();
 
+        open = false;
         closed = false;
     }
 
@@ -80,8 +82,8 @@ public class Measurement implements Serializable {
      *
      * @param dataInterval A measured DataInterval object, containing datapoints and all calculations
      */
-    public void addDataInterval(DataInterval dataInterval) {
-        if (closed == true) {
+    void addDataInterval(DataInterval dataInterval) {
+        if (closed) {
             throw new IllegalStateException("Current measurement is already closed! No more data can be added.");
         }
 
@@ -91,17 +93,27 @@ public class Measurement implements Serializable {
     /**
      * Saves our current start time.
      */
-    public void onStartMeasuring() {
+    void onStartMeasuring() {
         dateStart = Calendar.getInstance().getTime();
+        open = true;
     }
 
     /**
      * Called when we stop the measuring.
      * This saves our end time.
      */
-    public void onStopMeasuring() {
+    void onStopMeasuring() {
         dateEnd = Calendar.getInstance().getTime();
         closed = true;
+    }
+
+    /**
+     * Checks if we have already started our measurement.
+     *
+     * @return True if the measurement has been started.
+     */
+    boolean isOpen() {
+        return open;
     }
 
     /**
@@ -109,7 +121,7 @@ public class Measurement implements Serializable {
      *
      * @return True if the measurement has already been closed.
      */
-    public boolean isClosed() {
+    boolean isClosed() {
         return closed;
     }
 
@@ -118,7 +130,7 @@ public class Measurement implements Serializable {
      *
      * @return The start time in millis.
      */
-    public long getStartTimeInMillis() {
+    long getStartTimeInMillis() {
         return this.dateStart.getTime();
     }
 
@@ -142,6 +154,14 @@ public class Measurement implements Serializable {
             return null;
         }
 
+    }
+
+    public void overwriteSettings(Settings settings) {
+        if (!open && !closed) {
+            this.settings = settings;
+        } else {
+            throw new IllegalArgumentException("Cannot overwrite settings on a measurement that is already started or closed.");
+        }
     }
 
     public void setName(String name) {
@@ -192,6 +212,14 @@ public class Measurement implements Serializable {
 
     public double getLocationAccuracy() {
         return this.locationAccuracy;
+    }
+
+    public Settings getSettings() {
+        return settings;
+    }
+
+    public ArrayList<DataInterval> getDataIntervals() {
+        return dataIntervals;
     }
 
     /**

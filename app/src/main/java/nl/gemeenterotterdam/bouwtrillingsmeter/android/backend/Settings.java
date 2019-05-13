@@ -14,24 +14,11 @@ import java.io.Serializable;
  */
 public class Settings implements Serializable {
 
-    public static Settings settings;
-
-    private BuildingCategory buildingCategory;
-    private VibrationCategory vibrationCategory;
-    private Boolean vibrationSensitive;
-    private Double yv;
-    private Double yt;
-
-    /**
-     * Constructor
-     */
-    public Settings() {
-        buildingCategory = BuildingCategory.NONE;
-        vibrationCategory = VibrationCategory.NONE;
-        vibrationSensitive = null;
-        yv = null;
-        yt = null;
-    }
+    private final BuildingCategory buildingCategory;
+    private final VibrationCategory vibrationCategory;
+    private final Boolean vibrationSensitive;
+    private final Float yv;
+    private final Float yt;
 
     /**
      * Constructor
@@ -40,6 +27,8 @@ public class Settings implements Serializable {
         this.buildingCategory = buildingCategory;
         this.vibrationCategory = vibrationCategory;
         this.vibrationSensitive = vibrationSensitive;
+        this.yv = LimitConstants.getYvFromSettings(this);
+        this.yt = LimitConstants.getYtFromSettings(this);
     }
 
     /**
@@ -47,48 +36,7 @@ public class Settings implements Serializable {
      * @return True if valid
      */
     public boolean isValid() {
-        return !(vibrationCategory == VibrationCategory.NONE || buildingCategory == BuildingCategory.NONE);
-    }
-
-    void setBuildingCategory(BuildingCategory buildingCategory) {
-        if (this.buildingCategory == BuildingCategory.NONE) {
-            this.buildingCategory = buildingCategory;
-        } else {
-            throw new IllegalArgumentException("Can't change building category once it has been set.");
-        }
-    }
-
-    void setVibrationCategory(VibrationCategory vibrationCategory) {
-        if (this.vibrationCategory == VibrationCategory.NONE) {
-            this.vibrationCategory = vibrationCategory;
-        } else {
-            throw new IllegalArgumentException("Can't change vibration category once it has been set.");
-        }
-    }
-
-    void setVibrationSensitive(Boolean vibrationSensitive) {
-        if (this.vibrationSensitive == null) {
-            this.vibrationSensitive = vibrationSensitive;
-        } else {
-            throw new IllegalArgumentException("Can't change vibration sensitivity once it has been set.");
-        }
-    }
-
-    void setYv(double yv) {
-        if (this.yv == null) {
-            this.yv = yv;
-        } else {
-            throw new IllegalArgumentException("Can't change yv once it has been set.");
-
-        }
-    }
-
-    void setYt(double yt) {
-        if (this.yt == null) {
-            this.yt = yt;
-        } else {
-            throw new IllegalArgumentException("Can't change yt once it has been set.");
-        }
+        return !(vibrationCategory == VibrationCategory.NONE || buildingCategory == BuildingCategory.NONE || vibrationSensitive == null || yv == null || yt == null);
     }
 
     public BuildingCategory getBuildingCategory() {
@@ -103,11 +51,11 @@ public class Settings implements Serializable {
         return vibrationSensitive;
     }
 
-    public double getYv() {
+    public float getYv() {
         return yv;
     }
 
-    public double getYt() {
+    public float getYt() {
         return yt;
     }
 }

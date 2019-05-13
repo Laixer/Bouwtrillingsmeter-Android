@@ -162,7 +162,7 @@ public class DataHandler implements AccelerometerListener {
         }
 
         // Attempt to clear all that has to be cleared
-        ArrayList<DataInterval> dataIntervals = MeasurementControl.getCurrentMeasurement().dataIntervals;
+        ArrayList<DataInterval> dataIntervals = MeasurementControl.getCurrentMeasurement().getDataIntervals();
         ArrayList<Integer> indexesClearedSuccessfully = new ArrayList<Integer>();
         for (int index : indexesToBeCleared) {
             if (dataIntervals.get(index).attemptDeleteDataPoints()) {

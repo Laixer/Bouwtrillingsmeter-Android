@@ -32,9 +32,9 @@ class Calculator {
         velocity = new float[]{0, 0, 0};
 
         // Get constants from limitconstants
-        Settings settings = MeasurementControl.getCurrentMeasurement().settings;
-        yt = LimitConstants.getYtFromSettings(settings);
-        yv = LimitConstants.getYvFromSettings(settings);
+        Settings settings = MeasurementControl.getCurrentMeasurement().getSettings();
+        yt = settings.getYt();
+        yv = settings.getYv();
         limitValuesAsFloatPoints = LimitConstants.getLimitAsFloatPoints(settings);
     }
 
