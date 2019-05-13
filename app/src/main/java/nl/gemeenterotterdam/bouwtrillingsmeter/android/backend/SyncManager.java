@@ -50,11 +50,12 @@ class SyncManager implements DataIntervalClosedListener {
 
     /**
      * This gets called when we abort our current measurement.
+     * TODO Do we need this?
      *
      * @param measurement The measurement
      */
     static void onMeasurementAborted(Measurement measurement) {
-        SyncConnectionManager.pushMeasurementAborted(measurement);
+        //
     }
 
     /**

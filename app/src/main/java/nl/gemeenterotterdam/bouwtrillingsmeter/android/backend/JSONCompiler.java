@@ -14,14 +14,14 @@ import java.util.ArrayList;
  * TODO Error handling
  * TODO String door user -> is dit veilig?
  */
-public class JSONCompiler {
+class JSONCompiler {
 
     /**
      * Converts our user uid to a JSON object.
      *
      * @return The JSON object
      */
-    public static JSONObject compileUserUID() {
+    static JSONObject compileUserUID() {
         JSONObject object = new JSONObject();
 
         try {
@@ -39,7 +39,7 @@ public class JSONCompiler {
      * @param measurement The measurement to convert.
      * @return The JSON object
      */
-    public static JSONObject compileMeasurement(Measurement measurement) {
+    static JSONObject compileMeasurement(Measurement measurement) {
         JSONObject object = new JSONObject();
 
         try {
@@ -64,7 +64,7 @@ public class JSONCompiler {
      *
      * @return The JSON array
      */
-    public static JSONArray compileDataIntervalEssentialsList(ArrayList<DataIntervalEssentials> list) {
+    static JSONArray compileDataIntervalEssentialsList(ArrayList<DataIntervalEssentials> list) {
         JSONArray array = new JSONArray();
 
         for (DataIntervalEssentials item : list) {
@@ -79,7 +79,7 @@ public class JSONCompiler {
      *
      * @return The JSON array
      */
-    public static JSONArray compileDataIntervalList(ArrayList<DataInterval> list) {
+    static JSONArray compileDataIntervalList(ArrayList<DataInterval> list) {
         JSONArray array = new JSONArray();
 
         for (DataInterval item : list) {
@@ -96,7 +96,7 @@ public class JSONCompiler {
      * @param image          The {@link Image} to convert
      * @return The JSON object
      */
-    public static JSONObject compileImage(String measurementUID, Image image) {
+    static JSONObject compileImage(String measurementUID, Image image) {
         JSONObject object = new JSONObject();
 
         try {
