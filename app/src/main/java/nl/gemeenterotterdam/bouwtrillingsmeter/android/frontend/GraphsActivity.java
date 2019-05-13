@@ -151,10 +151,10 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
          * Graph 4: Amplitude // frequency (line)
          * Graph 5: Dominant frequency // frequency (point)
          */
-        graphs[0].sendNewDataToSeries(dataInterval.dataPoints3DAcceleration);
+        graphs[0].sendNewDataToSeries(dataInterval.getDataPoints3DAcceleration());
         graphs[1].sendNewDataToSeries(dataInterval.getVelocitiesAbsMaxAsDataPoints());
         graphs[2].sendNewDataToSeries(dataInterval.getDominantFrequenciesAsDataPoints());
-        graphs[3].sendNewDataToSeries(dataInterval.frequencyAmplitudes);
+        graphs[3].sendNewDataToSeries(dataInterval.getFrequencyAmplitudes());
         graphs[4].sendNewDataToSeries(dataInterval.getExceedingAsDataPoints());
     }
 

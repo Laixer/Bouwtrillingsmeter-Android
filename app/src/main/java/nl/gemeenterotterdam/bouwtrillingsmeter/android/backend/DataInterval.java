@@ -1,11 +1,8 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
-import com.jjoe64.graphview.series.DataPoint;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * @author Thomas Beckers
@@ -16,29 +13,32 @@ import java.util.Date;
  */
 public class DataInterval implements Serializable {
 
-    public String measurementUID;
-    public int index;
-    public Date dateStart;
-    public Date dateEnd;
+    private String measurementUID;
+    private int index;
+    private long millisStart;
+    private long millisRelativeStart;
+    private long millisRelativeEnd;
 
-    public ArrayList<DataPoint3D<Long>> dataPoints3DAcceleration;
-    public ArrayList<DataPoint3D<Long>> velocities;
-    public DataPoint3D<Long> velocitiesAbsMax;
-    public ArrayList<DataPoint3D<Double>> frequencyAmplitudes;
-    public DominantFrequencies dominantFrequencies;
+    private ArrayList<DataPoint3D<Long>> dataPoints3DAcceleration;
+    private ArrayList<DataPoint3D<Long>> velocities;
+    private DataPoint3D<Long> velocitiesAbsMax;
+    private ArrayList<DataPoint3D<Double>> frequencyAmplitudes;
+    private DominantFrequencies dominantFrequencies;
 
-    private boolean isLockedByThread;
+    private boolean lockedByThread;
+    private boolean closed;
 
     /**
      * Constructor
      */
-    public DataInterval(String measurementUID, int index) {
+    DataInterval(String measurementUID, int index) {
         this.measurementUID = measurementUID;
         this.index = index;
 
         dataPoints3DAcceleration = new ArrayList<DataPoint3D<Long>>();
-        dateStart = Calendar.getInstance().getTime();
-        isLockedByThread = false;
+        millisStart = Calendar.getInstance().getTimeInMillis();
+        millisRelativeStart = millisStart - MeasurementControl.getCurrentMeasurement().getStartTimeInMillis();
+        lockedByThread = false;
     }
 
     /**
@@ -46,7 +46,7 @@ public class DataInterval implements Serializable {
      *
      * @param dataPoint3DTime The datapoint to add
      */
-    public void addDataPoint3D(DataPoint3D<Long> dataPoint3DTime) {
+    void addDataPoint3D(DataPoint3D<Long> dataPoint3DTime) {
         dataPoints3DAcceleration.add(dataPoint3DTime);
     }
 
@@ -55,8 +55,9 @@ public class DataInterval implements Serializable {
      * This class does not call this function by itself.
      * This function gets called by the DataHandler.
      */
-    public void onIntervalEnd() {
-        dateEnd = Calendar.getInstance().getTime();
+    void onIntervalEnd() {
+        millisRelativeEnd = Calendar.getInstance().getTimeInMillis() - millisStart;
+        closed = true;
     }
 
     /**
@@ -78,24 +79,24 @@ public class DataInterval implements Serializable {
     /**
      * This locks our object when the calculations thread is working on it.
      */
-    public void onThreadCalculationsStart() {
-        isLockedByThread = true;
+    void onThreadCalculationsStart() {
+        lockedByThread = true;
     }
 
     /**
      * This unlocks our object when the calculation thread is done with it.
      */
-    public void onThreadCalculationsEnd() {
-        isLockedByThread = false;
+    void onThreadCalculationsEnd() {
+        lockedByThread = false;
     }
 
     /**
      * This will clear our {@link #dataPoints3DAcceleration} array.
-     * A clear is only performed if we are not {@link #isLockedByThread}.
+     * A clear is only performed if we are not {@link #lockedByThread}.
      * This is done to save memory and prevent sending large files across the internet.
      */
-    public boolean attemptDeleteDataPoints() {
-        if (isLockedByThread) {
+    boolean attemptDeleteDataPoints() {
+        if (lockedByThread) {
             return false;
         } else {
             dataPoints3DAcceleration.clear();
@@ -110,8 +111,7 @@ public class DataInterval implements Serializable {
      */
     public ArrayList<DataPoint3D<Long>> getDominantFrequenciesAsDataPoints() {
         ArrayList<DataPoint3D<Long>> result = new ArrayList<DataPoint3D<Long>>();
-        long timeValue = dateStart.getTime() - MeasurementControl.getCurrentMeasurement().getStartTimeInMillis();
-        result.add(new DataPoint3D<Long>(timeValue, dominantFrequencies.velocities));
+        result.add(new DataPoint3D<Long>(millisRelativeStart, dominantFrequencies.velocities));
         return result;
     }
 
@@ -151,10 +151,80 @@ public class DataInterval implements Serializable {
      */
     public ArrayList<DataPoint3D<Long>> getVelocitiesAbsMaxAsDataPoints() {
         ArrayList<DataPoint3D<Long>> result = new ArrayList<DataPoint3D<Long>>(1);
-        long timeValue = dateStart.getTime() - MeasurementControl.getCurrentMeasurement().getStartTimeInMillis();
-        velocitiesAbsMax.xAxisValue = timeValue;
+        velocitiesAbsMax.xAxisValue = millisRelativeStart;
         result.add(velocitiesAbsMax);
         return result;
     }
 
+    void setVelocities(ArrayList<DataPoint3D<Long>> velocities) {
+        if (this.velocities == null) {
+            this.velocities = velocities;
+        } else {
+            throw new IllegalArgumentException("Cannot change velocities once they have been set.");
+        }
+    }
+
+    void setVelocitiesAbsMax(DataPoint3D<Long> velocitiesAbsMax) {
+        if (this.velocitiesAbsMax == null) {
+            this.velocitiesAbsMax = velocitiesAbsMax;
+        } else {
+            throw new IllegalArgumentException("Cannot change absolute max velocities once they have been set.");
+        }
+    }
+
+    void setFrequencyAmplitudes(ArrayList<DataPoint3D<Double>> frequencyAmplitudes) {
+        if (this.frequencyAmplitudes == null) {
+            this.frequencyAmplitudes = frequencyAmplitudes;
+        } else {
+            throw new IllegalArgumentException("Cannot change frequency amplitudes once they have been set.");
+        }
+    }
+
+    void setDominantFrequencies(DominantFrequencies dominantFrequencies) {
+        if (this.dominantFrequencies == null) {
+            this.dominantFrequencies = dominantFrequencies;
+        } else {
+            throw new IllegalArgumentException("Cannot change dominant frequencies once they have been set.");
+        }
+    }
+
+    public String getMeasurementUID() {
+        return measurementUID;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public long getMillisStart() {
+        return millisStart;
+    }
+
+    public long getMillisRelativeStart() {
+        return millisRelativeStart;
+    }
+
+    public long getMillisRelativeEnd() {
+        return millisRelativeEnd;
+    }
+
+    public ArrayList<DataPoint3D<Long>> getDataPoints3DAcceleration() {
+        return dataPoints3DAcceleration;
+    }
+
+    public ArrayList<DataPoint3D<Long>> getVelocities() {
+        return velocities;
+    }
+
+    public DataPoint3D<Long> getVelocitiesAbsMax() {
+        return velocitiesAbsMax;
+    }
+
+    public ArrayList<DataPoint3D<Double>> getFrequencyAmplitudes() {
+        return frequencyAmplitudes;
+    }
+
+    public DominantFrequencies getDominantFrequencies() {
+        return dominantFrequencies;
+    }
 }

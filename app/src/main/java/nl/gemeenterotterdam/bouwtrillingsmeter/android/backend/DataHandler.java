@@ -188,7 +188,7 @@ public class DataHandler implements AccelerometerListener {
      */
     private static void performIntervalCalculations(final DataInterval dataInterval) {
         // Edge cases
-        if (dataInterval.dataPoints3DAcceleration.size() == 0) {
+        if (dataInterval.getDataPoints3DAcceleration().size() == 0) {
             throw new IllegalArgumentException("No datapoints were added to this interval.");
         }
 
@@ -200,25 +200,25 @@ public class DataHandler implements AccelerometerListener {
                 thisDataInterval.onThreadCalculationsStart();
 
                 // Get time
-                long dataIntervalStartTime = dataInterval.dateStart.getTime();
+                long dataIntervalStartTime = dataInterval.getMillisRelativeStart();
 
                 // Calculate time-domain velocities
-                ArrayList<DataPoint3D<Long>> velocities = Calculator.calculateVelocityFromAcceleration(thisDataInterval.dataPoints3DAcceleration);
+                ArrayList<DataPoint3D<Long>> velocities = Calculator.calculateVelocityFromAcceleration(thisDataInterval.getDataPoints3DAcceleration());
                 DataPoint3D<Long> velocitiesAbsMax = Calculator.calculateVelocityAbsMaxFromVelocties(dataIntervalStartTime, velocities);
-                thisDataInterval.velocities = velocities;
-                thisDataInterval.velocitiesAbsMax = velocitiesAbsMax;
+                thisDataInterval.setVelocities(velocities);
+                thisDataInterval.setVelocitiesAbsMax(velocitiesAbsMax);
 
                 // Calculate fft for the acceleration
-                ArrayList<DataPoint3D<Double>> frequencyAmplitudes = Calculator.fft(thisDataInterval.dataPoints3DAcceleration);
-                thisDataInterval.frequencyAmplitudes = frequencyAmplitudes;
+                ArrayList<DataPoint3D<Double>> frequencyAmplitudes = Calculator.fft(thisDataInterval.getDataPoints3DAcceleration());
+                thisDataInterval.setFrequencyAmplitudes(frequencyAmplitudes);
 
                 // Calculate dominant frequencies of this interval
                 DominantFrequencies dominantFrequencies = Calculator.calculateDominantFrequencies(frequencyAmplitudes);
-                thisDataInterval.dominantFrequencies = dominantFrequencies;
+                thisDataInterval.setDominantFrequencies(dominantFrequencies);
 
                 // Check if we exceed any limits
                 if (thisDataInterval.isExceedingLimit()) {
-                    lastExceedingIndex = thisDataInterval.index;
+                    lastExceedingIndex = thisDataInterval.getIndex();
                     Backend.onExceedLimit();
                 }
 
@@ -241,7 +241,7 @@ public class DataHandler implements AccelerometerListener {
         // If we are measuring
         if (isCurrentlyMeasuring() && currentDataInterval != null) {
             // Check if our interval has passed.
-            long timePassed = -currentDataInterval.dateStart.getTime() + Calendar.getInstance().getTime().getTime();
+            long timePassed = Calendar.getInstance().getTimeInMillis() - currentDataInterval.getMillisStart();
             long interval = Constants.intervalInMilliseconds;
             if (timePassed > interval) {
                 onStartNewInterval();
