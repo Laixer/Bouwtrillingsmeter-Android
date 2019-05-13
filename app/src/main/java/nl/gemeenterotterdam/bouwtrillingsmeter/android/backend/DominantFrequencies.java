@@ -12,9 +12,9 @@ import java.io.Serializable;
  */
 public class DominantFrequencies implements Serializable {
 
-    public float[] frequencies;
-    public float[] velocities;
-    public boolean[] exceedsLimit;
+    private float[] frequencies;
+    private float[] velocities;
+    private boolean[] exceedsLimit;
 
     /**
      * Constructor
@@ -40,4 +40,15 @@ public class DominantFrequencies implements Serializable {
         return false;
     }
 
+    public float[] getFrequencies() {
+        return frequencies;
+    }
+
+    public float[] getVelocities() {
+        return velocities;
+    }
+
+    public boolean[] getExceedsLimit() {
+        return exceedsLimit;
+    }
 }
