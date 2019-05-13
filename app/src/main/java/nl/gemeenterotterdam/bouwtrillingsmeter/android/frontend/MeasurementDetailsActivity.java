@@ -99,7 +99,7 @@ public class MeasurementDetailsActivity extends AppCompatActivity {
      */
     public void onUpdateMeasurementTexts() {
         textViewName.setText(measurement.getName());
-        textViewDateTime.setText(measurement.getDateTime().toString());
+        textViewDateTime.setText(measurement.getDateStart());
         textViewDescription.setText(measurement.getDescription());
 
         // TODO Clean up

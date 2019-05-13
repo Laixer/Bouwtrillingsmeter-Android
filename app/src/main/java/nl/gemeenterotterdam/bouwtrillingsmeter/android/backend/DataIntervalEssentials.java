@@ -9,13 +9,13 @@ import java.io.Serializable;
 class DataIntervalEssentials implements Serializable {
 
     private String measurementUID;
-    private int dataIntervalIndex;
+    private int index;
     private DataPoint3D<Long> velocitiesAbsMax;
     private DominantFrequencies dominantFrequencies;
 
-    DataIntervalEssentials(String measurementUID, int dataIntervalIndex, DataPoint3D<Long> velocitiesAbsMax, DominantFrequencies dominantFrequencies) {
+    DataIntervalEssentials(String measurementUID, int index, DataPoint3D<Long> velocitiesAbsMax, DominantFrequencies dominantFrequencies) {
         this.measurementUID = measurementUID;
-        this.dataIntervalIndex = dataIntervalIndex;
+        this.index = index;
         this.velocitiesAbsMax = velocitiesAbsMax;
         this.dominantFrequencies = dominantFrequencies;
     }
@@ -24,8 +24,8 @@ class DataIntervalEssentials implements Serializable {
         return measurementUID;
     }
 
-    public int getDataIntervalIndex() {
-        return dataIntervalIndex;
+    public int getIndex() {
+        return index;
     }
 
     public DataPoint3D<Long> getVelocitiesAbsMax() {

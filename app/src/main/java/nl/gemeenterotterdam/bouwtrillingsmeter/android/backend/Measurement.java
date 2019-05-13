@@ -17,27 +17,29 @@ import java.util.UUID;
  * It has an arraylist of {@link DataInterval}s.
  * These {@link DataInterval}s contains all {@link DataPoint3D}s.
  * All calculated values (done by our {@link Calculator}) are also stored in said {@link DataInterval}.
+ * TODO ISO 8601 implementeren
  */
 public class Measurement implements Serializable {
 
-    // TODO ISO 8601
-    private Date dateStart;
-    private Date dateEnd;
-
-    private String uid;
+    // Dit gaat mee naar de server
+    private final String uid;
     private String name;
-    private Date datetime;
+    private String dateStart;
+    private String dateEnd;
     private double longitude;
     private double latitude;
     private double locationAccuracy;
     private String description;
+    private Settings settings;
+    private int dataIntervalCount;
+
+    private ArrayList<DataInterval> dataIntervals;
     private transient Bitmap bitmap;
 
+    // Dit gaat niet mee naar de server
+    private Date dateStartObject;
     private boolean open;
     private boolean closed;
-
-    private Settings settings;
-    private ArrayList<DataInterval> dataIntervals;
 
     /**
      * Simplified constructor for this class
@@ -57,10 +59,8 @@ public class Measurement implements Serializable {
         uid = UUID.randomUUID().toString();
 
         // Link all data
-        // Also create default data
         // TODO Remove default debug data
         this.name = name;
-        datetime = Calendar.getInstance().getTime();
         description = "";
         bitmap = null;
         longitude = Double.MAX_VALUE;
@@ -85,13 +85,15 @@ public class Measurement implements Serializable {
         }
 
         dataIntervals.add(dataInterval);
+        dataIntervalCount = dataIntervals.size();
     }
 
     /**
      * Saves our current start time.
      */
     void onStartMeasuring() {
-        dateStart = Calendar.getInstance().getTime();
+        dateStartObject = Calendar.getInstance().getTime();
+        dateStart = dateStartObject.toString();
         open = true;
     }
 
@@ -100,7 +102,7 @@ public class Measurement implements Serializable {
      * This saves our end time.
      */
     void onStopMeasuring() {
-        dateEnd = Calendar.getInstance().getTime();
+        dateEnd = Calendar.getInstance().getTime().toString();
         closed = true;
     }
 
@@ -128,7 +130,7 @@ public class Measurement implements Serializable {
      * @return The start time in millis.
      */
     long getStartTimeInMillis() {
-        return this.dateStart.getTime();
+        return this.dateStartObject.getTime();
     }
 
     /**
@@ -170,7 +172,6 @@ public class Measurement implements Serializable {
         longitude = location.getLongitude();
         latitude = location.getLatitude();
         locationAccuracy = location.getAccuracy();
-        onMetadataChanged();
     }
 
     public void setDescription(String description) {
@@ -189,10 +190,6 @@ public class Measurement implements Serializable {
 
     public String getName() {
         return this.name;
-    }
-
-    public Date getDateTime() {
-        return this.datetime;
     }
 
     public String getDescription() {
@@ -217,6 +214,18 @@ public class Measurement implements Serializable {
 
     public ArrayList<DataInterval> getDataIntervals() {
         return dataIntervals;
+    }
+
+    public int getDataIntervalCount() {
+        return dataIntervalCount;
+    }
+
+    public String getDateStart() {
+        return dateStart;
+    }
+
+    public String getDateEnd() {
+        return dateEnd;
     }
 
     /**

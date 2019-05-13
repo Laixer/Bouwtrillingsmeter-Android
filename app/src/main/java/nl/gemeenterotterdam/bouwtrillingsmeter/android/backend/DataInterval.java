@@ -13,18 +13,19 @@ import java.util.Calendar;
  */
 public class DataInterval implements Serializable {
 
+    // Gaat naar de server
     private final String measurementUID;
     private final int index;
-    private final long millisStart;
     private final long millisRelativeStart;
     private long millisRelativeEnd;
-
     private ArrayList<DataPoint3D<Long>> dataPoints3DAcceleration;
     private ArrayList<DataPoint3D<Long>> velocities;
-    private DataPoint3D<Long> velocitiesAbsMax;
+    private DataPoint3D<Long> velocitiesAbsoluteMax;
     private ArrayList<DataPoint3D<Double>> frequencyAmplitudes;
     private DominantFrequencies dominantFrequencies;
 
+    // Gaat niet naar de server
+    private final long millisStart;
     private boolean lockedByThread;
 
     /**
@@ -149,8 +150,8 @@ public class DataInterval implements Serializable {
      */
     public ArrayList<DataPoint3D<Long>> getVelocitiesAbsMaxAsDataPoints() {
         ArrayList<DataPoint3D<Long>> result = new ArrayList<DataPoint3D<Long>>(1);
-        velocitiesAbsMax.xAxisValue = millisRelativeStart;
-        result.add(velocitiesAbsMax);
+        velocitiesAbsoluteMax.xAxisValue = millisRelativeStart;
+        result.add(velocitiesAbsoluteMax);
         return result;
     }
 
@@ -162,9 +163,9 @@ public class DataInterval implements Serializable {
         }
     }
 
-    void setVelocitiesAbsMax(DataPoint3D<Long> velocitiesAbsMax) {
-        if (this.velocitiesAbsMax == null) {
-            this.velocitiesAbsMax = velocitiesAbsMax;
+    void setVelocitiesAbsoluteMax(DataPoint3D<Long> velocitiesAbsoluteMax) {
+        if (this.velocitiesAbsoluteMax == null) {
+            this.velocitiesAbsoluteMax = velocitiesAbsoluteMax;
         } else {
             throw new IllegalArgumentException("Cannot change absolute max velocities once they have been set.");
         }
@@ -214,8 +215,8 @@ public class DataInterval implements Serializable {
         return velocities;
     }
 
-    public DataPoint3D<Long> getVelocitiesAbsMax() {
-        return velocitiesAbsMax;
+    public DataPoint3D<Long> getVelocitiesAbsoluteMax() {
+        return velocitiesAbsoluteMax;
     }
 
     public ArrayList<DataPoint3D<Double>> getFrequencyAmplitudes() {

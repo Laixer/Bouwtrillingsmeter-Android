@@ -12,3 +12,18 @@ Uitzoeken:
 TODO Uitzoeken of je achtergrond sync kan doen op android
 TODO ? Uitzoeken wifi etc consistency bij fouten en grote bestanden
 TODO Supernauwkeurige locatie unit
+
+
+
+
+
+één datainterval
+[
+    measurement_id: "sdfksdjhfksdjfh"
+    frequencies: {
+        t: [t1, t2, t3, ...]
+        x: [x1, x2, x3, ...]
+        x: [x1, x2, x3, ...]
+        x: [x1, x2, x3, ...]
+    }
+]
