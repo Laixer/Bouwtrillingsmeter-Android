@@ -8,20 +8,11 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.util.ArrayList;
-
-/**
- * Connection type enum
- */
-enum ConnectionType {
-    NONE,
-    WIFI,
-    WIFI_AND_G,
-    G
-}
 
 /**
  * This class handles all our connections to WIFI and 3G/4G/5G.
@@ -48,7 +39,7 @@ class SyncConnectionManager {
     static boolean pushMeasurementMetadata(Measurement measurement) {
         JSONObject object = JSONCompiler.compileMeasurement(measurement);
 
-        // TODO send
+        // TODO Send
 
         return true;
     }
@@ -57,11 +48,13 @@ class SyncConnectionManager {
      * Push data interval essentials
      *
      * @param measurementUID            The measurement UID
-     * @param allDataIntervalEssentials All the data interval essentials
+     * @param dataIntervalEssentialsList All the data interval essentials
      * @return True if successful
      */
-    static boolean pushDataIntervalEssentialsList(String measurementUID, ArrayList<DataIntervalEssentials> allDataIntervalEssentials) {
+    static boolean pushDataIntervalEssentialsList(String measurementUID, ArrayList<DataIntervalEssentials> dataIntervalEssentialsList) {
+        JSONArray array = JSONCompiler.compileDataIntervalEssentialsList(dataIntervalEssentialsList);
 
+        // TODO Send
 
         return true;
     }
@@ -69,10 +62,14 @@ class SyncConnectionManager {
     /**
      * Push all dataintervals that belong to a measurement
      *
-     * @param dataIntervals The dataintervals to send
+     * @param dataIntervalList The dataintervals to send
      * @return True if successful
      */
-    static boolean pushDataIntervalsList(ArrayList<DataInterval> dataIntervals) {
+    static boolean pushDataIntervalsList(ArrayList<DataInterval> dataIntervalList) {
+        JSONArray array = JSONCompiler.compileDataIntervalList(dataIntervalList);
+
+        // TODO Send
+
         return true;
     }
 
