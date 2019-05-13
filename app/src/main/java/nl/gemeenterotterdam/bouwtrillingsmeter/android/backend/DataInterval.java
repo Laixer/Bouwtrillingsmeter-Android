@@ -13,10 +13,10 @@ import java.util.Calendar;
  */
 public class DataInterval implements Serializable {
 
-    private String measurementUID;
-    private int index;
-    private long millisStart;
-    private long millisRelativeStart;
+    private final String measurementUID;
+    private final int index;
+    private final long millisStart;
+    private final long millisRelativeStart;
     private long millisRelativeEnd;
 
     private ArrayList<DataPoint3D<Long>> dataPoints3DAcceleration;
@@ -26,7 +26,6 @@ public class DataInterval implements Serializable {
     private DominantFrequencies dominantFrequencies;
 
     private boolean lockedByThread;
-    private boolean closed;
 
     /**
      * Constructor
@@ -57,7 +56,6 @@ public class DataInterval implements Serializable {
      */
     void onIntervalEnd() {
         millisRelativeEnd = Calendar.getInstance().getTimeInMillis() - millisStart;
-        closed = true;
     }
 
     /**
