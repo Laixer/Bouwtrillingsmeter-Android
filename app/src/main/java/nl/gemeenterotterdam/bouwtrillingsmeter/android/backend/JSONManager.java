@@ -1,5 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
+import android.media.Image;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -88,7 +90,27 @@ public class JSONManager {
         try {
             object.put("userUID", Backend.getUserUID());
         } catch (JSONException e) {
-            //
+            System.out.println("Error while compiling dataInterval");
+        }
+
+        return object;
+    }
+
+    /**
+     * Converts our measurement to a JSON object.
+     *
+     * @param measurementUID The measurement UID corresponding to the image
+     * @param image The image to convert
+     * @return The JSON object
+     */
+    public static JSONObject compileImage(String measurementUID, Image image) {
+        JSONObject object = new JSONObject();
+
+        try {
+            object.put("measurementUID", measurementUID);
+            object.put("image", "to be determined");
+        } catch (JSONException e) {
+            System.out.println("Error while compiling image");
         }
 
         return object;
