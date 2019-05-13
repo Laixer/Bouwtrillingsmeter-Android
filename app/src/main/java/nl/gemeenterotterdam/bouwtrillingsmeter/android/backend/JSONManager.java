@@ -65,13 +65,10 @@ public class JSONManager {
         JSONObject object = new JSONObject();
 
         try {
-            object.put("userUID", Backend.getUserUID());
-            object.put("", );
-            object.put("", );
-            object.put("", );
-            object.put("", );
-            object.put("", );
-            object.put("", );
+            object.put("measurementUID", dataIntervalEssentials.getMeasurementUID());
+            object.put("index", dataIntervalEssentials.getIndex());
+            object.put("velocitiesAbsoluteMax", compileToJSONArray(ArrayUtils.toObject(dataIntervalEssentials.getVelocitiesAbsMax().values)));
+            object.put("dominantFrequencies", compileDominantFrequencies(dataIntervalEssentials.getDominantFrequencies()));
         } catch (JSONException e) {
             System.out.println("Error while compiling dataIntervalEssentials");
         }
