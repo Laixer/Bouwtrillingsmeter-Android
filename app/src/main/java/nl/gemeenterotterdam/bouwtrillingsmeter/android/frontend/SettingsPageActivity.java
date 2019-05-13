@@ -95,9 +95,9 @@ public class SettingsPageActivity extends AppCompatActivity {
      */
     private void pushCurrentSettingsToFields() {
         if (settings != null) {
-            spinnerCategoryBuilding.setSelection(settings.buildingCategory.ordinal(), true);
-            spinnerCategoryVibration.setSelection(settings.vibrationCategory.ordinal(), true);
-            switchVibrationSensitive.setChecked(settings.vibrationSensitive);
+            spinnerCategoryBuilding.setSelection(settings.getBuildingCategory().ordinal(), true);
+            spinnerCategoryVibration.setSelection(settings.getVibrationCategory().ordinal(), true);
+            switchVibrationSensitive.setChecked(settings.isVibrationSensitive());
         }
     }
 

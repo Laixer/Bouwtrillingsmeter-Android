@@ -271,9 +271,9 @@ public class SettingsWizardActivity extends AppCompatActivity {
         if (settings.isValid()) {
             setFinishTextViewsVisibilities(true);
             textViewTop.setText(getResources().getString(R.string.widget_final_top_success));
-            textViewBuildingCategory.setText(getResources().getStringArray(R.array.category_dropdown_building)[settings.buildingCategory.ordinal()]);
-            textViewVibrationCategory.setText(getResources().getStringArray(R.array.category_dropdown_vibration)[settings.vibrationCategory.ordinal()]);
-            textViewVibrationSensitive.setText(settings.vibrationSensitive ? getResources().getString(R.string.default_yes) : getResources().getString(R.string.default_no));
+            textViewBuildingCategory.setText(getResources().getStringArray(R.array.category_dropdown_building)[settings.getBuildingCategory().ordinal()]);
+            textViewVibrationCategory.setText(getResources().getStringArray(R.array.category_dropdown_vibration)[settings.getVibrationCategory().ordinal()]);
+            textViewVibrationSensitive.setText(settings.isVibrationSensitive() ? getResources().getString(R.string.default_yes) : getResources().getString(R.string.default_no));
         } else {
             setFinishTextViewsVisibilities(false);
             textViewTop.setText(getResources().getStringArray(R.array.wizard_outcome_text)[outcome.getIndex()]);

@@ -249,10 +249,10 @@ public class Backend {
      */
     public static void onGeneratedNewSettings(Settings settings) {
         // If something went wrong with the setup
-        if (settings.buildingCategory == null ||
-                settings.buildingCategory == BuildingCategory.NONE ||
-                settings.vibrationCategory == null ||
-                settings.vibrationCategory == VibrationCategory.NONE) {
+        if (settings.getBuildingCategory() == null ||
+                settings.getBuildingCategory() == BuildingCategory.NONE ||
+                settings.getVibrationCategory() == null ||
+                settings.getVibrationCategory() == VibrationCategory.NONE) {
             throw new IllegalArgumentException("Our settings file contained incomplete values.");
         }
 

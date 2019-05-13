@@ -52,7 +52,7 @@ public class LimitConstants {
      * @return Yv
      */
     static float getYvFromSettings(Settings settings) {
-        if (settings.vibrationSensitive) {
+        if (settings.isVibrationSensitive()) {
             return yvVibrationSensitive;
         }
 
@@ -69,11 +69,11 @@ public class LimitConstants {
      * @return Yt
      */
     static float getYtFromSettings(Settings settings) {
-        if (settings.vibrationSensitive) {
+        if (settings.isVibrationSensitive()) {
             return ytVibrationSensitive;
         }
 
-        switch (settings.vibrationCategory) {
+        switch (settings.getVibrationCategory()) {
             case SHORT:
                 return ytVibrationShort;
             case SHORT_REPEATED:
@@ -93,8 +93,8 @@ public class LimitConstants {
      * @return The corresponding amplitude limit values.
      */
     private static float[] getLineBreakPointAmplitudesFromSettings(Settings settings) {
-        int vibrationIndex = settings.vibrationCategory.ordinal();
-        int buildingIndex = settings.buildingCategory.ordinal();
+        int vibrationIndex = settings.getVibrationCategory().ordinal();
+        int buildingIndex = settings.getBuildingCategory().ordinal();
 
         float[] amplitudes;
         switch (vibrationIndex) {
