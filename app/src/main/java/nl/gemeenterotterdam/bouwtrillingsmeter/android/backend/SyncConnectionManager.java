@@ -20,29 +20,40 @@ import java.util.ArrayList;
 /**
  * This class handles all our connections to WIFI and 3G/4G/5G.
  * It communicates with the {@link SyncManager} class.
+ * TODO Implement feedback
+ * TODO Make one thread
  */
 class SyncConnectionManager {
 
-    private static final String urlString = "http://192.168.0.40:3000/poster";
+    /**
+     * Contains the base URL of our API.
+     */
+    private static final String URL_API = "http://192.168.0.40:3000/api/";
+
+    private static final String URL_RELATIVE_USER_UID = "user-uid/register";
+    private static final String URL_RELATIVE_MEASUREMENT = "measurement/push";
+    private static final String URL_RELATIVE_DATA_INTERVAL_ESSENTIALS = "data-interval-essentials/push";
+    private static final String URL_RELATIVE_DATA_INTERVALS = "data-intervals/push";
+    private static final String URL_RELATIVE_IMAGE = "image/push";
 
     /**
-     * Initializes the instance
+     * Initializes the instance.
      */
     static void initialize() {
-        JSONObject object = JSONCompiler.compileUserUID("this is my user UID");
-        post(object);
+
     }
 
     /**
      * This posts to the server.
      * TODO Uses the mock api now
      *
-     * @param object The JSON object to send
+     * @param urlRelative Relative url
+     * @param jsonObjectString The JSON data as a string
      */
-    private static void post(JSONObject object) {
+    private static void post(String urlRelative, String jsonObjectString) {
         Thread thread = new Thread(() -> {
             try {
-                URL url = new URL(urlString);
+                URL url = new URL(URL_API + urlRelative);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
                 connection.setRequestMethod("POST");
@@ -51,7 +62,7 @@ class SyncConnectionManager {
                 connection.setDoOutput(true);
 
                 OutputStream outputStream = connection.getOutputStream();
-                byte[] input = object.toString().getBytes();
+                byte[] input = jsonObjectString.getBytes();
                 outputStream.write(input, 0, input.length);
 
                 // Read response
@@ -63,7 +74,8 @@ class SyncConnectionManager {
                 while ((responseLine = bufferedReader.readLine()) != null) {
                     response.append(responseLine.trim());
                 }
-                System.out.println(response.toString());
+                boolean result = (response.toString().equals("true"));
+                System.out.println("The request towards " + urlRelative + " success = " + result);
 
             } catch (MalformedURLException e) {
                 System.out.println(e.toString());
@@ -83,9 +95,7 @@ class SyncConnectionManager {
      */
     static boolean pushUserUID(String userUID) {
         JSONObject object = JSONCompiler.compileUserUID(userUID);
-
-        // TODO Send
-
+        post(URL_RELATIVE_USER_UID, object.toString());
         return true;
     }
 
@@ -99,9 +109,7 @@ class SyncConnectionManager {
      */
     static boolean pushMeasurementMetadata(Measurement measurement) {
         JSONObject object = JSONCompiler.compileMeasurement(measurement);
-
-        // TODO Send
-
+        post(URL_RELATIVE_MEASUREMENT, object.toString());
         return true;
     }
 
@@ -114,9 +122,7 @@ class SyncConnectionManager {
      */
     static boolean pushDataIntervalEssentialsList(String measurementUID, ArrayList<DataIntervalEssentials> dataIntervalEssentialsList) {
         JSONArray array = JSONCompiler.compileDataIntervalEssentialsList(dataIntervalEssentialsList);
-
-        // TODO Send
-
+        post(URL_RELATIVE_DATA_INTERVAL_ESSENTIALS, array.toString());
         return true;
     }
 
@@ -127,10 +133,8 @@ class SyncConnectionManager {
      * @return True if successful
      */
     static boolean pushDataIntervalsList(ArrayList<DataInterval> dataIntervalList) {
-        JSONArray array = JSONCompiler.compileDataIntervalList(dataIntervalList);
-
-        // TODO Send
-
+        JSONArray object = JSONCompiler.compileDataIntervalList(dataIntervalList);
+        post(URL_RELATIVE_DATA_INTERVALS, object.toString());
         return true;
     }
 
@@ -143,9 +147,7 @@ class SyncConnectionManager {
      */
     static boolean pushImage(String measurementUID, Image image) {
         JSONObject object = JSONCompiler.compileImage(measurementUID, image);
-
-        // TODO Send
-
+        post(URL_RELATIVE_DATA_INTERVAL_ESSENTIALS, object.toString());
         return true;
     }
 
