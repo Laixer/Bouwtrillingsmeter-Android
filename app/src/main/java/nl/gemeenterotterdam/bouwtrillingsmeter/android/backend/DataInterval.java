@@ -104,6 +104,16 @@ public class DataInterval implements Serializable {
     }
 
     /**
+     * Converts this datainterval to an essential variant.
+     * This is used to send realtime to the server.
+     *
+     * @return A new {@link DataIntervalEssentials} object.
+     */
+    DataIntervalEssentials toEssentials() {
+        return new DataIntervalEssentials(measurementUID, index, velocitiesAbsoluteMax, dominantFrequencies);
+    }
+
+    /**
      * This transforms our dominant frequency velocities into an arraylist of 1 datapoint
      *
      * @return The arraylist

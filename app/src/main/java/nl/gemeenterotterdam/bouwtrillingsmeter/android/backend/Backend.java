@@ -51,7 +51,6 @@ public class Backend {
             flatPhoneDetector = new FlatPhoneDetector();
 
             SyncManager.initialize();
-            SyncConnectionManager.initialize();
 
             changeBackendState(BackendState.BROWSING_APP);
 
