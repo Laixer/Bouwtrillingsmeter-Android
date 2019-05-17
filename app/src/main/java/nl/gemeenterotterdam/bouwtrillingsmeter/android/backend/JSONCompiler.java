@@ -63,31 +63,31 @@ class JSONCompiler {
     /**
      * Converts a list of {@link DataIntervalEssentials} to a {@link JSONArray}.
      *
-     * @return The JSON array
+     * @return The JSON array, null if failed
      */
-    static JSONArray compileDataIntervalEssentialsList(ArrayList<DataIntervalEssentials> list) {
+    static JSONObject compileDataIntervalEssentialsList(ArrayList<DataIntervalEssentials> list) {
         JSONArray array = new JSONArray();
 
         for (DataIntervalEssentials item : list) {
             array.put(compileDataIntervalEssentials(item));
         }
 
-        return array;
+        return arrayToObject(array);
     }
 
     /**
      * Converts a list of {@link DataInterval} to a {@link JSONArray}.
      *
-     * @return The JSON array
+     * @return The JSON array, null if failed
      */
-    static JSONArray compileDataIntervalList(ArrayList<DataInterval> list) {
+    static JSONObject compileDataIntervalList(ArrayList<DataInterval> list) {
         JSONArray array = new JSONArray();
 
         for (DataInterval item : list) {
             array.put(compileDataInterval(item));
         }
 
-        return array;
+        return arrayToObject(array);
     }
 
     /**
@@ -251,6 +251,24 @@ class JSONCompiler {
         }
 
         return array;
+    }
+
+    /**
+     * Converts a JSON array to a JSON Object.
+     * The array holds the key "data".
+     *
+     * @param array The array
+     * @return The object, null if failed
+     */
+    private static JSONObject arrayToObject(JSONArray array) {
+        try {
+            JSONObject object = new JSONObject();
+            object.put("data", array);
+            return object;
+        } catch (JSONException e) {
+            System.out.println("Error while compiling array towards object. " + array.toString());
+            return null;
+        }
     }
 
 }

@@ -15,76 +15,34 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+
+import kotlin.text.Charsets;
 
 /**
  * This class handles all our connections to WIFI and 3G/4G/5G.
  * It communicates with the {@link SyncManager} class.
  * TODO Implement feedback
  * TODO Make one thread
+ * TODO This needs to recheck connection every once in a while
+ * TODO Dit maakt geen onderscheid tussen waar het proces fout gaat op het moment.
+ * Intern gebeurt dit wel, maar extern krijg je alleen een false terug.
  */
 class SyncConnectionManager {
 
-    /**
-     * Contains the base URL of our API.
-     */
-    private static final String URL_API = "http://192.168.0.40:3000/api/";
+    private static final boolean USING_MOCK = true;
+    private static final String URL_API_MOCK = "http://192.168.0.40:3000/api/";
+    private static final String URL_API = "";
 
-    private static final String URL_RELATIVE_USER_UID = "user-uid/register";
-    private static final String URL_RELATIVE_MEASUREMENT = "measurement/push";
-    private static final String URL_RELATIVE_DATA_INTERVAL_ESSENTIALS = "data-interval-essentials/push";
-    private static final String URL_RELATIVE_DATA_INTERVALS = "data-intervals/push";
-    private static final String URL_RELATIVE_IMAGE = "image/push";
+    private static final String ENDPOINT_USER_UID = "user-uid/register";
+    private static final String ENDPOINT_MEASUREMENT = "measurement/push";
+    private static final String ENDPOINT_DATA_INTERVAL_ESSENTIALS = "data-interval-essentials/push";
+    private static final String ENDPOINT_DATA_INTERVALS = "data-intervals/push";
+    private static final String ENDPOINT_IMAGE = "image/push";
 
-    /**
-     * Initializes the instance.
-     */
-    static void initialize() {
-
-    }
-
-    /**
-     * This posts to the server.
-     * TODO Uses the mock api now
-     *
-     * @param urlRelative Relative url
-     * @param jsonObjectString The JSON data as a string
-     */
-    private static void post(String urlRelative, String jsonObjectString) {
-        Thread thread = new Thread(() -> {
-            try {
-                URL url = new URL(URL_API + urlRelative);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type", "application/json; utf-8");
-                connection.setRequestProperty("Accept", "application/json");
-                connection.setDoOutput(true);
-
-                OutputStream outputStream = connection.getOutputStream();
-                byte[] input = jsonObjectString.getBytes();
-                outputStream.write(input, 0, input.length);
-
-                // Read response
-                InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream(), "utf-8");
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-                StringBuilder response = new StringBuilder();
-                String responseLine = null;
-                while ((responseLine = bufferedReader.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-                boolean result = (response.toString().equals("true"));
-                System.out.println("The request towards " + urlRelative + " success = " + result);
-
-            } catch (MalformedURLException e) {
-                System.out.println(e.toString());
-            } catch (IOException e) {
-                System.out.println(e.toString());
-            }
-        });
-        thread.start();
-    }
+    private static final String RESPONSE_SUCCESS = "true";
 
     /**
      * Push our registered user uid to the API.
@@ -93,10 +51,13 @@ class SyncConnectionManager {
      * @param userUID The user UID
      * @return True if successful
      */
-    static boolean pushUserUID(String userUID) {
+    boolean pushUserUID(String userUID) {
         JSONObject object = JSONCompiler.compileUserUID(userUID);
-        post(URL_RELATIVE_USER_UID, object.toString());
-        return true;
+        if (object != null) {
+            return post(ENDPOINT_USER_UID, object);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -107,10 +68,13 @@ class SyncConnectionManager {
      * @param measurement The measurement
      * @return True if successful
      */
-    static boolean pushMeasurementMetadata(Measurement measurement) {
+    boolean pushMeasurementMetadata(Measurement measurement) {
         JSONObject object = JSONCompiler.compileMeasurement(measurement);
-        post(URL_RELATIVE_MEASUREMENT, object.toString());
-        return true;
+        if (object != null) {
+            return post(ENDPOINT_MEASUREMENT, object);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -120,10 +84,13 @@ class SyncConnectionManager {
      * @param dataIntervalEssentialsList All the data interval essentials
      * @return True if successful
      */
-    static boolean pushDataIntervalEssentialsList(String measurementUID, ArrayList<DataIntervalEssentials> dataIntervalEssentialsList) {
-        JSONArray array = JSONCompiler.compileDataIntervalEssentialsList(dataIntervalEssentialsList);
-        post(URL_RELATIVE_DATA_INTERVAL_ESSENTIALS, array.toString());
-        return true;
+    boolean pushDataIntervalEssentialsList(String measurementUID, ArrayList<DataIntervalEssentials> dataIntervalEssentialsList) {
+        JSONObject object = JSONCompiler.compileDataIntervalEssentialsList(dataIntervalEssentialsList);
+        if (object != null) {
+            return post(ENDPOINT_DATA_INTERVAL_ESSENTIALS, object);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -132,10 +99,13 @@ class SyncConnectionManager {
      * @param dataIntervalList The dataintervals to send
      * @return True if successful
      */
-    static boolean pushDataIntervalsList(ArrayList<DataInterval> dataIntervalList) {
-        JSONArray object = JSONCompiler.compileDataIntervalList(dataIntervalList);
-        post(URL_RELATIVE_DATA_INTERVALS, object.toString());
-        return true;
+    boolean pushDataIntervalsList(ArrayList<DataInterval> dataIntervalList) {
+        JSONObject object = JSONCompiler.compileDataIntervalList(dataIntervalList);
+        if (object != null) {
+            return post(ENDPOINT_DATA_INTERVALS, object);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -145,10 +115,13 @@ class SyncConnectionManager {
      * @param image          The image
      * @return True if successful
      */
-    static boolean pushImage(String measurementUID, Image image) {
+    boolean pushImage(String measurementUID, Image image) {
         JSONObject object = JSONCompiler.compileImage(measurementUID, image);
-        post(URL_RELATIVE_DATA_INTERVAL_ESSENTIALS, object.toString());
-        return true;
+        if (object != null) {
+            return post(ENDPOINT_IMAGE, object);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -157,7 +130,7 @@ class SyncConnectionManager {
      *
      * @return Result
      */
-    static SyncConnectionType getConnectionType() {
+    SyncConnectionType getConnectionType() {
         // Get access to our connectivity manager
         ConnectivityManager connectivityManager = (ConnectivityManager) Backend.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -188,6 +161,83 @@ class SyncConnectionManager {
             return SyncConnectionType.G;
         } else {
             return SyncConnectionType.NONE;
+        }
+    }
+
+    /**
+     * This posts to the server.
+     * TODO Uses the mock api now
+     *
+     * @param endpoint   Relative url
+     * @param jsonObject The JSON object to send
+     */
+    private boolean post(String endpoint, JSONObject jsonObject) {
+        HttpURLConnection connection = getConnection(endpoint);
+        if (connection == null) {
+            return false;
+        }
+
+        String response = readResponse(connection);
+        if (response == null) {
+            return false;
+        } else {
+            return response.equals(RESPONSE_SUCCESS);
+        }
+    }
+
+    /**
+     * Creates a connection.
+     *
+     * @param endpoint The endpoint as string
+     * @return The connection, null if failed
+     */
+    private HttpURLConnection getConnection(String endpoint) {
+        try {
+            URL url = new URL((USING_MOCK ? URL_API_MOCK : URL_API) + endpoint);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json; utf-8");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setDoOutput(true);
+            return connection;
+        } catch (MalformedURLException e) {
+            System.out.println(String.format("URL is malformed. Aborting POST. Error message: %s", e.toString()));
+            return null;
+        } catch (IOException e) {
+            System.out.println(String.format("Could not connect. Error message: %s", e.toString()));
+            return null;
+        }
+    }
+
+    /**
+     * Attempts to read a response.
+     *
+     * @param connection The connection
+     * @return The response as a string, null if failed
+     */
+    private String readResponse(HttpURLConnection connection) {
+        if (connection == null) {
+            return null;
+        }
+
+        try {
+            // Read response
+            InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream(), Charsets.UTF_8);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+            // Build response
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = bufferedReader.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+
+            // Return response
+            System.out.println("Response read: " + response.toString());
+            return response.toString();
+        } catch (IOException e) {
+            System.out.println("Could not read connection response.");
+            return null;
         }
     }
 
