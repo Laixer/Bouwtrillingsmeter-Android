@@ -39,9 +39,6 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     private TextView textViewMeasuringCenter;
     private Button buttonMeasuringShowGraphs;
     private boolean isMeasuring;
-    private boolean hasUnlockedGraphs;
-    private long timePreviousTouch = 0;
-    private int totalTapCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,55 +60,9 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
 
         // Set bools
         isMeasuring = false;
-        hasUnlockedGraphs = PreferenceManager.readBooleanPreference(R.string.pref_graph_unlocked_before);
 
+        // Update our page state
         UpdatePageState();
-    }
-
-    /**
-     * Used to check for the 7 click unlock for the graphs
-     */
-    @Override
-    public boolean onTouchEvent(MotionEvent e) {
-        if (e.getAction() == MotionEvent.ACTION_DOWN) {
-            long timeCurrentTouch = Calendar.getInstance().getTimeInMillis();
-            long dt = timeCurrentTouch - timePreviousTouch;
-
-            // Reset tap count after not having tapped for 1 second
-            if (dt > 1000) {
-                totalTapCount = 0;
-            }
-
-            // Increment tap count
-            else {
-                totalTapCount++;
-
-                // If we have enough taps, act accordingly
-                if (totalTapCount >= 7) {
-                    hasUnlockedGraphs = !hasUnlockedGraphs;
-                    PreferenceManager.writeBooleanPreference(R.string.pref_graph_unlocked_before, hasUnlockedGraphs);
-
-                    if (isMeasuring) {
-                        buttonMeasuringShowGraphs.setVisibility(hasUnlockedGraphs ? View.VISIBLE : View.GONE);
-                    }
-
-                    // Show snackbar
-                    View view = findViewById(R.id.textViewMeasuringCenter);
-                    int resource = hasUnlockedGraphs ? R.string.measuring_snackbar_unlocked_graphs : R.string.measuring_snackbar_relocked_graphs;
-                    Snackbar.make(view, getResources().getString(resource), Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-
-                    // Reset the total tap count
-                    totalTapCount = 0;
-                }
-            }
-
-            // Save the time
-            timePreviousTouch = timeCurrentTouch;
-        }
-
-        super.onTouchEvent(e);
-        return true;
     }
 
     /**
@@ -121,16 +72,24 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     private void UpdatePageState() {
         // Measuring state
         if (isMeasuring) {
-            if (hasUnlockedGraphs) {
-                buttonMeasuringShowGraphs.setVisibility(View.VISIBLE);
-            }
             startMeasuringTextCycle();
+            updateGraphsButtonVisibility();
         }
 
         // Place device on table state
         else {
             textViewMeasuringCenter.setText(getResources().getString(R.string.measuring_place_device_on_table));
             buttonMeasuringShowGraphs.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Call this to update the graph visibility.
+     * Based on the {@link PreferenceManager}.
+     */
+    public void updateGraphsButtonVisibility() {
+        if (PreferenceManager.readBooleanPreference(R.string.pref_graph_unlocked_before)) {
+            buttonMeasuringShowGraphs.setVisibility(View.VISIBLE);
         }
     }
 

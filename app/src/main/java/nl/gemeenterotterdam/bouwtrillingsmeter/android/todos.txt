@@ -6,7 +6,8 @@ TODO Aparte plek voor measurement start end calls
 TODO Namen measurements
 TODO Eindscherm opschonen
 TODO Tutorial widget opschonen en met layoutinflater maken
-
+TODO Widget strakker
+TODO Scherm draai bulletproof maken
 
 
 
