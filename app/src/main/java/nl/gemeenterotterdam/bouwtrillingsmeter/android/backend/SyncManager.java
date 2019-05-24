@@ -42,7 +42,9 @@ class SyncManager implements DataIntervalClosedListener {
 
         syncConnectionManager = new SyncConnectionManager();
         DataHandler.addDataIntervalClosedListener(new SyncManager());
-        startSync();
+
+        // TODO We have to start the sync
+        // startSync();
     }
 
     /**
