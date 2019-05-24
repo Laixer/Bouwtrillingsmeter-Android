@@ -1,3 +1,16 @@
+Alpha todos
+TODO Settings menu voor graph unlock
+TODO Sync uit
+TODO Aparte plek voor measurement start end calls
+     De frontend gaat dit callen
+TODO Namen measurements
+TODO Eindscherm opschonen
+TODO Tutorial widget opschonen en met layoutinflater maken
+
+
+
+
+
 General todos
 TODO Locatie erin bouwen
 
