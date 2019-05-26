@@ -14,6 +14,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Deque;
+import java.util.LinkedList;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
@@ -26,17 +28,32 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendListener;
  * <p>
  * This activity gets called when we finish setting up our settings in the {@link SettingsPageActivity} page.
  * First, we await till the user places the phone flat on a surface.
- * TODO Implement this call from the backend.
  * <p>
  * When the phone is flat, we begin our measurements.
- * TODO Implement this call to the backend.
  */
 public class MeasuringActivity extends AppCompatActivity implements BackendListener {
+
+
+    /**
+     * The amount of ms we wait before displaying our next string message
+     * in the {@link MeasuringActivity} while measuring.
+     */
+    private static final int TEXT_CYCLE_SLEEP_TIME_IN_MILLIS = 2200;
+
+    /**
+     * The minimum time needed between two exceeding events in order for our UI to display a new message.
+     */
+    private static final int MINIMUM_TIME_IN_MILLIS_BETWEEN_EXCEEDINGS = 1500;
+
 
     private TextView textViewCenter;
     private Button buttonShowGraphs;
     private Button buttonStartStop;
     private boolean isMeasuring;
+
+    private Deque<String> strings;
+    private long millisLastShownExceeding = 0;
+    private long currentCycleId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,16 +92,12 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
      * If isMeasuring: True if we are measuring, false if we are waiting for the device to be placed on the table
      */
     private void updatePageState() {
-        // Measuring state
-        if (isMeasuring) {
-            startMeasuringTextCycle();
-            buttonStartStop.setText(R.string.measuring_stop);
-        }
-
-        // Place device on table state
-        else {
-            textViewCenter.setText(getResources().getString(R.string.measuring_place_device_on_table));
+        if (!isMeasuring) {
+            startTextCycleWaiting();
             buttonStartStop.setText(R.string.measuring_start);
+        } else {
+            startTextCycleMeasuring();
+            buttonStartStop.setText(R.string.measuring_stop);
         }
 
         updateButtonsVisibility();
@@ -102,76 +115,114 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     }
 
     /**
-     * This starts the text cycle while measuring.
-     * TODO Revise voor settings update
+     * Starts our text cycle while waiting
      */
-    private void startMeasuringTextCycle() {
-        final ArrayList<String> strings = new ArrayList<String>();
-        strings.add(getResources().getString(R.string.measuring_cycle_measuring_now));
-        strings.add(getResources().getString(R.string.measuring_cycle_keep_on_table));
+    private void startTextCycleWaiting() {
+        strings = new LinkedList<String>();
+        strings.addLast(getResources().getString(R.string.preparing_cycle_place_device_on_table));
+        strings.addLast(getResources().getString(R.string.preparing_cycle_start_flag));
 
-        // Based on preferences
-        if (PreferenceManager.readBooleanPreference(R.string.pref_use_pickup)) {
-            strings.add(getResources().getString(R.string.measuring_cycle_stop_pickup));
-        } else {
-            strings.add(getResources().getString(R.string.measuring_cycle_stop_button));
-        }
+        startTextCycle();
+    }
 
-        strings.add(getResources().getString(R.string.measuring_cycle_no_exceeding_detected));
+    /**
+     * This starts the text cycle while measuring.
+     */
+    private void startTextCycleMeasuring() {
+        strings = new LinkedList<String>();
+        strings.addLast(getResources().getString(R.string.measuring_cycle_measuring_now));
+        strings.addLast(getResources().getString(R.string.measuring_cycle_stop_flag));
+        strings.addLast(getResources().getString(R.string.measuring_cycle_keep_on_table));
+        strings.addLast(getResources().getString(R.string.measuring_cycle_exceeding_detected_flag));
 
-        new Thread(new Runnable() {
-            public void run() {
-                int index = 0;
-                while (isMeasuring) {
-                    // Determine the desired string
-                    String text = "";
+        startTextCycle();
+    }
 
-                    // Check for (new) backend exceedings
-                    // Our iterations pause for one cycle
-                    Date dateLastExceeding = Backend.getTimeLastExceeding();
-                    long millisLastExceeding = 0;
-                    if (dateLastExceeding != null) {
-                        millisLastExceeding = dateLastExceeding.getTime();
-                    }
-                    long millisCurrent = Calendar.getInstance().getTimeInMillis();
-                    long dt = millisCurrent - millisLastExceeding;
+    /**
+     * This loops through whatever is in {@link #strings}.
+     * Upon callign this function again, the {@link #currentCycleId} is
+     * incremented, stopping all existing loops.
+     */
+    private void startTextCycle() {
+        new Thread(() -> {
+            currentCycleId++;
+            final long thisId = currentCycleId;
+            System.out.println("current cycle id was incremented to " + currentCycleId);
 
-                    if (Backend.isCurrentMeasurementExceeded()
-                            && (Backend.getTimeLastExceeding() == null
-                            || -Backend.getTimeLastExceeding().getTime() + Calendar.getInstance().getTimeInMillis() > Constants.minimumTimeInMillisBetweenExceedings)) {
-                        text = getResources().getString(R.string.measuring_cycle_measuring_now);
-                    }
-
-                    // Else display a regular message
-                    else {
-                        if (index >= strings.size()) {
-                            index = 0;
-                        }
-                        text = strings.get(index);
-                        index++;
+            while (currentCycleId == thisId) {
+                // Push the text onto the textview
+                // This can only be done in the UI thread
+                runOnUiThread(() -> {
+                    if (currentCycleId != thisId) {
+                        return;
                     }
 
-                    // Push the text onto the textview
-                    // This can only be done in the UI thread
-                    final String textAsFinal = text;
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            textViewCenter.setText(textAsFinal);
-                            textViewCenter.setGravity(Gravity.CENTER);
-                        }
-                    });
-
-                    // Set timer
-                    try {
-                        Thread.sleep(Constants.measuringTextCycleSleepTimeInMillis);
-                    } catch (Exception e) {
-                        //
+                    String text = strings.getFirst();
+                    strings.removeFirst();
+                    if (!text.equals(getResources().getString(R.string.measuring_cycle_exceeding_detected_now))) {
+                        strings.addLast(text);
                     }
 
+                    text = checkForFlags(text);
+                    textViewCenter.setText(text);
+                    textViewCenter.setGravity(Gravity.CENTER);
+
+                    System.out.println(String.format("Id %s just displayed %s", thisId, text));
+                });
+
+                // Set timer
+                // TODO This can be done cleaner 100%
+                try {
+                    Thread.sleep(TEXT_CYCLE_SLEEP_TIME_IN_MILLIS);
+                } catch (Exception e) {
+                    //
                 }
             }
         }).start();
+    }
+
+    /**
+     * This checks if we have flagged our text message.
+     * It can either be flag_start or flag_stop.
+     * This function converts the flag to the desired message
+     * based on our user preferences.
+     *
+     * @param string The string, without knowing if it is a flag or not
+     * @return The proper string or the original string if it is not a flag
+     */
+    private String checkForFlags(String string) {
+        if (string.equals(getResources().getString(R.string.preparing_cycle_start_flag))) {
+            boolean usePickup = PreferenceManager.readBooleanPreference(R.string.pref_use_pickup);
+            int id = usePickup ? R.string.preparing_cycle_start_flat : R.string.preparing_cycle_start_button;
+            return getResources().getString(id);
+        }
+
+        if (string.equals(getResources().getString(R.string.measuring_cycle_stop_flag))) {
+            boolean usePickup = PreferenceManager.readBooleanPreference(R.string.pref_use_pickup);
+            int id = usePickup ? R.string.measuring_cycle_stop_pickup : R.string.measuring_cycle_stop_button;
+            return getResources().getString(id);
+        }
+
+        if (string.equals(getResources().getString(R.string.measuring_cycle_exceeding_detected_flag))) {
+            int id = Backend.isCurrentMeasurementExceeded() ? R.string.measuring_cycle_exceeding_detected : R.string.measuring_cycle_no_exceeding_detected;
+            return getResources().getString(id);
+        }
+
+        return string;
+    }
+
+    /**
+     * This gets called when we exceed our limit.
+     * This determines whether or not we should display this.
+     */
+    @Override
+    public void onExceededLimit() {
+        long millisLastExceeding = Backend.getTimeLastExceeding().getTime();
+        if (millisLastExceeding - millisLastShownExceeding > MINIMUM_TIME_IN_MILLIS_BETWEEN_EXCEEDINGS) {
+            strings.addFirst(getResources().getString(R.string.measuring_cycle_exceeding_detected_now));
+            System.out.println("Added NOW message");
+            startTextCycleMeasuring();
+        }
     }
 
     /**
@@ -264,10 +315,6 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
                 GraphsActivity.forceFinish();
                 break;
         }
-    }
-
-    @Override
-    public void onExceededLimit() {
     }
 
     /**

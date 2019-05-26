@@ -32,7 +32,7 @@
     <string name="settings_advanced_show_user_uid">Laat gebruiker UID zien</string>
 
     <!--Everything regarding the measurements list-->
-    <string name="measurement_list_empty">U heeft nog geen opgeslagen metingen,</string>
+    <string name="measurement_list_empty">U heeft nog geen opgeslagen metingen</string>
 
     <!--Everything regarding the measurement properties-->
     <string name="measurement_name_default">Naam van de meting</string>
@@ -154,11 +154,16 @@
     <string name="category_notyetselected_vibration">Selecteer het type vibratie</string>
 
     <!--Measuring page-->
-    <string name="measuring_place_device_on_table">Plaats uw telefoon op tafel</string>
+    <string name="preparing_cycle_place_device_on_table">Plaats uw telefoon op tafel...</string>
+    <string name="preparing_cycle_start_flat">De meting begint zodra de telefoon stil ligt...</string>
+    <string name="preparing_cycle_start_button">Druk op start om de meting te starten...</string>
+    <string name="preparing_cycle_start_flag">start_flag</string>
     <string name="measuring_cycle_measuring_now">Aan het meten...</string>
     <string name="measuring_cycle_keep_on_table">Laat de telefoon liggen...</string>
+    <string name="measuring_cycle_stop_flag">stop_flag</string>
     <string name="measuring_cycle_stop_pickup">Pak de telefoon op als u de meting wilt stoppen...</string>
     <string name="measuring_cycle_stop_button">Druk op stop als u de meting wilt stoppen...</string>
+    <string name="measuring_cycle_exceeding_detected_flag">exceeding_flag</string>
     <string name="measuring_cycle_no_exceeding_detected">Nog geen overschrijding gedetecteerd...</string>
     <string name="measuring_cycle_exceeding_detected">Er zijn overschrijdingen gedetecteerd...</string>
     <string name="measuring_cycle_exceeding_detected_now">Overschrijding gedecteerd! Laat de telefoon liggen...</string>
