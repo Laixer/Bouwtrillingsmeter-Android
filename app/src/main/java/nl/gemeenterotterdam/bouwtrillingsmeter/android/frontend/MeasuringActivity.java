@@ -96,7 +96,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
             startTextCycleWaiting();
             buttonStartStop.setText(R.string.measuring_start);
         } else {
-            startTextCycleMeasuring();
+            startTextCycleMeasuring(false);
             buttonStartStop.setText(R.string.measuring_stop);
         }
 
@@ -128,8 +128,13 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     /**
      * This starts the text cycle while measuring.
      */
-    private void startTextCycleMeasuring() {
+    private void startTextCycleMeasuring(boolean showNowExceedingMessage) {
         strings = new LinkedList<String>();
+
+        if (showNowExceedingMessage) {
+            strings.addFirst(getResources().getString(R.string.measuring_cycle_exceeding_detected_now));
+        }
+
         strings.addLast(getResources().getString(R.string.measuring_cycle_measuring_now));
         strings.addLast(getResources().getString(R.string.measuring_cycle_stop_flag));
         strings.addLast(getResources().getString(R.string.measuring_cycle_keep_on_table));
@@ -147,7 +152,6 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
         new Thread(() -> {
             currentCycleId++;
             final long thisId = currentCycleId;
-            System.out.println("current cycle id was incremented to " + currentCycleId);
 
             while (currentCycleId == thisId) {
                 // Push the text onto the textview
@@ -166,8 +170,6 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
                     text = checkForFlags(text);
                     textViewCenter.setText(text);
                     textViewCenter.setGravity(Gravity.CENTER);
-
-                    System.out.println(String.format("Id %s just displayed %s", thisId, text));
                 });
 
                 // Set timer
@@ -219,9 +221,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     public void onExceededLimit() {
         long millisLastExceeding = Backend.getTimeLastExceeding().getTime();
         if (millisLastExceeding - millisLastShownExceeding > MINIMUM_TIME_IN_MILLIS_BETWEEN_EXCEEDINGS) {
-            strings.addFirst(getResources().getString(R.string.measuring_cycle_exceeding_detected_now));
-            System.out.println("Added NOW message");
-            startTextCycleMeasuring();
+            startTextCycleMeasuring(true);
         }
     }
 
