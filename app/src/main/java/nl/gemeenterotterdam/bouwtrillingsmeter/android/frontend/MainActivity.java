@@ -1,18 +1,11 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.VersionedPackage;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -21,15 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
-
-import java.util.ArrayList;
 
 import me.toptas.fancyshowcase.FancyShowCaseView;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendState;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendListener;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendState;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageControl;
 
 /**
@@ -78,7 +70,10 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickCreateNewMeasurementFab();
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(intent);
+
+                 onClickCreateNewMeasurementFab();
             }
         });
 
@@ -106,6 +101,16 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
 
         // TODO debug remove this
         // showcaseFirstVisit();
+
+        // TODO Remove this debug
+        Button buttonDebugSettings = (Button) findViewById(R.id.buttonDebugSettings);
+        buttonDebugSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -208,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
             LayoutInflater inflater = this.getLayoutInflater();
 
-            View dialogView = inflater.inflate(R.layout.alert_dialog_unsupported_hardware, null);
+            View dialogView = inflater.inflate(R.layout.alert_dialog_ok, null);
             dialogBuilder.setView(dialogView);
 
             dialogBuilder.setTitle(getResources().getString(R.string.alert_dialog_unsupported_hardware));

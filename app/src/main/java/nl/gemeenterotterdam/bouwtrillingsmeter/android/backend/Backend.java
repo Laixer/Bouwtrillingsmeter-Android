@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.PreferenceManager;
+
 /**
  * @author Thomas Beckers
  * @since 1.0
@@ -41,6 +43,8 @@ public class Backend {
         if (!initialized) {
             Backend.applicationContext = applicationContext;
             Backend.resources = resources;
+            generateOrFetchUserUID();
+
             constantsLimits = new ConstantsLimits();
 
             StorageControl.initialize();
@@ -287,7 +291,7 @@ public class Backend {
     /**
      * This is called by our {@link FlatPhoneDetector} when the phone is lying on the table.
      */
-    static void onPhoneFlat() {
+    public static void onReadyToStartMeasurement() {
         if (backendState == BackendState.AWAITING_PHONE_FLAT) {
             changeBackendState(BackendState.MEASURING);
         }
@@ -296,7 +300,7 @@ public class Backend {
     /**
      * This is called by our {@link FlatPhoneDetector} when the phone is picked up again.
      */
-    static void onPhonePickup() {
+    public static void onRequestEndMeasurement() {
         if (backendState == BackendState.MEASURING) {
             changeBackendState(BackendState.FINISHED_MEASUREMENT);
         }
@@ -314,4 +318,12 @@ public class Backend {
         return userUID;
     }
 
+    /**
+     * Used to load user UID.
+     * If none is present, we create one.
+     * TODO Implement
+     */
+    private static void generateOrFetchUserUID() {
+        userUID = "DEFAULT_USER_UID";
+    }
 }

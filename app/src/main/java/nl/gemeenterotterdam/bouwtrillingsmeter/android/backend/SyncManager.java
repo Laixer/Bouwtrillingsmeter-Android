@@ -58,11 +58,12 @@ class SyncManager implements DataIntervalClosedListener {
 
     /**
      * This gets called when we start a new measurement.
+     * TODO Implement
      *
      * @param measurement The measurement
      */
     static void onMeasurementStart(Measurement measurement) {
-        unpushedMeasurements.add(measurement);
+        // unpushedMeasurements.add(measurement);
     }
 
     /**
@@ -78,24 +79,28 @@ class SyncManager implements DataIntervalClosedListener {
     /**
      * This gets called when we successfully close our measurement.
      * All data intervals get added to the to-be-pushed list.
+     * TODO Implement
      *
      * @param measurement The measurement
      */
     static void onMeasurementFinished(Measurement measurement) {
+        /*
         if (!unpushedMeasurements.contains(measurement)) {
             unpushedMeasurements.add(measurement);
         }
-        unpushedDataIntervals.addAll(measurement.getDataIntervals());
+        unpushedDataIntervals.addAll(measurement.getDataIntervals());*/
     }
 
     /**
      * This gets called when the {@link DataInterval} is closed.
+     * TODO Implement
      * TODO Wat doen we als je halverwege je meting WIFI aanzet?
      *
      * @param dataInterval The datainterval
      */
     @Override
     public void onDataIntervalClosed(DataInterval dataInterval) {
+        /*
         unpushedDataIntervals.add(dataInterval);
 
         // If we are on G, we want to send the essentials.
@@ -103,7 +108,7 @@ class SyncManager implements DataIntervalClosedListener {
         SyncConnectionType syncConnectionType = syncConnectionManager.getConnectionType();
         if (syncConnectionType == SyncConnectionType.G) {
             unpushedDataIntervalEssentials.add(dataInterval.toEssentials());
-        }
+        }*/
     }
 
     /**

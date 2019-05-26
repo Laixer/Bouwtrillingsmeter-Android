@@ -8,6 +8,9 @@ import android.hardware.SensorManager;
 
 import java.util.Calendar;
 
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.PreferenceManager;
+
 /**
  * This class detects if we have our phone flat on the table.
  * It also detects when we pick it up again.
@@ -97,8 +100,11 @@ class FlatPhoneDetector implements SensorEventListener {
                         // If the time limit exceeds we are flat
                         flat = true;
                         flatPending = false;
-                        Backend.onPhoneFlat();
-                        System.out.println("FLAT");
+
+                        if (PreferenceManager.readBooleanPreference(R.string.pref_use_pickup)) {
+                            Backend.onReadyToStartMeasurement();
+                        }
+
                         orientationComparing = new float[]{orientation[0], orientation[1], orientation[2]};
                     }
                 }
@@ -118,8 +124,10 @@ class FlatPhoneDetector implements SensorEventListener {
             if (d > MIN_DELTA_ROTATION_TO_DETERMINE_PICKUP) {
                 flat = false;
                 flatPending = false;
-                Backend.onPhonePickup();
-                System.out.println("PICKUP");
+
+                if (PreferenceManager.readBooleanPreference(R.string.pref_use_pickup)) {
+                    Backend.onRequestEndMeasurement();
+                }
             }
         }
     }

@@ -59,7 +59,7 @@ public class PreferenceManager {
         }
 
         String preference = sharedPreferences.getString(context.getString(resourceID), defaultNull);
-        if (preference.equals(defaultNull) || preference.equals(defaultFalse)) {
+        if (preference == null || preference.equals(defaultNull) || preference.equals(defaultFalse)) {
             return false;
         } else {
             return true;

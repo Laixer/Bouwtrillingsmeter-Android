@@ -4,14 +4,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -36,8 +33,9 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendListener;
  */
 public class MeasuringActivity extends AppCompatActivity implements BackendListener {
 
-    private TextView textViewMeasuringCenter;
-    private Button buttonMeasuringShowGraphs;
+    private TextView textViewCenter;
+    private Button buttonShowGraphs;
+    private Button buttonStartStop;
     private boolean isMeasuring;
 
     @Override
@@ -49,12 +47,19 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
         Backend.addBackendStateListener(this);
 
         // Link elements
-        textViewMeasuringCenter = (TextView) findViewById(R.id.textViewMeasuringCenter);
-        buttonMeasuringShowGraphs = (Button) findViewById(R.id.buttonMeasuringShowGraphs);
-        buttonMeasuringShowGraphs.setOnClickListener(new View.OnClickListener() {
+        textViewCenter = (TextView) findViewById(R.id.textViewMeasuringCenter);
+        buttonShowGraphs = (Button) findViewById(R.id.buttonMeasuringShowGraphs);
+        buttonShowGraphs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickShowGraphs();
+            }
+        });
+        buttonStartStop = (Button) findViewById(R.id.buttonMeasuringStartStop);
+        buttonStartStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickStartStop();
             }
         });
 
@@ -62,45 +67,56 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
         isMeasuring = false;
 
         // Update our page state
-        UpdatePageState();
+        updatePageState();
     }
 
     /**
      * This controls the UI elements and text
      * If isMeasuring: True if we are measuring, false if we are waiting for the device to be placed on the table
      */
-    private void UpdatePageState() {
+    private void updatePageState() {
         // Measuring state
         if (isMeasuring) {
             startMeasuringTextCycle();
-            updateGraphsButtonVisibility();
+            buttonStartStop.setText(R.string.measuring_stop);
         }
 
         // Place device on table state
         else {
-            textViewMeasuringCenter.setText(getResources().getString(R.string.measuring_place_device_on_table));
-            buttonMeasuringShowGraphs.setVisibility(View.GONE);
+            textViewCenter.setText(getResources().getString(R.string.measuring_place_device_on_table));
+            buttonStartStop.setText(R.string.measuring_start);
         }
+
+        updateButtonsVisibility();
     }
 
     /**
-     * Call this to update the graph visibility.
+     * Call this to update the visibility of our buttons.
      * Based on the {@link PreferenceManager}.
      */
-    public void updateGraphsButtonVisibility() {
-        if (PreferenceManager.readBooleanPreference(R.string.pref_graph_unlocked_before)) {
-            buttonMeasuringShowGraphs.setVisibility(View.VISIBLE);
-        }
+    public void updateButtonsVisibility() {
+        boolean showGraphs = PreferenceManager.readBooleanPreference(R.string.pref_show_graphs);
+        boolean usePickup = PreferenceManager.readBooleanPreference(R.string.pref_use_pickup);
+        buttonStartStop.setVisibility(usePickup ? View.GONE : View.VISIBLE);
+        buttonShowGraphs.setVisibility(showGraphs && isMeasuring ? View.VISIBLE : View.GONE);
     }
 
     /**
      * This starts the text cycle while measuring.
+     * TODO Revise voor settings update
      */
     private void startMeasuringTextCycle() {
         final ArrayList<String> strings = new ArrayList<String>();
         strings.add(getResources().getString(R.string.measuring_cycle_measuring_now));
         strings.add(getResources().getString(R.string.measuring_cycle_keep_on_table));
-        strings.add(getResources().getString(R.string.measuring_cycle_lift_to_stop));
+
+        // Based on preferences
+        if (PreferenceManager.readBooleanPreference(R.string.pref_use_pickup)) {
+            strings.add(getResources().getString(R.string.measuring_cycle_stop_pickup));
+        } else {
+            strings.add(getResources().getString(R.string.measuring_cycle_stop_button));
+        }
+
         strings.add(getResources().getString(R.string.measuring_cycle_no_exceeding_detected));
 
         new Thread(new Runnable() {
@@ -141,8 +157,8 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            textViewMeasuringCenter.setText(textAsFinal);
-                            textViewMeasuringCenter.setGravity(Gravity.CENTER);
+                            textViewCenter.setText(textAsFinal);
+                            textViewCenter.setGravity(Gravity.CENTER);
                         }
                     });
 
@@ -162,10 +178,21 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
      * Open the graphs, by calling {@link GraphsActivity}.
      * This does not start a new activity if the activity is already open.
      */
-    public void onClickShowGraphs() {
+    private void onClickShowGraphs() {
         Intent intent = new Intent(getApplicationContext(), GraphsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
+    }
+
+    /**
+     * Starts or stops our measurement.
+     */
+    private void onClickStartStop() {
+        if (!isMeasuring) {
+            Backend.onReadyToStartMeasurement();
+        } else {
+            Backend.onRequestEndMeasurement();
+        }
     }
 
     /**
@@ -176,7 +203,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
 
-        View dialogView = inflater.inflate(R.layout.alert_dialog_cancel_measurement, null);
+        View dialogView = inflater.inflate(R.layout.alert_dialog_yes_no, null);
         dialogBuilder.setView(dialogView);
 
         dialogBuilder.setTitle(getResources().getString(R.string.measuring_alert_dialog));
@@ -184,14 +211,14 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
         dialog.show();
 
         // Buttons
-        dialogView.findViewById(R.id.buttonAlertDialogCancelMeasurementYes).setOnClickListener(new View.OnClickListener() {
+        dialogView.findViewById(R.id.buttonAlertDialogYes).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onCancelMeasurement();
                 dialog.dismiss();
             }
         });
-        dialogView.findViewById(R.id.buttonAlertDialogCancelMeasurementNo).setOnClickListener(new View.OnClickListener() {
+        dialogView.findViewById(R.id.buttonAlertDialogNo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -223,7 +250,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
         switch (newBackendState) {
             case MEASURING:
                 isMeasuring = true;
-                UpdatePageState();
+                updatePageState();
                 break;
 
             case FINISHED_MEASUREMENT:

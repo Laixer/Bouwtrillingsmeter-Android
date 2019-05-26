@@ -9,13 +9,15 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".frontend.SettingsAdvancedActivity"></activity>
+        <activity android:name=".frontend.SettingsActivity" />
         <activity
             android:name=".frontend.MainActivity"
             android:label="@string/app_name"
@@ -33,7 +35,6 @@
         <activity android:name=".frontend.FirstVisitTutorialActivity" />
         <activity android:name=".frontend.MeasurementDetailsActivity" />
         <activity android:name=".frontend.SettingsWizardActivity" />
-
     </application>
 
 </manifest>

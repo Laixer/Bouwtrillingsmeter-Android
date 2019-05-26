@@ -9,6 +9,7 @@ TODO Graph scaling soepel
 TODO Graph slaat niet op als je hem wegklikt en opnieuw opent.
 TODO Graph slaat niet op als je draait
 TODO Graph haper mini check
+TODO Settings pagina anders noemen om verwarring te voorkomen
 TODO Wat als je geen settings file kan creëren met de huidige instellingen?
 TODO Widget opnieuw?
 TODO Grafiek linken aan data!
@@ -21,6 +22,7 @@ TODO Switch achtergrond ook groen (check API version!)
 TODO Switch touch hele breedte
 TODO Foto maken en cancellen haalt je meting weg
 TODO Alle constraints checken -> er zitten nog wat hard coded stukken tussen
+TODO Popup ding kan generalized
 
 Details:
 TODO Snackbar from activity complete in front of activity animation

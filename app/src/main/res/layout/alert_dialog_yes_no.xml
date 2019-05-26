@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        style="@style/Widget.AppCompat.ButtonBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -15,24 +16,24 @@
         tools:layout_editor_absoluteX="8dp">
 
         <Button
-            android:id="@+id/buttonAlertDialogCancelMeasurementYes"
+            android:id="@+id/buttonAlertDialogYes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:text="@string/default_yes"
             android:textColor="@color/colorPrimary"
-            android:background="@null"
+            style="?android:attr/buttonBarButtonStyle"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="493dp" />
 
         <Button
-            android:id="@+id/buttonAlertDialogCancelMeasurementNo"
+            android:id="@+id/buttonAlertDialogNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:text="@string/default_no"
             android:textColor="@color/colorPrimary"
-            android:background="@null"
+            style="?android:attr/buttonBarButtonStyle"
             tools:layout_editor_absoluteX="271dp"
             tools:layout_editor_absoluteY="241dp" />
     </LinearLayout>
