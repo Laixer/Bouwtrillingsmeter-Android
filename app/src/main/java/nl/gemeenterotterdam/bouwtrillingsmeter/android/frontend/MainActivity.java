@@ -1,5 +1,6 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -101,16 +102,6 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
 
         // TODO debug remove this
         // showcaseFirstVisit();
-
-        // TODO Remove this debug
-        Button buttonDebugSettings = (Button) findViewById(R.id.buttonDebugSettings);
-        buttonDebugSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -122,14 +113,10 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

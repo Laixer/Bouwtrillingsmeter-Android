@@ -17,6 +17,7 @@
         android:layout_height="74dp"
         android:layout_below="@+id/imageViewListMeasurementPhoto"
         android:layout_marginTop="0dp"
+        android:background="@android:color/white"
         android:orientation="vertical">
 
         <TextView
@@ -51,6 +52,7 @@
         android:layout_marginTop="0dp"
         android:background="@color/background_transparent"
         android:contentDescription="@string/finished_measurement_description_default"
+        android:visibility="invisible"
         app:srcCompat="@color/fab_checkmark" />
 
 </RelativeLayout>
