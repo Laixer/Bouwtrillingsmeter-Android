@@ -1,7 +1,4 @@
 Alpha todos
-TODO Settings menu mooi
-TODO Aparte plek voor measurement start end calls
-     De frontend gaat dit callen
 TODO Namen measurements
 TODO Eindscherm opschonen
 TODO Tutorial widget opschonen en met layoutinflater maken
