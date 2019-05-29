@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
@@ -19,7 +20,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
  * @since 1.0
  * <p>
  * This class is used as an adapter for each measurement item in the main measurement listview displayd on our {@link MainActivity}.
- * This class does NOT control the page that opens when you click a measurement within said listview, this is done by {@link MeasurementDetailsActivity}.
+ * This class does NOT control the page that opens when you click a measurement within said listview, this is done by {@link DetailsActivity}.
  */
 public class MainActivityMeasurementListAdapter extends BaseAdapter {
 
@@ -57,10 +58,12 @@ public class MainActivityMeasurementListAdapter extends BaseAdapter {
         View view = mLayoutInflater.inflate(R.layout.list_measurements_details, null);
 
         TextView textViewName = (TextView) view.findViewById(R.id.textViewListMeasurementName);
+        TextView textViewDate = (TextView) view.findViewById(R.id.textViewListMeasurementDate);
         ImageView imageViewPhoto = (ImageView) view.findViewById(R.id.imageViewListMeasurementPhoto);
 
-        // Set the name
+        // Set the variables
         textViewName.setText(measurements.get(position).getName());
+        textViewDate.setText(Utility.formatDate(measurements.get(position).getDateStart()));
 
         // Set the photo
         // Add an actionlistener to this to attempt to take a photo

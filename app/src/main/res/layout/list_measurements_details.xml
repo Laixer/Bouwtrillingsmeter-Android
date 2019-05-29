@@ -11,59 +11,46 @@
         android:contentDescription="@string/measurement_name_default"
         android:scaleType="center" />
 
-    <ImageView
-        android:id="@+id/imageViewListMeasurementBackground"
+    <LinearLayout
+        android:id="@+id/frameCenter"
         android:layout_width="match_parent"
         android:layout_height="74dp"
-        android:layout_alignBottom="@+id/imageViewListMeasurementPhoto"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginBottom="-74dp"
-        android:background="@color/listview_item_background"
-        android:contentDescription="@string/measurement_name_default"
-        android:scaleType="center" />
-
-    <TextView
-        android:id="@+id/textViewListMeasurementDateTime"
-        android:layout_width="377dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewListMeasurementName"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="18dp"
-        android:layout_marginRight="16dp"
-        android:text="@string/measurement_datetime_default"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/textViewListMeasurementName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_below="@+id/imageViewListMeasurementPhoto"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="16dp"
-        android:text="@string/measurement_name_default"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:layout_marginTop="0dp"
+        android:orientation="vertical">
 
-    <Space
+        <TextView
+            android:id="@+id/textViewListMeasurementName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/measurement_name_default"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textViewListMeasurementDate"
+            android:layout_width="377dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/measurement_default_datetime"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewListMeasurementDateTime"
-        android:layout_marginTop="36dp"
-        android:background="@null"
-        android:visibility="invisible" />
+        android:layout_height="16dp"
+        android:layout_below="@+id/frameCenter"
+        android:layout_marginTop="0dp"
+        android:background="@color/background_transparent"
+        android:contentDescription="@string/finished_measurement_description_default"
+        app:srcCompat="@color/fab_checkmark" />
 
 </RelativeLayout>

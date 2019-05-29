@@ -1,6 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 import android.graphics.Bitmap;
+import android.location.Address;
 import android.location.Location;
 
 import java.io.Serializable;
@@ -8,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
+
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
 /**
  * @author Thomas Beckers
@@ -24,11 +27,12 @@ public class Measurement implements Serializable {
     // Dit gaat mee naar de server
     private final String uid;
     private String name;
-    private String dateStart;
-    private String dateEnd;
+    private Date dateStart;
+    private Date dateEnd;
     private double longitude;
     private double latitude;
     private double locationAccuracy;
+    private Address address;
     private String description;
     private Settings settings;
     private int dataIntervalCount;
@@ -42,26 +46,15 @@ public class Measurement implements Serializable {
     private boolean closed;
 
     /**
-     * Simplified constructor for this class
+     * Constructor for this class
      */
     Measurement() {
-        this("default name");
-    }
-
-    /**
-     * Constructor for this class
-     * TODO Remove this default data
-     *
-     * @param name The name for this measurement
-     */
-    Measurement(String name) {
         // Generate a random uid for this measurement
         uid = UUID.randomUUID().toString();
 
         // Link all data
-        // TODO Remove default debug data
-        this.name = name;
-        description = "";
+        this.name = Backend.resources.getString(R.string.measurement_name_default);
+        description = Backend.resources.getString(R.string.measurement_default_description);
         bitmap = null;
         longitude = Double.MAX_VALUE;
         latitude = Double.MAX_VALUE;
@@ -70,6 +63,7 @@ public class Measurement implements Serializable {
         settings = null;
         dataIntervals = new ArrayList<DataInterval>();
 
+        // Set booleans
         open = false;
         closed = false;
     }
@@ -91,9 +85,9 @@ public class Measurement implements Serializable {
     /**
      * Saves our current start time.
      */
-    void onStartMeasuring() {
+    void start() {
         dateStartObject = Calendar.getInstance().getTime();
-        dateStart = dateStartObject.toString();
+        dateStart = dateStartObject;
         open = true;
     }
 
@@ -101,9 +95,15 @@ public class Measurement implements Serializable {
      * Called when we stop the measuring.
      * This saves our end time.
      */
-    void onStopMeasuring() {
-        dateEnd = Calendar.getInstance().getTime().toString();
+    void close() {
+        dateEnd = Calendar.getInstance().getTime();
         closed = true;
+
+        if (longitude < Double.MAX_VALUE) {
+            address = ConstantsLimits.coordinatesToAddress(latitude, longitude);
+            String locality = address.getLocality();
+            name = Backend.resources.getString(R.string.measurement_name_format, locality);
+        }
     }
 
     /**
@@ -208,6 +208,10 @@ public class Measurement implements Serializable {
         return this.locationAccuracy;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
     public Settings getSettings() {
         return settings;
     }
@@ -220,11 +224,11 @@ public class Measurement implements Serializable {
         return dataIntervalCount;
     }
 
-    public String getDateStart() {
+    public Date getDateStart() {
         return dateStart;
     }
 
-    public String getDateEnd() {
+    public Date getDateEnd() {
         return dateEnd;
     }
 
@@ -236,7 +240,6 @@ public class Measurement implements Serializable {
      */
     public Bitmap getBitmap() {
         if (bitmap == null) {
-            System.out.println("Photo is null, fix this.");
             return null;
         }
 

@@ -31,7 +31,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageControl;
  * This is the main entry point of the application.
  * This page shows an overview of our saved activities, if any are present.
  * <p>
- * Clicking an item in our activity list takes us to the {@link MeasurementDetailsActivity}.
+ * Clicking an item in our activity list takes us to the {@link DetailsActivity}.
  * Clicking the '+ fab' on first visit takes us to the {@link FirstVisitTutorialActivity}.
  * Clicking the '+ fab' after that takes us to the {@link SettingsPageActivity}.
  * <p>
@@ -89,11 +89,11 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
                 // Temporarily disable all items
                 // TODO Implement
 
-                Intent intentShowMeasurementDetails = new Intent(getApplicationContext(), MeasurementDetailsActivity.class);
+                Intent intentShowMeasurementDetails = new Intent(getApplicationContext(), DetailsActivity.class);
 
                 // TODO Reconsider measurement linking structure
 //              intentShowMeasuremenstDetails.putExtra("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX", position);
-                MeasurementDetailsActivity.measurement = Backend.getAllMeasurementsList().get(position);
+                DetailsActivity.measurement = Backend.getAllMeasurementsList().get(position);
 
                 startActivity(intentShowMeasurementDetails);
             }

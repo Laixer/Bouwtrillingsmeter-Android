@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.PreferenceManager;
-
 /**
  * @author Thomas Beckers
  * @since 1.0
@@ -123,7 +121,7 @@ public class Backend {
                 // Start the measurement
                 currentMeasurementExceeded = false;
                 Calculator.onStartMeasurementCalculations();
-                MeasurementControl.getCurrentMeasurement().onStartMeasuring();
+                MeasurementControl.getCurrentMeasurement().start();
                 DataHandler.startMeasuring();
                 SyncManager.onMeasurementStart(MeasurementControl.getCurrentMeasurement());
                 constantsLimits.fetchCurrentLocation();

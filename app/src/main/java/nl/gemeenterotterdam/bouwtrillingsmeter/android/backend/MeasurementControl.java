@@ -58,7 +58,7 @@ class MeasurementControl {
      * This is only overwritten if we redo the entire measurement creation process.
      */
     static void onFinishMeasurement() {
-        currentMeasurement.onStopMeasuring();
+        currentMeasurement.close();
         allMeasurements.add(currentMeasurement);
         StorageControl.writeMeasurement(currentMeasurement);
     }
@@ -68,7 +68,7 @@ class MeasurementControl {
      */
     static void abortCurrentMeasurement() {
         if (!currentMeasurement.isClosed()) {
-            currentMeasurement.onStopMeasuring();
+            currentMeasurement.close();
             SyncManager.onMeasurementAborted(currentMeasurement);
         }
         currentMeasurement = null;

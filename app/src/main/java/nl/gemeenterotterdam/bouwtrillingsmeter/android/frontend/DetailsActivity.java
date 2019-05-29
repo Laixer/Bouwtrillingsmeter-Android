@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.ConstantsLimits;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 
 /**
@@ -24,7 +23,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
  * Clicking the displayed photo attempts to open our camera, coded in the {@link #onCreate(Bundle)} function.
  * The callback is handled by {@link #onActivityResult(int, int, Intent)}.
  */
-public class MeasurementDetailsActivity extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity {
 
     TextView textViewName;
     TextView textViewDateTime;
@@ -43,22 +42,10 @@ public class MeasurementDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_measurement_details);
-
-        textViewName = (TextView) findViewById(R.id.textViewListMeasurementName);
-
-        // Get the information from our activity
-//        Intent intent = getIntent();
-//        int measurementIndex = -1;
-//        if (intent.hasExtra("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX")) {
-//            measurementIndex = intent.getExtras().getInt("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX");
-//        }
-//
-//        // Link our measurement
-//        // TODO Handle a measurement getting error
-//        measurement = Backend.MeasurementControl.getMeasurementByIndex(measurementIndex);
+        setContentView(R.layout.activity_details);
 
         // Link the descriptive UI elements
+        textViewName = (TextView) findViewById(R.id.textViewListMeasurementName);
         textViewName = (TextView) findViewById(R.id.textViewDetailsMeasurementName);
         textViewDateTime = (TextView) findViewById(R.id.textViewDetailsMeasurementDateTime);
         textViewLocation = (TextView) findViewById(R.id.textViewDetailsMeasurementLocation);
@@ -99,14 +86,12 @@ public class MeasurementDetailsActivity extends AppCompatActivity {
      */
     public void onUpdateMeasurementTexts() {
         textViewName.setText(measurement.getName());
-        textViewDateTime.setText(measurement.getDateStart());
+        textViewDateTime.setText(Utility.formatDate(measurement.getDateStart()));
         textViewDescription.setText(measurement.getDescription());
 
-        // TODO Clean up
-        // Long and Lat appear switched, this yields correct behaviour. Don't change this.
-        Address address = ConstantsLimits.coordinatesToAddress(measurement.getLocationLatitude(), measurement.getLocationLongitude());
+        Address address = measurement.getAddress();
         if (address == null) {
-            textViewLocation.setText(Double.toString(measurement.getLocationLongitude()) + ", " + measurement.getLocationLatitude());
+            textViewLocation.setText(getResources().getString(R.string.measurement_default_location));
         } else {
             textViewLocation.setText(address.getAddressLine(0));
         }

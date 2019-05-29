@@ -10,7 +10,7 @@
     <color name="indicatorDotInactive">#061557</color>
     <color name="indicatorDotDisabled">#cccccc</color>
     <color name="fab_plus">#ffffff</color>
-    <color name="fab_checkmark">#ffffff</color>
+    <color name="fab_checkmark">#FFFFFF</color>
     <color name="fab_background_disabled">#dddddd</color>
     <color name="photo_not_found_indicator">#cccccc</color>
     <color name="button_outline">#061557</color>
@@ -27,6 +27,7 @@
     <color name="graph_dominant_constant_line">#000000</color>
 
     <!--Backgrounds-->
-    <color name="listview_item_background">#efefef</color>
+    <color name="background_listview_item">#efefef</color>
+    <color name="background_transparent">#00000000</color>
 
 </resources>

@@ -18,6 +18,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BuildingCategory;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory;
@@ -40,6 +47,8 @@ class Utility {
     // TODO Rethink this design pattern
     public static Context applicationContext;
     public static Resources resources;
+
+    private static String[] MONTH_NAMES = {"Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "October", "November", "December"};
 
     /**
      * Checks if our screen is in landscape or portrait mode
@@ -175,7 +184,7 @@ class Utility {
     /**
      * Shows and returns a dialog.
      *
-     * @param activity The activity from which we call this
+     * @param activity       The activity from which we call this
      * @param dialogResource The dialog resource
      * @param stringResource The string resource for the text to display
      * @return The dialog
@@ -187,9 +196,9 @@ class Utility {
     /**
      * Shows and returns a dialog.
      *
-     * @param activity The activity from which we call this
+     * @param activity       The activity from which we call this
      * @param dialogResource The dialog resource
-     * @param string The string to display
+     * @param string         The string to display
      * @return The dialog
      */
     static Dialog showAndGetPopup(Activity activity, int dialogResource, String string) {
@@ -204,6 +213,26 @@ class Utility {
         dialog.show();
 
         return dialog;
+    }
+
+    /**
+     * Converts our date object to a nice string for our UI.
+     *
+     * @param date The date object
+     * @return The formatted string
+     */
+    static String formatDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(calendar.get(Calendar.DAY_OF_MONTH));
+        stringBuilder.append(" ");
+        stringBuilder.append(MONTH_NAMES[calendar.get(Calendar.MONTH)]);
+        stringBuilder.append(" ");
+        stringBuilder.append(calendar.get(Calendar.YEAR));
+
+        return stringBuilder.toString();
     }
 
 }

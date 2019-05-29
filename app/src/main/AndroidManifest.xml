@@ -35,7 +35,7 @@
         <activity android:name=".frontend.SettingsPageActivity" />
         <activity android:name=".frontend.MeasuringActivity" />
         <activity android:name=".frontend.FirstVisitTutorialActivity" />
-        <activity android:name=".frontend.MeasurementDetailsActivity" />
+        <activity android:name=".frontend.DetailsActivity" />
         <activity android:name=".frontend.SettingsWizardActivity" />
     </application>
 

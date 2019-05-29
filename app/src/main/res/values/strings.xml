@@ -35,10 +35,12 @@
     <string name="measurement_list_empty">U heeft nog geen opgeslagen metingen</string>
 
     <!--Everything regarding the measurement properties-->
-    <string name="measurement_name_default">Naam van de meting</string>
-    <string name="measurement_datetime_default">Datum en tijd van de meting</string>
-    <string name="measurement_location_default">Locatie van de meting</string>
-    <string name="measurement_description_default">Dit is een beschrijving van de meting. Hier kan van alles in staan, bijvoorbeeld wat de gebruiker heeft gehoord. Deze tekst is langer om te kijken hoe dit schaalt in de user interface.</string>
+    <string name="measurement_name_format" formatted="false">Meting in %s</string>
+
+    <string name="measurement_name_default">Meting</string>
+    <string name="measurement_default_datetime">Onbekende datum en tijd</string>
+    <string name="measurement_default_location">Onbekende locatie</string>
+    <string name="measurement_default_description">Voeg een beschrijving toe</string>
 
     <!--Popup on first visit-->
     <string name="first_visit_popup">Klik op het plusje om uw eerste meting te starten</string>
