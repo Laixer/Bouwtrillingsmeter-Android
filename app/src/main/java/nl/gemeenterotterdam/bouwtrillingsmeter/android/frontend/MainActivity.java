@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
             dialog.show();
 
             // Buttons
-            dialogView.findViewById(R.id.buttonAlertDialogUnsupportedHardwareOk).setOnClickListener(new View.OnClickListener() {
+            dialogView.findViewById(R.id.buttonAlertDialogOk).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();

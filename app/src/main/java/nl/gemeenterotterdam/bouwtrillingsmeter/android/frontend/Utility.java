@@ -1,6 +1,8 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -10,7 +12,9 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.ActivityCompat;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.Surface;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -166,6 +170,40 @@ class Utility {
         } catch (PackageManager.NameNotFoundException e) {
             System.out.println("Package with name " + activity.getPackageName() + " not found.");
         }
+    }
+
+    /**
+     * Shows and returns a dialog.
+     *
+     * @param activity The activity from which we call this
+     * @param dialogResource The dialog resource
+     * @param stringResource The string resource for the text to display
+     * @return The dialog
+     */
+    static Dialog showAndGetPopup(Activity activity, int dialogResource, int stringResource) {
+        return showAndGetPopup(activity, dialogResource, activity.getResources().getString(stringResource));
+    }
+
+    /**
+     * Shows and returns a dialog.
+     *
+     * @param activity The activity from which we call this
+     * @param dialogResource The dialog resource
+     * @param string The string to display
+     * @return The dialog
+     */
+    static Dialog showAndGetPopup(Activity activity, int dialogResource, String string) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
+        LayoutInflater inflater = activity.getLayoutInflater();
+
+        View dialogView = inflater.inflate(dialogResource, null);
+        dialogBuilder.setView(dialogView);
+
+        dialogBuilder.setMessage(string);
+        final Dialog dialog = dialogBuilder.create();
+        dialog.show();
+
+        return dialog;
     }
 
 }

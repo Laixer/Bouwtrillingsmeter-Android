@@ -1,11 +1,9 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -87,7 +85,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (!setTo) {
             PreferenceManager.writeBooleanPreference(R.string.pref_allow_stream_all_data, false);
         } else {
-            Dialog dialog = showAndGetPopup(R.string.settings_enable_roaming_alert_dialog);
+            Dialog dialog = Utility.showAndGetPopup(this, R.layout.alert_dialog_yes_no, R.string.settings_enable_roaming_alert_dialog);
             // Buttons
             dialog.findViewById(R.id.buttonAlertDialogYes).setOnClickListener((View v) -> {
                 PreferenceManager.writeBooleanPreference(R.string.pref_allow_stream_all_data, true);
@@ -113,7 +111,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (!setTo) {
             PreferenceManager.writeBooleanPreference(R.string.pref_allow_roaming, false);
         } else {
-            Dialog dialog = showAndGetPopup(R.string.settings_enable_roaming_alert_dialog);
+            Dialog dialog = Utility.showAndGetPopup(this, R.layout.alert_dialog_yes_no, R.string.settings_enable_roaming_alert_dialog);
             // Buttons
             dialog.findViewById(R.id.buttonAlertDialogYes).setOnClickListener((View v) -> {
                 PreferenceManager.writeBooleanPreference(R.string.pref_allow_roaming, true);
@@ -149,25 +147,6 @@ public class SettingsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /**
-     * Shows and returns a dialog.
-     *
-     * @param resourceId The string resource for the text to display
-     * @return The dialog
-     */
-    private Dialog showAndGetPopup(int resourceId) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-
-        View dialogView = inflater.inflate(R.layout.alert_dialog_yes_no, null);
-        dialogBuilder.setView(dialogView);
-
-        dialogBuilder.setTitle(getResources().getString(resourceId));
-        final Dialog dialog = dialogBuilder.create();
-        dialog.show();
-
-        return dialog;
-    }
 
     /**
      * Used to enable buttons etc again.

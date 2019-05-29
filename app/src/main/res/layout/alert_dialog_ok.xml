@@ -15,7 +15,7 @@
         tools:layout_editor_absoluteX="8dp">
 
         <Button
-            android:id="@+id/buttonAlertDialogUnsupportedHardwareOk"
+            android:id="@+id/buttonAlertDialogOk"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"

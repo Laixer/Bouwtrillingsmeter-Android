@@ -1,5 +1,6 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.app.Dialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 
 public class SettingsAdvancedActivity extends AppCompatActivity {
 
@@ -53,6 +55,11 @@ public class SettingsAdvancedActivity extends AppCompatActivity {
      * TODO Implement
      */
     private void onClickShowUserUID() {
-
+        String uid = Backend.getUserUID();
+        Dialog dialog = Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, uid);
+        dialog.findViewById(R.id.buttonAlertDialogOk).setOnClickListener((View v) -> {
+            PreferenceManager.writeBooleanPreference(R.string.pref_allow_stream_all_data, true);
+            dialog.dismiss();
+        });
     }
 }
