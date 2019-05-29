@@ -1,5 +1,6 @@
 Alpha todos
 TODO Settings menu voor graph unlock
+TODO Settings menu mooi
 TODO Sync uit
 TODO Aparte plek voor measurement start end calls
      De frontend gaat dit callen
@@ -23,3 +24,4 @@ Details
 TODO How to deal with widget x memory clear-up deleting the settingspages page?
 TODO Google play services wordt helemaal gebruikt. Dit kan partial om ruimte te besparen.
 TODO Check build.gradle voor app --> error in versie.
+
