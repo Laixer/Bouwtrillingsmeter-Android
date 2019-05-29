@@ -9,54 +9,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
-        <LinearLayout
-            android:id="@+id/linearLayout1"
+        <Switch
+            android:id="@+id/switchSettingsAdvancedShowGraphs"
+            style="@style/SwitchColor"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginTop="8dp"
-            android:gravity="fill_horizontal|fill_vertical"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/settings_advanced_show_graphs"
+            android:theme="@style/SwitchColor" />
 
-            <TextView
-                android:id="@+id/textViewSettingsAdvancedShowGraphs"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="8dp"
-                android:text="@string/settings_advanced_show_graphs"
-                android:textSize="18sp" />
-
-            <Switch
-                android:id="@+id/switchSettingsAdvancedShowGraphs"
-                android:theme="@style/SwitchColor"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:padding="8dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout3"
+        <Button
+            android:id="@+id/buttonSettingsAdvancedShowUserUID"
+            style="@style/SwitchColor"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginTop="8dp"
-            android:gravity="fill_horizontal|fill_vertical"
-            android:orientation="horizontal"
-            android:visibility="visible">
-
-
-            <Button
-                android:id="@+id/buttonSettingsAdvancedShowUserUID"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@null"
-                android:text="@string/settings_advanced_show_user_uid"
-                android:textSize="18sp" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@null"
+            android:gravity="start|center_vertical"
+            android:text="@string/settings_advanced_show_user_uid" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

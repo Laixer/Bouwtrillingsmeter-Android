@@ -29,14 +29,12 @@
     </style>
 
     <style name="SwitchColor" parent="Theme.AppCompat.Light">
-        <!-- active thumb & track color -->
         <item name="colorControlActivated">@color/colorPrimary</item>
-
-        <!-- inactive thumb color -->
         <item name="colorSwitchThumbNormal">@color/colorPrimary</item>
-
         <!-- inactive track color -->
-        <item name="android:colorForeground">#42221f1f</item>
+        <!--<item name="android:colorForeground">#42221f1f</item>-->
+        <item name="android:textSize">16sp</item>
+        <item name="android:minHeight">64dp</item>
     </style>
 
     <!--Alert dialog-->

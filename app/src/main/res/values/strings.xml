@@ -24,9 +24,9 @@
     <!--Settings-->
     <string name="settings_enable_roaming">Sta gegevens uploaden toe via roaming</string>
     <string name="settings_enable_roaming_alert_dialog">Uw provider kan extra kosten in rekening brengen voor het uploaden van data via roaming. Wilt u verder gaan?</string>
-    <string name="settings_enable_uploading_all_data">Sta toe om alle data te streamen via mobiele netwerken</string>
+    <string name="settings_enable_uploading_all_data">Upload alle gegevens via mobiele netwerken</string>
     <string name="settings_enable_uploading_all_data_alert_dialog">Uw provider kan extra kosten in rekening brengen als u buiten uw mobiele netwerk bundel gaat. Wilt u verder gaan?</string>
-    <string name="settings_enable_pickup">Telefoon oriëntatie gebruiken om metingen te starten en te stoppen</string>
+    <string name="settings_enable_pickup">Meting starten zodra de telefoon plat ligt</string>
     <string name="settings_advanced_open">Geavanceerde instellingen</string>
     <string name="settings_advanced_show_graphs">Laat grafieken zien</string>
     <string name="settings_advanced_show_user_uid">Laat gebruiker UID zien</string>
