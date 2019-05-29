@@ -143,10 +143,6 @@ public class Backend {
                 listener.onBackendStateChanged(newState);
             }
         }
-
-        // TODO Remove this
-        System.out.println(String.format("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tChanged from %s to %s", oldState, newState));
-
     }
 
     /**
@@ -243,6 +239,10 @@ public class Backend {
      */
     public static Measurement getCurrentMeasurement() {
         return MeasurementControl.getCurrentMeasurement();
+    }
+
+    public static Measurement getLastMeasurement() {
+        return MeasurementControl.getLastMeasurement();
     }
 
     /**

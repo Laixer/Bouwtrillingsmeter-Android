@@ -1,21 +1,27 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 
 /**
  * This activity launches when we successfully complete our measurement.
  */
 public class FinishedMeasurementActivity extends AppCompatActivity {
+
+    private EditText editTextName;
+    private EditText editTextDescription;
+    private Measurement measurement;
 
     /**
      * On create.
@@ -28,6 +34,14 @@ public class FinishedMeasurementActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finished_measurement);
+
+        // Link elements
+        measurement = Backend.getLastMeasurement();
+        editTextName = (EditText) findViewById(R.id.editTextFinishedMeasurementName);
+        editTextName.setText(measurement.getName());
+        editTextDescription = (EditText) findViewById(R.id.editTextFinishedMeasurementDescription);
+        editTextDescription.setText(measurement.getDescription());
+        setupEditTextListeners();
 
         // Indicate if we have exceeded any limits or not
         TextView textViewExceeded = (TextView) findViewById(R.id.textViewFinishedMeasurementExceeded);
@@ -44,6 +58,42 @@ public class FinishedMeasurementActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onExitThisActivity();
+            }
+        });
+    }
+
+    private void setupEditTextListeners() {
+        editTextName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                measurement.setName(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        editTextDescription.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                measurement.setDescription(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }

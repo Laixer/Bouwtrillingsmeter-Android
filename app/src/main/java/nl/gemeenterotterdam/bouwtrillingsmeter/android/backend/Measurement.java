@@ -32,7 +32,7 @@ public class Measurement implements Serializable {
     private double longitude;
     private double latitude;
     private double locationAccuracy;
-    private Address address;
+    private transient Address address;
     private String description;
     private Settings settings;
     private int dataIntervalCount;

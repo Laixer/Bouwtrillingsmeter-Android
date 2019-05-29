@@ -15,6 +15,7 @@ import java.util.ArrayList;
 class MeasurementControl {
 
     private static Measurement currentMeasurement;
+    private static Measurement lastMeasurement;
     private static ArrayList<Measurement> allMeasurements;
 
     /**
@@ -31,6 +32,10 @@ class MeasurementControl {
      */
     static Measurement getCurrentMeasurement() {
         return currentMeasurement;
+    }
+
+    static Measurement getLastMeasurement() {
+        return lastMeasurement;
     }
 
     /**
@@ -59,6 +64,7 @@ class MeasurementControl {
      */
     static void onFinishMeasurement() {
         currentMeasurement.close();
+        lastMeasurement = currentMeasurement;
         allMeasurements.add(currentMeasurement);
         StorageControl.writeMeasurement(currentMeasurement);
     }

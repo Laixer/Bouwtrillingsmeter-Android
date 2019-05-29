@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/textViewFinishedMeasurementTop"
         android:layout_width="395dp"
-        android:layout_height="29dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="@string/finished_measurement_completed"
         android:textSize="24sp"
@@ -22,25 +22,14 @@
         android:id="@+id/textViewFinishedMeasurementExceeded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/default_text"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewDetailsMeasurementPhoto2" />
-
-    <ImageView
-        android:id="@+id/imageViewDetailsMeasurementPhoto2"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="24dp"
-        android:contentDescription="@string/measurement_name_default"
-        android:scaleType="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewFinishedMeasurementTop" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabFinishedMeasurementDone"
@@ -57,20 +46,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/fab_checkmark" />
 
-    <EditText
-        android:id="@+id/editTextFinishedMeasurementDescription"
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/finished_measurement_description_default"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewFinishedMeasurementExceeded" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.7">
+
+        <EditText
+            android:id="@+id/editTextFinishedMeasurementName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@string/measurement_name_default" />
+
+        <EditText
+            android:id="@+id/editTextFinishedMeasurementDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@string/finished_measurement_description_default" />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
