@@ -27,12 +27,8 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendListener;
  * @since 1.0
  * <p>
  * This activity gets called when we finish setting up our settings in the {@link SettingsPageActivity} page.
- * First, we await till the user places the phone flat on a surface.
- * <p>
- * When the phone is flat, we begin our measurements.
  */
 public class MeasuringActivity extends AppCompatActivity implements BackendListener {
-
 
     /**
      * The amount of ms we wait before displaying our next string message
@@ -59,9 +55,6 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measuring);
-
-        // Set this as listener
-        Backend.addBackendStateListener(this);
 
         // Link elements
         textViewCenter = (TextView) findViewById(R.id.textViewMeasuringCenter);
@@ -223,6 +216,16 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     }
 
     /**
+     * Not used at the moment.
+     *
+     * @param newBackendState The new state
+     */
+    @Override
+    public void onBackendStateChanged(BackendState newBackendState) {
+        // Not used
+    }
+
+    /**
      * This gets called when we exceed our limit.
      * This determines whether or not we should display this.
      */
@@ -250,8 +253,10 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     private void onClickStartStop() {
         if (!isMeasuring) {
             Backend.onReadyToStartMeasurement();
+            onStartMeasuring();
         } else {
             Backend.onRequestEndMeasurement();
+            onFinishMeasuring();
         }
     }
 
@@ -301,37 +306,30 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     }
 
     /**
-     * Gets called when the backend state changes
-     *
-     * @param newBackendState The new Backend State
+     * Updates the UI when we start measuring
      */
-    @Override
-    public void onBackendStateChanged(BackendState newBackendState) {
-        switch (newBackendState) {
-            case MEASURING:
-                isMeasuring = true;
-                updatePageState();
-                break;
-
-            case FINISHED_MEASUREMENT:
-                Intent intent = new Intent(getApplicationContext(), FinishedMeasurementActivity.class);
-                startActivity(intent);
-
-                // Close this activity
-                finish();
-
-                // Close the graphs activity
-                GraphsActivity.forceFinish();
-                break;
-        }
+    private void onStartMeasuring() {
+        isMeasuring = true;
+        updatePageState();
     }
 
     /**
-     * Remove this as a listener
+     * Updates the UI when we finish measuring (not cancel!).
+     */
+    private void onFinishMeasuring() {
+        Intent intent = new Intent(getApplicationContext(), FinishedMeasurementActivity.class);
+        startActivity(intent);
+
+        // Close this activity
+        finish();
+    }
+
+    /**
+     * Called when this activity closes.
      */
     @Override
     public void finish() {
-        Backend.removeBackendStateListener(this);
+        GraphsActivity.forceFinish();
         isMeasuring = null;
         super.finish();
     }
