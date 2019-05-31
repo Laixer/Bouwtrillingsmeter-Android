@@ -174,4 +174,3 @@ public class GraphFrequencyDominant extends Graph {
         pointGraphSeries.setSize(7);
     }
 }
-
