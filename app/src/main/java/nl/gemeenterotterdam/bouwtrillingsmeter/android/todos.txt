@@ -1,13 +1,10 @@
 Alpha todos
-TODO Namen measurements
-TODO Eindscherm opschonen
 TODO Tutorial widget opschonen en met layoutinflater maken
 TODO Scherm draai bulletproof maken
 TODO Heel hard zorgen dat hij niet kan crashen
      Ook als je hem afsluit!
      Misschien exception throwing anders doen (nu altijd uncaught!)
-TODO Graph issues oplossen
-
+TODO Graph legenda namen
 
 General todos
 TODO Als je je measurement nooit start moet hij worden weggegooid
