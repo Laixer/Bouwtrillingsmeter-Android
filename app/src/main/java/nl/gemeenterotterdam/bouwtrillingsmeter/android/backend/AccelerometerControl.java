@@ -26,22 +26,8 @@ public class AccelerometerControl {
         try {
             accelerometer = new Accelerometer();
         } catch (UnsupportedOperationException e) {
-            System.out.println(e.getMessage());
             Backend.onUnsupportedHardware();
         }
-    }
-
-    /**
-     * Gets the accelerometer that is listening to the phone sensors
-     *
-     * @return The accelerometer class object used
-     */
-    public static Accelerometer getAccelerometer() {
-        if (accelerometer == null) {
-            accelerometer = new Accelerometer();
-        }
-
-        return accelerometer;
     }
 
     /**

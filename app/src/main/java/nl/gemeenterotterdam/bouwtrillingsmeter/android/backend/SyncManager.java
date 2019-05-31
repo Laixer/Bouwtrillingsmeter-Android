@@ -118,7 +118,8 @@ class SyncManager implements DataIntervalClosedListener {
      */
     private static void startSync() {
         if (syncing) {
-            throw new IllegalStateException("Cannot start sync when we are already syncing.");
+            System.out.println("Cannot start sync when we are already syncing.");
+            return;
         }
 
         threadSyncing = new Thread(() -> {
@@ -153,7 +154,8 @@ class SyncManager implements DataIntervalClosedListener {
      */
     private static void stopSync() {
         if (!syncing) {
-            throw new IllegalStateException("Cannot stop sync when we are not syncing.");
+            System.out.println("Cannot stop sync when we are not syncing.");
+            return;
         }
 
     }

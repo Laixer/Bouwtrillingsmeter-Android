@@ -131,7 +131,8 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
      */
     private void createAllGraphs() {
         if (graphs != null) {
-            throw new IllegalArgumentException("Creating graphs when graphs is not null.");
+            System.out.println("Creating graphs when graphs is not null.");
+            return;
         }
 
         // Get constants

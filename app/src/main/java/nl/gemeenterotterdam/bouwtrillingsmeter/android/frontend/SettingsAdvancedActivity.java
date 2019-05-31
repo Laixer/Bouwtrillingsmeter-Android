@@ -10,11 +10,13 @@ import android.widget.Switch;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageControl;
 
 public class SettingsAdvancedActivity extends AppCompatActivity {
 
     private Switch switchShowGraphs;
     private Button buttonShowUserUID;
+    private Button buttonClearAppData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +31,20 @@ public class SettingsAdvancedActivity extends AppCompatActivity {
                 onChangeShowGraphs(switchShowGraphs.isChecked());
             }
         });
+
         buttonShowUserUID = (Button) findViewById(R.id.buttonSettingsAdvancedShowUserUID);
         buttonShowUserUID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickShowUserUID();
+            }
+        });
+
+        buttonClearAppData = (Button) findViewById(R.id.buttonSettingsAdvancedClearAppData);
+        buttonClearAppData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickClearApplicationData();
             }
         });
 
@@ -61,5 +72,25 @@ public class SettingsAdvancedActivity extends AppCompatActivity {
             PreferenceManager.writeBooleanPreference(R.string.pref_allow_stream_all_data, true);
             dialog.dismiss();
         });
+    }
+
+    /**
+     * This clears our preferences.
+     * This removes all our storage.
+     */
+    private void onClickClearApplicationData() {
+        Dialog dialog = Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.settings_advanced_delete_application_data_alert_dialog);
+        dialog.findViewById(R.id.buttonAlertDialogOk).setOnClickListener((View v) -> {
+            dialog.dismiss();
+        });
+
+        PreferenceManager.clearAllPreferences();
+        StorageControl.removeAllInternalStorage();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

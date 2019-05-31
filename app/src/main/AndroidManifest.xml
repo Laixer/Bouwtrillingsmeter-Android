@@ -18,8 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".frontend.SettingsAdvancedActivity"></activity>
-        <activity android:name=".frontend.SettingsActivity" />
         <activity
             android:name=".frontend.MainActivity"
             android:label="@string/app_name"
@@ -37,6 +35,8 @@
         <activity android:name=".frontend.FirstVisitTutorialActivity" />
         <activity android:name=".frontend.DetailsActivity" />
         <activity android:name=".frontend.SettingsWizardActivity" />
+        <activity android:name=".frontend.SettingsAdvancedActivity"></activity>
+        <activity android:name=".frontend.SettingsActivity" />
     </application>
 
 </manifest>

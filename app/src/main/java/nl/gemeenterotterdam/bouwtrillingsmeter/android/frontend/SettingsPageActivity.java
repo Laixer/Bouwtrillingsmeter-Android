@@ -225,6 +225,11 @@ public class SettingsPageActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Backend.onPressedBackButton();
+
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+
         finish();
     }
 

@@ -32,5 +32,15 @@
             android:gravity="start|center_vertical"
             android:text="@string/settings_advanced_show_user_uid" />
 
+        <Button
+            android:id="@+id/buttonSettingsAdvancedClearAppData"
+            style="@style/SwitchColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@null"
+            android:gravity="start|center_vertical"
+            android:text="@string/settings_advanced_delete_application_data" />
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

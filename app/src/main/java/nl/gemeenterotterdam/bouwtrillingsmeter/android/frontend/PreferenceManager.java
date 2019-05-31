@@ -39,7 +39,8 @@ public class PreferenceManager {
      */
     public static void writeBooleanPreference(int resourceID, boolean value) {
         if (sharedPreferences == null || context == null) {
-            throw new IllegalArgumentException("Our preference manager was never initialized!");
+            System.out.println("Our preference manager was never initialized!");
+            return;
         }
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -55,7 +56,8 @@ public class PreferenceManager {
      */
     public static boolean readBooleanPreference(int resourceID) {
         if (sharedPreferences == null || context == null) {
-            throw new IllegalArgumentException("Our preference manager was never initialized.");
+            System.out.println("Our preference manager was never initialized.");
+            return false;
         }
 
         String preference = sharedPreferences.getString(context.getString(resourceID), defaultNull);
@@ -71,7 +73,8 @@ public class PreferenceManager {
      */
     public static void clearAllPreferences() {
         if (sharedPreferences == null || context == null) {
-            throw new IllegalArgumentException("Our preference manager was never initialized.");
+            System.out.println("Our preference manager was never initialized.");
+            return;
         }
 
         sharedPreferences.edit().clear().apply();

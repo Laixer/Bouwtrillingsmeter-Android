@@ -90,59 +90,63 @@ public class Backend {
      * @param newState The new state.
      */
     private static void changeBackendState(BackendState newState) {
-        if (newState == null || newState == BackendState.NONE) {
-            throw new IllegalStateException("New backend state is not valid.");
-        }
-
         BackendState oldState = backendState;
         backendState = newState;
 
-        switch (newState) {
-            case BROWSING_APP:
-                break;
+        try {
+            switch (newState) {
+                case BROWSING_APP:
+                    break;
 
-            case PREPARING_MEASUREMENT:
-                MeasurementControl.createNewMeasurement();
-                break;
+                case PREPARING_MEASUREMENT:
+                    MeasurementControl.createNewMeasurement();
+                    break;
 
-            case AWAITING_PHONE_FLAT:
-                flatPhoneDetector.forceFlatToFalse();
-                break;
+                case AWAITING_PHONE_FLAT:
+                    flatPhoneDetector.forceFlatToFalse();
+                    break;
 
-            case MEASURING:
-                // Edge cases
-                if (MeasurementControl.getCurrentMeasurement() == null) {
-                    throw new IllegalStateException("No measurement object was present.");
-                }
+                case MEASURING:
+                    // Edge cases
+                    if (MeasurementControl.getCurrentMeasurement() == null) {
+                        throw new IllegalStateException("No measurement object was present.");
+                    }
 
-                if (MeasurementControl.getCurrentMeasurement().isClosed()) {
-                    throw new IllegalStateException("The current measurement object is already closed. No more data can be added.");
-                }
+                    if (MeasurementControl.getCurrentMeasurement().isClosed()) {
+                        throw new IllegalStateException("The current measurement object is already closed. No more data can be added.");
+                    }
 
-                // Start the measurement
-                currentMeasurementExceeded = false;
-                Calculator.onStartMeasurementCalculations();
-                MeasurementControl.getCurrentMeasurement().start();
-                DataHandler.startMeasuring();
-                SyncManager.onMeasurementStart(MeasurementControl.getCurrentMeasurement());
-                constantsLimits.fetchCurrentLocation();
-                break;
+                    // Start the measurement
+                    currentMeasurementExceeded = false;
+                    Calculator.onStartMeasurementCalculations();
+                    MeasurementControl.getCurrentMeasurement().start();
+                    DataHandler.startMeasuring();
+                    SyncManager.onMeasurementStart(MeasurementControl.getCurrentMeasurement());
+                    constantsLimits.fetchCurrentLocation();
+                    break;
 
-            case FINISHED_MEASUREMENT:
-                DataHandler.stopMeasuring();
-                MeasurementControl.onFinishMeasurement();
-                SyncManager.onMeasurementFinished(MeasurementControl.getCurrentMeasurement());
-                break;
+                case FINISHED_MEASUREMENT:
+                    DataHandler.stopMeasuring();
+                    MeasurementControl.onFinishMeasurement();
+                    SyncManager.onMeasurementFinished(MeasurementControl.getCurrentMeasurement());
+                    break;
 
-            case UNSUPPORTED_HARDWARE:
-                break;
-        }
+                case UNSUPPORTED_HARDWARE:
+                    break;
 
-        // Call all the listeners.
-        for (BackendListener listener : backendListeners) {
-            if (listener != null) {
-                listener.onBackendStateChanged(newState);
+                default:
+                    throw new IllegalStateException("New backend state is not valid.");
             }
+
+            // Call all the listeners.
+            for (BackendListener listener : backendListeners) {
+                if (listener != null) {
+                    listener.onBackendStateChanged(newState);
+                }
+            }
+        } catch (IllegalStateException | NullPointerException e) {
+            System.out.println("New backend state is not valid. Changing back to browsing app.");
+            changeBackendState(BackendState.BROWSING_APP);
         }
     }
 
@@ -187,7 +191,8 @@ public class Backend {
      */
     public static void onClickCreateNewMeasurement() {
         if (MeasurementControl.getCurrentMeasurement() != null && !MeasurementControl.getCurrentMeasurement().isClosed()) {
-            throw new IllegalStateException("Our current measurement object is still measuring! Creating a new measurement is not allowed.");
+            System.out.println("Our current measurement object is still measuring! Creating a new measurement is not allowed.");
+            return;
         }
 
         changeBackendState(BackendState.PREPARING_MEASUREMENT);
@@ -257,17 +262,20 @@ public class Backend {
                 settings.getBuildingCategory() == BuildingCategory.NONE ||
                 settings.getVibrationCategory() == null ||
                 settings.getVibrationCategory() == VibrationCategory.NONE) {
-            throw new IllegalArgumentException("Our settings file contained incomplete values.");
+            System.out.println("Our settings file contained incomplete values.");
+            return;
         }
 
         // If we are currently measuring
         if (DataHandler.isCurrentlyMeasuring()) {
-            throw new IllegalStateException("We are measuring. Do not change the settings.");
+            System.out.println("We are measuring. Do not change the settings.");
+            return;
         }
 
         // If we are in the wrong state
         if (backendState != BackendState.PREPARING_MEASUREMENT) {
-            throw new IllegalStateException("We are NOT in the PREPARING_MEASUREMENT state. No settings object can be created at the moment.");
+            System.out.println("We are NOT in the PREPARING_MEASUREMENT state. No settings object can be created at the moment.");
+            return;
         }
 
         getCurrentMeasurement().overwriteSettings(settings);
@@ -306,7 +314,6 @@ public class Backend {
 
     /**
      * This triggers when we don't have sufficient hardware.
-     *
      */
     static void onUnsupportedHardware() {
         changeBackendState(BackendState.UNSUPPORTED_HARDWARE);

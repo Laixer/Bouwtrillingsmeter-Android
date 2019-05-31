@@ -169,7 +169,8 @@ public class DataInterval implements Serializable {
         if (this.velocities == null) {
             this.velocities = velocities;
         } else {
-            throw new IllegalArgumentException("Cannot change velocities once they have been set.");
+            System.out.println("Cannot change velocities once they have been set.");
+            return;
         }
     }
 
@@ -177,7 +178,8 @@ public class DataInterval implements Serializable {
         if (this.velocitiesAbsoluteMax == null) {
             this.velocitiesAbsoluteMax = velocitiesAbsoluteMax;
         } else {
-            throw new IllegalArgumentException("Cannot change absolute max velocities once they have been set.");
+            System.out.println("Cannot change absolute max velocities once they have been set.");
+            return;
         }
     }
 
@@ -185,7 +187,8 @@ public class DataInterval implements Serializable {
         if (this.frequencyAmplitudes == null) {
             this.frequencyAmplitudes = frequencyAmplitudes;
         } else {
-            throw new IllegalArgumentException("Cannot change frequency amplitudes once they have been set.");
+            System.out.println("Cannot change frequency amplitudes once they have been set.");
+            return;
         }
     }
 
@@ -193,7 +196,8 @@ public class DataInterval implements Serializable {
         if (this.dominantFrequencies == null) {
             this.dominantFrequencies = dominantFrequencies;
         } else {
-            throw new IllegalArgumentException("Cannot change dominant frequencies once they have been set.");
+            System.out.println("Cannot change dominant frequencies once they have been set.");
+            return;
         }
     }
 

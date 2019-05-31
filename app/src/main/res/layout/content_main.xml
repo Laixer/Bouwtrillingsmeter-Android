@@ -9,18 +9,6 @@
     tools:context=".frontend.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <Button
-        android:id="@+id/buttonDebugClearAppdata"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:onClick="onClickDebugClearAppdata"
-        android:text="[DEBUG] Clear appdata"
-        app:layout_constraintBottom_toBottomOf="@+id/listViewMeasurements"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabNewMeasurement"
         android:layout_width="wrap_content"

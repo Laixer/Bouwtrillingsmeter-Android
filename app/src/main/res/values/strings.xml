@@ -30,6 +30,8 @@
     <string name="settings_advanced_open">Geavanceerde instellingen</string>
     <string name="settings_advanced_show_graphs">Laat grafieken zien</string>
     <string name="settings_advanced_show_user_uid">Toon gebruiker UID</string>
+    <string name="settings_advanced_delete_application_data">Verwijder gegevens en voorkeuren</string>
+    <string name="settings_advanced_delete_application_data_alert_dialog">Alle gegevens en voorkeuren zijn verwijderd.</string>
 
     <!--Everything regarding the measurements list-->
     <string name="measurement_list_empty">U heeft nog geen opgeslagen metingen</string>
@@ -215,7 +217,8 @@
     <string name="graph_legend_exceeding_name">Overschrijdingen</string>
 
     <!--Unsupported Hardware-->
-    <string name="alert_dialog_unsupported_hardware">Uw telefoon mist essentiële hardware. De applicatie zal nu sluiten.</string>
+    <string name="alert_dialog_unsupported_hardware_title">Ontoereikende hardware</string>
+    <string name="alert_dialog_unsupported_hardware_message">Uw telefoon mist essentiële hardware. De applicatie zal nu sluiten.</string>
 
 </resources>
 

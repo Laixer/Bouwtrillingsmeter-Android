@@ -9,7 +9,7 @@ import java.util.Calendar;
  * <p>
  * This class triggers the collection of data.
  * It also triggers the calculations done on said data, which are executed by the {@link Calculator}.
- * Data is received in the form of a {@link DataPoint3D<Long>}.
+ * Data is received in the form of a {@link DataPoint3D<>}.
  * The collection and measurements are stored in a {@link DataInterval} object.
  * These intervals are stored within a {@link Measurement} object.
  */
@@ -53,7 +53,8 @@ public class DataHandler implements AccelerometerListener {
      */
     public static void addDataIntervalClosedListener(DataIntervalClosedListener listener) {
         if (listener == null) {
-            throw new IllegalArgumentException("Listener to be added to data interval closed listeners can not be null.");
+            System.out.println("Listener to be added to data interval closed listeners can not be null.");
+            return;
         }
 
         dataIntervalClosedListeners.add(listener);
@@ -102,7 +103,8 @@ public class DataHandler implements AccelerometerListener {
     static void startMeasuring() {
         // Give an error if we have no measurement object
         if (MeasurementControl.getCurrentMeasurement() == null) {
-            throw new NullPointerException("We have no current measurement object!");
+            System.out.println("We have no current measurement object!");
+            return;
         }
 
         currentlyMeasuring = true;
@@ -189,7 +191,8 @@ public class DataHandler implements AccelerometerListener {
     private static void performIntervalCalculations(final DataInterval dataInterval) {
         // Edge cases
         if (dataInterval.getDataPoints3DAcceleration().size() == 0) {
-            throw new IllegalArgumentException("No datapoints were added to this interval.");
+            System.out.println("No datapoints were added to this interval.");
+            return;
         }
 
         // Create a thread for all calculations
@@ -263,7 +266,8 @@ public class DataHandler implements AccelerometerListener {
      */
     static void stopMeasuring() {
         if (!currentlyMeasuring) {
-            throw new IllegalStateException("Attempted to stop measuring when we were not measuring.");
+            System.out.println("Attempted to stop measuring when we were not measuring.");
+            return;
         }
 
         currentlyMeasuring = false;

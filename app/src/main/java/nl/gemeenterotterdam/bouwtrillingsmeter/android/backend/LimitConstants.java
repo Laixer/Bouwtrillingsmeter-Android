@@ -57,7 +57,6 @@ public class LimitConstants {
         }
 
         return yvVibrationSensitive;
-        // throw new IllegalArgumentException("Unable to determine Yv");
     }
 
     /**
@@ -82,7 +81,7 @@ public class LimitConstants {
                 return ytVibrationContinuous;
         }
 
-        throw new IllegalArgumentException("Unable to determine Yt");
+        return 0;
     }
 
     /**
@@ -108,7 +107,8 @@ public class LimitConstants {
                 amplitudes = getLineBreakPointsVibrationContinuous[buildingIndex - 1];
                 break;
             default:
-                throw new IllegalArgumentException("Could not compute limit values");
+                System.out.println("Could not compute limit values");
+                return new float[0];
         }
 
         return amplitudes;

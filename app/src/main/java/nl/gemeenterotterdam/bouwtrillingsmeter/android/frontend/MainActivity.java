@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
                 Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(intent);
 
-                 onClickCreateNewMeasurementFab();
+                onClickCreateNewMeasurementFab();
             }
         });
 
@@ -172,15 +172,6 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
     }
 
     /**
-     * Gets called when the clear preference debug button is clicked
-     * TODO Remove this
-     */
-    public void onClickDebugClearAppdata(View view) {
-        PreferenceManager.clearAllPreferences();
-        StorageControl.removeAllInternalStorage();
-    }
-
-    /**
      * Creates a popup on first visit that points at the plus sign
      */
     private void showcaseFirstVisit() {
@@ -212,7 +203,8 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
             View dialogView = inflater.inflate(R.layout.alert_dialog_ok, null);
             dialogBuilder.setView(dialogView);
 
-            dialogBuilder.setTitle(getResources().getString(R.string.alert_dialog_unsupported_hardware));
+            dialogBuilder.setTitle(getResources().getString(R.string.alert_dialog_unsupported_hardware_title));
+            dialogBuilder.setMessage(getResources().getString(R.string.alert_dialog_unsupported_hardware_message));
             final Dialog dialog = dialogBuilder.create();
             dialog.show();
 

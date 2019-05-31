@@ -156,4 +156,10 @@ public class SettingsActivity extends AppCompatActivity {
         buttonShowAdvancedSettings.setEnabled(true);
         super.onResume();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

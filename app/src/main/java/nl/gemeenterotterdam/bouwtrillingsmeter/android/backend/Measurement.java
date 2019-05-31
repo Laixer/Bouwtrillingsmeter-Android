@@ -75,7 +75,8 @@ public class Measurement implements Serializable {
      */
     void addDataInterval(DataInterval dataInterval) {
         if (closed) {
-            throw new IllegalStateException("Current measurement is already closed! No more data can be added.");
+            System.out.println("Current measurement is already closed! No more data can be added.");
+            return;
         }
 
         dataIntervals.add(dataInterval);
@@ -159,7 +160,8 @@ public class Measurement implements Serializable {
         if (!open && !closed) {
             this.settings = settings;
         } else {
-            throw new IllegalArgumentException("Cannot overwrite settings on a measurement that is already started or closed.");
+            System.out.println("Cannot overwrite settings on a measurement that is already started or closed.");
+            return;
         }
     }
 

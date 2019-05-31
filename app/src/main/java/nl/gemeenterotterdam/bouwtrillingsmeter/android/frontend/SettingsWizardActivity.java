@@ -207,8 +207,10 @@ public class SettingsWizardActivity extends AppCompatActivity {
      */
     private void pushQuestionToScreen(Question question) {
         if (question != currentQuestion) {
-            throw new IllegalStateException("Set the question on screen as current question first!");
+            System.out.println("Set the question on screen as current question first!");
+            return;
         }
+
         textViewMain.setText(getResources().getStringArray(R.array.wizard_question_text_main)[question.getIndex()]);
         textViewExtra.setText(getResources().getStringArray(R.array.wizard_question_text_extra)[question.getIndex()]);
     }
