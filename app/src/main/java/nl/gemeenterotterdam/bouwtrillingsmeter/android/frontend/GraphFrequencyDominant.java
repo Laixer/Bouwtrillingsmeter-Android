@@ -51,11 +51,12 @@ public class GraphFrequencyDominant extends Graph {
      */
     @Override
     public void onCreatedGraphView(GraphView graphView, boolean addSeriesXYZ) {
+        // Add constant line
+        this.graphView = graphView;
+        addAndStyleSeries(constantLine, R.color.graph_dominant_constant_line);
+
         // Call super
         super.onCreatedGraphView(graphView, false);
-
-        // Add constant line
-        addAndStyleSeries(constantLine, R.color.graph_dominant_constant_line);
 
         // Fix axis permanently
         int axisMin = Utility.resources.getInteger(R.integer.graphs_frequency_bound_min);
