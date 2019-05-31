@@ -95,6 +95,11 @@ public class GraphFrequency extends Graph {
             return;
         }
 
+        // Only do this if the graphview is visible
+        if (!Utility.isVisible(graphView)) {
+            return;
+        }
+
         // Clear
         graphView.removeAllSeries();
 

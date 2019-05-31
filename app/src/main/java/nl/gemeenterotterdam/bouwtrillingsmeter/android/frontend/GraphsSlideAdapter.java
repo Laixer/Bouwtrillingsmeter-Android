@@ -17,18 +17,15 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
 public class GraphsSlideAdapter extends PagerAdapter {
 
-
     private Graph[] graphs;
     private LayoutInflater layoutInflater;
-    private Context context;
 
     /**
      * Constructor for this adapter
      *
      * @param context The context
      */
-    public GraphsSlideAdapter(Context context, Graph[] graphs) {
-        this.context = context;
+    GraphsSlideAdapter(Context context, Graph[] graphs) {
         this.graphs = graphs;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -58,8 +55,9 @@ public class GraphsSlideAdapter extends PagerAdapter {
         Graph graph = graphs[position];
         textViewName.setText(graph.getName());
 
-        // Add and return
+        // Add, push and return
         container.addView(view);
+        graph.pushToGraph();
         return view;
     }
 

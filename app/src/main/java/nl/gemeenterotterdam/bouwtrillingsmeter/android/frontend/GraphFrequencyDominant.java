@@ -137,6 +137,11 @@ public class GraphFrequencyDominant extends Graph {
             return;
         }
 
+        // Only do this if the graphview is visible
+        if (!Utility.isVisible(graphView)) {
+            return;
+        }
+
         // Clear
         if (graphView.getSeries().contains(pointGraphSeries)) {
             graphView.removeSeries(pointGraphSeries);

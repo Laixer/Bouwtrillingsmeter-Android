@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.ActivityCompat;
 import android.view.Display;
@@ -18,16 +19,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BuildingCategory;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory;
 
 /**
  * @author Thomas Beckers
@@ -56,7 +51,7 @@ class Utility {
      * @param context The context from which we are checking
      * @return True if portrait, false if landscape
      */
-    static boolean isScreenInPortraitMode(Context context) {
+    private static boolean isScreenInPortraitMode(Context context) {
         final int screenOrientation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
         switch (screenOrientation) {
             case Surface.ROTATION_0:
@@ -78,7 +73,7 @@ class Utility {
      * @param context The context from which we are checking
      * @return The screen width in pixels
      */
-    public static int getScreenWidth(Context context) {
+    private static int getScreenWidth(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -92,7 +87,7 @@ class Utility {
      * @param context The context from which we are checking
      * @return The screen height in pixels
      */
-    static int getScreenHeight(Context context) {
+    private static int getScreenHeight(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -140,7 +135,7 @@ class Utility {
      *
      * @param imageView The image view to update
      */
-    static void updateScaledPhotoMissing(ImageView imageView) {
+    private static void updateScaledPhotoMissing(ImageView imageView) {
         Drawable drawable = resources.getDrawable(R.drawable.ic_image_not_present);
         imageView.setImageDrawable(drawable);
     }
@@ -233,6 +228,29 @@ class Utility {
         stringBuilder.append(calendar.get(Calendar.YEAR));
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * Checks if our view is visible
+     * @param view The view to check
+     * @return True if visible
+     */
+    static boolean isVisible(final View view) {
+        // Edge case
+        if (view == null) {
+            return false;
+        }
+
+        // Edge case
+        if (!view.isShown()) {
+            return false;
+        }
+
+        // Draw rect
+        final Rect actualPosition = new Rect();
+        view.getGlobalVisibleRect(actualPosition);
+        final Rect screen = new Rect(0, 0, getScreenWidth(applicationContext), getScreenHeight(applicationContext));
+        return actualPosition.intersect(screen);
     }
 
 }

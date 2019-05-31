@@ -12,7 +12,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
  * This manages a {@link com.jjoe64.graphview.GraphView} with time on the x-axis and some value on the y-axis.
  * It contains a line graph.
  */
-public class GraphTime extends Graph {
+public class GraphTimeLine extends Graph {
 
     private int maxHorizontalRange = Utility.resources.getInteger(R.integer.graphs_time_line_horizontal_axis_range_max_s);
     private int maxDataPointCount = Utility.resources.getInteger(R.integer.graphs_line_max_datapoint_count);
@@ -25,7 +25,7 @@ public class GraphTime extends Graph {
      * @param textAxisHorizontal Horizontal axis text
      * @param textAxisVertical   Vertical axis text
      */
-    GraphTime(String name, String textAxisHorizontal, String textAxisVertical) {
+    GraphTimeLine(String name, String textAxisHorizontal, String textAxisVertical) {
         // Call super
         super(name, textAxisHorizontal, textAxisVertical);
 
@@ -34,6 +34,9 @@ public class GraphTime extends Graph {
         for (int dimension = 0; dimension < 3; dimension++) {
             dataPointsXYZ.add(new ArrayList<DataPoint>());
         }
+    }
+
+    public void resetData() {
     }
 
     /**
@@ -62,7 +65,6 @@ public class GraphTime extends Graph {
      * TODO Dit checkt nu niet voor overlap!
      *
      * @param graphPoints A time based arraylist with datapoints in 3 dimensions
-     * @throws IllegalArgumentException If our dimension is incorrect.
      */
     @Override
     protected void appendDataToList(ArrayList<ArrayList<DataPoint>> graphPoints) {
@@ -89,14 +91,21 @@ public class GraphTime extends Graph {
     }
 
     /**
+     * Call this to force a draw.
+     * <p>
      * This crops our datapoints list if required
      * Then gets all minima and maxima
      * Then pushes everything to our graphview
      * TODO HorizontalMinMax kan effectiever
      */
-    protected void pushToGraph() {
+    public void pushToGraph() {
         // Edge case
         if (graphView == null) {
+            return;
+        }
+
+        // Only do this if the graphview is visible
+        if (!Utility.isVisible(graphView)) {
             return;
         }
 

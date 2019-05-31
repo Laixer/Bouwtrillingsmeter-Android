@@ -22,6 +22,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
  * It is used to avoid loads of duplicate code.
  * TODO This only updates graphs upon receiving new data
  * TODO Optimize by only writing if we are visible
+ * TODO Currently we first create the graph, then the graphview. Might want to switch this!
  */
 public abstract class Graph {
 

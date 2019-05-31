@@ -9,17 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.jjoe64.graphview.series.DataPoint;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataHandler;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataInterval;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClosedListener;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DominantFrequencies;
 
 /**
  * This activity shows all the graphs.
@@ -121,7 +114,7 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
 
         // Create graphs
         graphs = new Graph[5];
-        graphs[0] = new GraphTime(title[0], axisHorizontal[0], axisVertical[0]);
+        graphs[0] = new GraphTimeLine(title[0], axisHorizontal[0], axisVertical[0]);
         graphs[1] = new GraphTimeBar(title[1], axisHorizontal[1], axisVertical[1]);
         graphs[2] = new GraphTimeBar(title[2], axisHorizontal[2], axisVertical[2]);
         graphs[3] = new GraphFrequency(title[3], axisHorizontal[3], axisVertical[3]);

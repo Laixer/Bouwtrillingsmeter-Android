@@ -22,7 +22,7 @@
         android:id="@+id/textViewFinishedMeasurementExceeded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/default_text"
+        android:text="@string/finished_measurement_not_exceeded"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

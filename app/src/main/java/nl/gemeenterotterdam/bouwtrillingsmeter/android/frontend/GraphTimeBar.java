@@ -70,7 +70,6 @@ public class GraphTimeBar extends Graph {
      * TODO Dit checkt nu niet voor overlap!
      *
      * @param graphPoints A time based arraylist with datapoints in 3 dimensions
-     * @throws IllegalArgumentException If our dimension is incorrect.
      */
     @Override
     protected void appendDataToList(ArrayList<ArrayList<DataPoint>> graphPoints) {
@@ -100,6 +99,11 @@ public class GraphTimeBar extends Graph {
     protected void pushToGraph() {
         // Edge case
         if (graphView == null) {
+            return;
+        }
+
+        // Only do this if the graphview is visible
+        if (!Utility.isVisible(graphView)) {
             return;
         }
 

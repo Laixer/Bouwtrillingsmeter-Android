@@ -29,7 +29,7 @@
     <string name="settings_enable_pickup">Meting starten zodra de telefoon plat ligt</string>
     <string name="settings_advanced_open">Geavanceerde instellingen</string>
     <string name="settings_advanced_show_graphs">Laat grafieken zien</string>
-    <string name="settings_advanced_show_user_uid">Laat gebruiker UID zien</string>
+    <string name="settings_advanced_show_user_uid">Toon gebruiker UID</string>
 
     <!--Everything regarding the measurements list-->
     <string name="measurement_list_empty">U heeft nog geen opgeslagen metingen</string>
