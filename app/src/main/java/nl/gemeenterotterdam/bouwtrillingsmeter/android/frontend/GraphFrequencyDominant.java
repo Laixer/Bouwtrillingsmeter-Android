@@ -55,6 +55,11 @@ public class GraphFrequencyDominant extends Graph {
         this.graphView = graphView;
         addAndStyleSeries(constantLine, R.color.graph_dominant_constant_line, Utility.resources.getString(R.string.graph_legend_limitline_name));
 
+        // Add pointgraph series
+        graphView.addSeries(pointGraphSeries);
+        pointGraphSeries.setColor(Utility.resources.getColor(R.color.graph_series_color_point));
+        pointGraphSeries.setSize(7);
+        pointGraphSeries.setTitle(Utility.resources.getString(R.string.graph_legend_exceeding_name));
         // Call super
         super.onCreatedGraphView(graphView, false);
 
