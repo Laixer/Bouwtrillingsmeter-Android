@@ -1,6 +1,5 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import me.toptas.fancyshowcase.FancyShowCaseView;
@@ -39,6 +37,9 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageControl;
  * Our first visit will highlight the '+ fab' using the {@link #showcaseFirstVisit()} function.
  */
 public class MainActivity extends AppCompatActivity implements BackendListener {
+
+    private static final boolean SHOW_FIRST_VISIT_TUTORIAL = false;
+    private static final boolean SHOW_FIRST_VISIT_SHOWCASE = false;
 
     Toolbar toolbar;
     ListView listViewMeasurements;
@@ -100,8 +101,10 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
             }
         });
 
-        // TODO debug remove this
-        // showcaseFirstVisit();
+        // Show the highlight on the first visit
+        if (SHOW_FIRST_VISIT_SHOWCASE) {
+            showcaseFirstVisit();
+        }
     }
 
     /**
@@ -157,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
 
         // Launch the next activity
         Intent intent;
-        if (!PreferenceManager.readBooleanPreference(R.string.pref_has_visited_before)) {
+        if (SHOW_FIRST_VISIT_TUTORIAL && !PreferenceManager.readBooleanPreference(R.string.pref_has_visited_before)) {
             intent = new Intent(getApplicationContext(), FirstVisitTutorialActivity.class);
         } else {
             intent = new Intent(getApplicationContext(), SettingsPageActivity.class);
