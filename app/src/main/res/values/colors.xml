@@ -4,7 +4,7 @@
     <!--Main theme colors-->
     <color name="colorPrimary">#00AC5C</color>
     <color name="colorPrimaryDark">#061557</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">@color/colorPrimary</color>
 
     <color name="indicatorDotActive">#00AC5C</color>
     <color name="indicatorDotInactive">#061557</color>
@@ -24,10 +24,11 @@
     <color name="graph_series_color_y">#0000ff</color>
     <color name="graph_series_color_z">#00ff00</color>
     <color name="graph_series_color_point">#00AC5C</color>
-    <color name="graph_dominant_constant_line">#000000</color>
+    <color name="graph_dominant_constant_line">@color/colorPrimaryDark</color>
 
     <!--Backgrounds-->
     <color name="background_listview_item">#efefef</color>
     <color name="background_transparent">#00000000</color>
+    <color name="background_legend">#74CECECE</color>
 
 </resources>

@@ -157,6 +157,7 @@ public class GraphTimeBar extends Graph {
             if (graphView != null) {
                 graphView.addSeries(barSeries.get(dimension));
                 int colorResourceAsInteger = Utility.getColorResourceFromDimension(dimension);
+                barSeries.get(dimension).setTitle(Utility.resources.getStringArray(R.array.graph_legend_xyz_names)[dimension]);
                 barSeries.get(dimension).setColor(Utility.applicationContext.getResources().getColor(colorResourceAsInteger));
             }
         }

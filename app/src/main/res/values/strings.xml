@@ -211,6 +211,8 @@
         <item>Y</item>
         <item>Z</item>
     </string-array>
+    <string name="graph_legend_limitline_name">Grenswaarde     </string>
+    <string name="graph_legend_exceeding_name">Overschrijdingen</string>
 
     <!--Unsupported Hardware-->
     <string name="alert_dialog_unsupported_hardware">Uw telefoon mist essentiële hardware. De applicatie zal nu sluiten.</string>

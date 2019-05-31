@@ -71,10 +71,11 @@ public abstract class Graph {
         this.graphView = graphView;
 
         // Link series
+        String[] names = Utility.resources.getStringArray(R.array.graph_legend_xyz_names);
         if (addSeriesXYZ) {
-            addAndStyleSeries(series.get(0), R.color.graph_series_color_x);
-            addAndStyleSeries(series.get(1), R.color.graph_series_color_y);
-            addAndStyleSeries(series.get(2), R.color.graph_series_color_z);
+            addAndStyleSeries(series.get(0), R.color.graph_series_color_x, names[0]);
+            addAndStyleSeries(series.get(1), R.color.graph_series_color_y, names[1]);
+            addAndStyleSeries(series.get(2), R.color.graph_series_color_z, names[2]);
         }
 
         // Scaling
@@ -98,6 +99,10 @@ public abstract class Graph {
         LegendRenderer legendRenderer = graphView.getLegendRenderer();
         legendRenderer.setVisible(true);
         legendRenderer.setAlign(LegendRenderer.LegendAlign.TOP);
+        legendRenderer.setSpacing(12);
+
+        // TODO Change background color of legend
+        // legendRenderer.setBackgroundColor(R.color.background_legend);
 
         // Check if zoom is enabled
         if (USE_ZOOM) {
@@ -152,7 +157,7 @@ public abstract class Graph {
      *
      * @param series The series
      */
-    void addAndStyleSeries(LineGraphSeries series, int colorResourceAsInteger) {
+    void addAndStyleSeries(LineGraphSeries series, int colorResourceAsInteger, String nameForLegend) {
         if (graphView != null) {
             // Add to the graphview, or we won't see anything
             graphView.addSeries(series);
@@ -160,6 +165,7 @@ public abstract class Graph {
             // Series and line styling
             series.setThickness(4);
             series.setColor(Utility.applicationContext.getResources().getColor(colorResourceAsInteger));
+            series.setTitle(nameForLegend);
         } else {
             System.out.println("Graph.addAndStyleSeries() graphview = null");
         }

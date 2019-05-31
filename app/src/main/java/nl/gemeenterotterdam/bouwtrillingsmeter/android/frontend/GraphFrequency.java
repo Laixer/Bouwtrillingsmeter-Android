@@ -117,7 +117,7 @@ public class GraphFrequency extends Graph {
             DataPoint[] d = new DataPoint[dataPointsXYZ.get(dimension).size()];
             d = dataPointsXYZ.get(dimension).toArray(d);
             series.set(dimension, new LineGraphSeries<DataPoint>(d));
-            addAndStyleSeries(series.get(dimension), Utility.getColorResourceFromDimension(dimension));
+            addAndStyleSeries(series.get(dimension), Utility.getColorResourceFromDimension(dimension), Utility.resources.getStringArray(R.array.graph_legend_xyz_names)[dimension]);
         }
 
         // Set the range we calculated
