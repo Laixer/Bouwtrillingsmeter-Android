@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.jjoe64.graphview.GraphView;
+
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataHandler;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataInterval;
@@ -19,8 +21,15 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClose
  */
 public class GraphsActivity extends AppCompatActivity implements DataIntervalClosedListener {
 
+    /**
+     * This is recalled to make sure we don't make multiple activities for this.
+     */
     private static GraphsActivity graphsActivity = null;
-    private static Graph[] graphs = null;
+
+    /**
+     * This is static because we never want to recreate our graphs during a measurement.
+     */
+    static Graph[] graphs = null;
 
     ViewPager viewPager;
     private GraphsSlideAdapter graphSlideAdapter;
@@ -51,7 +60,24 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         // Also link the adapter
         viewPager = findViewById(R.id.viewPagerGraphs);
         graphSlideAdapter = new GraphsSlideAdapter(this, graphs);
+        viewPager.setOffscreenPageLimit(10);
         viewPager.setAdapter(graphSlideAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                onGraphSelected(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
 
         // Viewpager dots
         dotsLayout = (LinearLayout) findViewById(R.id.linearLayoutGraphsDots);
@@ -100,7 +126,8 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
     }
 
     /**
-     * Creates all the graphs.
+     * This creates all our graphs.
+     * The graphviews are linked later.
      */
     private void createAllGraphs() {
         if (graphs != null) {
@@ -177,5 +204,9 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         // Set null
         graphs = null;
         graphsActivity = null;
+    }
+
+    private void onGraphSelected(int index) {
+
     }
 }

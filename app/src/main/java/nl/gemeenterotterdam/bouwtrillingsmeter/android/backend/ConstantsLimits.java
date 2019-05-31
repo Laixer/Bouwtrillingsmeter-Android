@@ -71,7 +71,6 @@ public class ConstantsLimits {
             @Override
             public void onLocationChanged(Location location) {
                 if (location != null) {
-                    System.out.println("Got location!");
                     MeasurementControl.onNewLocationFetched(location);
                 }
             }
@@ -90,9 +89,10 @@ public class ConstantsLimits {
         };
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
-            System.out.println("Requested");
         } catch (SecurityException e) {
             System.out.println(e.toString());
+        } catch (Exception e) {
+            System.out.println("Unexpected exception: " + e.toString());
         }
     }
 

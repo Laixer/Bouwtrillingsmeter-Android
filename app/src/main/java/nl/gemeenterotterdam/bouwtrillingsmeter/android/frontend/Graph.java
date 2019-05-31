@@ -1,6 +1,5 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
-import android.annotation.SuppressLint;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -26,6 +25,11 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
  */
 public abstract class Graph {
 
+    /**
+     * If this is set to true we can drag to zoom in our graph.
+     */
+    private static final boolean USE_ZOOM = false;
+
     private String name;
     private String textAxisHorizontal;
     private String textAxisVertical;
@@ -38,7 +42,7 @@ public abstract class Graph {
     ArrayList<LineGraphSeries<DataPoint>> series;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param name               Our graph name
      * @param textAxisHorizontal Our horizontal label text
@@ -49,9 +53,9 @@ public abstract class Graph {
         this.textAxisHorizontal = textAxisHorizontal;
         this.textAxisVertical = textAxisVertical;
 
-        series = new ArrayList<LineGraphSeries<DataPoint>>();
+        series = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            series.add(new LineGraphSeries<DataPoint>());
+            series.add(new LineGraphSeries<>());
             series.get(i).setTitle(Utility.resources.getStringArray(R.array.graph_legend_xyz_names)[i]);
         }
     }
@@ -82,9 +86,7 @@ public abstract class Graph {
         viewport.setXAxisBoundsManual(true);
         viewport.setYAxisBoundsManual(true);
 
-        // Text and names
-        // graphView.setTitle(graph.getName()); This is done with a separate label because it looked ugly
-
+        // Labels
         GridLabelRenderer gridLabelRenderer = graphView.getGridLabelRenderer();
         graphView.setPadding(0, 0, 0, 0);
         gridLabelRenderer.setHorizontalAxisTitle(getTextAxisHorizontal());
@@ -97,16 +99,26 @@ public abstract class Graph {
         legendRenderer.setVisible(true);
         legendRenderer.setAlign(LegendRenderer.LegendAlign.TOP);
 
-        setupTouchListener();
+        // Check if zoom is enabled
+        if (USE_ZOOM) {
+            setupTouchListener();
+        }
     }
 
     /**
-     * Implements the dragging gestures
+     * Implements the dragging gestures.
+     * Set {@link #USE_ZOOM} to true to use this.
      */
     private void setupTouchListener() {
+        if (!USE_ZOOM) {
+            return;
+        }
+
         graphView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+
+
                 // Drag check
                 if (event.getPointerCount() > 1) {
                     scaleOnHold = true;
@@ -129,7 +141,7 @@ public abstract class Graph {
     }
 
     /**
-     * This forces our scale to un-hold
+     * This forces our scale to un-hold.
      */
     void forceScaleOffHold() {
         scaleOnHold = false;
@@ -159,7 +171,7 @@ public abstract class Graph {
      * Swaps if from > to.
      *
      * @param from Range from
-     * @param to Range to
+     * @param to   Range to
      */
     void setHorizontalRange(double from, double to) {
         if (scaleOnHold) {
@@ -185,7 +197,7 @@ public abstract class Graph {
      * This also adds margin
      *
      * @param from Range from
-     * @param to Range to
+     * @param to   Range to
      */
     void setVerticalRange(double from, double to, boolean addMarginLower, boolean addMarginHigher) {
         if (scaleOnHold) {

@@ -65,6 +65,9 @@ public class GraphFrequencyDominant extends Graph {
 
         // Set some additional grid stuff
         graphView.getGridLabelRenderer().setNumHorizontalLabels(11);
+
+        // Push to graph
+        pushToGraph();
     }
 
     /**
@@ -128,7 +131,7 @@ public class GraphFrequencyDominant extends Graph {
     /**
      * This pushes our datapoints onto the graph.
      * Override this method.
-     * TODO This does not nede to iterate since we never throw away data. Just check minmax on adding.
+     * TODO This does not need to iterate since we never throw away data. Just check minmax on adding.
      */
     @Override
     protected void pushToGraph() {
