@@ -6,7 +6,7 @@ TODO Scherm draai bulletproof maken
 TODO Heel hard zorgen dat hij niet kan crashen
      Ook als je hem afsluit!
      Misschien exception throwing anders doen (nu altijd uncaught!)
-
+TODO Graph issues oplossen
 
 
 General todos
