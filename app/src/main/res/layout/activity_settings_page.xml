@@ -36,27 +36,18 @@
 
     <Switch
         android:id="@+id/switchCategoryVibrationSensitive"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:checked="false"
-        android:theme="@style/SwitchColor"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewCategoryVibrationSensitive"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textViewCategoryVibrationSensitive" />
-
-    <TextView
-        android:id="@+id/textViewCategoryVibrationSensitive"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
         android:text="@string/category_vibration_sensitive"
-        android:textSize="18sp"
+        android:theme="@style/SwitchColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerCategoryVibration" />
 
@@ -69,11 +60,11 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:clickable="true"
+        android:focusable="true"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/fab_checkmark"
-        android:focusable="true" />
+        app:srcCompat="@drawable/fab_checkmark" />
 
     <Button
         android:id="@+id/buttonSettingsIDontKnow"
@@ -90,6 +81,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCategoryVibrationSensitive" />
+        app:layout_constraintTop_toBottomOf="@+id/switchCategoryVibrationSensitive" />
 
 </android.support.constraint.ConstraintLayout>

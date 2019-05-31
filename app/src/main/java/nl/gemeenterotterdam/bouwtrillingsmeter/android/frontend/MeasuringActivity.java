@@ -45,15 +45,15 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
      */
     private static final int MINIMUM_TIME_IN_MILLIS_BETWEEN_EXCEEDINGS = 1500;
 
-
     private TextView textViewCenter;
     private Button buttonShowGraphs;
     private Button buttonStartStop;
-    private boolean isMeasuring;
 
-    private Deque<String> strings;
-    private long millisLastShownExceeding = 0;
-    private long currentCycleId = 0;
+    // Static to be preserved after rotation
+    private static Boolean isMeasuring = null;
+    private static long millisLastShownExceeding = 0;
+    private static long currentCycleId = 0;
+    private static Deque<String> strings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +80,10 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
             }
         });
 
-        // Set bools
-        isMeasuring = false;
+        // Set bool, but only if we just start this activity
+        if (isMeasuring == null) {
+            isMeasuring = false;
+        }
 
         // Update our page state
         updatePageState();
@@ -157,10 +159,17 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
                 // Push the text onto the textview
                 // This can only be done in the UI thread
                 runOnUiThread(() -> {
+                    // Exit if a new cycle was started
                     if (currentCycleId != thisId) {
                         return;
                     }
 
+                    // This can sometimes happen during rotation
+                    if (strings == null || strings.size() == 0) {
+                        return;
+                    }
+
+                    // Get and push the string
                     String text = strings.getFirst();
                     strings.removeFirst();
                     if (!text.equals(getResources().getString(R.string.measuring_cycle_exceeding_detected_now))) {
@@ -323,6 +332,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     @Override
     public void finish() {
         Backend.removeBackendStateListener(this);
+        isMeasuring = null;
         super.finish();
     }
 }

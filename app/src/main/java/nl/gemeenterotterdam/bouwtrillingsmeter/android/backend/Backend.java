@@ -36,6 +36,7 @@ public class Backend {
      * This has a failsafe so that we can only call this once.
      * The only way this might happen is if our {@link nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.MainActivity} gets dropped from memory
      * in the case of low phone memory.
+     * The other only way this might happen is if we rotate our main menu.
      */
     public static void initialize(Context applicationContext, Resources resources) {
         if (!initialized) {
@@ -277,7 +278,6 @@ public class Backend {
      * The frontend should refer to this function in some way.
      */
     protected static void onExceedLimit() {
-        System.out.println("Exceeded limit!");
         currentMeasurementExceeded = true;
         timeLastExceeding = Calendar.getInstance().getTime();
 

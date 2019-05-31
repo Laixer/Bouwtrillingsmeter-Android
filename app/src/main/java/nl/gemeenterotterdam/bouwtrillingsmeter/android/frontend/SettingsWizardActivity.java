@@ -42,12 +42,11 @@ public class SettingsWizardActivity extends AppCompatActivity {
     private Question currentQuestion;
 
     // Settings object and variables
-    private BuildingCategory buildingCategory = BuildingCategory.NONE;
-    private VibrationCategory vibrationCategory = VibrationCategory.NONE;
-    private Boolean vibrationSensitive = null;
-    private Double yv = null;
-    private Double yt = null;
-    private Settings settings;
+    // These are static because of rotation
+    private static BuildingCategory buildingCategory = BuildingCategory.NONE;
+    private static VibrationCategory vibrationCategory = VibrationCategory.NONE;
+    private static Boolean vibrationSensitive = null;
+    private static Settings settings;
 
     /**
      * Gets called when we launch this activity.
