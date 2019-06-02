@@ -103,14 +103,7 @@ class Utility {
      * @param bitmap    The bitmap to scale
      */
     static void updateScaledPhoto(ImageView imageView, Bitmap bitmap) {
-        // If we have no bitmap we call the default bitmap function
-        if (bitmap == null) {
-            updateScaledPhotoMissing(imageView);
-            return;
-        }
-
         // Get the width/height ratio as a value between 0 and 1
-        /*
         double ratio = 0;
         if (Utility.isScreenInPortraitMode(applicationContext)) {
             ratio = resources.getInteger(R.integer.measurement_details_photo_portrait);
@@ -122,27 +115,16 @@ class Utility {
         // Set the pixel values
         int desiredWidth = getScreenWidth(applicationContext);
         int desiredHeight = (int) ((double) (Utility.getScreenHeight(applicationContext) * ratio));
+        imageView.setMaxWidth(desiredWidth);
         imageView.setMaxHeight(desiredHeight);
 
-        // Scale image
-        double ratioBitmap = (double) bitmap.getHeight() / (double) bitmap.getWidth();
-        int bitmapHeight = (int) (desiredWidth * ratioBitmap);
-        Bitmap newBitmap = Bitmap.createScaledBitmap(bitmap, desiredWidth, bitmapHeight, false);
-        imageView.setImageBitmap(newBitmap);
-        */
-
-        imageView.setScaleType(ScaleType.);
-        imageView.setImageBitmap(bitmap);
-    }
-
-    /**
-     * Sets the image not present placeholder as a bitmap
-     *
-     * @param imageView The image view to update
-     */
-    private static void updateScaledPhotoMissing(ImageView imageView) {
-        Drawable drawable = resources.getDrawable(R.drawable.ic_image_not_present);
-        imageView.setImageDrawable(drawable);
+        // Write image or default if bitmap is null
+        if (bitmap == null) {
+            Drawable drawable = resources.getDrawable(R.drawable.ic_image_not_present);
+            imageView.setImageDrawable(drawable);
+        } else {
+            imageView.setImageBitmap(bitmap);
+        }
     }
 
     /**
