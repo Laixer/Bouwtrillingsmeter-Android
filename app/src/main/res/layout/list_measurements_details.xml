@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="144dp"
         android:contentDescription="@string/measurement_name_default"
-        android:scaleType="center" />
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:id="@+id/frameCenter"
