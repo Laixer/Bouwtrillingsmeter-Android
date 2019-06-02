@@ -10,25 +10,20 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
  * @since 1.0
  * <p>
  * This class handles our preferences, which are saved on the phone.
- * Currently this isn't properly implemented.
- * <p>
- * TODO Restructure this one
  */
-public class PreferenceManager {
-
-    private static Context context;
-    private static SharedPreferences sharedPreferences;
+class PreferenceManager {
 
     private static final String defaultTrue = "TRUE";
     private static final String defaultFalse = "FALSE";
     private static final String defaultNull = "NULL";
+    
+    private static SharedPreferences sharedPreferences;
 
     /**
      * Loads everything from the phone
      */
-    public static void fetchSharedPreferences(Context _context) {
-        context = _context;
-        sharedPreferences = context.getSharedPreferences(_context.getString(R.string.shared_preferences), Context.MODE_PRIVATE);
+    static void fetchSharedPreferences() {
+        sharedPreferences = Utility.applicationContext.getSharedPreferences(Utility.resources.getString(R.string.shared_preferences), Context.MODE_PRIVATE);
     }
 
     /**
@@ -37,14 +32,36 @@ public class PreferenceManager {
      * @param resourceID The resource ID
      * @param value      True or false
      */
-    public static void writeBooleanPreference(int resourceID, boolean value) {
-        if (sharedPreferences == null || context == null) {
+    static void writeBooleanPreference(int resourceID, boolean value) {
+        String stringValue = value ? defaultTrue : defaultFalse;
+        writeStringPreference(resourceID, stringValue);
+    }
+
+    /**
+     * Checks a boolean preference
+     *
+     * @param resourceID The resource ID
+     * @return The result as a boolean
+     */
+    static boolean readBooleanPreference(int resourceID) {
+        String preference = readStringPreference(resourceID);
+        return !(preference == null || preference.equals(defaultNull) || preference.equals(defaultFalse));
+    }
+
+    /**
+     * Writes a string to the user preferences.
+     *
+     * @param resourceID The preference resource ID
+     * @param value      The string to write
+     */
+    static void writeStringPreference(int resourceID, String value) {
+        if (sharedPreferences == null || Utility.applicationContext == null) {
             System.out.println("Our preference manager was never initialized!");
             return;
         }
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(context.getString(resourceID), value ? defaultTrue : defaultFalse);
+        editor.putString(Utility.applicationContext.getString(resourceID), value);
         editor.apply();
     }
 
@@ -54,25 +71,20 @@ public class PreferenceManager {
      * @param resourceID The resource ID
      * @return The result as a boolean
      */
-    public static boolean readBooleanPreference(int resourceID) {
-        if (sharedPreferences == null || context == null) {
+    static String readStringPreference(int resourceID) {
+        if (sharedPreferences == null || Utility.applicationContext == null) {
             System.out.println("Our preference manager was never initialized.");
-            return false;
+            return null;
         }
 
-        String preference = sharedPreferences.getString(context.getString(resourceID), defaultNull);
-        if (preference == null || preference.equals(defaultNull) || preference.equals(defaultFalse)) {
-            return false;
-        } else {
-            return true;
-        }
+        return sharedPreferences.getString(Utility.applicationContext.getString(resourceID), defaultNull);
     }
 
     /**
      * This clears all the preferences
      */
-    public static void clearAllPreferences() {
-        if (sharedPreferences == null || context == null) {
+    static void clearAllPreferences() {
+        if (sharedPreferences == null || Utility.applicationContext == null) {
             System.out.println("Our preference manager was never initialized.");
             return;
         }
