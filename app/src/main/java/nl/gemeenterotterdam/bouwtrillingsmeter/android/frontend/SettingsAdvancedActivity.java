@@ -10,6 +10,7 @@ import android.widget.Switch;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.PreferenceManager;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageControl;
 
 public class SettingsAdvancedActivity extends AppCompatActivity {
@@ -48,7 +49,13 @@ public class SettingsAdvancedActivity extends AppCompatActivity {
             }
         });
 
-        // Call stuff
+        loadCurrentStoredSettings();
+    }
+
+    /**
+     * Reads all currently stored preferences from our {@link PreferenceManager}.
+     */
+    private void loadCurrentStoredSettings() {
         switchShowGraphs.setChecked(PreferenceManager.readBooleanPreference(R.string.pref_show_graphs));
     }
 
@@ -86,6 +93,7 @@ public class SettingsAdvancedActivity extends AppCompatActivity {
 
         PreferenceManager.clearAllPreferences();
         StorageControl.removeAllInternalStorage();
+        loadCurrentStoredSettings();
     }
 
     @Override

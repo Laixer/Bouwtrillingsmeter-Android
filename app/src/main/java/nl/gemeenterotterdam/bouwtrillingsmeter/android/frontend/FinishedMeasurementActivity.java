@@ -13,6 +13,7 @@ import android.widget.TextView;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.PreferenceManager;
 
 /**
  * This activity launches when we successfully complete our measurement.

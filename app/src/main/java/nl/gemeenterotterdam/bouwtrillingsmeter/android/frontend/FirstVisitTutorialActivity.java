@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.PreferenceManager;
 
 public class FirstVisitTutorialActivity extends AppCompatActivity {
 

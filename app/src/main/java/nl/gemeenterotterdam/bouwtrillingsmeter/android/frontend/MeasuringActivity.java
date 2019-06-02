@@ -1,19 +1,14 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -21,6 +16,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendState;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendListener;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.PreferenceManager;
 
 /**
  * @author Thomas Beckers
@@ -265,25 +261,26 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
      */
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-
-        View dialogView = inflater.inflate(R.layout.alert_dialog_yes_no, null);
-        dialogBuilder.setView(dialogView);
-
-        dialogBuilder.setTitle(getResources().getString(R.string.measuring_alert_dialog));
-        final Dialog dialog = dialogBuilder.create();
-        dialog.show();
+        // Create a dialog
+        int resource = isMeasuring ? R.string.measuring_alert_dialog_stop : R.string.measuring_alert_dialog_back;
+        Dialog dialog = Utility.showAndGetPopup(this, R.layout.alert_dialog_yes_no, resource);
+        dialog.setCanceledOnTouchOutside(true);
 
         // Buttons
-        dialogView.findViewById(R.id.buttonAlertDialogYes).setOnClickListener(new View.OnClickListener() {
+        dialog.findViewById(R.id.buttonAlertDialogYes).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCancelMeasurement();
+                if (!isMeasuring) {
+                    onBackToMainActivity();
+                } else {
+                    // This will stop the measurement and
+                    // get us to the end screen.
+                    onClickStartStop();
+                }
                 dialog.dismiss();
             }
         });
-        dialogView.findViewById(R.id.buttonAlertDialogNo).setOnClickListener(new View.OnClickListener() {
+        dialog.findViewById(R.id.buttonAlertDialogNo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -295,7 +292,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
      * This gets called when we (want to) cancel our current measurement.
      * This makes us go back to the {@link MainActivity} page.
      */
-    public void onCancelMeasurement() {
+    public void onBackToMainActivity() {
         Backend.onPressedBackButton();
 
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);

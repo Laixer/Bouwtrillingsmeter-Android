@@ -205,6 +205,7 @@ class Utility {
 
         dialogBuilder.setMessage(string);
         final Dialog dialog = dialogBuilder.create();
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
         return dialog;

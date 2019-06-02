@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.PreferenceManager;
 
 /**
  * Displays our settings menu.
@@ -62,11 +63,19 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        // Load current settings
+        loadCurrentStoredSettings();
+    }
+
+    /**
+     * Reads all currently stored preferences from our {@link PreferenceManager}.
+     */
+    private void loadCurrentStoredSettings() {
         importingPreferences = true;
+
         switchStreamAllData.setChecked(PreferenceManager.readBooleanPreference(R.string.pref_allow_stream_all_data));
         switchRoaming.setChecked(PreferenceManager.readBooleanPreference(R.string.pref_allow_roaming));
         switchPickup.setChecked(PreferenceManager.readBooleanPreference(R.string.pref_use_pickup));
+
         importingPreferences = false;
     }
 
@@ -154,6 +163,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         buttonShowAdvancedSettings.setEnabled(true);
+        loadCurrentStoredSettings();
         super.onResume();
     }
 

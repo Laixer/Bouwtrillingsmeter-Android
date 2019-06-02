@@ -6,6 +6,9 @@ import android.content.res.Resources;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
+
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
 /**
  * @author Thomas Beckers
@@ -16,7 +19,6 @@ import java.util.Date;
  */
 public class Backend {
 
-    // TODO Implement
     private static String userUID = "user_id";
 
     private static BackendState backendState;
@@ -37,11 +39,16 @@ public class Backend {
      * The only way this might happen is if our {@link nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.MainActivity} gets dropped from memory
      * in the case of low phone memory.
      * The other only way this might happen is if we rotate our main menu.
+     *
+     * @param applicationContext Application context pointer
+     * @param resources          Application resources pointer
      */
     public static void initialize(Context applicationContext, Resources resources) {
         if (!initialized) {
             Backend.applicationContext = applicationContext;
             Backend.resources = resources;
+
+            PreferenceManager.fetchSharedPreferences();
             generateOrFetchUserUID();
 
             constantsLimits = new ConstantsLimits();
@@ -326,9 +333,14 @@ public class Backend {
     /**
      * Used to load user UID.
      * If none is present, we create one.
-     * TODO Implement
      */
     private static void generateOrFetchUserUID() {
-        userUID = "DEFAULT_USER_UID";
+        String storedUserUID = PreferenceManager.readStringPreference(R.string.pref_user_uid);
+        if (storedUserUID == null) {
+            userUID = UUID.randomUUID().toString();
+            PreferenceManager.writeStringPreference(R.string.pref_user_uid, userUID);
+        } else {
+            userUID = storedUserUID;
+        }
     }
 }

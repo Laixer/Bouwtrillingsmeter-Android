@@ -21,7 +21,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendListener;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendState;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageControl;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.PreferenceManager;
 
 /**
  * @author Thomas Beckers
@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
         // Initialize the utility frontend
         Utility.applicationContext = getApplicationContext();
         Utility.resources = getResources();
-        PreferenceManager.fetchSharedPreferences(this);
 
         // Toolbar
         toolbar = findViewById(R.id.toolbar);

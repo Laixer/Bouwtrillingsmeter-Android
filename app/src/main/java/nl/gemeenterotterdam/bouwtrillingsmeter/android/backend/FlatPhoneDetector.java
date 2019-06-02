@@ -9,7 +9,6 @@ import android.hardware.SensorManager;
 import java.util.Calendar;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.PreferenceManager;
 
 /**
  * This class detects if we have our phone flat on the table.
