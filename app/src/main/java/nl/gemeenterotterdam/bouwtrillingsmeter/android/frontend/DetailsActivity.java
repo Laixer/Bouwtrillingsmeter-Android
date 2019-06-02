@@ -64,6 +64,8 @@ public class DetailsActivity extends AppCompatActivity {
                 startActivityForResult(intentTakePicture, 0);
             }
         });
+        updateImageVisibility(measurement.getBitmap() != null);
+        // TODO REmove
         updateImageVisibility(true);
         Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
     }

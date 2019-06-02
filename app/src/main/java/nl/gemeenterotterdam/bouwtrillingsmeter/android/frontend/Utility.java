@@ -109,7 +109,8 @@ class Utility {
             return;
         }
 
-        // Get the ratio as a value between 0 and 1
+        // Get the width/height ratio as a value between 0 and 1
+        /*
         double ratio = 0;
         if (Utility.isScreenInPortraitMode(applicationContext)) {
             ratio = resources.getInteger(R.integer.measurement_details_photo_portrait);
@@ -128,6 +129,10 @@ class Utility {
         int bitmapHeight = (int) (desiredWidth * ratioBitmap);
         Bitmap newBitmap = Bitmap.createScaledBitmap(bitmap, desiredWidth, bitmapHeight, false);
         imageView.setImageBitmap(newBitmap);
+        */
+
+        imageView.setScaleType(ScaleType.);
+        imageView.setImageBitmap(bitmap);
     }
 
     /**
