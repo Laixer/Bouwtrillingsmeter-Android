@@ -64,20 +64,24 @@ public class DetailsActivity extends AppCompatActivity {
                 startActivityForResult(intentTakePicture, 0);
             }
         });
+        updateImageVisibility(true);
         Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
     }
 
     /**
      * This gets called when we succesfully take a picture
-     * TODO Save a pointer to the image in some way!
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-        measurement.setBitmap(bitmap);
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            measurement.setBitmap(bitmap);
 
-        Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
+            Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
+        } catch (NullPointerException e) {
+            // If we don't get an image
+        }
     }
 
     /**
@@ -95,6 +99,15 @@ public class DetailsActivity extends AppCompatActivity {
         } else {
             textViewLocation.setText(address.getAddressLine(0));
         }
+    }
+
+    /**
+     * Used to show or hide our image.
+     *
+     * @param visible True if visible
+     */
+    private void updateImageVisibility(boolean visible) {
+        imageViewMeasurementPhoto.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
 }
