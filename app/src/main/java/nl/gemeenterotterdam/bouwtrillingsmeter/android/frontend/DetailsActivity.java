@@ -4,13 +4,22 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Address;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.BuildConfig;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 
@@ -26,6 +35,9 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
  */
 public class DetailsActivity extends AppCompatActivity {
 
+    private static final String AUTHORITY_URI = "nl.gemeenterotterdam.bouwtrillingsmeter.android." + BuildConfig.APPLICATION_ID + ".provider";
+    private static final int REQUEST_CODE_IMAGE_CAPTURE = 1;
+
     TextView textViewName;
     TextView textViewDateTime;
     TextView textViewLocation;
@@ -33,6 +45,8 @@ public class DetailsActivity extends AppCompatActivity {
     ImageView imageViewMeasurementPhoto;
 
     public static Measurement measurement;
+
+    private Uri imageUri;
 
     /**
      * Gets called when this activity is launched
@@ -65,40 +79,77 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
         updateImageVisibility(measurement.getBitmap() != null);
-        // TODO REmove
+        // TODO Remove
         updateImageVisibility(true);
         Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
     }
 
     /**
+     * Enlarges the picture for us.
+     * This gets triggered by clicking the image view.
+     */
+    private void onClickEnlargePicture() {
+        // TODO Implement
+    }
+
+    /**
      * Takes a picture if we have a camera.
+     * Shows a popup if we can't take a picture.
      */
     private void onClickTakePicture() {
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-            return;
-        }
-
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, 0);
+
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) || intent.resolveActivity(getPackageManager()) == null) {
+            Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.alert_dialog_no_camera);
+        } else try {
+
+            File imageFile = createImageFile();
+            imageUri = FileProvider.getUriForFile(this, AUTHORITY_URI, imageFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+
+            startActivityForResult(intent, REQUEST_CODE_IMAGE_CAPTURE);
+
+        } catch (IOException e) {
+            Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.alert_dialog_error_taking_picture);
         }
     }
 
     /**
-     * This gets called when we succesfully take a picture
+     * This gets called when we successfully take a picture.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
-            super.onActivityResult(requestCode, resultCode, data);
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            measurement.setBitmap(bitmap);
+        super.onActivityResult(requestCode, resultCode, data);
 
-            Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
-        } catch (NullPointerException e) {
-            // If we don't get an image
+        if (data.getExtras() == null) {
+            return;
         }
+
+        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+        measurement.setBitmap(bitmap, imageUri);
+
+        Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
     }
+
+    /**
+     * Creates an image file.
+     *
+     * @return The image file
+     * @throws IOException If we fail
+     */
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "IMAGE_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File imageFile = File.createTempFile(imageFileName, ".jpg", storageDir);
+
+        if (imageFile == null) {
+            throw new IOException("Image file is null");
+        }
+
+        return imageFile;
+    }
+
 
     /**
      * This will update all textviews containing the details about the measurement we are looking at

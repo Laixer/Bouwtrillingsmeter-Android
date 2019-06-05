@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import java.util.Calendar;
@@ -194,6 +195,18 @@ class Utility {
         final Dialog dialog = dialogBuilder.create();
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
+
+        ((Button) activity.findViewById(R.id.buttonAlertDialogOk)).setOnClickListener((view) -> {
+            dialog.dismiss();
+        });
+
+        ((Button) activity.findViewById(R.id.buttonAlertDialogYes)).setOnClickListener((view) -> {
+            dialog.dismiss();
+        });
+
+        ((Button) activity.findViewById(R.id.buttonAlertDialogNo)).setOnClickListener((view) -> {
+            dialog.dismiss();
+        });
 
         return dialog;
     }

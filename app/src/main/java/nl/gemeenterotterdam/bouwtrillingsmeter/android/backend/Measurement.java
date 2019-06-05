@@ -3,6 +3,7 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Location;
+import android.net.Uri;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class Measurement implements Serializable {
     private Date dateStartObject;
     private boolean open;
     private boolean closed;
+    private Uri imageUri;
 
     /**
      * Constructor for this class
@@ -181,8 +183,9 @@ public class Measurement implements Serializable {
         onMetadataChanged();
     }
 
-    public void setBitmap(Bitmap bitmap) {
+    public void setBitmap(Bitmap bitmap, Uri uri) {
         this.bitmap = bitmap;
+        this.imageUri = uri;
         onMetadataChanged();
     }
 

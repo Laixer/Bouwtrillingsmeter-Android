@@ -221,6 +221,10 @@
     <string name="alert_dialog_unsupported_hardware_title">Ontoereikende hardware</string>
     <string name="alert_dialog_unsupported_hardware_message">Uw telefoon mist essentiële hardware. De applicatie zal nu sluiten.</string>
 
+    <!--Details activity-->
+    <string name="alert_dialog_no_camera">Geen camera gevonden - Het toevoegen van fotos is uitgeschakeld</string>
+    <string name="alert_dialog_error_taking_picture">Er is iets fout gegaan tijdens het nemen van de foto</string>
+
 </resources>
 
 
