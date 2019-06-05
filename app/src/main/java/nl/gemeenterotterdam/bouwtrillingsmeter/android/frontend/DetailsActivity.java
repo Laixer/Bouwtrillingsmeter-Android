@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -43,11 +44,12 @@ public class DetailsActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_IMAGE_CAPTURE = 1;
 
-    TextView textViewName;
-    TextView textViewDateTime;
-    TextView textViewLocation;
-    TextView textViewDescription;
-    ImageView imageViewMeasurementPhoto;
+    private TextView textViewName;
+    private TextView textViewDateTime;
+    private TextView textViewLocation;
+    private TextView textViewDescription;
+    private ImageView imageViewMeasurementPhoto;
+    private FloatingActionButton fabTakePicture;
 
     public static Measurement measurement;
 
@@ -73,15 +75,13 @@ public class DetailsActivity extends AppCompatActivity {
         // Update all textviews at once
         onUpdateMeasurementTexts();
 
-        // Imageview holding our photo
-        // When we click the image and no image was present, we attempt to take a picture with the phones camera
+        // Click FAB to take new picture
+        fabTakePicture = (FloatingActionButton) findViewById(R.id.fabDetailsTakePicture);
+        fabTakePicture.setOnClickListener((view) -> onClickTakePicture());
+
+        // Click imageview to enlarge photo
         imageViewMeasurementPhoto = (ImageView) findViewById(R.id.imageViewDetailsMeasurementPhoto);
-        imageViewMeasurementPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickTakePicture();
-            }
-        });
+        imageViewMeasurementPhoto.setOnClickListener((view) -> onClickEnlargePicture());
         updateImageVisibility(measurement.getBitmap() != null);
         // TODO Remove
         updateImageVisibility(true);

@@ -252,10 +252,6 @@ public class Measurement implements Serializable {
      * @return A bitmap in Bitmap format, null if there is no bitmap
      */
     public Bitmap getBitmap() {
-        if (bitmap == null) {
-            return null;
-        }
-
         if (bitmapFileName != null) try {
             bitmap = StorageControl.readImage(bitmapFileName);
         } catch (StorageReadException e) {
