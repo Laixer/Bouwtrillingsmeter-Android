@@ -45,7 +45,6 @@ public class Measurement implements Serializable {
     private Date dateStartObject;
     private boolean open;
     private boolean closed;
-    private Uri imageUri;
 
     /**
      * Constructor for this class
@@ -183,9 +182,8 @@ public class Measurement implements Serializable {
         onMetadataChanged();
     }
 
-    public void setBitmap(Bitmap bitmap, Uri uri) {
+    public void setBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
-        this.imageUri = uri;
         onMetadataChanged();
     }
 
