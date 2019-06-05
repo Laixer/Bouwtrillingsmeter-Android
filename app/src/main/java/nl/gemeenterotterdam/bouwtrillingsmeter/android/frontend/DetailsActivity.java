@@ -1,9 +1,11 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Address;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,7 +37,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
  */
 public class DetailsActivity extends AppCompatActivity {
 
-    private static final String AUTHORITY_URI = "nl.gemeenterotterdam.bouwtrillingsmeter.android." + BuildConfig.APPLICATION_ID + ".provider";
+    private static final String AUTHORITY_URI = "nl.gemeenterotterdam.bouwtrillingsmeter.android." + ".fileprovider";
     private static final int REQUEST_CODE_IMAGE_CAPTURE = 1;
 
     TextView textViewName;
@@ -99,17 +101,14 @@ public class DetailsActivity extends AppCompatActivity {
     private void onClickTakePicture() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+        PackageManager packageManager = getPackageManager();
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) || intent.resolveActivity(getPackageManager()) == null) {
             Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.alert_dialog_no_camera);
         } else try {
 
-            File imageFile = createImageFile();
-            imageUri = FileProvider.getUriForFile(this, AUTHORITY_URI, imageFile);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-
             startActivityForResult(intent, REQUEST_CODE_IMAGE_CAPTURE);
 
-        } catch (IOException e) {
+        } catch (NullPointerException e) {
             Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.alert_dialog_error_taking_picture);
         }
     }
@@ -126,7 +125,13 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+
+        File imagePath = new File(getFilesDir(), "images");
+        File imageFile = new File(imagePath, "default_image.jpg");
+        imageUri = FileProvider.getUriForFile(this, AUTHORITY_URI, imageFile);
+
         measurement.setBitmap(bitmap, imageUri);
+        imageUri = null;
 
         Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
     }

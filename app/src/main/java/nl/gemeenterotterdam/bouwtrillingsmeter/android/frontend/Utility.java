@@ -196,17 +196,20 @@ class Utility {
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
-        ((Button) activity.findViewById(R.id.buttonAlertDialogOk)).setOnClickListener((view) -> {
-            dialog.dismiss();
-        });
-
-        ((Button) activity.findViewById(R.id.buttonAlertDialogYes)).setOnClickListener((view) -> {
-            dialog.dismiss();
-        });
-
-        ((Button) activity.findViewById(R.id.buttonAlertDialogNo)).setOnClickListener((view) -> {
-            dialog.dismiss();
-        });
+        // Buttons
+        // TODO Kan eleganter
+        if (dialogResource == R.layout.alert_dialog_ok) {
+            ((Button) activity.findViewById(R.id.buttonAlertDialogOk)).setOnClickListener((view) -> {
+                dialog.dismiss();
+            });
+        } else if (dialogResource == R.layout.alert_dialog_yes_no) {
+            ((Button) activity.findViewById(R.id.buttonAlertDialogYes)).setOnClickListener((view) -> {
+                dialog.dismiss();
+            });
+            ((Button) activity.findViewById(R.id.buttonAlertDialogNo)).setOnClickListener((view) -> {
+                dialog.dismiss();
+            });
+        }
 
         return dialog;
     }
