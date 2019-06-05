@@ -104,12 +104,8 @@ public class DetailsActivity extends AppCompatActivity {
         PackageManager packageManager = getPackageManager();
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) || intent.resolveActivity(getPackageManager()) == null) {
             Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.alert_dialog_no_camera);
-        } else try {
-
+        } else {
             startActivityForResult(intent, REQUEST_CODE_IMAGE_CAPTURE);
-
-        } catch (NullPointerException e) {
-            Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.alert_dialog_error_taking_picture);
         }
     }
 
@@ -120,20 +116,24 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (data.getExtras() == null) {
+        if (data != null && data.getExtras() != null) try {
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+
+            File imagePath = new File(getFilesDir(), "images");
+            File imageFile = new File(imagePath, "default_image.jpg");
+            imageUri = FileProvider.getUriForFile(this, AUTHORITY_URI, imageFile);
+
+            measurement.setBitmap(bitmap, imageUri);
+            imageUri = null;
+
+            Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
             return;
+
+        } catch (Exception e) {
+            /* Do nothing */
         }
 
-        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-
-        File imagePath = new File(getFilesDir(), "images");
-        File imageFile = new File(imagePath, "default_image.jpg");
-        imageUri = FileProvider.getUriForFile(this, AUTHORITY_URI, imageFile);
-
-        measurement.setBitmap(bitmap, imageUri);
-        imageUri = null;
-
-        Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
+        Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.alert_dialog_error_taking_picture);
     }
 
     /**
