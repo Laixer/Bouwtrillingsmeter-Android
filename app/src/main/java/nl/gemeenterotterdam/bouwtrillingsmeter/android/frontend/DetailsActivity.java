@@ -117,7 +117,7 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RESULT_CANCELED) {
+        if (resultCode == RESULT_CANCELED) {
             return;
         }
 
