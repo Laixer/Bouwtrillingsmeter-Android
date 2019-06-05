@@ -43,7 +43,8 @@
         <activity android:name=".frontend.SettingsActivity" />
 
         <!--File provider to read and write images-->
-        <provider
+        <!--This was scrapped-->
+        <!--<provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="$(applicationId).fileprovider"
             android:exported="false"
@@ -51,7 +52,7 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
-        </provider>
+        </provider>-->
 
     </application>
 

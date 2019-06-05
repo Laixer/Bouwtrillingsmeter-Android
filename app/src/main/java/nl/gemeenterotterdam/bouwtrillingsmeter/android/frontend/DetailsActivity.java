@@ -133,13 +133,14 @@ public class DetailsActivity extends AppCompatActivity {
             // Write to storage
             ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
             File directory = contextWrapper.getDir("imageDirectory", Context.MODE_PRIVATE);
-            File image  = new File(directory, "image.jpg");
+            String imageName = "image.jpg";
+            File image  = new File(directory, imageName);
             FileOutputStream fileOutputStream = new FileOutputStream(image);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
             fileOutputStream.close();
 
             // Write to measurement
-            measurement.setBitmap(bitmap, image.getAbsolutePath());
+            measurement.setBitmap(bitmap, imageName);
             Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
             return;
 

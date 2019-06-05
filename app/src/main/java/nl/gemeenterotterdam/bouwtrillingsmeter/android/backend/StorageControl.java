@@ -1,11 +1,15 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InvalidClassException;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -20,6 +24,12 @@ import java.util.ArrayList;
  * TODO Now all files are in the sample place, might not want to do that
  */
 public class StorageControl {
+
+    /**
+     * This is the location of our images
+     * TODO Rethink this structure
+     */
+    private static final String DIRECTORY_IMAGES = "images";
 
     /**
      * Initializes our folder structure
@@ -165,6 +175,79 @@ public class StorageControl {
         for (File file : files) {
             Backend.applicationContext.deleteFile(file.getName());
         }
+    }
+
+    /**
+     * Writes an image to our internal storage.
+     *
+     * @param fileName The filename,
+     *                 no directory,
+     *                 include extension
+     * @param bitmap   The bitmap
+     * @throws StorageWriteException If we fail
+     */
+    public static void writeImage(String fileName, Bitmap bitmap) throws StorageWriteException {
+        FileOutputStream fileOutputStream = null;
+
+        try {
+
+            File image = new File(getImageDirectory(), fileName);
+            fileOutputStream = new FileOutputStream(image);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+
+        } catch (IOException e) {
+            /* Do nothing */
+        } finally {
+            if (fileOutputStream != null) try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                /* Do nothing */
+            }
+        }
+
+        throw new StorageWriteException("Could not write image with filename = " + fileName);
+    }
+
+    /**
+     * Reads an image from memory.
+     *
+     * @param fileName The filename without any dir,
+     *                 including extension
+     * @return The bitmap, null if we fail
+     * @throws StorageReadException If we fail
+     */
+    public static Bitmap readImage(String fileName) throws StorageReadException {
+        FileInputStream fileInputStream = null;
+
+        try {
+            File file = new File(getImageDirectory(), fileName);
+            fileInputStream = new FileInputStream(file);
+            Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
+            if (bitmap != null) {
+                return bitmap;
+            }
+
+        } catch (IOException e) {
+            /* Do nothing */
+        } finally {
+            if (fileInputStream != null) try {
+                fileInputStream.close();
+            } catch (IOException e) {
+                /* Do nothing */
+            }
+        }
+
+        throw new StorageReadException("Could not read image with filename = " + fileName);
+    }
+
+    /**
+     * Gets our image directory, located in internal storage.
+     *
+     * @return The directory as a file
+     */
+    private static File getImageDirectory() {
+        ContextWrapper contextWrapper = new ContextWrapper(Backend.applicationContext);
+        return contextWrapper.getDir(DIRECTORY_IMAGES, Context.MODE_PRIVATE);
     }
 
 }

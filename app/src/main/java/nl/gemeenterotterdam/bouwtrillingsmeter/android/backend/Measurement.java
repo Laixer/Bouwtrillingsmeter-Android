@@ -3,7 +3,6 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Location;
-import android.net.Uri;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ public class Measurement implements Serializable {
     private Date dateStartObject;
     private boolean open;
     private boolean closed;
-    private String bitmapAbsolutePath;
+    private String bitmapFileName;
 
     /**
      * Constructor for this class
@@ -183,9 +182,16 @@ public class Measurement implements Serializable {
         onMetadataChanged();
     }
 
-    public void setBitmap(Bitmap bitmap, String absolutePath) {
+    /**
+     * Saves a bitmap to this measurement.
+     *
+     * @param bitmap         The bitmap
+     * @param bitmapFileName The filename of the image,
+     *                       don't include the root dir
+     */
+    public void setBitmap(Bitmap bitmap, String bitmapFileName) {
         this.bitmap = bitmap;
-        this.bitmapAbsolutePath = absolutePath;
+        this.bitmapFileName = bitmapFileName;
         onMetadataChanged();
     }
 
@@ -238,14 +244,22 @@ public class Measurement implements Serializable {
     }
 
     /**
-     * Returns the bitmap
-     * The "no picture present" handling is NOT done by this class
+     * Returns our bitmap. If none is present this
+     * will call our {@link StorageControl} to attempt
+     * to load the image. If that fails, the {@link #bitmapFileName}
+     * gets reset to null.
      *
      * @return A bitmap in Bitmap format, null if there is no bitmap
      */
     public Bitmap getBitmap() {
         if (bitmap == null) {
             return null;
+        }
+
+        if (bitmapFileName != null) try {
+            bitmap = StorageControl.readImage(bitmapFileName);
+        } catch (StorageReadException e) {
+            bitmap = null;
         }
 
         return bitmap;
