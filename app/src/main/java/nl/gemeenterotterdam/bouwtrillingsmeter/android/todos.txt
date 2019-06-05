@@ -1,11 +1,6 @@
-Alpha todos
-TODO Heel hard zorgen dat hij niet kan crashen
-     Ook als je hem afsluit!
-     Misschien exception throwing anders doen (nu altijd uncaught!)
-
 General todos
 TODO Als je je measurement nooit start moet hij worden weggegooid
-TODO Oude widget instellignen opslaan?
+TODO Oude widget instellingen opslaan?
 TODO Een miljoen unittests schrijven
 
 Details
