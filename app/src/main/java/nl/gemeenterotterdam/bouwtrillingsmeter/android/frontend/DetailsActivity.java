@@ -1,6 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.os.Bundle;
@@ -60,14 +61,27 @@ public class DetailsActivity extends AppCompatActivity {
         imageViewMeasurementPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentTakePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intentTakePicture, 0);
+                onClickTakePicture();
             }
         });
         updateImageVisibility(measurement.getBitmap() != null);
         // TODO REmove
         updateImageVisibility(true);
         Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
+    }
+
+    /**
+     * Takes a picture if we have a camera.
+     */
+    private void onClickTakePicture() {
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+            return;
+        }
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, 0);
+        }
     }
 
     /**
