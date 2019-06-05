@@ -1,6 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,7 +39,6 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
  */
 public class DetailsActivity extends AppCompatActivity {
 
-    private static String AUTHORITY_URI;
     private static final int REQUEST_CODE_IMAGE_CAPTURE = 1;
 
     TextView textViewName;
@@ -48,8 +49,6 @@ public class DetailsActivity extends AppCompatActivity {
 
     public static Measurement measurement;
 
-    private Uri imageUri;
-
     /**
      * Gets called when this activity is launched
      * TODO Reconsider measurement calling structure
@@ -58,7 +57,6 @@ public class DetailsActivity extends AppCompatActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-         AUTHORITY_URI = getApplicationContext().getPackageName() + ".fileprovider";
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
@@ -105,12 +103,8 @@ public class DetailsActivity extends AppCompatActivity {
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) || intent.resolveActivity(getPackageManager()) == null) {
             Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.alert_dialog_no_camera);
-        } else try {
-
-
-
-        } catch (IOException e) {
-            System.out.println(e.toString());
+        } else {
+            startActivityForResult(intent, REQUEST_CODE_IMAGE_CAPTURE);
         }
     }
 
@@ -129,36 +123,31 @@ public class DetailsActivity extends AppCompatActivity {
                 && resultCode == RESULT_OK
                 && data != null
                 && data.getExtras() != null) try {
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            measurement.setBitmap(bitmap, imageUri);
 
+            // Get image
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            if (bitmap == null) {
+                return;
+            }
+
+            // Write to storage
+            ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
+            File directory = contextWrapper.getDir("imageDirectory", Context.MODE_PRIVATE);
+            File image  = new File(directory, "image.jpg");
+            FileOutputStream fileOutputStream = new FileOutputStream(image);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+            fileOutputStream.close();
+
+            // Write to measurement
+            measurement.setBitmap(bitmap, image.getAbsolutePath());
             Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
             return;
 
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | IOException e) {
             System.out.println(e);
         }
 
         Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.alert_dialog_error_taking_picture);
-    }
-
-    /**
-     * Creates an image file.
-     *
-     * @return The image file
-     * @throws IOException If we fail
-     */
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File imageFile = File.createTempFile(imageFileName, ".jpg", storageDir);
-
-        if (imageFile == null) {
-            throw new IOException("Image file is null");
-        }
-
-        return imageFile;
     }
 
 

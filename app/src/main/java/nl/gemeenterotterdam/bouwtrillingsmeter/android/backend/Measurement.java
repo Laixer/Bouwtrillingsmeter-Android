@@ -45,6 +45,7 @@ public class Measurement implements Serializable {
     private Date dateStartObject;
     private boolean open;
     private boolean closed;
+    private String bitmapAbsolutePath;
 
     /**
      * Constructor for this class
@@ -182,8 +183,9 @@ public class Measurement implements Serializable {
         onMetadataChanged();
     }
 
-    public void setBitmap(Bitmap bitmap) {
+    public void setBitmap(Bitmap bitmap, String absolutePath) {
         this.bitmap = bitmap;
+        this.bitmapAbsolutePath = absolutePath;
         onMetadataChanged();
     }
 
