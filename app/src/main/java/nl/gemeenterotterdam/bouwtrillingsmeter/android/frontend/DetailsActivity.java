@@ -26,6 +26,8 @@ import java.util.Date;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.BuildConfig;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageControl;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageWriteException;
 
 /**
  * @author Thomas Beckers
@@ -131,21 +133,16 @@ public class DetailsActivity extends AppCompatActivity {
             }
 
             // Write to storage
-            ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
-            File directory = contextWrapper.getDir("imageDirectory", Context.MODE_PRIVATE);
-            String imageName = "image.jpg";
-            File image  = new File(directory, imageName);
-            FileOutputStream fileOutputStream = new FileOutputStream(image);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-            fileOutputStream.close();
+            String imageName = Utility.getNameForImage(measurement);
+            StorageControl.writeImage(imageName, bitmap);
 
             // Write to measurement
             measurement.setBitmap(bitmap, imageName);
             Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
             return;
 
-        } catch (NullPointerException | IOException e) {
-            System.out.println(e);
+        } catch (StorageWriteException e) {
+            System.out.println(e.toString());
         }
 
         Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.alert_dialog_error_taking_picture);

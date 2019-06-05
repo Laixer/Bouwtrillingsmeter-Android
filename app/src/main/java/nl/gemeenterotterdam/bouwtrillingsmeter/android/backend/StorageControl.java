@@ -5,6 +5,8 @@ import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -186,7 +188,7 @@ public class StorageControl {
      * @param bitmap   The bitmap
      * @throws StorageWriteException If we fail
      */
-    public static void writeImage(String fileName, Bitmap bitmap) throws StorageWriteException {
+    public static void writeImage(@NotNull String fileName, @NotNull Bitmap bitmap) throws StorageWriteException {
         FileOutputStream fileOutputStream = null;
 
         try {
@@ -196,7 +198,7 @@ public class StorageControl {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
 
         } catch (IOException e) {
-            /* Do nothing */
+            throw new StorageWriteException("Could not write image with filename = " + fileName);
         } finally {
             if (fileOutputStream != null) try {
                 fileOutputStream.close();
@@ -204,8 +206,6 @@ public class StorageControl {
                 /* Do nothing */
             }
         }
-
-        throw new StorageWriteException("Could not write image with filename = " + fileName);
     }
 
     /**
@@ -216,7 +216,7 @@ public class StorageControl {
      * @return The bitmap, null if we fail
      * @throws StorageReadException If we fail
      */
-    public static Bitmap readImage(String fileName) throws StorageReadException {
+    public static Bitmap readImage(@NotNull String fileName) throws StorageReadException {
         FileInputStream fileInputStream = null;
 
         try {

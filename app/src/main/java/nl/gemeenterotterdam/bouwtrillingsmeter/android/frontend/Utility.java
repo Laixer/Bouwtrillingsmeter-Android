@@ -20,10 +20,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 
 /**
  * @author Thomas Beckers
@@ -255,6 +259,19 @@ class Utility {
         view.getGlobalVisibleRect(actualPosition);
         final Rect screen = new Rect(0, 0, getScreenWidth(applicationContext), getScreenHeight(applicationContext));
         return actualPosition.intersect(screen);
+    }
+
+    /**
+     * Generates a name for our image.
+     * This is based on the measurement UID and the
+     * current time and date.
+     *
+     * @param measurement The measurement to which this belongs
+     * @return A formatted name
+     */
+    static String getNameForImage(@NotNull Measurement measurement) {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        return timeStamp + "-" + measurement.getUID() + ".png";
     }
 
 }
