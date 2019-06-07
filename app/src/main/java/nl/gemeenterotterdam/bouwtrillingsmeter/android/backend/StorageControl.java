@@ -5,11 +5,12 @@ import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.google.android.gms.auth.api.signin.internal.Storage;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -67,46 +68,49 @@ public class StorageControl {
         File folderDataIntervals = getDirectory(DIRECTORY_DATA_INTERVALS);
         File[] files = folderMeasurements.listFiles();
 
+        // Get all measurements
         ArrayList<Measurement> measurements = new ArrayList<Measurement>(files.length);
+        for (File file : files)
+            try {
 
-        for (File file : files) {
-            Object object = readObject(file.getName());
+                Measurement measurement = readAndConvertFile(file);
+                File fileDataIntervals = new File(folderDataIntervals, measurement.getUID());
+                if (fileDataIntervals.exists()) {
+                    ArrayList<DataInterval> dataIntervals = StorageControl.readAndConvertArrayList(fileDataIntervals);
+                    measurement.setDataIntervalsFromStorage(dataIntervals);
+                }
 
-            // Try to convert to measurement
-            if (object instanceof Measurement) try {
-                Measurement measurement = (Measurement) object;
-                measurements.add(measurement);
             } catch (ClassCastException e) {
-                System.out.println("Not a measurement but this is not a problem: " + file.getName());
-            } catch (Exception e) {
-                System.out.println("StorageControl.retrieveAllSavedMeasurements unexpected exception:\n" + e.toString());
+                System.out.println(e.toString());
             }
-        }
 
         return measurements;
     }
 
-    /**
-     * Retrieves an array list based on a name.
-     * This returns an empty arraylist if we could not find the file or if it is incompatiable.
-     *
-     * @param fileName The filename
-     * @param <T>      The type of our arraylist objects
-     * @return The arraylist. It's empty if we can't find it or if we get a casting error.
-     */
-    static <T> ArrayList<T> retrieveArrayList(String fileName) {
+    private static <T> T readAndConvertFile(File file) throws ClassCastException {
         try {
-            Object object = readObject(fileName);
-            if (object == null) {
-                return new ArrayList<T>();
-            }
-            ArrayList<T> result = (ArrayList<T>) object;
-            return result;
-        } catch (Exception e) {
-            System.out.println("StorageControl.retrieveArrayList: " + e.getMessage());
+
+            Object object = readObject(file.getName());
+            return (T) object;
+
+        } catch (ClassCastException e) {
+            System.out.println(e.toString());
         }
 
-        return new ArrayList<T>();
+        throw new ClassCastException("Could not convert object");
+    }
+
+    static <T> ArrayList<T> readAndConvertArrayList(File file) throws ClassCastException {
+        try {
+
+            Object object = readObject(file.toString());
+            return (ArrayList<T>) object;
+
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+
+        throw new ClassCastException("Could not convert arraylist");
     }
 
     /**

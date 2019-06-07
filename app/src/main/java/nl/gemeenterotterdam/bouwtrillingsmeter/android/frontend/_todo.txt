@@ -1,6 +1,7 @@
 Frontend todos
 
 Nu:
+TODO Overschrijding gedetecteerd instant popup is stuk
 TODO Zet je telefoon op stil dingetje
 TODO Annuleer meting zodra je uit de app gaat op wat voor manier dan ook??
 

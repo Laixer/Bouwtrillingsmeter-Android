@@ -35,10 +35,10 @@ class SyncManager implements DataIntervalClosedListener {
      * Initializes the instance
      */
     static void initialize() {
-        unpushedMeasurements = StorageControl.<Measurement>retrieveArrayList(NAME_UNPUSHED_MEASUREMENTS_LIST);
+        /*unpushedMeasurements = StorageControl.<Measurement>retrieveArrayList(NAME_UNPUSHED_MEASUREMENTS_LIST);
         unpushedDataIntervals = StorageControl.<DataInterval>retrieveArrayList(NAME_UNPUSHED_DATA_INTERVALS_LIST);
         unpushedDataIntervalEssentials = StorageControl.<DataIntervalEssentials>retrieveArrayList(NAME_UNPUSHED_DATA_INTERVAL_ESSENTIALS_LIST);
-        syncing = false;
+        syncing = false;*/
 
         syncConnectionManager = new SyncConnectionManager();
         DataHandler.addDataIntervalClosedListener(new SyncManager());

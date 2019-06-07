@@ -127,6 +127,21 @@ public class Measurement implements Serializable {
     }
 
     /**
+     * We store our data in another folder than our
+     * metadata object. This function links the two
+     * back together.
+     *
+     * @param dataIntervalsFromStorage The imported data interval list
+     */
+    void setDataIntervalsFromStorage(ArrayList<DataInterval> dataIntervalsFromStorage) {
+        if (dataIntervals != null) {
+            throw new RuntimeException("Data intervals already set!");
+        }
+
+        dataIntervals = dataIntervalsFromStorage;
+    }
+
+    /**
      * This will get us the start time in millis since Jan 1 1970.
      *
      * @return The start time in millis.
