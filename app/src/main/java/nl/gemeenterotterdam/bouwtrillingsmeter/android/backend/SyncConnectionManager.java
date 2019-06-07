@@ -201,10 +201,10 @@ class SyncConnectionManager {
             connection.setDoOutput(true);
             return connection;
         } catch (MalformedURLException e) {
-            System.out.println(String.format("URL is malformed. Aborting POST. Error message: %s", e.toString()));
+            System.out.println(String.format("URL is malformed. Aborting POST. Error message: %s", e.getMessage()));
             return null;
         } catch (IOException e) {
-            System.out.println(String.format("Could not connect. Error message: %s", e.toString()));
+            System.out.println(String.format("Could not connect. Error message: %s", e.getMessage()));
             return null;
         }
     }

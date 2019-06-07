@@ -52,8 +52,9 @@ class SyncManager implements DataIntervalClosedListener {
      * It stores our unpushed data intervals and data interval essentials.
      */
     static void onApplicationShutdown() {
-        StorageControl.writeArrayList(unpushedDataIntervals, NAME_UNPUSHED_DATA_INTERVALS_LIST);
-        StorageControl.writeArrayList(unpushedDataIntervalEssentials, NAME_UNPUSHED_DATA_INTERVAL_ESSENTIALS_LIST);
+        // TODO Handle
+        // StorageControl.writeArrayList(unpushedDataIntervals, NAME_UNPUSHED_DATA_INTERVALS_LIST);
+        // StorageControl.writeArrayList(unpushedDataIntervalEssentials, NAME_UNPUSHED_DATA_INTERVAL_ESSENTIALS_LIST);
     }
 
     /**

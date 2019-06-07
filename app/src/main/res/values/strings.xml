@@ -31,7 +31,8 @@
     <string name="settings_advanced_show_graphs">Laat grafieken zien</string>
     <string name="settings_advanced_show_user_uid">Toon gebruiker UID</string>
     <string name="settings_advanced_delete_application_data">Verwijder gegevens en voorkeuren</string>
-    <string name="settings_advanced_delete_application_data_alert_dialog">Alle gegevens en voorkeuren zijn verwijderd.</string>
+    <string name="settings_advanced_delete_application_data_alert_dialog_success">Alle gegevens en voorkeuren zijn verwijderd.</string>
+    <string name="settings_advanced_delete_application_data_alert_dialog_fail">Er is iets fout gegaan tijdens het verwijderen van de gegevens.</string>
 
     <!--Everything regarding the measurements list-->
     <string name="measurement_list_empty">U heeft nog geen opgeslagen metingen</string>

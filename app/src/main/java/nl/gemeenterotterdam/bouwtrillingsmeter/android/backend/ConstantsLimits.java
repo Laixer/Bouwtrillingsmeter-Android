@@ -90,9 +90,9 @@ public class ConstantsLimits {
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
         } catch (SecurityException e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         } catch (Exception e) {
-            System.out.println("Unexpected exception: " + e.toString());
+            System.out.println("Unexpected exception: " + e.getMessage());
         }
     }
 
@@ -108,7 +108,7 @@ public class ConstantsLimits {
         try {
             addresses = geocoder.getFromLocation(longitude, latitude, 1);
         } catch (IOException e) {
-            System.out.println("Network / io problem: " + e.toString());
+            System.out.println("Network / io problem: " + e.getMessage());
             return null;
         } catch (IllegalArgumentException e) {
             System.out.println("Our location object contains invalid values.");

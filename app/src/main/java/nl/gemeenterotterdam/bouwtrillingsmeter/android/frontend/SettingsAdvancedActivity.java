@@ -12,6 +12,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.PreferenceManager;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageControl;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageWriteException;
 
 public class SettingsAdvancedActivity extends AppCompatActivity {
 
@@ -70,7 +71,6 @@ public class SettingsAdvancedActivity extends AppCompatActivity {
 
     /**
      * When we click the show user UID button.
-     * TODO Implement
      */
     private void onClickShowUserUID() {
         String uid = Backend.getUserUID();
@@ -86,14 +86,15 @@ public class SettingsAdvancedActivity extends AppCompatActivity {
      * This removes all our storage.
      */
     private void onClickClearApplicationData() {
-        Dialog dialog = Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.settings_advanced_delete_application_data_alert_dialog);
-        dialog.findViewById(R.id.buttonAlertDialogOk).setOnClickListener((View v) -> {
-            dialog.dismiss();
-        });
+        Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.settings_advanced_delete_application_data_alert_dialog_success);
 
-        PreferenceManager.clearAllPreferences();
-        StorageControl.removeAllInternalStorage();
-        loadCurrentStoredSettings();
+        try {
+            PreferenceManager.clearAllPreferences();
+            StorageControl.removeAllInternalStorage();
+            loadCurrentStoredSettings();
+        } catch (StorageWriteException e) {
+            Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.settings_advanced_delete_application_data_alert_dialog_fail);
+        }
     }
 
     @Override

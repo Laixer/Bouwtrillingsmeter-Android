@@ -22,7 +22,13 @@ class MeasurementControl {
      * initializes the class for static use
      */
     static void initialize() {
-        allMeasurements = StorageControl.retrieveAllSavedMeasurements();
+        try {
+            allMeasurements = StorageControl.retrieveAllSavedMeasurements();
+        } catch (StorageReadException e) {
+            // TODO Handle
+            System.out.println("Could not import saved measurements. Handle this");
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -66,7 +72,15 @@ class MeasurementControl {
         currentMeasurement.close();
         lastMeasurement = currentMeasurement;
         allMeasurements.add(currentMeasurement);
-        StorageControl.writeMeasurement(currentMeasurement);
+
+        try {
+            StorageControl.writeMeasurementMetaData(currentMeasurement);
+            StorageControl.writeMeasurementDataIntervals(currentMeasurement);
+        } catch (StorageWriteException e) {
+            // TODO Handle
+            System.out.println("Could not write measurement data to storage. Handle this");
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -77,6 +91,7 @@ class MeasurementControl {
             currentMeasurement.close();
             SyncManager.onMeasurementAborted(currentMeasurement);
         }
+
         currentMeasurement = null;
     }
 
@@ -86,7 +101,13 @@ class MeasurementControl {
      */
     static void onApplicationShutdown() {
         for (Measurement measurement : allMeasurements) {
-            StorageControl.writeMeasurement(measurement);
+            try {
+                StorageControl.writeMeasurementMetaData(measurement);
+            } catch (StorageWriteException e) {
+                // TODO Handleo
+                System.out.println("Could not write measurements on application shutdown, handle this");
+                System.out.println(e.getMessage());
+            }
         }
     }
 

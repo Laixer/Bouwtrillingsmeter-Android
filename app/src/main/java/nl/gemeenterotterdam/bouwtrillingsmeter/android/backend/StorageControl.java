@@ -15,6 +15,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+
 /**
  * @author Thomas Beckers
  * @since 1.0
@@ -63,6 +65,7 @@ public class StorageControl {
      */
     public static void removeAllInternalStorage() throws StorageWriteException {
         try {
+
             File internalStorage = Backend.applicationContext.getFilesDir();
             File[] files = internalStorage.listFiles();
 
@@ -71,8 +74,9 @@ public class StorageControl {
             }
 
             return;
+
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
 
         throw new StorageWriteException("Could not remove all internal storage");
@@ -104,7 +108,7 @@ public class StorageControl {
                 }
 
             } catch (StorageReadException e) {
-                System.out.println(e.toString());
+                System.out.println(e.getMessage());
             }
         }
 
@@ -120,12 +124,15 @@ public class StorageControl {
      * @param measurement The measurement
      * @throws StorageWriteException If we fail
      */
-    static void writeMeasurement(Measurement measurement) throws StorageWriteException {
+    static void writeMeasurementMetaData(Measurement measurement) throws StorageWriteException {
         try {
+
             File file = new File(getDirectory(DIRECTORY_MEASUREMENTS), measurement.getUID());
             writeObject(measurement, file);
+            return;
+
         } catch (StorageWriteException e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
 
         throw new StorageWriteException("Could not write measurement metadata with UID = " + measurement);
@@ -140,10 +147,13 @@ public class StorageControl {
      */
     static void writeMeasurementDataIntervals(Measurement measurement) throws StorageWriteException {
         try {
+
             File file = new File(getDirectory(DIRECTORY_DATA_INTERVALS), measurement.getUID());
             writeObject(measurement.getDataIntervals(), file);
+            return;
+
         } catch (StorageWriteException e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
 
         throw new StorageWriteException("Could not write data intervals for measurement with UID = " + measurement.getUID());
@@ -162,11 +172,14 @@ public class StorageControl {
         String fileName = "";
 
         try {
+
             File file = new File(getDirectory(DIRECTORY_UTILITY_LISTS), fileNameWithoutPath);
             fileName = file.getName();
             writeObject(arrayList, file);
+            return;
+
         } catch (StorageWriteException e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
 
         throw new StorageWriteException("Could not write arraylist to " + fileName);
@@ -251,7 +264,7 @@ public class StorageControl {
             return (T) object;
 
         } catch (StorageReadException | ClassCastException e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
 
         throw new StorageReadException("Could not convert object");
@@ -273,7 +286,7 @@ public class StorageControl {
             return (ArrayList<T>) object;
 
         } catch (StorageReadException | ClassCastException e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
 
         throw new StorageReadException("Could not convert arraylist");
@@ -299,7 +312,7 @@ public class StorageControl {
             return object;
 
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         } finally {
             if (fileInputStream != null) try {
                 fileInputStream.close();

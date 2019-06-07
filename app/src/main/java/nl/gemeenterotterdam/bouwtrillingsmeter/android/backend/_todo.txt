@@ -1,5 +1,6 @@
 Nu:
 TODO Locatie toevoegen nadat meting te snel is gestopt
+TODO Location exception fix
 TODO Waarom hapert de accelerometer graph steeds?
 TODO Hoe gaan we om met een gepasseerd interval zonder dat er een datapoint binnen komt? Dit wordt niet gecalled dan!
 

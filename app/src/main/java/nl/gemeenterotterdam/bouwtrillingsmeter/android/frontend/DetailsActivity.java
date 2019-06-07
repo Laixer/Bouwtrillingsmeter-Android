@@ -142,7 +142,7 @@ public class DetailsActivity extends AppCompatActivity {
             return;
 
         } catch (StorageWriteException e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
 
         Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.alert_dialog_error_taking_picture);

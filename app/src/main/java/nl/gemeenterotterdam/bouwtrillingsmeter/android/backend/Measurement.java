@@ -277,10 +277,16 @@ public class Measurement implements Serializable {
     }
 
     /**
-     * This writes the new metadata to disk
-     * TODO Potential problem: this can take very long with big data sets
+     * This writes the new metadata to disk.
+     * This skips all data points.
      */
     private void onMetadataChanged() {
-        StorageControl.writeMeasurement(this);
+        try {
+            StorageControl.writeMeasurementMetaData(this);
+        } catch (StorageWriteException e) {
+            // TODO Handle
+            System.out.println("Could not write meta data to storage. Handle this!");
+            System.out.println(e.getMessage());
+        }
     }
 }
