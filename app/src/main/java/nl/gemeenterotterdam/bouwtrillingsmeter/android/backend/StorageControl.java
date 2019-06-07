@@ -57,26 +57,34 @@ public class StorageControl {
     }
 
     /**
-     * This removes all our internal storage
-     * TODO We might never ever need this
+     * This removes all our internal storage.
+     *
+     * @throws StorageWriteException If we fail
      */
-    public static void removeAllInternalStorage() {
-        File internalStorage = Backend.applicationContext.getFilesDir();
-        File[] files = internalStorage.listFiles();
+    public static void removeAllInternalStorage() throws StorageWriteException {
+        try {
+            File internalStorage = Backend.applicationContext.getFilesDir();
+            File[] files = internalStorage.listFiles();
 
-        for (File file : files) {
-            Backend.applicationContext.deleteFile(file.getName());
+            for (File file : files) {
+                Backend.applicationContext.deleteFile(file.getName());
+            }
+
+            return;
+        } catch (Exception e) {
+            System.out.println(e.toString());
         }
 
-        System.out.println("StorageControl.removeAllInternalStorage() called");
+        throw new StorageWriteException("Could not remove all internal storage");
     }
 
     /**
      * This retrieves all saved measurements.
      *
      * @return All retrieved non-null measurements
+     * @throws StorageReadException If we fail
      */
-    static ArrayList<Measurement> retrieveAllSavedMeasurements() {
+    static ArrayList<Measurement> retrieveAllSavedMeasurements() throws StorageReadException {
         File folderMeasurements = getDirectory(DIRECTORY_MEASUREMENTS);
         File folderDataIntervals = getDirectory(DIRECTORY_DATA_INTERVALS);
         File[] files = folderMeasurements.listFiles();
@@ -130,7 +138,7 @@ public class StorageControl {
      *                    data intervals belong
      * @throws StorageWriteException If we fail
      */
-    static void writeDataIntervals(Measurement measurement) throws StorageWriteException {
+    static void writeMeasurementDataIntervals(Measurement measurement) throws StorageWriteException {
         try {
             File file = new File(getDirectory(DIRECTORY_DATA_INTERVALS), measurement.getUID());
             writeObject(measurement.getDataIntervals(), file);
@@ -163,6 +171,70 @@ public class StorageControl {
 
         throw new StorageWriteException("Could not write arraylist to " + fileName);
     }
+
+    /**
+     * Writes an image to our internal storage.
+     *
+     * @param fileName The filename,
+     *                 no directory,
+     *                 include extension
+     * @param bitmap   The bitmap
+     * @throws StorageWriteException If we fail
+     */
+    public static void writeImage(@NotNull String fileName, @NotNull Bitmap bitmap) throws StorageWriteException {
+        FileOutputStream fileOutputStream = null;
+
+        try {
+
+            File image = new File(getDirectory(DIRECTORY_IMAGES), fileName);
+            fileOutputStream = new FileOutputStream(image);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+
+        } catch (IOException e) {
+            throw new StorageWriteException("Could not write image with filename = " + fileName);
+        } finally {
+            if (fileOutputStream != null) try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                /* Do nothing */
+            }
+        }
+    }
+
+    /**
+     * Reads an image from memory.
+     *
+     * @param fileName The filename without any dir,
+     *                 including extension
+     * @return The bitmap, null if we fail
+     * @throws StorageReadException If we fail
+     */
+    public static Bitmap readImage(@NotNull String fileName) throws StorageReadException {
+        FileInputStream fileInputStream = null;
+
+        try {
+
+            File file = new File(getDirectory(DIRECTORY_IMAGES), fileName);
+            fileInputStream = new FileInputStream(file);
+            Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
+            if (bitmap != null) {
+                return bitmap;
+            }
+
+        } catch (IOException e) {
+            /* Do nothing */
+        } finally {
+            if (fileInputStream != null) try {
+                fileInputStream.close();
+            } catch (IOException e) {
+                /* Do nothing */
+            }
+        }
+
+        throw new StorageReadException("Could not read image with filename = " + fileName);
+    }
+
+    /* All internal functions */
 
     /**
      * Attempts to convert an object.
@@ -284,68 +356,6 @@ public class StorageControl {
         }
 
         throw new StorageWriteException("Could not write object to file " + file.getName());
-    }
-
-    /**
-     * Writes an image to our internal storage.
-     *
-     * @param fileName The filename,
-     *                 no directory,
-     *                 include extension
-     * @param bitmap   The bitmap
-     * @throws StorageWriteException If we fail
-     */
-    public static void writeImage(@NotNull String fileName, @NotNull Bitmap bitmap) throws StorageWriteException {
-        FileOutputStream fileOutputStream = null;
-
-        try {
-
-            File image = new File(getDirectory(DIRECTORY_IMAGES), fileName);
-            fileOutputStream = new FileOutputStream(image);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-
-        } catch (IOException e) {
-            throw new StorageWriteException("Could not write image with filename = " + fileName);
-        } finally {
-            if (fileOutputStream != null) try {
-                fileOutputStream.close();
-            } catch (IOException e) {
-                /* Do nothing */
-            }
-        }
-    }
-
-    /**
-     * Reads an image from memory.
-     *
-     * @param fileName The filename without any dir,
-     *                 including extension
-     * @return The bitmap, null if we fail
-     * @throws StorageReadException If we fail
-     */
-    public static Bitmap readImage(@NotNull String fileName) throws StorageReadException {
-        FileInputStream fileInputStream = null;
-
-        try {
-
-            File file = new File(getDirectory(DIRECTORY_IMAGES), fileName);
-            fileInputStream = new FileInputStream(file);
-            Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
-            if (bitmap != null) {
-                return bitmap;
-            }
-
-        } catch (IOException e) {
-            /* Do nothing */
-        } finally {
-            if (fileInputStream != null) try {
-                fileInputStream.close();
-            } catch (IOException e) {
-                /* Do nothing */
-            }
-        }
-
-        throw new StorageReadException("Could not read image with filename = " + fileName);
     }
 
     /**
