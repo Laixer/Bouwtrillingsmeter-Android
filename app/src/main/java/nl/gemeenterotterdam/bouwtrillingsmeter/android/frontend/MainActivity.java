@@ -131,7 +131,8 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
     }
 
     /**
-     * This gets called when we press the back button and end up in the main activity again
+     * This gets called when we press the back button
+     * and end up in the main activity again.
      */
     @Override
     public void onResume() {
@@ -151,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
     }
 
     /**
+     *
      * This starts our tutorial OR starts our settings widget
      */
     public void onClickCreateNewMeasurementFab() {

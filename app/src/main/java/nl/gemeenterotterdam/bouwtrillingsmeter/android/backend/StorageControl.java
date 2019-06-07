@@ -20,30 +20,41 @@ import java.util.ArrayList;
  * @author Thomas Beckers
  * @since 1.0
  * <p>
- * This class reads and writes files to and from the phones internal storage.
- * TODO Make private, we only need this public for now to clear the saved measurements
- * TODO Implement failsafe handling for measurements if we cant save it for some reason.
- * TODO Now all files are in the sample place, might not want to do that
+ * This class reads and writes files to
+ * and from the phones internal storage.
  */
 public class StorageControl {
 
     /**
-     * This is the location of our images
-     * TODO Rethink this structure
+     * This is the location of our images.
      */
     private static final String DIRECTORY_IMAGES = "images";
 
     /**
-     * Initializes our folder structure
-     * TODO Do we need this?
+     * This is the location of our lists.
+     */
+    private static final String DIRECTORY_LISTS = "lists";
+
+    /**
+     * This is the location of our measurements.
+     * Data intervals are not stored in here.
+     */
+    private static final String DIRECTORY_MEASUREMENTS = "measurements";
+
+    /**
+     * This is the location of our data intervals.
+     */
+    private static final String DIRECTORY_DATA_INTERVALS = "data_intervals";
+
+
+    /**
+     * Initializes our folder structure.
      */
     static void initialize() {
-//        File internalStorage = Backend.applicationContext.getFilesDir();
-//        File folderMeasurements = new File(internalStorage, folderNameMeasurements);
-//        folderMeasurements.mkdir();
-//
-//        File folderLists = new File(internalStorage, folderNameArrayLists);
-//        folderLists.mkdir();
+        getDirectory(DIRECTORY_IMAGES);
+        getDirectory(DIRECTORY_LISTS);
+        getDirectory(DIRECTORY_MEASUREMENTS);
+        getDirectory(DIRECTORY_DATA_INTERVALS);
     }
 
     /**
@@ -52,8 +63,9 @@ public class StorageControl {
      * @return All retrieved non-null measurements
      */
     static ArrayList<Measurement> retrieveAllSavedMeasurements() {
-        File internalStorage = Backend.applicationContext.getFilesDir();
-        File[] files = internalStorage.listFiles();
+        File folderMeasurements = getDirectory(DIRECTORY_MEASUREMENTS);
+        File folderDataIntervals = getDirectory(DIRECTORY_DATA_INTERVALS);
+        File[] files = folderMeasurements.listFiles();
 
         ArrayList<Measurement> measurements = new ArrayList<Measurement>(files.length);
 
@@ -61,15 +73,13 @@ public class StorageControl {
             Object object = readObject(file.getName());
 
             // Try to convert to measurement
-            try {
+            if (object instanceof Measurement) try {
                 Measurement measurement = (Measurement) object;
-                if (measurement != null) {
-                    measurements.add(measurement);
-                }
+                measurements.add(measurement);
             } catch (ClassCastException e) {
                 System.out.println("Not a measurement but this is not a problem: " + file.getName());
             } catch (Exception e) {
-                System.out.println("StorageControl.retrieveAllSavedMeasurements: " + e.toString());
+                System.out.println("StorageControl.retrieveAllSavedMeasurements unexpected exception:\n" + e.toString());
             }
         }
 
@@ -193,7 +203,7 @@ public class StorageControl {
 
         try {
 
-            File image = new File(getImageDirectory(), fileName);
+            File image = new File(getDirectory(DIRECTORY_IMAGES), fileName);
             fileOutputStream = new FileOutputStream(image);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
 
@@ -220,7 +230,8 @@ public class StorageControl {
         FileInputStream fileInputStream = null;
 
         try {
-            File file = new File(getImageDirectory(), fileName);
+
+            File file = new File(getDirectory(DIRECTORY_IMAGES), fileName);
             fileInputStream = new FileInputStream(file);
             Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
             if (bitmap != null) {
@@ -243,11 +254,23 @@ public class StorageControl {
     /**
      * Gets our image directory, located in internal storage.
      *
+     * @param directoryName One of the static variables, being:
+     *                      - {@link #DIRECTORY_IMAGES}
+     *                      - {@link #DIRECTORY_LISTS}
+     *                      - {@link #DIRECTORY_MEASUREMENTS}
+     *                      - {@link #DIRECTORY_DATA_INTERVALS}
      * @return The directory as a file
      */
-    private static File getImageDirectory() {
+    private static File getDirectory(String directoryName) {
+        if (!directoryName.equals(DIRECTORY_IMAGES)
+                && !directoryName.equals(DIRECTORY_LISTS)
+                && !directoryName.equals(DIRECTORY_MEASUREMENTS)
+                && !directoryName.equals(DIRECTORY_DATA_INTERVALS)) {
+            throw new IllegalArgumentException("Pick a constant for the directory name, not " + directoryName);
+        }
+
         ContextWrapper contextWrapper = new ContextWrapper(Backend.applicationContext);
-        return contextWrapper.getDir(DIRECTORY_IMAGES, Context.MODE_PRIVATE);
+        return contextWrapper.getDir(directoryName, Context.MODE_PRIVATE);
     }
 
 }

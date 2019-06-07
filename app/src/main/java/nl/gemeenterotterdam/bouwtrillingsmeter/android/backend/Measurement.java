@@ -37,7 +37,7 @@ public class Measurement implements Serializable {
     private Settings settings;
     private int dataIntervalCount;
 
-    private ArrayList<DataInterval> dataIntervals;
+    private transient ArrayList<DataInterval> dataIntervals;
     private transient Bitmap bitmap;
 
     // Dit gaat niet mee naar de server

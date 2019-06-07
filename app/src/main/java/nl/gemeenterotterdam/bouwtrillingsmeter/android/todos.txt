@@ -1,6 +1,6 @@
 General todos
+TODO Dingen van static naar instance maken, iets eleganter
 TODO Als je je measurement nooit start moet hij worden weggegooid
-TODO Oude widget instellingen opslaan?
 TODO Een miljoen unittests schrijven
 
 Details
