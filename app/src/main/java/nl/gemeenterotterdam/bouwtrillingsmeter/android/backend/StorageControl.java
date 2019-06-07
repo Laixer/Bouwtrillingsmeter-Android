@@ -5,8 +5,6 @@ import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.google.android.gms.auth.api.signin.internal.Storage;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -34,7 +32,7 @@ public class StorageControl {
     /**
      * This is the location of our lists.
      */
-    private static final String DIRECTORY_LISTS = "lists";
+    private static final String DIRECTORY_UTILITY_LISTS = "lists";
 
     /**
      * This is the location of our measurements.
@@ -53,9 +51,24 @@ public class StorageControl {
      */
     static void initialize() {
         getDirectory(DIRECTORY_IMAGES);
-        getDirectory(DIRECTORY_LISTS);
+        getDirectory(DIRECTORY_UTILITY_LISTS);
         getDirectory(DIRECTORY_MEASUREMENTS);
         getDirectory(DIRECTORY_DATA_INTERVALS);
+    }
+
+    /**
+     * This removes all our internal storage
+     * TODO We might never ever need this
+     */
+    public static void removeAllInternalStorage() {
+        File internalStorage = Backend.applicationContext.getFilesDir();
+        File[] files = internalStorage.listFiles();
+
+        for (File file : files) {
+            Backend.applicationContext.deleteFile(file.getName());
+        }
+
+        System.out.println("StorageControl.removeAllInternalStorage() called");
     }
 
     /**
@@ -70,127 +83,207 @@ public class StorageControl {
 
         // Get all measurements
         ArrayList<Measurement> measurements = new ArrayList<Measurement>(files.length);
-        for (File file : files)
+        for (File file : files) {
             try {
 
                 Measurement measurement = readAndConvertFile(file);
+
+                // Extract data intervals
                 File fileDataIntervals = new File(folderDataIntervals, measurement.getUID());
                 if (fileDataIntervals.exists()) {
                     ArrayList<DataInterval> dataIntervals = StorageControl.readAndConvertArrayList(fileDataIntervals);
                     measurement.setDataIntervalsFromStorage(dataIntervals);
                 }
 
-            } catch (ClassCastException e) {
+            } catch (StorageReadException e) {
                 System.out.println(e.toString());
             }
+        }
+
 
         return measurements;
     }
 
-    private static <T> T readAndConvertFile(File file) throws ClassCastException {
+    /**
+     * Writes all measurement metadata to the storage.
+     * This ignores the image.
+     * This ignores the data intervals.
+     *
+     * @param measurement The measurement
+     * @throws StorageWriteException If we fail
+     */
+    static void writeMeasurement(Measurement measurement) throws StorageWriteException {
+        try {
+            File file = new File(getDirectory(DIRECTORY_MEASUREMENTS), measurement.getUID());
+            writeObject(measurement, file);
+        } catch (StorageWriteException e) {
+            System.out.println(e.toString());
+        }
+
+        throw new StorageWriteException("Could not write measurement metadata with UID = " + measurement);
+    }
+
+    /**
+     * Writes our data intervals to the storage.
+     *
+     * @param measurement The measurement to which the
+     *                    data intervals belong
+     * @throws StorageWriteException If we fail
+     */
+    static void writeDataIntervals(Measurement measurement) throws StorageWriteException {
+        try {
+            File file = new File(getDirectory(DIRECTORY_DATA_INTERVALS), measurement.getUID());
+            writeObject(measurement.getDataIntervals(), file);
+        } catch (StorageWriteException e) {
+            System.out.println(e.toString());
+        }
+
+        throw new StorageWriteException("Could not write data intervals for measurement with UID = " + measurement.getUID());
+    }
+
+    /**
+     * Writes an array list to our storage.
+     *
+     * @param arrayList           The array list
+     * @param fileNameWithoutPath The name of the array list
+     * @param <T>                 The type of the arraylist,
+     *                            ArrayList<T>
+     * @throws StorageWriteException If we fail
+     */
+    static <T> void writeArrayList(ArrayList<T> arrayList, String fileNameWithoutPath) throws StorageWriteException {
+        String fileName = "";
+
+        try {
+            File file = new File(getDirectory(DIRECTORY_UTILITY_LISTS), fileNameWithoutPath);
+            fileName = file.getName();
+            writeObject(arrayList, file);
+        } catch (StorageWriteException e) {
+            System.out.println(e.toString());
+        }
+
+        throw new StorageWriteException("Could not write arraylist to " + fileName);
+    }
+
+    /**
+     * Attempts to convert an object.
+     *
+     * @param file The file
+     * @param <T>  The type
+     * @return The converted object
+     * @throws StorageReadException If the type doesn't match
+     */
+    private static <T> T readAndConvertFile(File file) throws StorageReadException {
         try {
 
-            Object object = readObject(file.getName());
+            Object object = readObject(file);
             return (T) object;
 
-        } catch (ClassCastException e) {
+        } catch (StorageReadException | ClassCastException e) {
             System.out.println(e.toString());
         }
 
-        throw new ClassCastException("Could not convert object");
+        throw new StorageReadException("Could not convert object");
     }
 
-    static <T> ArrayList<T> readAndConvertArrayList(File file) throws ClassCastException {
+    /**
+     * Attempts to convert an array list.
+     *
+     * @param file The file
+     * @param <T>  The arraylist type,
+     *             ArrayList<T>
+     * @return The converted array list
+     * @throws StorageReadException If the type doesn't match
+     */
+    private static <T> ArrayList<T> readAndConvertArrayList(File file) throws StorageReadException {
         try {
 
-            Object object = readObject(file.toString());
+            Object object = readObject(file);
             return (ArrayList<T>) object;
 
-        } catch (Exception e) {
+        } catch (StorageReadException | ClassCastException e) {
             System.out.println(e.toString());
         }
 
-        throw new ClassCastException("Could not convert arraylist");
-    }
-
-    /**
-     * Writes a measurement to the internal memory
-     *
-     * @param measurement The measurement to write
-     */
-    static void writeMeasurement(Measurement measurement) {
-        writeObject(measurement, measurement.getUID());
-    }
-
-    /**
-     * Writes an arraylist to our internal memory
-     *
-     * @param arrayList The arraylist
-     * @param fileName  The filename
-     * @param <T>       The type of the arraylist
-     */
-    static <T> void writeArrayList(ArrayList<T> arrayList, String fileName) {
-        writeObject(arrayList, fileName);
-    }
-
-    /**
-     * Writes an object to the internal storage.
-     * Always overwrites.
-     *
-     * @param object   The object
-     * @param fileName The filename
-     */
-    private static void writeObject(Object object, String fileName) {
-        try {
-            FileOutputStream fileOutputStream = Backend.applicationContext.openFileOutput(fileName, Context.MODE_PRIVATE);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-
-            objectOutputStream.writeObject(object);
-
-            objectOutputStream.close();
-            fileOutputStream.close();
-        } catch (Exception e) {
-            System.out.println("StorageControl.writeObject: " + e.toString());
-        }
+        throw new StorageReadException("Could not convert arraylist");
     }
 
     /**
      * Reads an object from the internal storage.
      *
-     * @param fileName The filename
+     * @param file The file
      * @return Null if no object is found
      */
-    private static Object readObject(String fileName) {
-        Object object = null;
+    private static Object readObject(File file) throws StorageReadException {
         FileInputStream fileInputStream = null;
         ObjectInputStream objectInputStream = null;
 
         try {
-            fileInputStream = Backend.applicationContext.openFileInput(fileName);
+
+            fileInputStream = new FileInputStream(file);
             objectInputStream = new ObjectInputStream(fileInputStream);
-            object = objectInputStream.readObject();
+            Object object = objectInputStream.readObject();
             fileInputStream.close();
             objectInputStream.close();
-        } catch (Exception e) {
-            System.out.println("StorageControl.readObject: " + e.toString());
+            return object;
+
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println(e.toString());
+        } finally {
+            if (fileInputStream != null) try {
+                fileInputStream.close();
+            } catch (IOException e) {
+                /* Do nothing */
+            }
+
+            if (objectInputStream != null) try {
+                objectInputStream.close();
+            } catch (IOException e) {
+                /* Do nothing */
+            }
         }
 
-        return object;
+        throw new StorageReadException("Could not read object from file ");
     }
 
     /**
-     * This removes all our internal storage
-     * TODO We might never ever need this
+     * This writes an object to the desired file location.
+     * Implement the root directory in the file before
+     * sending it as parameter to this function.
+     * <p>
+     * This function always overwrites.
+     *
+     * @param object The object
      */
-    public static void removeAllInternalStorage() {
-        System.out.println("StorageControl.removeAllInternalStorage() called");
+    private static void writeObject(Object object, File file) throws StorageWriteException {
+        FileOutputStream fileOutputStream = null;
+        ObjectOutputStream objectOutputStream = null;
 
-        File internalStorage = Backend.applicationContext.getFilesDir();
-        File[] files = internalStorage.listFiles();
+        try {
 
-        for (File file : files) {
-            Backend.applicationContext.deleteFile(file.getName());
+            fileOutputStream = new FileOutputStream(file);
+            objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(object);
+            objectOutputStream.close();
+            fileOutputStream.close();
+            return;
+
+        } catch (IOException e) {
+            /* Do nothing */
+        } finally {
+            if (fileOutputStream != null) try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                /* Do nothing */
+            }
+
+            if (objectOutputStream != null) try {
+                objectOutputStream.close();
+            } catch (IOException e) {
+                /* Do nothing */
+            }
         }
+
+        throw new StorageWriteException("Could not write object to file " + file.getName());
     }
 
     /**
@@ -260,14 +353,14 @@ public class StorageControl {
      *
      * @param directoryName One of the static variables, being:
      *                      - {@link #DIRECTORY_IMAGES}
-     *                      - {@link #DIRECTORY_LISTS}
+     *                      - {@link #DIRECTORY_UTILITY_LISTS}
      *                      - {@link #DIRECTORY_MEASUREMENTS}
      *                      - {@link #DIRECTORY_DATA_INTERVALS}
      * @return The directory as a file
      */
     private static File getDirectory(String directoryName) {
         if (!directoryName.equals(DIRECTORY_IMAGES)
-                && !directoryName.equals(DIRECTORY_LISTS)
+                && !directoryName.equals(DIRECTORY_UTILITY_LISTS)
                 && !directoryName.equals(DIRECTORY_MEASUREMENTS)
                 && !directoryName.equals(DIRECTORY_DATA_INTERVALS)) {
             throw new IllegalArgumentException("Pick a constant for the directory name, not " + directoryName);
