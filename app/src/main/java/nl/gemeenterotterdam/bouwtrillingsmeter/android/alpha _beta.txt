@@ -1,6 +1,7 @@
 Alpha:
 
 TODO Fix read issues, gets really slow when we have multiple measurements
+TODO Fix instant exceeding message
 
 MainActivity
 DONE - Naam meting:      "Meting in Delft"
@@ -40,10 +41,10 @@ DONE - Bad weather:      Done knop
 DONE                     wel opnieuw knop
 
 MeasuringActivity
-TODO - Voor meting
-TODO - Start knop
-TODO - Wacht icoontje
-TODO - Leg uw telefoon plat neer
+Voor meting:
+DONE - Start knop
+DONE - Wacht icoontje
+DONE - Leg uw telefoon plat neer
 
 Tijdens meting:
 TODO - "Stop" knop / iOS bovenin "sla op"

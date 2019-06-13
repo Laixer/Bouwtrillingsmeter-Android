@@ -159,7 +159,7 @@
     <string name="category_notyetselected_vibration">Selecteer het type vibratie</string>
 
     <!--Measuring page-->
-    <string name="preparing_cycle_place_device_on_table">Plaats uw telefoon op tafel...</string>
+    <string name="preparing_cycle_place_device_on_table">Leg de telefoon plat neer...</string>
     <string name="preparing_cycle_start_flat">De meting begint zodra de telefoon stil ligt...</string>
     <string name="preparing_cycle_start_button">Druk op start om de meting te starten...</string>
     <string name="preparing_cycle_start_flag">start_flag</string>

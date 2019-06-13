@@ -109,9 +109,14 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
      * Starts our text cycle while waiting
      */
     private void startTextCycleWaiting() {
-        strings = new LinkedList<String>();
-        strings.addLast(getResources().getString(R.string.preparing_cycle_place_device_on_table));
-        strings.addLast(getResources().getString(R.string.preparing_cycle_start_flag));
+        strings = new LinkedList<>();
+
+        if (Utility.isAlpha()) {
+            strings.addLast(getResources().getString(R.string.preparing_cycle_place_device_on_table));
+        } else {
+            strings.addLast(getResources().getString(R.string.preparing_cycle_place_device_on_table));
+            strings.addLast(getResources().getString(R.string.preparing_cycle_start_flag));
+        }
 
         startTextCycle();
     }
@@ -120,16 +125,20 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
      * This starts the text cycle while measuring.
      */
     private void startTextCycleMeasuring(boolean showNowExceedingMessage) {
-        strings = new LinkedList<String>();
+        strings = new LinkedList<>();
 
         if (showNowExceedingMessage) {
             strings.addFirst(getResources().getString(R.string.measuring_cycle_exceeding_detected_now));
         }
 
-        strings.addLast(getResources().getString(R.string.measuring_cycle_measuring_now));
-        strings.addLast(getResources().getString(R.string.measuring_cycle_stop_flag));
-        strings.addLast(getResources().getString(R.string.measuring_cycle_keep_on_table));
-        strings.addLast(getResources().getString(R.string.measuring_cycle_exceeding_detected_flag));
+        if (Utility.isAlpha()) {
+            strings.addLast(getResources().getString(R.string.measuring_cycle_measuring_now));
+        } else {
+            strings.addLast(getResources().getString(R.string.measuring_cycle_measuring_now));
+            strings.addLast(getResources().getString(R.string.measuring_cycle_stop_flag));
+            strings.addLast(getResources().getString(R.string.measuring_cycle_keep_on_table));
+            strings.addLast(getResources().getString(R.string.measuring_cycle_exceeding_detected_flag));
+        }
 
         startTextCycle();
     }
