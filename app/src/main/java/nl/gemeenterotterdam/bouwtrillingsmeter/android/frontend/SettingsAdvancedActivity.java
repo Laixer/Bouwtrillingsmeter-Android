@@ -86,12 +86,11 @@ public class SettingsAdvancedActivity extends AppCompatActivity {
      * This removes all our storage.
      */
     private void onClickClearApplicationData() {
-        Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.settings_advanced_delete_application_data_alert_dialog_success);
-
         try {
             PreferenceManager.clearAllPreferences();
             StorageControl.removeAllInternalStorage();
             loadCurrentStoredSettings();
+            Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.settings_advanced_delete_application_data_alert_dialog_success);
         } catch (StorageWriteException e) {
             Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.settings_advanced_delete_application_data_alert_dialog_fail);
         }

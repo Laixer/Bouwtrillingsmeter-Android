@@ -5,6 +5,7 @@ import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -66,21 +67,18 @@ public class StorageControl {
     public static void removeAllInternalStorage() throws StorageWriteException {
         try {
 
-            ArrayList<File> folders = new ArrayList<File>();
+            ArrayList<File> folders = new ArrayList<>();
             folders.add(getDirectory(DIRECTORY_DATA_INTERVALS));
             folders.add(getDirectory(DIRECTORY_MEASUREMENTS));
             folders.add(getDirectory(DIRECTORY_IMAGES));
             folders.add(getDirectory(DIRECTORY_UTILITY_LISTS));
 
             for (File folder : folders) {
-                for (File file : folder.listFiles()) {
-                    Backend.applicationContext.deleteFile(file.getName());
-                }
+                FileUtils.cleanDirectory(folder);
             }
 
             return;
-
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println(e.getMessage());
         }
 
