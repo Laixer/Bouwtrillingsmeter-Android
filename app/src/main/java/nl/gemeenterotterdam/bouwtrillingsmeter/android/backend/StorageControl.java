@@ -91,11 +91,21 @@ public class StorageControl {
     static ArrayList<Measurement> retrieveAllSavedMeasurements() throws StorageReadException {
         File folderMeasurements = getDirectory(DIRECTORY_MEASUREMENTS);
         File folderDataIntervals = getDirectory(DIRECTORY_DATA_INTERVALS);
-        File[] files = folderMeasurements.listFiles();
+
+        // TODO Remove this debug bit
+
+        System.out.println();
+
+        for (File file : folderDataIntervals.listFiles()) {
+            System.out.println(file.getName());
+        }
+
+        System.out.println();
 
         // Get all measurements
-        ArrayList<Measurement> measurements = new ArrayList<Measurement>(files.length);
-        for (File file : files) {
+        ArrayList<Measurement> measurements = new ArrayList<>();
+        for (File file : folderMeasurements.listFiles()) {
+            System.out.println(file.getName());
             try {
 
                 Measurement measurement = readAndConvertFile(file);
@@ -107,11 +117,12 @@ public class StorageControl {
                     measurement.setDataIntervalsFromStorage(dataIntervals);
                 }
 
+                measurements.add(measurement);
+
             } catch (StorageReadException e) {
-                System.out.println(e.getMessage());
+                System.out.println(e.toString());
             }
         }
-
 
         return measurements;
     }

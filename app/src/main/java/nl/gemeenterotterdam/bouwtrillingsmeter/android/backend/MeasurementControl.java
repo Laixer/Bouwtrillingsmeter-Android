@@ -40,6 +40,11 @@ class MeasurementControl {
         return currentMeasurement;
     }
 
+    /**
+     * Returns the last measurement that was created.
+     *
+     * @return Our last measurement
+     */
     static Measurement getLastMeasurement() {
         return lastMeasurement;
     }
@@ -103,8 +108,9 @@ class MeasurementControl {
         for (Measurement measurement : allMeasurements) {
             try {
                 StorageControl.writeMeasurementMetaData(measurement);
+                StorageControl.writeMeasurementDataIntervals(measurement);
             } catch (StorageWriteException e) {
-                // TODO Handleo
+                // TODO Handle
                 System.out.println("Could not write measurements on application shutdown, handle this");
                 System.out.println(e.getMessage());
             }

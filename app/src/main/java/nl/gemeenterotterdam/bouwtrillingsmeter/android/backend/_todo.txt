@@ -1,4 +1,5 @@
 Nu:
+TODO Abort measurement moet eruit, is gewoon finish
 TODO Locatie toevoegen nadat meting te snel is gestopt
 TODO Location exception fix
 TODO Waarom hapert de accelerometer graph steeds?

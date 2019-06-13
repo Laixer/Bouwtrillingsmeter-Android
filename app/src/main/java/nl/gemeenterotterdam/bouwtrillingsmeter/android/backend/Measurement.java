@@ -101,10 +101,13 @@ public class Measurement implements Serializable {
         dateEnd = Calendar.getInstance().getTime();
         closed = true;
 
-        if (longitude < Double.MAX_VALUE) {
+        if (longitude < Double.MAX_VALUE) try {
             address = ConstantsLimits.coordinatesToAddress(latitude, longitude);
             String locality = address.getLocality();
             name = Backend.resources.getString(R.string.measurement_name_format, locality);
+        } catch (NullPointerException e) {
+            // TODO Handle
+            System.out.println("Locality is null, handle this");
         }
     }
 
