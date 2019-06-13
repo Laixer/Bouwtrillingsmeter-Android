@@ -83,21 +83,17 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
         listViewMeasurements.setEmptyView(findViewById(R.id.textViewNoMeasurements));
         listViewMeasurementsAdapter = new MainActivityMeasurementListAdapter(this, Backend.getAllMeasurementsList());
         listViewMeasurements.setAdapter(listViewMeasurementsAdapter);
-        listViewMeasurements.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listViewMeasurements.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
+            // Temporarily disable all items
+            // TODO Implement
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Temporarily disable all items
-                // TODO Implement
+            Intent intentShowMeasurementDetails = new Intent(getApplicationContext(), DetailsActivity.class);
 
-                Intent intentShowMeasurementDetails = new Intent(getApplicationContext(), DetailsActivity.class);
-
-                // TODO Reconsider measurement linking structure
+            // TODO Reconsider measurement linking structure
 //              intentShowMeasuremenstDetails.putExtra("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX", position);
-                DetailsActivity.measurement = Backend.getAllMeasurementsList().get(position);
+            DetailsActivity.measurement = Backend.getAllMeasurementsList().get(position);
 
-                startActivity(intentShowMeasurementDetails);
-            }
+            startActivity(intentShowMeasurementDetails);
         });
 
         // Show the highlight on the first visit
@@ -152,7 +148,6 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
     }
 
     /**
-     *
      * This starts our tutorial OR starts our settings widget
      */
     public void onClickCreateNewMeasurementFab() {

@@ -155,7 +155,7 @@ public class DetailsActivity extends AppCompatActivity {
      */
     public void onUpdateMeasurementTexts() {
         textViewName.setText(measurement.getName());
-        textViewDateTime.setText(Utility.formatDate(measurement.getDateStart()));
+        textViewDateTime.setText(Utility.formatMeasurementDateTime(measurement));
         textViewDescription.setText(measurement.getDescription());
 
         Address address = measurement.getAddress();

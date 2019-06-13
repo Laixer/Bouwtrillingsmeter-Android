@@ -28,6 +28,7 @@ import java.util.Date;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.PreferenceManager;
 
 /**
  * @author Thomas Beckers
@@ -49,6 +50,15 @@ class Utility {
     public static Resources resources;
 
     private static String[] MONTH_NAMES = {"Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "October", "November", "December"};
+
+    /**
+     * Used to check if we are in alpha release.
+     *
+     * @return True if we are
+     */
+    public static boolean isAlpha() {
+        return resources.getBoolean(R.bool.alpha);
+    }
 
     /**
      * Checks if our screen is in landscape or portrait mode
@@ -219,23 +229,31 @@ class Utility {
     }
 
     /**
-     * Converts our date object to a nice string for our UI.
+     * Extracts the date and time from our measurement and
+     * formats them into a desired string as:
      *
-     * @param date The date object
+     * DD Month YYYY om hh:mm
+     *
+     * @param measurement The measurement
      * @return The formatted string
      */
-    static String formatDate(Date date) {
+    static String formatMeasurementDateTime(Measurement measurement) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
+        calendar.setTime(measurement.getDateStart());
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(calendar.get(Calendar.DAY_OF_MONTH));
-        stringBuilder.append(" ");
-        stringBuilder.append(MONTH_NAMES[calendar.get(Calendar.MONTH)]);
-        stringBuilder.append(" ");
-        stringBuilder.append(calendar.get(Calendar.YEAR));
+        String result = "";
 
-        return stringBuilder.toString();
+        result += calendar.get(Calendar.DAY_OF_MONTH);
+        result += " ";
+        result += MONTH_NAMES[calendar.get(Calendar.MONTH)];
+        result += " ";
+        result += calendar.get(Calendar.YEAR);
+        result += " om ";
+        result += calendar.get(Calendar.HOUR_OF_DAY);
+        result += ":";
+        result += calendar.get(Calendar.MINUTE);
+
+        return  result;
     }
 
     /**

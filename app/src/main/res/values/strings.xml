@@ -40,7 +40,7 @@
     <!--Everything regarding the measurement properties-->
     <string name="measurement_name_format" formatted="false">Meting in %s</string>
 
-    <string name="measurement_name_default">Meting</string>
+    <string name="measurement_name_default">Meting op onbekende locatie</string>
     <string name="measurement_default_datetime">Onbekende datum en tijd</string>
     <string name="measurement_default_location">Onbekende locatie</string>
     <string name="measurement_default_description">Voeg een beschrijving toe</string>

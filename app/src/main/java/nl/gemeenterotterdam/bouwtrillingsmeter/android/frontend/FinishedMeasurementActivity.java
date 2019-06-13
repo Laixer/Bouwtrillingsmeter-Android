@@ -16,8 +16,14 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.PreferenceManager;
 
 /**
- * This activity launches when we successfully complete our measurement.
+ * This activity launches when we successfully
+ * complete our measurement.
+ * <p>
+ * We no longer use this, since alpha release.
+ * After we finish our measurement we just go
+ * straight to the {@link DetailsActivity} page.
  */
+@Deprecated
 public class FinishedMeasurementActivity extends AppCompatActivity {
 
     private EditText editTextName;

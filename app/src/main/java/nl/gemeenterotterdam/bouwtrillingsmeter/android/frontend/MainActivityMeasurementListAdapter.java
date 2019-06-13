@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
@@ -63,16 +62,19 @@ public class MainActivityMeasurementListAdapter extends BaseAdapter {
 
         // Set the variables
         textViewName.setText(measurements.get(position).getName());
-        textViewDate.setText(Utility.formatDate(measurements.get(position).getDateStart()));
+        textViewDate.setText(Utility.formatMeasurementDateTime(measurements.get(position)));
 
         // Set the photo
         // Add an actionlistener to this to attempt to take a photo
-        Bitmap photo = measurements.get(position).getBitmap();
-        if (photo == null) {
-            imageViewPhoto.getLayoutParams().height = 0;
-            imageViewPhoto.requestLayout();
-        } else {
-            Utility.updateScaledPhoto(imageViewPhoto, photo);
+        // TODO ALpha
+        if (!Utility.isAlpha()) {
+            Bitmap photo = measurements.get(position).getBitmap();
+            if (photo == null) {
+                imageViewPhoto.getLayoutParams().height = 0;
+                imageViewPhoto.requestLayout();
+            } else {
+                Utility.updateScaledPhoto(imageViewPhoto, photo);
+            }
         }
 
         return view;

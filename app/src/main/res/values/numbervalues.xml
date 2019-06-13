@@ -13,4 +13,7 @@
     <!--Touch-->
     <integer name="double_touch_ms_min">25</integer>
     <integer name="double_touch_ms_max">300</integer>
+
+    <!--Version control-->
+    <bool name="alpha">true</bool>
 </resources>

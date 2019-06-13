@@ -1,10 +1,10 @@
 Alpha:
 
 MainActivity
-- Naam meting:      "Meting in Delft"
-                    geen *stad*? "Meting op onbekende locatie"
-- Datum + tijd:     13 Juni 2019 om 14:35
-- Geen fotos in de alpha
+DONE - Naam meting:      "Meting in Delft"
+DONE                      geen *stad*? "Meting op onbekende locatie"
+DONE - Datum + tijd:     13 Juni 2019 om 14:35
+DONE - Geen fotos in de alpha
 
 DetailsActitivy
 - Alpha? Overleggen met Don en Yorick
