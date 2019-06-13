@@ -50,6 +50,11 @@ public class SettingsAdvancedActivity extends AppCompatActivity {
             }
         });
 
+        // TODO Alpha
+        if (Utility.isAlpha()) {
+            buttonShowUserUID.setVisibility(View.GONE);
+        }
+
         loadCurrentStoredSettings();
     }
 

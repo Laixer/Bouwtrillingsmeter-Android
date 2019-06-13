@@ -63,6 +63,14 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        // TODO Alpha
+        if (Utility.isAlpha()) {
+            switchPickup.setVisibility(View.GONE);
+            switchRoaming.setVisibility(View.GONE);
+            switchStreamAllData.setVisibility(View.GONE);
+            findViewById(R.id.settingsBarSeparator).setVisibility(View.GONE);
+        }
+
         loadCurrentStoredSettings();
     }
 
