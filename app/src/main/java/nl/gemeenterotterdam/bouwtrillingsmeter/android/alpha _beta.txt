@@ -1,0 +1,61 @@
+Alpha:
+
+MainActivity
+- Naam meting:      "Meting in Delft"
+                    geen *stad*? "Meting op onbekende locatie"
+- Datum + tijd:     13 Juni 2019 om 14:35
+- Geen fotos in de alpha
+
+DetailsActitivy
+- Alpha? Overleggen met Don en Yorick
+- Indeling
+    Naam
+    Datum tijd
+    Locatie
+    Beschrijving
+    Overschrijding of niet
+- Geen foto
+- FloatingActionButton
+- Geen namen en tekst aanpassen voor nu
+
+SettingsActivity
+- Alleen "geavanceerde instellingen"
+
+SettingsAdvancedActivity
+- Alleen "laat grafieken zien" switch
+
+Instellingen meting Activity:
+- Start meting blokkeren als je niet alles wat nodig is hebt geselcteerd
+- Popup -> even laten, afwachten wat Wander gaat doen
+
+WizardActivity
+- Groen en rood voor knoppen
+- Terug knop:       Wander denkt er even over na
+- Terug klikken:    eruit
+- Good weather:     zoals het nu is
+                    geen opnieuw knop
+- Bad weather:      Done knop
+                    wel opnieuw knop
+
+MeasuringActivity
+- Voor meting
+    - Start knop
+    - Wacht icoontje
+    - Leg uw telefoon plat neer
+
+- Tijdens meting
+    - "Stop" knop / iOS bovenin "sla op"
+    - Eventueel een laat grafieken zien knop
+    - Aan het meten
+      Laat de telefoon liggen (één zin)
+    - Terug knop alleen bij Android, iOS heeft dat niet
+
+GraphsActivity
+- Previews? --> vragen
+- Dezelfde library
+    ik zoek dit uit
+    mpandroidchart vs charts (ios)?
+
+FinishedMeasurementActivity
+- Naar details scherm instantly
+
