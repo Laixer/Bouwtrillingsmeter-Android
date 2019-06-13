@@ -25,6 +25,11 @@ public class SettingsWizardActivity extends AppCompatActivity {
     private ConstraintLayout layoutQuestion;
     private ConstraintLayout layoutFinish;
 
+    // Buttons
+    private Button buttonYes;
+    private Button buttonNo;
+    private Button buttonTryAgain;
+
     // Question
     private TextView textViewMain;
     private TextView textViewExtra;
@@ -62,32 +67,23 @@ public class SettingsWizardActivity extends AppCompatActivity {
         // Link all elements
         layoutQuestion = (ConstraintLayout) findViewById(R.id.layoutWidgetQuestions);
         layoutFinish = (ConstraintLayout) findViewById(R.id.layoutWidgetCompleted);
-        ((FloatingActionButton) findViewById(R.id.fabWizardConfirm)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        ((FloatingActionButton) findViewById(R.id.fabWizardConfirm)).setOnClickListener((View v) -> {
                 if (settings != null && settings.isValid()) {
                     SettingsPageActivity.onWizardCreatedValidSettings(settings);
                     finish();
                 }
-            }
         });
 
         // Question
         textViewMain = (TextView) findViewById(R.id.textViewWizardMain);
         textViewExtra = (TextView) findViewById(R.id.textViewWizardExtra);
-        Button buttonYes = (Button) findViewById(R.id.buttonWizardYes);
-        buttonYes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        buttonYes = (Button) findViewById(R.id.buttonWizardYes);
+        buttonYes.setOnClickListener((View v) -> {
                 onAnswered(true);
-            }
         });
-        Button buttonNo = (Button) findViewById(R.id.buttonWizardNo);
-        buttonNo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        buttonNo = (Button) findViewById(R.id.buttonWizardNo);
+        buttonNo.setOnClickListener((View v) -> {
                 onAnswered(false);
-            }
         });
 
         // Finish
@@ -102,12 +98,9 @@ public class SettingsWizardActivity extends AppCompatActivity {
         // Setup wizard
         settingsWizard = createQuestionWizard();
         currentQuestion = settingsWizard.getStartQuestion();
-        Button buttonTryAgain = (Button) findViewById(R.id.buttonWizardTryAgain);
-        buttonTryAgain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        buttonTryAgain = (Button) findViewById(R.id.buttonWizardTryAgain);
+        buttonTryAgain.setOnClickListener((View v) -> {
                 onClickTryAgain();
-            }
         });
 
         // Change layout
@@ -279,6 +272,7 @@ public class SettingsWizardActivity extends AppCompatActivity {
 
         if (settings.isValid()) {
             setFinishTextViewsVisibilities(true);
+            findViewById(R.id.buttonWizardTryAgain).setVisibility(View.GONE);
             textViewTop.setText(getResources().getString(R.string.widget_final_top_success));
             textViewBuildingCategory.setText(getResources().getStringArray(R.array.category_dropdown_building)[settings.getBuildingCategory().ordinal()]);
             textViewVibrationCategory.setText(getResources().getStringArray(R.array.category_dropdown_vibration)[settings.getVibrationCategory().ordinal()]);
@@ -286,6 +280,7 @@ public class SettingsWizardActivity extends AppCompatActivity {
         } else {
             setFinishTextViewsVisibilities(false);
             textViewTop.setText(getResources().getStringArray(R.array.wizard_outcome_text)[outcome.getIndex()]);
+            findViewById(R.id.buttonWizardTryAgain).setVisibility(View.VISIBLE);
         }
     }
 

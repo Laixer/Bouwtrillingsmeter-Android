@@ -19,6 +19,10 @@
     <color name="first_visit_popup_text">#ffffff</color>
     <color name="first_visit_popup_background">#ff061557</color>
 
+    <!--Wizard-->
+    <color name="wizard_button_yes">@color/colorPrimary</color>
+    <color name="wizard_button_no">#FF5757</color>
+
     <!--Graphs-->
     <color name="graph_series_color_x">#ff0000</color>
     <color name="graph_series_color_y">#0000ff</color>
