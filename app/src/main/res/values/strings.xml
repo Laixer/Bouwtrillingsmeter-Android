@@ -163,6 +163,7 @@
     <string name="preparing_cycle_start_flat">De meting begint zodra de telefoon stil ligt...</string>
     <string name="preparing_cycle_start_button">Druk op start om de meting te starten...</string>
     <string name="preparing_cycle_start_flag">start_flag</string>
+    <string name="measuring_cycle_measuring_now_alpha">Aan het meten\nLaat de telefoon liggen</string>
     <string name="measuring_cycle_measuring_now">Aan het meten...</string>
     <string name="measuring_cycle_keep_on_table">Laat de telefoon liggen...</string>
     <string name="measuring_cycle_stop_flag">stop_flag</string>

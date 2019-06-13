@@ -74,6 +74,9 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
             isMeasuring = false;
         }
 
+        // Add this as a listener
+        Backend.addBackendStateListener(this);
+
         // Update our page state
         updatePageState();
     }
@@ -132,7 +135,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
         }
 
         if (Utility.isAlpha()) {
-            strings.addLast(getResources().getString(R.string.measuring_cycle_measuring_now));
+            strings.addLast(getResources().getString(R.string.measuring_cycle_measuring_now_alpha));
         } else {
             strings.addLast(getResources().getString(R.string.measuring_cycle_measuring_now));
             strings.addLast(getResources().getString(R.string.measuring_cycle_stop_flag));
@@ -338,6 +341,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     public void finish() {
         GraphsActivity.forceFinish();
         isMeasuring = null;
+        Backend.removeBackendStateListener(this);
         super.finish();
     }
 }
