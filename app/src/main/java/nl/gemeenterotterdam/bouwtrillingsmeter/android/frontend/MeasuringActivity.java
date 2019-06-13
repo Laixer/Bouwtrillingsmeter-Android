@@ -114,6 +114,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     private void startTextCycleWaiting() {
         strings = new LinkedList<>();
 
+        // TODO Alpha
         if (Utility.isAlpha()) {
             strings.addLast(getResources().getString(R.string.preparing_cycle_place_device_on_table));
         } else {
@@ -134,6 +135,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
             strings.addFirst(getResources().getString(R.string.measuring_cycle_exceeding_detected_now));
         }
 
+        // TODO Alpha
         if (Utility.isAlpha()) {
             strings.addLast(getResources().getString(R.string.measuring_cycle_measuring_now_alpha));
         } else {

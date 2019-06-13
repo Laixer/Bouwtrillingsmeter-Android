@@ -1,6 +1,5 @@
 Alpha:
 
-TODO Fix read issues, gets really slow when we have multiple measurements
 TODO Settings activity always on stack, fix this
 
 MainActivity

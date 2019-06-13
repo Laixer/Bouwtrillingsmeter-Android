@@ -62,7 +62,7 @@ public class Measurement implements Serializable {
 
         // Create variables
         settings = null;
-        dataIntervals = new ArrayList<DataInterval>();
+        dataIntervals = new ArrayList<>();
 
         // Set booleans
         open = false;
