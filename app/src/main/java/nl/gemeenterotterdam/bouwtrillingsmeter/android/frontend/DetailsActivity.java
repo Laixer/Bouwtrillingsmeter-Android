@@ -90,7 +90,7 @@ public class DetailsActivity extends AppCompatActivity {
         // TODO Alpha
         if (Utility.isAlpha()) {
             imageViewMeasurementPhoto.setVisibility(View.GONE);
-            fabTakePicture.setVisibility(View.GONE);
+            ((View) fabTakePicture).setVisibility(View.GONE);
         }
     }
 

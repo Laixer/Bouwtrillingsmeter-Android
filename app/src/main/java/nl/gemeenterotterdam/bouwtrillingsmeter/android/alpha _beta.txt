@@ -28,7 +28,7 @@ DONE - Alleen "laat grafieken zien" switch
 
 Instellingen meting Activity:
 DONE - Start meting blokkeren als je niet alles wat nodig is hebt geselcteerd
-- Popup -> even laten, afwachten wat Wander gaat doen
+TODO - Popup -> even laten, afwachten wat Wander gaat doen
 
 WizardActivity
 DONE - Groen en rood voor knoppen
@@ -40,24 +40,24 @@ DONE - Bad weather:      Done knop
 DONE                     wel opnieuw knop
 
 MeasuringActivity
-- Voor meting
-    - Start knop
-    - Wacht icoontje
-    - Leg uw telefoon plat neer
+TODO - Voor meting
+TODO - Start knop
+TODO - Wacht icoontje
+TODO - Leg uw telefoon plat neer
 
-- Tijdens meting
-    - "Stop" knop / iOS bovenin "sla op"
-    - Eventueel een laat grafieken zien knop
-    - Aan het meten
-      Laat de telefoon liggen (één zin)
-    - Terug knop alleen bij Android, iOS heeft dat niet
+Tijdens meting:
+TODO - "Stop" knop / iOS bovenin "sla op"
+TODO - Eventueel een laat grafieken zien knop
+TODO - Aan het meten
+TODO - Laat de telefoon liggen (één zin)
+TODO - Terug knop alleen bij Android, iOS heeft dat niet
 
 GraphsActivity
-- Previews? --> vragen
-- Dezelfde library
-    ik zoek dit uit
-    mpandroidchart vs charts (ios)?
+TODO - Previews? --> vragen
+TODO - Dezelfde library
+TODO     ik zoek dit uit
+TODO     mpandroidchart vs charts (ios)?
 
 FinishedMeasurementActivity
-- Naar details scherm instantly
+TODO - Naar details scherm instantly
 

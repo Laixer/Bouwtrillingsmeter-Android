@@ -314,7 +314,8 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
      * Updates the UI when we finish measuring (not cancel!).
      */
     private void onFinishMeasuring() {
-        Intent intent = new Intent(getApplicationContext(), FinishedMeasurementActivity.class);
+        DetailsActivity.measurement = Backend.getLastMeasurement();
+        Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
         startActivity(intent);
 
         // Close this activity
