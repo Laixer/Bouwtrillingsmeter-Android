@@ -1,10 +1,12 @@
 Alpha:
 
+TODO Fix read issues, gets really slow when we have multiple measurements
+
 MainActivity
 DONE - Naam meting:      "Meting in Delft"
 DONE                      geen *stad*? "Meting op onbekende locatie"
 DONE - Datum + tijd:     13 Juni 2019 om 14:35
-DONE - Geen fotos in de alpha
+DONE - Geen foto
 
 DetailsActitivy
 - Alpha? Overleggen met Don en Yorick
@@ -12,10 +14,10 @@ DetailsActitivy
     Naam
     Datum tijd
     Locatie
-    Beschrijving
     Overschrijding of niet
+    Beschrijving
 - Geen foto
-- FloatingActionButton
+- Geen fab
 - Geen namen en tekst aanpassen voor nu
 
 SettingsActivity

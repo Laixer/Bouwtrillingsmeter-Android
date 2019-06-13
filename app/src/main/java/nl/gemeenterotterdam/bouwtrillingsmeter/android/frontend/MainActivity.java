@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Floating action button to start a new measurement
+        // Floating action button to start a new measurementu
         fab = findViewById(R.id.fabNewMeasurement);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

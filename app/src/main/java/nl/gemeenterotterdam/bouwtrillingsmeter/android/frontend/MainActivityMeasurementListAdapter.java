@@ -18,8 +18,11 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
  * @author Thomas Beckers
  * @since 1.0
  * <p>
- * This class is used as an adapter for each measurement item in the main measurement listview displayd on our {@link MainActivity}.
- * This class does NOT control the page that opens when you click a measurement within said listview, this is done by {@link DetailsActivity}.
+ * This class is used as an adapter for each measurement
+ * item in the main measurement listview displayd on our
+ * {@link MainActivity}. This class does NOT control the
+ * page that opens when you click a measurement within
+ * said listview. This is done by {@link DetailsActivity}.
  */
 public class MainActivityMeasurementListAdapter extends BaseAdapter {
 
@@ -32,7 +35,7 @@ public class MainActivityMeasurementListAdapter extends BaseAdapter {
      * @param context      Our context, usually referred to as "this"
      * @param measurements The pointer to the measurements list
      */
-    public MainActivityMeasurementListAdapter(Context context, ArrayList<Measurement> measurements) {
+    MainActivityMeasurementListAdapter(Context context, ArrayList<Measurement> measurements) {
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.measurements = measurements;
     }
@@ -75,6 +78,8 @@ public class MainActivityMeasurementListAdapter extends BaseAdapter {
             } else {
                 Utility.updateScaledPhoto(imageViewPhoto, photo);
             }
+        } else {
+            imageViewPhoto.setVisibility(View.GONE);
         }
 
         return view;
@@ -83,7 +88,7 @@ public class MainActivityMeasurementListAdapter extends BaseAdapter {
     /**
      * Forces the adapter to update
      */
-    public void onDataSetChanged() {
+    void onDataSetChanged() {
         this.notifyDataSetChanged();
     }
 

@@ -66,11 +66,16 @@ public class StorageControl {
     public static void removeAllInternalStorage() throws StorageWriteException {
         try {
 
-            File internalStorage = Backend.applicationContext.getFilesDir();
-            File[] files = internalStorage.listFiles();
+            ArrayList<File> folders = new ArrayList<File>();
+            folders.add(getDirectory(DIRECTORY_DATA_INTERVALS));
+            folders.add(getDirectory(DIRECTORY_MEASUREMENTS));
+            folders.add(getDirectory(DIRECTORY_IMAGES));
+            folders.add(getDirectory(DIRECTORY_UTILITY_LISTS));
 
-            for (File file : files) {
-                Backend.applicationContext.deleteFile(file.getName());
+            for (File folder : folders) {
+                for (File file : folder.listFiles()) {
+                    Backend.applicationContext.deleteFile(file.getName());
+                }
             }
 
             return;

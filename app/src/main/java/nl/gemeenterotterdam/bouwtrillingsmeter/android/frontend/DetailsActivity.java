@@ -86,6 +86,12 @@ public class DetailsActivity extends AppCompatActivity {
         // TODO Remove
         updateImageVisibility(true);
         Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
+
+        // TODO Alpha
+        if (Utility.isAlpha()) {
+            imageViewMeasurementPhoto.setVisibility(View.GONE);
+            fabTakePicture.setVisibility(View.GONE);
+        }
     }
 
     /**
