@@ -1,5 +1,9 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import com.github.mikephil.charting.charts.Chart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+
 import java.util.ArrayList;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
@@ -23,8 +27,17 @@ class MpaGraphLine extends MpaGraph {
      */
     public MpaGraphLine(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, ArrayList<String> dataSetNames) {
         super(title, xAxisLabel, yAxisLabel, scrolling, dataSetNames);
+    }
 
-
+    /**
+     * This links our chart. Each implementation must
+     * convert the chart type.
+     *
+     * @param chart The chart
+     */
+    @Override
+    void linkChart(Chart chart) {
+        this.chart = (LineChart) chart;
     }
 
     /**
@@ -45,7 +58,11 @@ class MpaGraphLine extends MpaGraph {
      */
     @Override
     protected <T> void appendDataToEntries(ArrayList<DataPoint3D<T>> dataPoints3D) {
-
+        for (DataPoint3D<T> dataPoint3D : dataPoints3D) {
+            for (int dimension = 0; dimension < 3; dimension++) {
+                entries[dimension].add(new Entry((float) dataPoint3D.xAxisValue, dataPoint3D.values[dimension]));
+            }
+        }
     }
 
     /**

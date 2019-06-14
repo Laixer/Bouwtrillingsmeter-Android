@@ -49,22 +49,30 @@ abstract class MpaGraph {
 
         this.scrolling = scrolling;
 
+        entries = new ArrayList[dataSetNames.size()];
         chartDataConstant = new ArrayList<>();
         chartDataVariable = new ArrayList<>();
     }
 
     /**
      * Call this when the activity is live and we actually
-     * have a chart to push to.
+     * have a chart to push to. Same for the text view.
      *
      * @param chart The chart object
      */
-    void onChartCreated(Chart chart, TextView textViewTitle) {
+    void onUiCreated(Chart chart, TextView textViewTitle) {
         this.textViewTitle = textViewTitle;
-        this.chart = chart;
-
         textViewTitle.setText(title);
+        linkChart(chart);
     }
+
+    /**
+     * This links our chart. Each implementation must
+     * convert the chart type.
+     *
+     * @param chart The chart
+     */
+    abstract void linkChart(Chart chart);
 
     /**
      * Call this to add a constant line to the graph.
