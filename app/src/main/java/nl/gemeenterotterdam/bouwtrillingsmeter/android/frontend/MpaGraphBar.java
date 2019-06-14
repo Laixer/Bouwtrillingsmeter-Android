@@ -3,6 +3,7 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.BaseEntry;
 import com.github.mikephil.charting.data.Entry;
@@ -15,6 +16,8 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
  * Instance of a bar graph.
  */
 class MpaGraphBar extends MpaGraph {
+
+    private ArrayList<BarEntry>[] barEntries;
 
     /**
      * Creates an instance of a line graph.
@@ -30,6 +33,11 @@ class MpaGraphBar extends MpaGraph {
      */
     public MpaGraphBar(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, ArrayList<String> dataSetNames) {
         super(title, xAxisLabel, yAxisLabel, scrolling, dataSetNames);
+
+        barEntries = new ArrayList[dataSetNames.size()];
+        for (int i = 0; i < dataSetNames.size(); i++) {
+            barEntries[i] = new ArrayList<BarEntry>();
+        }
     }
 
     /**
@@ -74,6 +82,9 @@ class MpaGraphBar extends MpaGraph {
      */
     @Override
     protected void pushToChart() {
-
+        BarDataSet[] barDataSets = new BarDataSet[entries.length];
+        for (int i = 0; i < barDataSets.length; i++) {
+            barDataSets[i] = new BarDataSet(entries[i], dataSetNames.get(i));
+        }
     }
 }
