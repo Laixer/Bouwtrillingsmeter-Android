@@ -36,9 +36,6 @@ public class GraphTimeLine extends Graph {
         }
     }
 
-    public void resetData() {
-    }
-
     /**
      * This method sends datapoints3D to our graph.
      * They get split and passed on to {@link #appendDataToList(ArrayList)}.

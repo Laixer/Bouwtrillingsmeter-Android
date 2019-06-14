@@ -22,7 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".frontend.MPAndroidChartActivity"></activity>
+        <activity android:name=".frontend.MpaGraphsActivity"></activity>
+        <activity android:name=".frontend.MPAndroidChartActivity" />
         <activity
             android:name=".frontend.MainActivity"
             android:label="@string/app_name"
