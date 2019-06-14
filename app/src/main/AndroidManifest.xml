@@ -22,6 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".frontend.MPAndroidChartActivity"></activity>
         <activity
             android:name=".frontend.MainActivity"
             android:label="@string/app_name"
@@ -39,21 +40,8 @@
         <activity android:name=".frontend.FirstVisitTutorialActivity" />
         <activity android:name=".frontend.DetailsActivity" />
         <activity android:name=".frontend.SettingsWizardActivity" />
-        <activity android:name=".frontend.SettingsAdvancedActivity"></activity>
+        <activity android:name=".frontend.SettingsAdvancedActivity" />
         <activity android:name=".frontend.SettingsActivity" />
-
-        <!--File provider to read and write images-->
-        <!--This was scrapped-->
-        <!--<provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="$(applicationId).fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>-->
-
     </application>
 
 </manifest>

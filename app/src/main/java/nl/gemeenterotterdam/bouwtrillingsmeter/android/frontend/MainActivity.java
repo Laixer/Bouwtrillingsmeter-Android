@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Floating action button to start a new measurementu
+        // Floating action button to start a new measurement
         fab = findViewById(R.id.fabNewMeasurement);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
         if (SHOW_FIRST_VISIT_SHOWCASE) {
             showcaseFirstVisit();
         }
+
     }
 
     /**
