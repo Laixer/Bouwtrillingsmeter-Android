@@ -10,36 +10,48 @@ import java.util.ArrayList;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
-public abstract class MpaGraph {
+/**
+ * Base for a graph.
+ */
+abstract class MpaGraph {
 
-    private String title;
-    private String xAxisLabel;
-    private String yAxisLabel;
+    protected String title;
+    protected String xAxisLabel;
+    protected String yAxisLabel;
+    protected ArrayList<String> dataSetNames;
 
-    private boolean scrolling;
+    protected boolean scrolling;
 
-    private ArrayList<Entry>[] entries;
-    private ChartData[] chartDataConstant;
-    private ChartData[] chartDataVariable;
+    protected ArrayList<Entry>[] entries;
+    protected ArrayList<ChartData> chartDataConstant;
+    protected ArrayList<ChartData> chartDataVariable;
 
-    private TextView textViewTitle;
-    private Chart chart;
+    protected TextView textViewTitle;
+    protected Chart chart;
 
-
-    MpaGraph(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, int variableChartCount) {
+    /**
+     * Constructor, call by calling super().
+     *
+     * @param title        The graph title
+     * @param xAxisLabel   The x axis label
+     * @param yAxisLabel   The y axis label
+     * @param scrolling    If set to true we append data to the right,
+     *                     if set to false we refresh the graph each
+     *                     iteration
+     * @param dataSetNames The names of all data sets,
+     *                     this also indicates their count
+     */
+    protected MpaGraph(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, ArrayList<String> dataSetNames) {
         this.title = title;
         this.xAxisLabel = xAxisLabel;
         this.yAxisLabel = yAxisLabel;
+        this.dataSetNames = dataSetNames;
+
         this.scrolling = scrolling;
 
-        chartDataVariable = new ChartData[variableChartCount];
+        chartDataConstant = new ArrayList<>();
+        chartDataVariable = new ArrayList<>();
     }
-
-    /**
-     * This initializes our variables based on the type
-     * of graph, being line or bar.
-     */
-    protected abstract void createArraysAndLists();
 
     /**
      * Call this when the activity is live and we actually
@@ -52,6 +64,15 @@ public abstract class MpaGraph {
         this.chart = chart;
 
         textViewTitle.setText(title);
+    }
+
+    /**
+     * Call this to add a constant line to the graph.
+     *
+     * @param chartData The chart data to add
+     */
+    void addConstantChartData(ChartData chartData) {
+        chartDataConstant.add(chartData);
     }
 
     /**
@@ -97,7 +118,6 @@ public abstract class MpaGraph {
      * for bar and line graphs.
      */
     protected abstract void pushToChart();
-
 
     /**
      * This determines whether or not our UI should attempt to

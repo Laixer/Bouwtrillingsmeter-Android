@@ -47,6 +47,9 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     private static long currentCycleId = 0;
     private static Deque<String> strings;
 
+    // Graph holder
+    private static MpaGraphControl mpaGraphControl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +82,12 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
 
         // Update our page state
         updatePageState();
+
+        // Graph creation
+        if (mpaGraphControl == null) {
+            mpaGraphControl = new MpaGraphControl();
+            mpaGraphControl.createAllGraphs();
+        }
     }
 
     /**
@@ -344,6 +353,10 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
         GraphsActivity.forceFinish();
         isMeasuring = null;
         Backend.removeBackendStateListener(this);
+
+        // MpaGraphControl gets deleted again
+        mpaGraphControl = null;
+
         super.finish();
     }
 }
