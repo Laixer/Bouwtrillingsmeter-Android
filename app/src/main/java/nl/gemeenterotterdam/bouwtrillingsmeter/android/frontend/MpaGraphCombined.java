@@ -15,6 +15,7 @@ import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.ScatterData;
 import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IBarLineScatterCandleBubbleDataSet;
 import com.github.mikephil.charting.renderer.LineChartRenderer;
@@ -143,107 +144,31 @@ class MpaGraphCombined extends MpaGraph {
      */
     @Override
     protected void pushToChart() {
-        /*CombinedData combinedData = new CombinedData();
-
+        CombinedData combinedData = new CombinedData();
+        LineData lineData = new LineData();
+        ScatterData scatterData = new ScatterData();
         for (int i = 0; i < dataSetNames.length; i++) {
             if (useAsPoints) {
                 ScatterDataSet scatterDataSet = new ScatterDataSet(entries[i], dataSetNames[i]);
                 styleScatterDataSet(scatterDataSet, colors[i]);
-                combinedData.addDataSet(scatterDataSet);
+                scatterData.addDataSet(scatterDataSet);
             } else {
                 LineDataSet lineDataSet = new LineDataSet(entries[i], dataSetNames[i]);
                 styleLineDataSet(lineDataSet, colors[i]);
-                combinedData.addDataSet(lineDataSet);
+                lineData.addDataSet(lineDataSet);
             }
         }
 
+        combinedData.setData(scatterData);
+        combinedData.setData(lineData);
+
         chart.setData(combinedData);
-        chart.invalidate();*/
-
-
-
-
-        CombinedData data = new CombinedData();
-
-        data.setData(generateLineData());
-        data.setData(generateBarData());
-
-        chart.setData(data);
         chart.invalidate();
 
-
-
-        /*if (entries[0].size() > 0) {
+        if (entries[0].size() > 0) {
             forceAxisMinMAx(entries[0].get(0).getX(),
                     entries[0].get(entries[0].size() - 1).getX());
-        }*/
+        }
+
     }
-
-    private LineData generateLineData() {
-
-        LineData d = new LineData();
-
-        ArrayList<Entry> entries = new ArrayList<Entry>();
-
-        entries = getLineEntriesData(entries);
-
-        LineDataSet set = new LineDataSet(entries, "Line");
-        //set.setColor(Color.rgb(240, 238, 70));
-        set.setColors(ColorTemplate.COLORFUL_COLORS);
-        set.setLineWidth(2.5f);
-        set.setCircleColor(Color.rgb(240, 238, 70));
-        set.setCircleRadius(5f);
-        set.setFillColor(Color.rgb(240, 238, 70));
-        set.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        set.setDrawValues(true);
-        set.setValueTextSize(10f);
-        set.setValueTextColor(Color.rgb(240, 238, 70));
-
-        set.setAxisDependency(YAxis.AxisDependency.LEFT);
-        d.addDataSet(set);
-
-        return d;
-    }
-
-    private BarData generateBarData() {
-
-        ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
-        entries = getBarEnteries(entries);
-
-        BarDataSet set1 = new BarDataSet(entries, "Bar");
-        //set1.setColor(Color.rgb(60, 220, 78));
-        set1.setColors(ColorTemplate.COLORFUL_COLORS);
-        set1.setValueTextColor(Color.rgb(60, 220, 78));
-        set1.setValueTextSize(10f);
-        set1.setAxisDependency(YAxis.AxisDependency.LEFT);
-
-        float barWidth = 0.45f; // x2 dataset
-
-
-        BarData d = new BarData(set1);
-        d.setBarWidth(barWidth);
-
-
-        return d;
-    }
-
-    private ArrayList<Entry> getLineEntriesData(ArrayList<Entry> entries){
-        entries.add(new Entry(1, 20));
-        entries.add(new Entry(2, 10));
-        entries.add(new Entry(3, 8));
-        entries.add(new Entry(4, 40));
-        entries.add(new Entry(5, 37));
-
-        return entries;
-    }
-
-    private ArrayList<BarEntry> getBarEnteries(ArrayList<BarEntry> entries){
-        entries.add(new BarEntry(1, 25));
-        entries.add(new BarEntry(2, 30));
-        entries.add(new BarEntry(3, 38));
-        entries.add(new BarEntry(4, 10));
-        entries.add(new BarEntry(5, 15));
-        return  entries;
-    }
-
 }
