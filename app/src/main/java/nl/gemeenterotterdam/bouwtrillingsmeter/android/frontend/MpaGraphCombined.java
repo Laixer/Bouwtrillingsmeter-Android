@@ -147,6 +147,7 @@ class MpaGraphCombined extends MpaGraph {
         CombinedData combinedData = new CombinedData();
         LineData lineData = new LineData();
         ScatterData scatterData = new ScatterData();
+
         for (int i = 0; i < dataSetNames.length; i++) {
             if (useAsPoints) {
                 ScatterDataSet scatterDataSet = new ScatterDataSet(entries[i], dataSetNames[i]);
