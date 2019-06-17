@@ -3,6 +3,7 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 import android.content.Context;
 
 import com.github.mikephil.charting.charts.Chart;
+import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.data.CombinedData;
@@ -21,12 +22,9 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
  */
 class MpaGraphCombined extends MpaGraph {
 
-    private ArrayList<Entry>[] entries;
+//    private ArrayList<Entry>[] entries;
     private IBarLineScatterCandleBubbleDataSet[] graphDataSets;
     private CombinedData combinedData;
-
-    private LineDataSet[] lineDataSets;
-    private LineData lineData;
     private boolean useAsPoints;
 
     /**
@@ -52,13 +50,14 @@ class MpaGraphCombined extends MpaGraph {
         this.useAsPoints = useAsPoints;
 
         // Prepare entries
-        entries = new ArrayList[dataSetNames.length];
+        ArrayList<Entry>[] entries = new ArrayList[dataSetNames.length];
         for (int i = 0; i < dataSetNames.length; i++) {
             entries[i] = new ArrayList<>();
         }
 
         // Prepare line data sets
-        /*combinedData = new CombinedData();
+        // Do this generic
+        combinedData = new CombinedData();
         if (useAsPoints) {
             graphDataSets = new ScatterDataSet[dataSetNames.length];
             for (int i = 0; i < graphDataSets.length; i++) {
@@ -73,16 +72,7 @@ class MpaGraphCombined extends MpaGraph {
                 styleLineDataSet((LineDataSet) graphDataSets[i], colors[i]);
                 combinedData.addDataSet(graphDataSets[i]);
             }
-        }*/
-
-        lineData = new LineData();
-        lineDataSets = new LineDataSet[dataSetNames.length];
-        for (int i = 0; i < lineDataSets.length; i++) {
-            lineDataSets[i] = new LineDataSet(entries[i], dataSetNames[i]);
-            styleLineDataSet(lineDataSets[i], colors[i]);
-            lineData.addDataSet(lineDataSets[i]);
         }
-
     }
 
     /**
@@ -94,7 +84,8 @@ class MpaGraphCombined extends MpaGraph {
      */
     @Override
     Chart createChart(Context context) {
-        chart = new LineChart(context);
+        chart = new CombinedChart(context);
+        chart.setData(combinedData);
         styleChart();
 
         return chart;
@@ -106,16 +97,8 @@ class MpaGraphCombined extends MpaGraph {
      */
     @Override
     protected void resetChartData() {
-        /*for (IBarLineScatterCandleBubbleDataSet graphDataSet : graphDataSets) {
+        for (IBarLineScatterCandleBubbleDataSet graphDataSet : graphDataSets) {
             graphDataSet.clear();
-        }*/
-
-        for (LineDataSet lineDataSet : lineDataSets) {
-            lineDataSet.clear();
-        }
-
-        for (int i = 0; i < entries.length; i++) {
-            entries[i] = new ArrayList<>();
         }
     }
 
@@ -129,25 +112,11 @@ class MpaGraphCombined extends MpaGraph {
     @Override
     protected <T> void appendDataToEntries(ArrayList<DataPoint3D<T>> dataPoints3D) {
         for (DataPoint3D<T> dataPoint3D : dataPoints3D) {
-            for (int i = 0; i < entries.length; i++) {
-                // Create entry
+            for (int i = 0; i < dataSetNames.length; i++) {
                 Entry entry = new Entry(
                         dataPoint3D.xAxisValueAsFloat() / 1000,
                         dataPoint3D.values[i]);
-
-                // Failsafe for the ordering
-                // Yes, we actually need this
-                if (entries[i].size() > 0) {
-                    float previousX = entries[i]
-                            .get(entries[i].size() - 1).getX();
-                    if (entry.getX() < previousX) {
-                        continue;
-                    }
-                }
-
-                // Add entry to list, we don't add to line data set
-                // This might change later because realtime adding doesn't work
-                entries[i].add(entry);
+                graphDataSets[i].addEntry(entry);
             }
         }
     }
@@ -158,47 +127,7 @@ class MpaGraphCombined extends MpaGraph {
      */
     @Override
     protected void pushToChart() {
-        /*CombinedData combinedData = new CombinedData();
-
-        if (useAsPoints) {
-            for (int i = 0; i < entries.length; i++) {
-                graphDataSets[i] = new ScatterDataSet(entries[i], dataSetNames[i]);
-                styleScatterDataSet((ScatterDataSet) graphDataSets[i], colors[i]);
-                combinedData.addDataSet(graphDataSets[i]);
-            }
-        } else {
-            for (int i = 0; i < entries.length; i++) {
-                graphDataSets[i] = new LineDataSet(entries[i], dataSetNames[i]);
-                styleLineDataSet((LineDataSet) graphDataSets[i], colors[i]);
-                combinedData.addDataSet((LineDataSet) graphDataSets[i]);
-            }
-        }
-
-        chart.setData(combinedData);
-        chart.invalidate();*/
-        lineData = new LineData();
-        for (int i = 0; i < entries.length; i++) {
-            lineDataSets[i] = new LineDataSet(entries[i], dataSetNames[i]);
-            styleLineDataSet(lineDataSets[i], colors[i]);
-            lineData.addDataSet(lineDataSets[i]);
-        }
-
-
-        chart.setData(lineData);
         chart.invalidate();
-    }
-
-    private void styleLineDataSet(LineDataSet lineDataSet, int color) {
-        lineDataSet.setDrawCircles(false);
-        lineDataSet.setDrawCircleHole(false);
-        lineDataSet.setColor(color);
-        lineDataSet.setLineWidth(1);
-    }
-
-    private void styleScatterDataSet(ScatterDataSet scatterDataSet, int color) {
-        scatterDataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
-        scatterDataSet.setColor(color);
-        scatterDataSet.setScatterShapeSize(3);
     }
 
 }

@@ -4,10 +4,13 @@ import android.content.Context;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.Chart;
+import com.github.mikephil.charting.charts.ScatterChart;
+import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
@@ -118,7 +121,7 @@ abstract class MpaGraph {
      * @param dataPoints3D The datapoints to add
      * @param <T>          The type of datapoint
      */
-    <T> void sendNewDataToSeries(ArrayList<DataPoint3D<T>> dataPoints3D) {
+    <T> void sendNewDataToChart(ArrayList<DataPoint3D<T>> dataPoints3D) {
         // If we are not scrolling we should reset our view
         if (refreshing) {
             resetChartData();
@@ -169,6 +172,24 @@ abstract class MpaGraph {
 
     protected void styleChart() {
         chart.setDescription(null);
+    }
+
+    protected void styleLineDataSet(LineDataSet lineDataSet, int color) {
+        lineDataSet.setDrawCircles(false);
+        lineDataSet.setDrawCircleHole(false);
+        lineDataSet.setColor(color);
+        lineDataSet.setLineWidth(1);
+    }
+
+    protected void styleScatterDataSet(ScatterDataSet scatterDataSet, int color) {
+        scatterDataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
+        scatterDataSet.setColor(color);
+        scatterDataSet.setScatterShapeSize(3);
+    }
+
+    protected void styleBarDataSet(BarDataSet barDataSet, int color) {
+        barDataSet.setColor(color);
+        barDataSet.setDrawValues(false);
     }
 
 }

@@ -146,18 +146,4 @@ class MpaGraphLine extends MpaGraph {
         chart.setData(lineData);
         chart.invalidate();
     }
-
-    private void styleLineDataSet(LineDataSet lineDataSet, int color) {
-        lineDataSet.setDrawCircles(false);
-        lineDataSet.setDrawCircleHole(false);
-        lineDataSet.setColor(color);
-        lineDataSet.setLineWidth(1);
-    }
-
-    private void styleScatterDataSet(ScatterDataSet scatterDataSet, int color) {
-        scatterDataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
-        scatterDataSet.setColor(color);
-        scatterDataSet.setScatterShapeSize(3);
-    }
-
 }

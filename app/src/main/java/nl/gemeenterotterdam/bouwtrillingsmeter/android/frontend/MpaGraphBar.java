@@ -122,8 +122,4 @@ class MpaGraphBar extends MpaGraph {
         chart.invalidate();
     }
 
-    private void styleBarDataSet(BarDataSet barDataSet, int color) {
-        barDataSet.setColor(color);
-        barDataSet.setDrawValues(false);
-    }
 }

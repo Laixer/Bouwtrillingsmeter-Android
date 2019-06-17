@@ -1,12 +1,6 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
-import android.graphics.Color;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataHandler;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataInterval;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClosedListener;
@@ -64,7 +58,7 @@ class MpaGraphsControl implements DataIntervalClosedListener {
 
         // Create graphs
         graphs = new MpaGraph[5];
-        graphs[0] = new MpaGraphLine(title[0], axisHorizontal[0], axisVertical[0],
+        graphs[0] = new MpaGraphCombined(title[0], axisHorizontal[0], axisVertical[0],
                 true, false, namesXYZ, colorsXYZ, false);
         graphs[1] = new MpaGraphBar(title[1], axisHorizontal[1], axisVertical[1],
                 true, false, namesXYZ, colorsXYZ);
@@ -72,15 +66,15 @@ class MpaGraphsControl implements DataIntervalClosedListener {
                 true, false, namesXYZ, colorsXYZ);
         graphs[3] = new MpaGraphLine(title[3], axisHorizontal[3], axisVertical[3],
                 false, true, namesXYZ, colorsXYZ, false);
-        graphs[4] = new MpaGraphLine(title[4], axisHorizontal[4], axisVertical[4],
+        graphs[4] = new MpaGraphCombined(title[4], axisHorizontal[4], axisVertical[4],
                 false, false, namesDominant, colorsDominant, true);
 
         // Set limits separately
-        //graphs[0].setSizeConstants(3, 10, 0, 0);
-        //graphs[1].setSizeConstants(30, 100, 0, 0);
-        //graphs[2].setSizeConstants(30, 100, 0, 0);
-        //graphs[3].setSizeConstants(0, 0, 0, 100);
-        //graphs[4].setSizeConstants(0, 0, 0, 100);
+        graphs[0].setSizeConstants(3, 10, 0, 0);
+        graphs[1].setSizeConstants(30, 100, 0, 0);
+        graphs[2].setSizeConstants(30, 100, 0, 0);
+        graphs[3].setSizeConstants(0, 0, 0, 100);
+        graphs[4].setSizeConstants(0, 0, 0, 100);
 
         // TODO Add constant line
     }
@@ -103,11 +97,11 @@ class MpaGraphsControl implements DataIntervalClosedListener {
          * Graph 4: Amplitude // frequency (line)
          * Graph 5: Dominant frequency // frequency (point)
          */
-        graphs[0].sendNewDataToSeries(dataInterval.getDataPoints3DAcceleration());
-        graphs[1].sendNewDataToSeries(dataInterval.getVelocitiesAbsMaxAsDataPoints());
-        graphs[2].sendNewDataToSeries(dataInterval.getDominantFrequenciesAsDataPoints());
-        graphs[3].sendNewDataToSeries(dataInterval.getFrequencyAmplitudes());
-        graphs[4].sendNewDataToSeries(dataInterval.getExceedingAsDataPoints());
+        graphs[0].sendNewDataToChart(dataInterval.getDataPoints3DAcceleration());
+        graphs[1].sendNewDataToChart(dataInterval.getVelocitiesAbsMaxAsDataPoints());
+        graphs[2].sendNewDataToChart(dataInterval.getDominantFrequenciesAsDataPoints());
+        graphs[3].sendNewDataToChart(dataInterval.getFrequencyAmplitudes());
+        graphs[4].sendNewDataToChart(dataInterval.getExceedingAsDataPoints());
     }
 
     /**
