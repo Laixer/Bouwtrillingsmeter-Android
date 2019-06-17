@@ -22,7 +22,7 @@ public class DataPoint3D<X> implements Serializable {
      * Constructor
      *
      * @param xAxisValue The xAxisValue. Long is used for time. Int or int[] is used for frequency.
-     * @param values The corresponding data values
+     * @param values     The corresponding data values
      */
     public DataPoint3D(X xAxisValue, float[] values) {
         this(xAxisValue, values[0], values[1], values[2]);
@@ -32,9 +32,9 @@ public class DataPoint3D<X> implements Serializable {
      * Constructor
      *
      * @param xAxisValue The xAxisValue, being of type a Date (time xAxisValue) or float[x, y, z] (frequency xAxisValue)
-     * @param x      Data x
-     * @param y      Data y
-     * @param z      Data z
+     * @param x          Data x
+     * @param y          Data y
+     * @param z          Data z
      */
     public DataPoint3D(X xAxisValue, float x, float y, float z) {
         this.xAxisValue = xAxisValue;
@@ -43,6 +43,31 @@ public class DataPoint3D<X> implements Serializable {
         values[1] = y;
         values[2] = z;
         this.values = values;
+    }
+
+    /**
+     * Converts our generic x axis value to a float.
+     *
+     * @return X axis  value as float
+     */
+    public float xAxisValueAsFloat() {
+        try {
+            Long value = (long) xAxisValue;
+            double x = value;
+            return (float) x;
+        } catch (ClassCastException e) {
+            /* Do nothing */
+        }
+
+        try {
+            Double value = (double) xAxisValue;
+            double x = value;
+            return (float) x;
+        } catch (ClassCastException e) {
+            /* Do nothing */
+        }
+
+        throw new RuntimeException("Could not convert x axis value");
     }
 
 }

@@ -75,16 +75,12 @@ public class DataHandler implements AccelerometerListener {
     /**
      * This triggers all listeners, which have the
      * {@link DataIntervalClosedListener} interface.
+     * TODO First data interval is always null?? Why
      *
      * @param dataInterval The closed datainterval,
      *                     including all calculations
      */
     private static void triggerDataIntervalClosedEvent(DataInterval dataInterval) {
-
-        if (dataInterval == null) {
-            return;
-        }
-
         for (DataIntervalClosedListener listener : dataIntervalClosedListeners) {
             if (listener != null) {
                 listener.onDataIntervalClosed(dataInterval);

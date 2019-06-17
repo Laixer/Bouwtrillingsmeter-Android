@@ -33,7 +33,7 @@ class MpaGraphBar extends MpaGraph {
      * @param dataSetNames The names of all data sets,
      *                     this also indicates their count
      */
-    public MpaGraphBar(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, String[] dataSetNames) {
+    MpaGraphBar(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, String[] dataSetNames) {
         super(title, xAxisLabel, yAxisLabel, scrolling, dataSetNames);
 
         entries = new ArrayList[dataSetNames.length];
@@ -75,7 +75,9 @@ class MpaGraphBar extends MpaGraph {
     protected <T> void appendDataToEntries(ArrayList<DataPoint3D<T>> dataPoints3D) {
         for (DataPoint3D<T> dataPoint3D : dataPoints3D) {
             for (int dimension = 0; dimension < 3; dimension++) {
-                entries[dimension].add(new BarEntry((float) dataPoint3D.xAxisValue, dataPoint3D.values[dimension]));
+                entries[dimension].add(new BarEntry(
+                        dataPoint3D.xAxisValueAsFloat() / 1000,
+                        dataPoint3D.values[dimension]));
             }
         }
     }

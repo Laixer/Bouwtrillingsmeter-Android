@@ -58,18 +58,12 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
         // Link elements
         textViewCenter = (TextView) findViewById(R.id.textViewMeasuringCenter);
         buttonShowGraphs = (Button) findViewById(R.id.buttonMeasuringShowGraphs);
-        buttonShowGraphs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickShowGraphs();
-            }
+        buttonShowGraphs.setOnClickListener((View v) -> {
+            onClickShowGraphs();
         });
         buttonStartStop = (Button) findViewById(R.id.buttonMeasuringStartStop);
-        buttonStartStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickStartStop();
-            }
+        buttonStartStop.setOnClickListener((View v) -> {
+            onClickStartStop();
         });
 
         // Set bool, but only if we just start this activity
@@ -91,8 +85,10 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     }
 
     /**
-     * This controls the UI elements and text
-     * If isMeasuring: True if we are measuring, false if we are waiting for the device to be placed on the table
+     * This controls the UI elements and text.
+     * If isMeasuring: True if we are measuring,
+     * false if we are waiting for the device to
+     * be placed on the table.
      */
     private void updatePageState() {
         if (!isMeasuring) {
