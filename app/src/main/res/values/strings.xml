@@ -216,7 +216,6 @@
         <item>Y</item>
         <item>Z</item>
     </string-array>
-    <string name="graph_legend_fourier">Amplitude</string>
     <string name="graph_legend_limitline_name">Grenswaarde</string>
     <string name="graph_legend_exceeding_name">Overschrijdingen</string>
 

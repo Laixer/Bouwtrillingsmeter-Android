@@ -53,8 +53,6 @@ class MpaGraphsControl implements DataIntervalClosedListener {
                 getStringArray(R.array.graph_axis_vertical);
         String[] namesXYZ = Utility.resources.
                 getStringArray(R.array.graph_legend_xyz_names);
-        String[] namesAmplitde = new String[]{
-                Utility.resources.getString(R.string.graph_legend_fourier)};
         String[] namesDominant = new String[]{
                 Utility.resources.getString(R.string.graph_legend_exceeding_name)};
 
@@ -67,7 +65,7 @@ class MpaGraphsControl implements DataIntervalClosedListener {
         graphs[2] = new MpaGraphBar(title[2], axisHorizontal[2],
                 axisVertical[2], true, namesXYZ);
         graphs[3] = new MpaGraphLine(title[3], axisHorizontal[3],
-                axisVertical[3], false, namesAmplitde);
+                axisVertical[3], false, namesXYZ);
         graphs[4] = new MpaGraphLine(title[4], axisHorizontal[4],
                 axisVertical[4], false, namesDominant);
     }

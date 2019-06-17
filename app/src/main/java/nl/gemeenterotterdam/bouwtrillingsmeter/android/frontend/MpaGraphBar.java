@@ -74,7 +74,7 @@ class MpaGraphBar extends MpaGraph {
     @Override
     protected <T> void appendDataToEntries(ArrayList<DataPoint3D<T>> dataPoints3D) {
         for (DataPoint3D<T> dataPoint3D : dataPoints3D) {
-            for (int dimension = 0; dimension < 3; dimension++) {
+            for (int dimension = 0; dimension < dataSetNames.length; dimension++) {
                 entries[dimension].add(new BarEntry(
                         dataPoint3D.xAxisValueAsFloat() / 1000,
                         dataPoint3D.values[dimension]));

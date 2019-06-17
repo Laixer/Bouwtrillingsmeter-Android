@@ -153,8 +153,9 @@ public class DataInterval implements Serializable {
     }
 
     /**
-     * Converts our max velocity datapoint3d to an arraylist of datapoints3d with size 1.
-     * This is implemented for consistent graph usage.
+     * Converts our max velocity datapoint3d to an
+     * arraylist of datapoints3d with size 1.This
+     * is implemented for consistent graph usage.
      *
      * @return The "arraylist"
      */
