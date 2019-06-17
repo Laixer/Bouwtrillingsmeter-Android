@@ -20,6 +20,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 class MpaGraphLine extends MpaGraph {
 
     private ArrayList<Entry>[] entries;
+    private LineDataSet[] lineDataSets;
 
     /**
      * Creates an instance of a line graph.
@@ -40,6 +41,8 @@ class MpaGraphLine extends MpaGraph {
         for (int i = 0; i < dataSetNames.length; i++) {
             entries[i] = new ArrayList<>();
         }
+
+        lineDataSets = new LineDataSet[entries.length];
     }
 
     /**
@@ -61,7 +64,9 @@ class MpaGraphLine extends MpaGraph {
      */
     @Override
     protected void resetChartData() {
-
+        for (LineDataSet lineDataSet : lineDataSets) {
+            lineDataSet.clear();
+        }
     }
 
     /**
@@ -88,7 +93,6 @@ class MpaGraphLine extends MpaGraph {
      */
     @Override
     protected void pushToChart() {
-        LineDataSet[] lineDataSets = new LineDataSet[entries.length];
         LineData lineData = new LineData();
         for (int i = 0; i < lineDataSets.length; i++) {
             lineDataSets[i] = new LineDataSet(entries[i], dataSetNames[i]);

@@ -9,6 +9,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.BaseEntry;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineDataSet;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 class MpaGraphBar extends MpaGraph {
 
     private ArrayList<BarEntry>[] entries;
+    private BarDataSet[] barDataSets;
 
     /**
      * Creates an instance of a line graph.
@@ -40,6 +42,8 @@ class MpaGraphBar extends MpaGraph {
         for (int i = 0; i < dataSetNames.length; i++) {
             entries[i] = new ArrayList<>();
         }
+
+        barDataSets = new BarDataSet[entries.length];
     }
 
     /**
@@ -61,7 +65,9 @@ class MpaGraphBar extends MpaGraph {
      */
     @Override
     protected void resetChartData() {
-
+        for (BarDataSet barDataSet : barDataSets) {
+            barDataSet.clear();
+        }
     }
 
     /**
@@ -88,7 +94,6 @@ class MpaGraphBar extends MpaGraph {
      */
     @Override
     protected void pushToChart() {
-        BarDataSet[] barDataSets = new BarDataSet[entries.length];
         BarData barData = new BarData();
         for (int i = 0; i < barDataSets.length; i++) {
             barDataSets[i] = new BarDataSet(entries[i], dataSetNames[i]);
