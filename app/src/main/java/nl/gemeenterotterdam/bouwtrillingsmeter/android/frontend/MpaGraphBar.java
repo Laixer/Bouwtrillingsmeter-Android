@@ -89,8 +89,13 @@ class MpaGraphBar extends MpaGraph {
     @Override
     protected void pushToChart() {
         BarDataSet[] barDataSets = new BarDataSet[entries.length];
+        BarData barData = new BarData();
         for (int i = 0; i < barDataSets.length; i++) {
             barDataSets[i] = new BarDataSet(entries[i], dataSetNames[i]);
+            barData.addDataSet(barDataSets[i]);
         }
+
+        chart.setData(barData);
+        chart.invalidate();
     }
 }

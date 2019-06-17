@@ -4,7 +4,11 @@ import android.content.Context;
 
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 
 import java.util.ArrayList;
 
@@ -84,6 +88,14 @@ class MpaGraphLine extends MpaGraph {
      */
     @Override
     protected void pushToChart() {
+        LineDataSet[] lineDataSets = new LineDataSet[entries.length];
+        LineData lineData = new LineData();
+        for (int i = 0; i < lineDataSets.length; i++) {
+            lineDataSets[i] = new LineDataSet(entries[i], dataSetNames[i]);
+            lineData.addDataSet(lineDataSets[i]);
+        }
 
+        chart.setData(lineData);
+        chart.invalidate();
     }
 }
