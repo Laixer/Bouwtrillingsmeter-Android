@@ -34,9 +34,11 @@ class MpaGraphBar extends MpaGraph {
      *                     iteration
      * @param dataSetNames The names of all data sets,
      *                     this also indicates their count
+     * @param colors       The color integer for each
+     *                     data set
      */
-    MpaGraphBar(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, String[] dataSetNames) {
-        super(title, xAxisLabel, yAxisLabel, scrolling, dataSetNames);
+    MpaGraphBar(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, String[] dataSetNames, int[] colors) {
+        super(title, xAxisLabel, yAxisLabel, scrolling, dataSetNames, colors);
 
         entries = new ArrayList[dataSetNames.length];
         for (int i = 0; i < dataSetNames.length; i++) {

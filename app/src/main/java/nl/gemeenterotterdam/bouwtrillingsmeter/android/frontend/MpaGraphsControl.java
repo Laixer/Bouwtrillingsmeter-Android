@@ -1,5 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.graphics.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,19 +57,23 @@ class MpaGraphsControl implements DataIntervalClosedListener {
                 getStringArray(R.array.graph_legend_xyz_names);
         String[] namesDominant = new String[]{
                 Utility.resources.getString(R.string.graph_legend_exceeding_name)};
+        int[] colorsXYZ = Utility.getXYZColorsArray();
+        int[] colorsDominant = new int[]{R.color.graph_series_color_point};
 
         // Create graphs
         graphs = new MpaGraph[5];
         graphs[0] = new MpaGraphLine(title[0], axisHorizontal[0],
-                axisVertical[0], true, namesXYZ);
+                axisVertical[0], true, namesXYZ, colorsXYZ);
         graphs[1] = new MpaGraphBar(title[1], axisHorizontal[1],
-                axisVertical[1], true, namesXYZ);
+                axisVertical[1], true, namesXYZ, colorsXYZ);
         graphs[2] = new MpaGraphBar(title[2], axisHorizontal[2],
-                axisVertical[2], true, namesXYZ);
+                axisVertical[2], true, namesXYZ, colorsXYZ);
         graphs[3] = new MpaGraphLine(title[3], axisHorizontal[3],
-                axisVertical[3], false, namesXYZ);
+                axisVertical[3], false, namesXYZ, colorsXYZ);
         graphs[4] = new MpaGraphLine(title[4], axisHorizontal[4],
-                axisVertical[4], false, namesDominant);
+                axisVertical[4], false, namesDominant, colorsDominant);
+
+        // TODO Add constant line
     }
 
     /**

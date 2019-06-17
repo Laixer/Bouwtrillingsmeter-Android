@@ -11,7 +11,9 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
 /**
@@ -21,6 +23,7 @@ class MpaGraphLine extends MpaGraph {
 
     private ArrayList<Entry>[] entries;
     private LineDataSet[] lineDataSets;
+    private LineData lineData;
 
     /**
      * Creates an instance of a line graph.
@@ -33,16 +36,28 @@ class MpaGraphLine extends MpaGraph {
      *                     iteration
      * @param dataSetNames The names of all data sets,
      *                     this also indicates their count
+     * @param colors       The color integer for each
+     *                     data set
      */
-    MpaGraphLine(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, String[] dataSetNames) {
-        super(title, xAxisLabel, yAxisLabel, scrolling, dataSetNames);
+    MpaGraphLine(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, String[] dataSetNames, int[] colors) {
+        super(title, xAxisLabel, yAxisLabel, scrolling, dataSetNames, colors);
 
+        // Prepare entries
         entries = new ArrayList[dataSetNames.length];
         for (int i = 0; i < dataSetNames.length; i++) {
             entries[i] = new ArrayList<>();
         }
 
-        lineDataSets = new LineDataSet[entries.length];
+        // Prepare line data sets
+        lineDataSets = new LineDataSet[dataSetNames.length];
+        for (int i = 0; i < lineDataSets.length; i++) {
+            lineDataSets[i] = new LineDataSet(entries[i], dataSetNames[i]);
+            lineDataSets[i].setColor(colors[i]);
+            lineDataSets[i].setDrawCircles(false);
+        }
+
+        // Prepare graph data
+        lineData = new LineData(lineDataSets);
     }
 
     /**
@@ -55,6 +70,7 @@ class MpaGraphLine extends MpaGraph {
     @Override
     Chart createChart(Context context) {
         chart = new LineChart(context);
+        chart.setData(lineData);
         return chart;
     }
 
@@ -80,9 +96,22 @@ class MpaGraphLine extends MpaGraph {
     protected <T> void appendDataToEntries(ArrayList<DataPoint3D<T>> dataPoints3D) {
         for (DataPoint3D<T> dataPoint3D : dataPoints3D) {
             for (int dimension = 0; dimension < dataSetNames.length; dimension++) {
-                entries[dimension].add(new Entry(
+
+                Entry entry = new Entry(
                         dataPoint3D.xAxisValueAsFloat() / 1000,
-                        dataPoint3D.values[dimension]));
+                        dataPoint3D.values[dimension]);
+
+                // Failsafe for the ordering
+                if (entries[dimension].size() > 0) {
+                    float previousX = entries[dimension]
+                            .get(entries[dimension].size() - 1).getX();
+                    if (entry.getX() < previousX) {
+                        continue;
+                    }
+                }
+
+                entries[dimension].add(entry);
+                lineDataSets[dimension].addEntry(entry);
             }
         }
     }
@@ -93,13 +122,6 @@ class MpaGraphLine extends MpaGraph {
      */
     @Override
     protected void pushToChart() {
-        LineData lineData = new LineData();
-        for (int i = 0; i < lineDataSets.length; i++) {
-            lineDataSets[i] = new LineDataSet(entries[i], dataSetNames[i]);
-            lineData.addDataSet(lineDataSets[i]);
-        }
-
-        chart.setData(lineData);
         chart.invalidate();
     }
 }

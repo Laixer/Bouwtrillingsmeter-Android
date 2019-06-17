@@ -325,5 +325,18 @@ class Utility {
         }
     }
 
+    /**
+     * Gets the colors for each axis and puts them in an
+     * integer array.
+     *
+     * @return The integer array
+     */
+    static int[] getXYZColorsArray() {
+        return new int[]{
+                resources.getColor(R.color.graph_series_color_x),
+                resources.getColor(R.color.graph_series_color_y),
+                resources.getColor(R.color.graph_series_color_z)
+        };
+    }
 
 }

@@ -19,6 +19,7 @@ abstract class MpaGraph {
     protected String xAxisLabel;
     protected String yAxisLabel;
     protected String[] dataSetNames;
+    protected int[] colors;
 
     protected boolean scrolling;
 
@@ -39,12 +40,15 @@ abstract class MpaGraph {
      *                     iteration
      * @param dataSetNames The names of all data sets,
      *                     this also indicates their count
+     * @param colors       The color integer for each
+     *                     data set
      */
-    protected MpaGraph(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, String[] dataSetNames) {
+    protected MpaGraph(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, String[] dataSetNames, int[] colors) {
         this.title = title;
         this.xAxisLabel = xAxisLabel;
         this.yAxisLabel = yAxisLabel;
         this.dataSetNames = dataSetNames;
+        this.colors = colors;
 
         this.scrolling = scrolling;
 
