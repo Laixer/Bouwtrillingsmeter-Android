@@ -60,6 +60,8 @@ class MpaGraphBar extends MpaGraph {
     @Override
     Chart createChart(Context context) {
         chart = new BarChart(context);
+        chart.setDescription(null);
+        chart.setHorizontalScrollBarEnabled(true);
         return chart;
     }
 
@@ -71,6 +73,10 @@ class MpaGraphBar extends MpaGraph {
     protected void resetChartData() {
         for (BarDataSet barDataSet : barDataSets) {
             barDataSet.clear();
+        }
+
+        for (ArrayList<BarEntry> entrie : entries) {
+            entrie = new ArrayList<>();
         }
     }
 

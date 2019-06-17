@@ -116,6 +116,10 @@ class MpaGraphLine extends MpaGraph {
         for (LineDataSet lineDataSet : lineDataSets) {
             lineDataSet.clear();
         }
+
+        for (ArrayList<Entry> entrie : entries) {
+            entrie = new ArrayList<>();
+        }
     }
 
     /**
@@ -135,6 +139,7 @@ class MpaGraphLine extends MpaGraph {
                         dataPoint3D.values[i]);
 
                 // Failsafe for the ordering
+                // Yes, we actually need this
                 if (entries[i].size() > 0) {
                     float previousX = entries[i]
                             .get(entries[i].size() - 1).getX();

@@ -57,6 +57,8 @@ class MpaGraphsControl implements DataIntervalClosedListener {
                 getStringArray(R.array.graph_legend_xyz_names);
         String[] namesDominant = new String[]{
                 Utility.resources.getString(R.string.graph_legend_exceeding_name)};
+
+        // Get legend names
         int[] colorsXYZ = Utility.getXYZColorsArray();
         int[] colorsDominant = new int[]{R.color.graph_series_color_point};
 
@@ -74,11 +76,11 @@ class MpaGraphsControl implements DataIntervalClosedListener {
                 false, false, namesDominant, colorsDominant, true);
 
         // Set limits separately
-        graphs[0].setSizeConstants(3, 10, 0, 0);
-        graphs[1].setSizeConstants(30, 100, 0, 0);
-        graphs[2].setSizeConstants(30, 100, 0, 0);
-        graphs[3].setSizeConstants(0, 0, 0, 100);
-        graphs[4].setSizeConstants(0, 0, 0, 100);
+        //graphs[0].setSizeConstants(3, 10, 0, 0);
+        //graphs[1].setSizeConstants(30, 100, 0, 0);
+        //graphs[2].setSizeConstants(30, 100, 0, 0);
+        //graphs[3].setSizeConstants(0, 0, 0, 100);
+        //graphs[4].setSizeConstants(0, 0, 0, 100);
 
         // TODO Add constant line
     }
