@@ -117,8 +117,8 @@ class MpaGraphLine extends MpaGraph {
             lineDataSet.clear();
         }
 
-        for (ArrayList<Entry> entrie : entries) {
-            entrie = new ArrayList<>();
+        for (int i = 0; i < entries.length; i++) {
+            entries[i] = new ArrayList<>();
         }
     }
 

@@ -118,7 +118,7 @@ abstract class MpaGraph {
      * @param dataPoints3D The datapoints to add
      * @param <T>          The type of datapoint
      */
-    protected <T> void sendNewDataToSeries(ArrayList<DataPoint3D<T>> dataPoints3D) {
+    <T> void sendNewDataToSeries(ArrayList<DataPoint3D<T>> dataPoints3D) {
         // If we are not scrolling we should reset our view
         if (refreshing) {
             resetChartData();

@@ -40,7 +40,7 @@ class MpaGraphBar extends MpaGraph {
      *                     data set
      */
     MpaGraphBar(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors) {
-        super(title, xAxisLabel, yAxisLabel, refreshing, scrolling, dataSetNames, colors);
+        super(title, xAxisLabel, yAxisLabel, scrolling, refreshing, dataSetNames, colors);
 
         entries = new ArrayList[dataSetNames.length];
         for (int i = 0; i < dataSetNames.length; i++) {
@@ -75,8 +75,8 @@ class MpaGraphBar extends MpaGraph {
             barDataSet.clear();
         }
 
-        for (ArrayList<BarEntry> entrie : entries) {
-            entrie = new ArrayList<>();
+        for (int i = 0; i < entries.length; i++) {
+            entries[i] = new ArrayList<>();
         }
     }
 
@@ -90,10 +90,13 @@ class MpaGraphBar extends MpaGraph {
     @Override
     protected <T> void appendDataToEntries(ArrayList<DataPoint3D<T>> dataPoints3D) {
         for (DataPoint3D<T> dataPoint3D : dataPoints3D) {
-            for (int dimension = 0; dimension < dataSetNames.length; dimension++) {
-                entries[dimension].add(new BarEntry(
+            for (int i = 0; i < dataSetNames.length; i++) {
+                System.out.println("Length " + i + " is now " + entries[i].size());
+                BarEntry barEntry = new BarEntry(
                         dataPoint3D.xAxisValueAsFloat() / 1000,
-                        dataPoint3D.values[dimension]));
+                        dataPoint3D.values[i]);
+                entries[i].add(barEntry);
+                System.out.println("length " + i + " after creation is " + entries[i].size() + "\n");
             }
         }
     }
@@ -105,6 +108,7 @@ class MpaGraphBar extends MpaGraph {
     @Override
     protected void pushToChart() {
         BarData barData = new BarData();
+        System.out.println("entries length = " + entries[0].size());
         for (int i = 0; i < barDataSets.length; i++) {
             barDataSets[i] = new BarDataSet(entries[i], dataSetNames[i]);
             styleBarDataSet(barDataSets[i], colors[i]);
