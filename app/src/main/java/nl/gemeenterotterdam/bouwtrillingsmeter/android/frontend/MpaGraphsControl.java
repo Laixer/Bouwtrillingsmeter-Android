@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataHandler;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataInterval;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClosedListener;
 
@@ -23,6 +25,14 @@ class MpaGraphsControl implements DataIntervalClosedListener {
      * All graphs.
      */
     private MpaGraph[] graphs;
+
+    /**
+     * Constructor for this class.
+     * This subscribes as listener.
+     */
+    MpaGraphsControl() {
+        DataHandler.addDataIntervalClosedListener(this);
+    }
 
     /**
      * Create all graphs. Reset what we already have.
@@ -69,7 +79,7 @@ class MpaGraphsControl implements DataIntervalClosedListener {
      */
     @Override
     public void onDataIntervalClosed(DataInterval dataInterval) {
-        if (graphs == null) {
+        if (graphs == null || dataInterval == null) {
             return;
         }
 
