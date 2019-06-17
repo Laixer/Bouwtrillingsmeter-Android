@@ -97,9 +97,8 @@ class MpaGraphLine extends MpaGraph {
     @Override
     Chart createChart(Context context) {
         chart = new LineChart(context);
-        chart.setData(lineData);
-
         styleChart();
+
         return chart;
     }
 

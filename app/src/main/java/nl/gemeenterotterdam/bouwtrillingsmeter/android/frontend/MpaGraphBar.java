@@ -60,8 +60,10 @@ class MpaGraphBar extends MpaGraph {
     @Override
     Chart createChart(Context context) {
         chart = new BarChart(context);
-        chart.setDescription(null);
+        styleChart();
+
         chart.setHorizontalScrollBarEnabled(true);
+
         return chart;
     }
 
