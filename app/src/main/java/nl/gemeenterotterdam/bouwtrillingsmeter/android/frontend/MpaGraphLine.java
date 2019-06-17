@@ -1,5 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.content.Context;
+
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -12,6 +14,8 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
  * Instance of a line graph.
  */
 class MpaGraphLine extends MpaGraph {
+
+    private ArrayList<Entry>[] entries;
 
     /**
      * Creates an instance of a line graph.
@@ -27,17 +31,24 @@ class MpaGraphLine extends MpaGraph {
      */
     public MpaGraphLine(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, ArrayList<String> dataSetNames) {
         super(title, xAxisLabel, yAxisLabel, scrolling, dataSetNames);
+
+        entries = new ArrayList[dataSetNames.size()];
+        for (int i = 0; i < dataSetNames.size(); i++) {
+            entries[i] = new ArrayList<>();
+        }
     }
 
     /**
-     * This links our chart. Each implementation must
-     * convert the chart type.
+     * This creates a chart that fits to the type.
+     * Manually add this to a container.
      *
-     * @param chart The chart
+     * @param context The context from which we call this
+     * @return The created chart
      */
     @Override
-    void linkChart(Chart chart) {
-        this.chart = (LineChart) chart;
+    Chart createChart(Context context) {
+        chart = new LineChart(context);
+        return chart;
     }
 
     /**

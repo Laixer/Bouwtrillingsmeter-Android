@@ -31,12 +31,11 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
      */
     static Graph[] graphs = null;
 
-    ViewPager viewPager;
+    private ViewPager viewPager;
     private GraphsSlideAdapter graphSlideAdapter;
-    private DataInterval previousDataInterval;
-
     private LinearLayout dotsLayout;
-    private ImageView[] dots;
+
+    private DataInterval previousDataInterval;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,73 +55,32 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
             }
         }
 
-        // Viewpager for the tutorial
-        // Also link the adapter
-        viewPager = findViewById(R.id.viewPagerGraphs);
-        graphSlideAdapter = new GraphsSlideAdapter(this, graphs);
-        viewPager.setOffscreenPageLimit(10);
-        viewPager.setAdapter(graphSlideAdapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
-
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                onGraphSelected(i);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
-            }
-        });
-
         // Viewpager dots
         dotsLayout = (LinearLayout) findViewById(R.id.linearLayoutGraphsDots);
-        setIndicatorDots(0);
+        Utility.setIndicatorDots(this, dotsLayout, 0, graphs.length);
+
+        // Setup viewpager
+        graphSlideAdapter = new GraphsSlideAdapter(this, graphs);
+        viewPager = findViewById(R.id.viewPagerGraphs);
+        viewPager.setAdapter(graphSlideAdapter);
+        viewPager.setOffscreenPageLimit(10);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
+
             }
 
             @Override
             public void onPageSelected(int i) {
-                setIndicatorDots(i);
+                Utility.setIndicatorDots(getApplicationContext(), dotsLayout, i, graphs.length);
             }
 
             @Override
             public void onPageScrollStateChanged(int i) {
+
             }
         });
-    }
 
-    /**
-     * Set the indicator dots.
-     *
-     * @param currentIndex The current index at which we are present
-     */
-    private void setIndicatorDots(int currentIndex) {
-        if (dotsLayout != null) {
-            dotsLayout.removeAllViews();
-            dots = new ImageView[graphs.length];
-
-            for (int i = 0; i < graphs.length; i++) {
-                dots[i] = new ImageView(this);
-                if (i == currentIndex) {
-                    dots[i].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.indicator_dot_active));
-                } else {
-                    dots[i].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.indicator_dot_inactive));
-                }
-
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMargins(4, 0, 4, 0);
-                dotsLayout.addView(dots[i], params);
-            }
-        }
     }
 
     /**
@@ -162,6 +120,8 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         if (dataInterval == previousDataInterval) {
             return;
         }
+
+        previousDataInterval = dataInterval;
 
         // TODO Deze splitsing by default in DataPoint3D bouwen scheelt best wel veel
         // TODO We moeten er wel altijd doorheen om de tijd te scalen en overlap te voorkomen --> Kan dit in de graph axis gedaan worden?
@@ -207,7 +167,4 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
         graphsActivity = null;
     }
 
-    private void onGraphSelected(int index) {
-
-    }
 }

@@ -1,5 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.content.Context;
+
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.data.BarData;
@@ -17,7 +19,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
  */
 class MpaGraphBar extends MpaGraph {
 
-    private ArrayList<BarEntry>[] barEntries;
+    private ArrayList<BarEntry>[] entries;
 
     /**
      * Creates an instance of a line graph.
@@ -34,21 +36,23 @@ class MpaGraphBar extends MpaGraph {
     public MpaGraphBar(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, ArrayList<String> dataSetNames) {
         super(title, xAxisLabel, yAxisLabel, scrolling, dataSetNames);
 
-        barEntries = new ArrayList[dataSetNames.size()];
+        entries = new ArrayList[dataSetNames.size()];
         for (int i = 0; i < dataSetNames.size(); i++) {
-            barEntries[i] = new ArrayList<BarEntry>();
+            entries[i] = new ArrayList<>();
         }
     }
 
     /**
-     * This links our chart. Each implementation must
-     * convert the chart type.
+     * This creates a chart that fits to the type.
+     * Manually add this to a container.
      *
-     * @param chart The chart
+     * @param context The context from which we call this
+     * @return The created chart
      */
     @Override
-    void linkChart(Chart chart) {
-        this.chart = (BarChart) chart;
+    Chart createChart(Context context) {
+        chart = new BarChart(context);
+        return chart;
     }
 
     /**

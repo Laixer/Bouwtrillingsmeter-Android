@@ -8,10 +8,12 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClose
  * we want to append graphs even when the activity
  * isn't loaded.
  * <p>
+ * This gets created by our {@link MeasuringActivity}.
+ * <p>
  * TODO Setup a way to make this stop receiving data intervals when we are no longer measuring?
  * Gaat automatisch? Check dit!
  */
-class MpaGraphControl implements DataIntervalClosedListener {
+class MpaGraphsControl implements DataIntervalClosedListener {
 
     /**
      * All graphs.
@@ -57,6 +59,15 @@ class MpaGraphControl implements DataIntervalClosedListener {
      */
     MpaGraph[] getGraphs() {
         return graphs;
+    }
+
+    /**
+     * Used to check how many graphs we have.
+     *
+     * @return The graphs count
+     */
+    int getGraphsCount() {
+        return graphs.length;
     }
 
 }

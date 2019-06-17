@@ -12,13 +12,16 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +31,6 @@ import java.util.Date;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Measurement;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.PreferenceManager;
 
 /**
  * @author Thomas Beckers
@@ -231,7 +233,7 @@ class Utility {
     /**
      * Extracts the date and time from our measurement and
      * formats them into a desired string as:
-     *
+     * <p>
      * DD Month YYYY om hh:mm
      *
      * @param measurement The measurement
@@ -253,11 +255,12 @@ class Utility {
         result += ":";
         result += calendar.get(Calendar.MINUTE);
 
-        return  result;
+        return result;
     }
 
     /**
      * Checks if our view is visible
+     *
      * @param view The view to check
      * @return True if visible
      */
@@ -291,5 +294,36 @@ class Utility {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         return timeStamp + "-" + measurement.getUID() + ".png";
     }
+
+    /**
+     * Used to set indicator dots.
+     *
+     * @param context      The context from which we call
+     * @param dotsLayout   The dots layout
+     * @param currentIndex The current index
+     * @param totalCount   The total count
+     */
+    static void setIndicatorDots(Context context, LinearLayout dotsLayout, int currentIndex, int totalCount) {
+        if (dotsLayout != null) {
+            dotsLayout.removeAllViews();
+            ImageView[] dots = new ImageView[totalCount];
+
+            for (int i = 0; i < totalCount; i++) {
+                dots[i] = new ImageView(context);
+                if (i == currentIndex) {
+                    dots[i].setImageDrawable(ContextCompat.getDrawable(context, R.drawable.indicator_dot_active));
+                } else {
+                    dots[i].setImageDrawable(ContextCompat.getDrawable(context, R.drawable.indicator_dot_inactive));
+                }
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(4, 0, 4, 0);
+                dotsLayout.addView(dots[i], params);
+            }
+        }
+    }
+
 
 }

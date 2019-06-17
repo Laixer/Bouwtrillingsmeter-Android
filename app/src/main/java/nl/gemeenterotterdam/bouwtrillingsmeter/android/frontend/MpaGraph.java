@@ -1,10 +1,10 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.content.Context;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.data.ChartData;
-import com.github.mikephil.charting.data.Entry;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,6 @@ abstract class MpaGraph {
 
     protected boolean scrolling;
 
-    protected ArrayList<Entry>[] entries;
     protected ArrayList<ChartData> chartDataConstant;
     protected ArrayList<ChartData> chartDataVariable;
 
@@ -49,30 +48,28 @@ abstract class MpaGraph {
 
         this.scrolling = scrolling;
 
-        entries = new ArrayList[dataSetNames.size()];
         chartDataConstant = new ArrayList<>();
         chartDataVariable = new ArrayList<>();
     }
 
     /**
-     * Call this when the activity is live and we actually
-     * have a chart to push to. Same for the text view.
+     * Call this when the text view for our title is created.
      *
-     * @param chart The chart object
+     * @param textViewTitle The text view
      */
-    void onUiCreated(Chart chart, TextView textViewTitle) {
+    void onTextViewTitleCreated(TextView textViewTitle) {
         this.textViewTitle = textViewTitle;
         textViewTitle.setText(title);
-        linkChart(chart);
     }
 
     /**
-     * This links our chart. Each implementation must
-     * convert the chart type.
+     * This creates a chart that fits to the type.
+     * Manually add this to a container.
      *
-     * @param chart The chart
+     * @param context The context from which we call this
+     * @return The created chart
      */
-    abstract void linkChart(Chart chart);
+    abstract Chart createChart(Context context);
 
     /**
      * Call this to add a constant line to the graph.
@@ -138,6 +135,5 @@ abstract class MpaGraph {
     private boolean shouldRender() {
         return chart != null;
     }
-
 
 }

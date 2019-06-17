@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.GridLabelRenderer;
-import com.jjoe64.graphview.Viewport;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
@@ -45,7 +42,7 @@ public class GraphsSlideAdapter extends PagerAdapter {
         View view = layoutInflater.inflate(R.layout.graph_template, container, false);
 
         // Get elements
-        TextView textViewName = (TextView) view.findViewById(R.id.textViewGraphTemplateName);
+        TextView textViewName = (TextView) view.findViewById(R.id.textViewMpaGraphTemplateName);
         GraphView graphView = (GraphView) view.findViewById(R.id.graphViewGraphTemplate);
 
         // Link view to our graph object

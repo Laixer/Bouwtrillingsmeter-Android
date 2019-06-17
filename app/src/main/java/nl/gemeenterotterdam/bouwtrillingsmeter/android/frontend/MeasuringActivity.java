@@ -48,7 +48,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     private static Deque<String> strings;
 
     // Graph holder
-    private static MpaGraphControl mpaGraphControl;
+    private static MpaGraphsControl mpaGraphsControl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +84,9 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
         updatePageState();
 
         // Graph creation
-        if (mpaGraphControl == null) {
-            mpaGraphControl = new MpaGraphControl();
-            mpaGraphControl.createAllGraphs();
+        if (mpaGraphsControl == null) {
+            mpaGraphsControl = new MpaGraphsControl();
+            mpaGraphsControl.createAllGraphs();
         }
     }
 
@@ -261,7 +261,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
      * This does not start a new activity if the activity is already open.
      */
     private void onClickShowGraphs() {
-        Intent intent = new Intent(getApplicationContext(), GraphsActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MpaGraphsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
@@ -354,9 +354,17 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
         isMeasuring = null;
         Backend.removeBackendStateListener(this);
 
-        // MpaGraphControl gets deleted again
-        mpaGraphControl = null;
+        // MpaGraphsControl gets deleted again
+        mpaGraphsControl = null;
 
         super.finish();
+    }
+
+    /**
+     * Gets our static instance of the graphs control.
+     * Used by {@link MpaGraphsActivity}.
+     */
+    static MpaGraphsControl getMpaGraphsControl() {
+        return mpaGraphsControl;
     }
 }
