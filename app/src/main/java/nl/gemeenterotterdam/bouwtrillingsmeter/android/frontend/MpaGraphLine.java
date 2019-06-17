@@ -46,8 +46,8 @@ class MpaGraphLine extends MpaGraph {
      * @param useAsPoints  True if this should behave as a point chart
      *                     for our dynamic set(s)
      */
-    MpaGraphLine(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors, boolean useAsPoints) {
-        super(title, xAxisLabel, yAxisLabel, scrolling, refreshing, dataSetNames, colors);
+    MpaGraphLine(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors, boolean useAsPoints, float xMultiplier) {
+        super(title, xAxisLabel, yAxisLabel, scrolling, refreshing, dataSetNames, colors, xMultiplier);
         this.useAsPoints = useAsPoints;
 
         // Prepare entries
@@ -109,7 +109,7 @@ class MpaGraphLine extends MpaGraph {
             for (int i = 0; i < entries.length; i++) {
                 // Create entry
                 Entry entry = new Entry(
-                        dataPoint3D.xAxisValueAsFloat() / 1000,
+                        dataPoint3D.xAxisValueAsFloat() * xMultiplier,
                         dataPoint3D.values[i]);
 
                 // Failsafe for the ordering
@@ -142,8 +142,12 @@ class MpaGraphLine extends MpaGraph {
             lineData.addDataSet(lineDataSets[i]);
         }
 
-
         chart.setData(lineData);
         chart.invalidate();
+
+        if (entries[0].size() > 0) {
+            forceAxisMinMAx(entries[0].get(0).getX(),
+                    entries[0].get(entries[0].size() - 1).getX());
+        }
     }
 }

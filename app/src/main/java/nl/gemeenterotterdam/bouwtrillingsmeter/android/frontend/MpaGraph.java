@@ -30,10 +30,12 @@ abstract class MpaGraph {
 
     protected boolean scrolling;
     protected boolean refreshing;
-    protected double minimumWidth;
-    protected double maximumWidth;
-    protected double xMin;
-    protected double xMax;
+    protected float xMultiplier;
+
+    protected float minimumWidth;
+    protected float maximumWidth;
+    protected float xMin;
+    protected float xMax;
 
     protected ArrayList<ChartData> chartDataConstant;
     protected ArrayList<ChartData> chartDataVariable;
@@ -56,8 +58,11 @@ abstract class MpaGraph {
      *                     this also indicates their count
      * @param colors       The color integer for each
      *                     data set
+     * @param xMultiplier  The multiplier for the x values
      */
-    protected MpaGraph(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors) {
+    protected MpaGraph(String title, String xAxisLabel, String yAxisLabel,
+                       boolean scrolling, boolean refreshing, String[] dataSetNames,
+                       int[] colors, float xMultiplier) {
         this.title = title;
         this.xAxisLabel = xAxisLabel;
         this.yAxisLabel = yAxisLabel;
@@ -66,6 +71,7 @@ abstract class MpaGraph {
 
         this.scrolling = scrolling;
         this.refreshing = refreshing;
+        this.xMultiplier = xMultiplier;
 
         chartDataConstant = new ArrayList<>();
         chartDataVariable = new ArrayList<>();
@@ -79,7 +85,7 @@ abstract class MpaGraph {
      * @param xMin         Used if we don't scroll
      * @param xMax         Used if we don't scroll
      */
-    void setSizeConstants(double minimumWidth, double maximumWidth, double xMin, double xMax) {
+    void setSizeConstants(float minimumWidth, float maximumWidth, float xMin, float xMax) {
         this.minimumWidth = minimumWidth;
         this.maximumWidth = maximumWidth;
         this.xMin = xMin;
@@ -172,6 +178,18 @@ abstract class MpaGraph {
 
     protected void styleChart() {
         chart.setDescription(null);
+
+        if (!scrolling) {
+            chart.getXAxis().setAxisMinimum(xMin);
+            chart.getXAxis().setAxisMaximum(xMax);
+        }
+    }
+
+    protected void forceAxisMinMAx(float xLowest, float xHighest) {
+        if (scrolling) {
+            chart.getXAxis().setAxisMinimum(Math.max(xLowest, xHighest - maximumWidth));
+            chart.getXAxis().setAxisMaximum(xHighest);
+        }
     }
 
     protected void styleLineDataSet(LineDataSet lineDataSet, int color) {

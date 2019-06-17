@@ -39,8 +39,8 @@ class MpaGraphBar extends MpaGraph {
      * @param colors       The color integer for each
      *                     data set
      */
-    MpaGraphBar(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors) {
-        super(title, xAxisLabel, yAxisLabel, scrolling, refreshing, dataSetNames, colors);
+    MpaGraphBar(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors, float xMultiplier) {
+        super(title, xAxisLabel, yAxisLabel, scrolling, refreshing, dataSetNames, colors, xMultiplier);
 
         entries = new ArrayList[dataSetNames.length];
         for (int i = 0; i < dataSetNames.length; i++) {
@@ -93,12 +93,10 @@ class MpaGraphBar extends MpaGraph {
     protected <T> void appendDataToEntries(ArrayList<DataPoint3D<T>> dataPoints3D) {
         for (DataPoint3D<T> dataPoint3D : dataPoints3D) {
             for (int i = 0; i < dataSetNames.length; i++) {
-                System.out.println("Length " + i + " is now " + entries[i].size());
                 BarEntry barEntry = new BarEntry(
-                        dataPoint3D.xAxisValueAsFloat() / 1000,
+                        dataPoint3D.xAxisValueAsFloat() * xMultiplier,
                         dataPoint3D.values[i]);
                 entries[i].add(barEntry);
-                System.out.println("length " + i + " after creation is " + entries[i].size() + "\n");
             }
         }
     }
@@ -110,7 +108,6 @@ class MpaGraphBar extends MpaGraph {
     @Override
     protected void pushToChart() {
         BarData barData = new BarData();
-        System.out.println("entries length = " + entries[0].size());
         for (int i = 0; i < barDataSets.length; i++) {
             barDataSets[i] = new BarDataSet(entries[i], dataSetNames[i]);
             styleBarDataSet(barDataSets[i], colors[i]);
@@ -120,6 +117,11 @@ class MpaGraphBar extends MpaGraph {
         chart.setData(barData);
         ((BarChart) chart).groupBars(0, 0.1f, 0.01f);
         chart.invalidate();
+
+        if (entries[0].size() > 0) {
+            forceAxisMinMAx(entries[0].get(0).getX(),
+                    entries[0].get(entries[0].size() - 1).getX());
+        }
     }
 
 }

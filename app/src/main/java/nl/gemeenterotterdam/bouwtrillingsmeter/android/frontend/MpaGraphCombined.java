@@ -22,7 +22,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
  */
 class MpaGraphCombined extends MpaGraph {
 
-//    private ArrayList<Entry>[] entries;
+    private ArrayList<Entry>[] entries;
     private IBarLineScatterCandleBubbleDataSet[] graphDataSets;
     private CombinedData combinedData;
     private boolean useAsPoints;
@@ -45,12 +45,12 @@ class MpaGraphCombined extends MpaGraph {
      * @param useAsPoints  True if this should behave as a point chart
      *                     for our dynamic set(s)
      */
-    MpaGraphCombined(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors, boolean useAsPoints) {
-        super(title, xAxisLabel, yAxisLabel, scrolling, refreshing, dataSetNames, colors);
+    MpaGraphCombined(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors, boolean useAsPoints, float xMultiplier) {
+        super(title, xAxisLabel, yAxisLabel, scrolling, refreshing, dataSetNames, colors, xMultiplier);
         this.useAsPoints = useAsPoints;
 
         // Prepare entries
-        ArrayList<Entry>[] entries = new ArrayList[dataSetNames.length];
+        entries = new ArrayList[dataSetNames.length];
         for (int i = 0; i < dataSetNames.length; i++) {
             entries[i] = new ArrayList<>();
         }
@@ -86,6 +86,7 @@ class MpaGraphCombined extends MpaGraph {
     Chart createChart(Context context) {
         chart = new CombinedChart(context);
         chart.setData(combinedData);
+        chart.invalidate();
         styleChart();
 
         return chart;
@@ -99,6 +100,10 @@ class MpaGraphCombined extends MpaGraph {
     protected void resetChartData() {
         for (IBarLineScatterCandleBubbleDataSet graphDataSet : graphDataSets) {
             graphDataSet.clear();
+        }
+
+        for (int i = 0; i < entries.length; i++) {
+            entries[i] = new ArrayList<>();
         }
     }
 
@@ -114,9 +119,9 @@ class MpaGraphCombined extends MpaGraph {
         for (DataPoint3D<T> dataPoint3D : dataPoints3D) {
             for (int i = 0; i < dataSetNames.length; i++) {
                 Entry entry = new Entry(
-                        dataPoint3D.xAxisValueAsFloat() / 1000,
+                        dataPoint3D.xAxisValueAsFloat() * xMultiplier,
                         dataPoint3D.values[i]);
-                graphDataSets[i].addEntry(entry);
+                entries[i].add(entry);
             }
         }
     }
@@ -127,7 +132,27 @@ class MpaGraphCombined extends MpaGraph {
      */
     @Override
     protected void pushToChart() {
+        CombinedData combinedData = new CombinedData();
+
+        for (int i = 0; i < dataSetNames.length; i++) {
+            if (useAsPoints) {
+                ScatterDataSet scatterDataSet = new ScatterDataSet(entries[i], dataSetNames[i]);
+                styleScatterDataSet(scatterDataSet, colors[i]);
+                combinedData.addDataSet(scatterDataSet);
+            } else {
+                LineDataSet lineDataSet = new LineDataSet(entries[i], dataSetNames[i]);
+                styleLineDataSet(lineDataSet, colors[i]);
+                combinedData.addDataSet(lineDataSet);
+            }
+        }
+
+        chart.setData(combinedData);
         chart.invalidate();
+
+        if (entries[0].size() > 0) {
+            forceAxisMinMAx(entries[0].get(0).getX(),
+                    entries[0].get(entries[0].size() - 1).getX());
+        }
     }
 
 }

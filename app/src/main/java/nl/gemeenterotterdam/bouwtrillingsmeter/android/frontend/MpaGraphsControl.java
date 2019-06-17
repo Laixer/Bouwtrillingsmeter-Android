@@ -59,20 +59,20 @@ class MpaGraphsControl implements DataIntervalClosedListener {
         // Create graphs
         graphs = new MpaGraph[5];
         graphs[0] = new MpaGraphCombined(title[0], axisHorizontal[0], axisVertical[0],
-                true, false, namesXYZ, colorsXYZ, false);
+                true, false, namesXYZ, colorsXYZ, false, 0.001f);
         graphs[1] = new MpaGraphBar(title[1], axisHorizontal[1], axisVertical[1],
-                true, false, namesXYZ, colorsXYZ);
+                true, false, namesXYZ, colorsXYZ, 0.001f);
         graphs[2] = new MpaGraphBar(title[2], axisHorizontal[2], axisVertical[2],
-                true, false, namesXYZ, colorsXYZ);
+                true, false, namesXYZ, colorsXYZ, 0.001f);
         graphs[3] = new MpaGraphLine(title[3], axisHorizontal[3], axisVertical[3],
-                false, true, namesXYZ, colorsXYZ, false);
+                false, true, namesXYZ, colorsXYZ, false, 1);
         graphs[4] = new MpaGraphCombined(title[4], axisHorizontal[4], axisVertical[4],
-                false, false, namesDominant, colorsDominant, true);
+                false, false, namesDominant, colorsDominant, true, 1);
 
         // Set limits separately
-        graphs[0].setSizeConstants(3, 10, 0, 0);
-        graphs[1].setSizeConstants(30, 100, 0, 0);
-        graphs[2].setSizeConstants(30, 100, 0, 0);
+        graphs[0].setSizeConstants(3, 5, 0, 0);
+        graphs[1].setSizeConstants(30, 500, 0, 0);
+        graphs[2].setSizeConstants(30, 500, 0, 0);
         graphs[3].setSizeConstants(0, 0, 0, 100);
         graphs[4].setSizeConstants(0, 0, 0, 100);
 
