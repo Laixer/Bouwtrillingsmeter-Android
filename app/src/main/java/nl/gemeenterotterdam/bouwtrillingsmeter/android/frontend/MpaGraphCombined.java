@@ -86,6 +86,10 @@ class MpaGraphCombined extends MpaGraph {
     Chart createChart(Context context) {
         chart = new CombinedChart(context);
         chart.setData(combinedData);
+        ((CombinedChart) chart).setDrawOrder(new CombinedChart.DrawOrder[]{
+                CombinedChart.DrawOrder.LINE,
+                CombinedChart.DrawOrder.SCATTER
+        });
         chart.invalidate();
         styleChart();
 
