@@ -3,7 +3,6 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 import android.content.Context;
 
 import com.github.mikephil.charting.charts.Chart;
-import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.data.CombinedData;
@@ -15,15 +14,17 @@ import com.github.mikephil.charting.interfaces.datasets.IBarLineScatterCandleBub
 
 import java.util.ArrayList;
 
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
 /**
  * Instance of a line graph.
  */
-class MpaGraphLine extends MpaGraph {
+class MpaGraphCombined extends MpaGraph {
 
     private ArrayList<Entry>[] entries;
+    private IBarLineScatterCandleBubbleDataSet[] graphDataSets;
+    private CombinedData combinedData;
+
     private LineDataSet[] lineDataSets;
     private LineData lineData;
     private boolean useAsPoints;
@@ -46,7 +47,7 @@ class MpaGraphLine extends MpaGraph {
      * @param useAsPoints  True if this should behave as a point chart
      *                     for our dynamic set(s)
      */
-    MpaGraphLine(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors, boolean useAsPoints) {
+    MpaGraphCombined(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors, boolean useAsPoints) {
         super(title, xAxisLabel, yAxisLabel, scrolling, refreshing, dataSetNames, colors);
         this.useAsPoints = useAsPoints;
 
@@ -55,6 +56,24 @@ class MpaGraphLine extends MpaGraph {
         for (int i = 0; i < dataSetNames.length; i++) {
             entries[i] = new ArrayList<>();
         }
+
+        // Prepare line data sets
+        /*combinedData = new CombinedData();
+        if (useAsPoints) {
+            graphDataSets = new ScatterDataSet[dataSetNames.length];
+            for (int i = 0; i < graphDataSets.length; i++) {
+                graphDataSets[i] = new ScatterDataSet(entries[i], dataSetNames[i]);
+                styleScatterDataSet((ScatterDataSet) graphDataSets[i], colors[i]);
+                combinedData.addDataSet(graphDataSets[i]);
+            }
+        } else {
+            graphDataSets = new LineDataSet[dataSetNames.length];
+            for (int i = 0; i < graphDataSets.length; i++) {
+                graphDataSets[i] = new LineDataSet(entries[i], dataSetNames[i]);
+                styleLineDataSet((LineDataSet) graphDataSets[i], colors[i]);
+                combinedData.addDataSet(graphDataSets[i]);
+            }
+        }*/
 
         lineData = new LineData();
         lineDataSets = new LineDataSet[dataSetNames.length];
@@ -87,6 +106,10 @@ class MpaGraphLine extends MpaGraph {
      */
     @Override
     protected void resetChartData() {
+        /*for (IBarLineScatterCandleBubbleDataSet graphDataSet : graphDataSets) {
+            graphDataSet.clear();
+        }*/
+
         for (LineDataSet lineDataSet : lineDataSets) {
             lineDataSet.clear();
         }
@@ -135,6 +158,24 @@ class MpaGraphLine extends MpaGraph {
      */
     @Override
     protected void pushToChart() {
+        /*CombinedData combinedData = new CombinedData();
+
+        if (useAsPoints) {
+            for (int i = 0; i < entries.length; i++) {
+                graphDataSets[i] = new ScatterDataSet(entries[i], dataSetNames[i]);
+                styleScatterDataSet((ScatterDataSet) graphDataSets[i], colors[i]);
+                combinedData.addDataSet(graphDataSets[i]);
+            }
+        } else {
+            for (int i = 0; i < entries.length; i++) {
+                graphDataSets[i] = new LineDataSet(entries[i], dataSetNames[i]);
+                styleLineDataSet((LineDataSet) graphDataSets[i], colors[i]);
+                combinedData.addDataSet((LineDataSet) graphDataSets[i]);
+            }
+        }
+
+        chart.setData(combinedData);
+        chart.invalidate();*/
         lineData = new LineData();
         for (int i = 0; i < entries.length; i++) {
             lineDataSets[i] = new LineDataSet(entries[i], dataSetNames[i]);
