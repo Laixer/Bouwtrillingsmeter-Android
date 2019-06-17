@@ -13,6 +13,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
  * This manages a {@link GraphView} with time on the x-axis and some value on the y-axis.
  * It contains a bar graph.
  */
+@Deprecated
 public class GraphTimeBar extends Graph {
 
     private int maxHorizontalRange = Utility.resources.getInteger(R.integer.graphs_time_bar_horizontal_axis_range_max_s);

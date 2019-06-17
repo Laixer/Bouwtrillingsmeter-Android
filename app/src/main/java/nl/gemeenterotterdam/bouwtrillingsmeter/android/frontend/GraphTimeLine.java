@@ -12,6 +12,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
  * This manages a {@link com.jjoe64.graphview.GraphView} with time on the x-axis and some value on the y-axis.
  * It contains a line graph.
  */
+@Deprecated
 public class GraphTimeLine extends Graph {
 
     private int maxHorizontalRange = Utility.resources.getInteger(R.integer.graphs_time_line_horizontal_axis_range_max_s);

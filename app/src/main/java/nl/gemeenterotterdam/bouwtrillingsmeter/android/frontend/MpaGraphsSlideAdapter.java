@@ -42,7 +42,8 @@ public class MpaGraphsSlideAdapter extends PagerAdapter {
     MpaGraphsSlideAdapter(Context context, MpaGraph[] graphs) {
         this.graphs = graphs;
         this.context = context;
-        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mLayoutInflater = (LayoutInflater) context.getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
     }
 
     /**
@@ -61,7 +62,7 @@ public class MpaGraphsSlideAdapter extends PagerAdapter {
      * This must be implemented.
      *
      * @param view The view
-     * @param o The object
+     * @param o    The object
      * @return True if it is
      */
     @Override
@@ -73,7 +74,7 @@ public class MpaGraphsSlideAdapter extends PagerAdapter {
      * This creates an item in our adapter.
      *
      * @param container The container in which we instantiate
-     * @param position The index of this item
+     * @param position  The index of this item
      * @return The created view
      */
     @Override
@@ -81,13 +82,13 @@ public class MpaGraphsSlideAdapter extends PagerAdapter {
         View view = mLayoutInflater.inflate(R.layout.mpa_graph_template,
                 container, false);
 
-        // Get elements
+        // Get graph
         MpaGraph graph = graphs[position];
-        FrameLayout frameLayout = view.findViewById(
-                R.id.frameLayoutMpaGraphTemplate);
 
         // Create our chart and push it to the UI
         Chart chart = graph.createChart(context);
+        FrameLayout frameLayout = view.findViewById(
+                R.id.frameLayoutMpaGraphTemplate);
         frameLayout.addView(chart);
         graph.onTextViewTitleCreated(view.findViewById(
                 R.id.textViewMpaGraphTemplateName));
@@ -97,7 +98,7 @@ public class MpaGraphsSlideAdapter extends PagerAdapter {
         graph.pushToChart();
         return view;
     }
-    
+
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         View view = (View) object;

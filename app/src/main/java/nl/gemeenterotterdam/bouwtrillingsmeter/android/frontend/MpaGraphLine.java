@@ -29,11 +29,11 @@ class MpaGraphLine extends MpaGraph {
      * @param dataSetNames The names of all data sets,
      *                     this also indicates their count
      */
-    public MpaGraphLine(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, ArrayList<String> dataSetNames) {
+    public MpaGraphLine(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, String[] dataSetNames) {
         super(title, xAxisLabel, yAxisLabel, scrolling, dataSetNames);
 
-        entries = new ArrayList[dataSetNames.size()];
-        for (int i = 0; i < dataSetNames.size(); i++) {
+        entries = new ArrayList[dataSetNames.length];
+        for (int i = 0; i < dataSetNames.length; i++) {
             entries[i] = new ArrayList<>();
         }
     }

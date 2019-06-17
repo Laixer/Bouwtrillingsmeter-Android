@@ -19,6 +19,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.LimitConstants;
  * This contains a line indicating the limit.
  * This contains dots indicating individual exceeding cases.
  */
+@Deprecated
 public class GraphFrequencyDominant extends Graph {
 
     // This might need to become a PQ

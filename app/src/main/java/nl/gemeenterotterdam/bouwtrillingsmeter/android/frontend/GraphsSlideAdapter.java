@@ -12,6 +12,7 @@ import com.jjoe64.graphview.GraphView;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
+@Deprecated
 public class GraphsSlideAdapter extends PagerAdapter {
 
     private Graph[] graphs;

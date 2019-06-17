@@ -23,6 +23,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
  * TODO Optimize by only writing if we are visible
  * TODO Currently we first create the graph, then the graphview. Might want to switch this!
  */
+@Deprecated
 public abstract class Graph {
 
     /**

@@ -19,6 +19,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClose
 /**
  * This activity shows all the graphs.
  */
+@Deprecated
 public class GraphsActivity extends AppCompatActivity implements DataIntervalClosedListener {
 
     /**
@@ -125,7 +126,7 @@ public class GraphsActivity extends AppCompatActivity implements DataIntervalClo
 
         // TODO Deze splitsing by default in DataPoint3D bouwen scheelt best wel veel
         // TODO We moeten er wel altijd doorheen om de tijd te scalen en overlap te voorkomen --> Kan dit in de graph axis gedaan worden?
-        /**
+        /*
          * Graph 1: Acceleration // time (line)
          * Graph 2: Highest velocity // time (block)
          * Graph 3: Dominant frequency // time (block)

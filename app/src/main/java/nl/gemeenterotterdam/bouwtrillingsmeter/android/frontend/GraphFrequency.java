@@ -13,6 +13,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
  * This manages a {@link GraphView} with frequency on the x-axis and some value on the y-axis.
  * It contains a line graph.
  */
+@Deprecated
 public class GraphFrequency extends Graph {
 
     private int axisMin = Utility.resources.getInteger(R.integer.graphs_frequency_bound_min);

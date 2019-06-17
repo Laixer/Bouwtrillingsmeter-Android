@@ -18,7 +18,7 @@ abstract class MpaGraph {
     protected String title;
     protected String xAxisLabel;
     protected String yAxisLabel;
-    protected ArrayList<String> dataSetNames;
+    protected String[] dataSetNames;
 
     protected boolean scrolling;
 
@@ -40,7 +40,7 @@ abstract class MpaGraph {
      * @param dataSetNames The names of all data sets,
      *                     this also indicates their count
      */
-    protected MpaGraph(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, ArrayList<String> dataSetNames) {
+    protected MpaGraph(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, String[] dataSetNames) {
         this.title = title;
         this.xAxisLabel = xAxisLabel;
         this.yAxisLabel = yAxisLabel;

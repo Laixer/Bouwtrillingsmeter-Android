@@ -33,11 +33,11 @@ class MpaGraphBar extends MpaGraph {
      * @param dataSetNames The names of all data sets,
      *                     this also indicates their count
      */
-    public MpaGraphBar(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, ArrayList<String> dataSetNames) {
+    public MpaGraphBar(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, String[] dataSetNames) {
         super(title, xAxisLabel, yAxisLabel, scrolling, dataSetNames);
 
-        entries = new ArrayList[dataSetNames.size()];
-        for (int i = 0; i < dataSetNames.size(); i++) {
+        entries = new ArrayList[dataSetNames.length];
+        for (int i = 0; i < dataSetNames.length; i++) {
             entries[i] = new ArrayList<>();
         }
     }
@@ -88,7 +88,7 @@ class MpaGraphBar extends MpaGraph {
     protected void pushToChart() {
         BarDataSet[] barDataSets = new BarDataSet[entries.length];
         for (int i = 0; i < barDataSets.length; i++) {
-            barDataSets[i] = new BarDataSet(entries[i], dataSetNames.get(i));
+            barDataSets[i] = new BarDataSet(entries[i], dataSetNames[i]);
         }
     }
 }
