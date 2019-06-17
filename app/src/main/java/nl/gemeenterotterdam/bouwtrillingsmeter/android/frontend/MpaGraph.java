@@ -5,6 +5,10 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.data.ChartData;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
 
@@ -22,6 +26,11 @@ abstract class MpaGraph {
     protected int[] colors;
 
     protected boolean scrolling;
+    protected boolean refreshing;
+    protected double minimumWidth;
+    protected double maximumWidth;
+    protected double xMin;
+    protected double xMax;
 
     protected ArrayList<ChartData> chartDataConstant;
     protected ArrayList<ChartData> chartDataVariable;
@@ -38,12 +47,14 @@ abstract class MpaGraph {
      * @param scrolling    If set to true we append data to the right,
      *                     if set to false we refresh the graph each
      *                     iteration
+     * @param refreshing   If set to true all data will be refreshed
+     *                     upon appending new data
      * @param dataSetNames The names of all data sets,
      *                     this also indicates their count
      * @param colors       The color integer for each
      *                     data set
      */
-    protected MpaGraph(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, String[] dataSetNames, int[] colors) {
+    protected MpaGraph(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors) {
         this.title = title;
         this.xAxisLabel = xAxisLabel;
         this.yAxisLabel = yAxisLabel;
@@ -51,9 +62,25 @@ abstract class MpaGraph {
         this.colors = colors;
 
         this.scrolling = scrolling;
+        this.refreshing = refreshing;
 
         chartDataConstant = new ArrayList<>();
         chartDataVariable = new ArrayList<>();
+    }
+
+    /**
+     * This setups some constants.
+     *
+     * @param minimumWidth Used if we scroll
+     * @param maximumWidth Used if we scroll
+     * @param xMin         Used if we don't scroll
+     * @param xMax         Used if we don't scroll
+     */
+    void setSizeConstants(double minimumWidth, double maximumWidth, double xMin, double xMax) {
+        this.minimumWidth = minimumWidth;
+        this.maximumWidth = maximumWidth;
+        this.xMin = xMin;
+        this.xMax = xMax;
     }
 
     /**
@@ -93,7 +120,7 @@ abstract class MpaGraph {
      */
     protected <T> void sendNewDataToSeries(ArrayList<DataPoint3D<T>> dataPoints3D) {
         // If we are not scrolling we should reset our view
-        if (!scrolling) {
+        if (refreshing) {
             resetChartData();
         }
 
@@ -138,6 +165,10 @@ abstract class MpaGraph {
      */
     private boolean shouldRender() {
         return chart != null;
+    }
+
+    protected void styleChart() {
+        chart.setDescription(null);
     }
 
 }

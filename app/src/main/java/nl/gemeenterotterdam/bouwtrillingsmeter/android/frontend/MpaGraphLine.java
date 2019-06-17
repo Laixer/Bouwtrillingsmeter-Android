@@ -3,17 +3,17 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 import android.content.Context;
 
 import com.github.mikephil.charting.charts.Chart;
+import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.charts.ScatterChart;
+import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.utils.EntryXComparator;
+import com.github.mikephil.charting.data.ScatterDataSet;
+import com.github.mikephil.charting.interfaces.datasets.IBarLineScatterCandleBubbleDataSet;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
@@ -24,8 +24,12 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 class MpaGraphLine extends MpaGraph {
 
     private ArrayList<Entry>[] entries;
+    //private IBarLineScatterCandleBubbleDataSet[] graphDataSets;
+    //private CombinedData combinedData;
+
     private LineDataSet[] lineDataSets;
     private LineData lineData;
+    private boolean useAsPoints;
 
     /**
      * Creates an instance of a line graph.
@@ -36,13 +40,18 @@ class MpaGraphLine extends MpaGraph {
      * @param scrolling    If set to true we append data to the right,
      *                     if set to false we refresh the graph each
      *                     iteration
+     * @param refreshing   If set to true all data will be refreshed
+     *                     upon appending new data
      * @param dataSetNames The names of all data sets,
      *                     this also indicates their count
      * @param colors       The color integer for each
      *                     data set
+     * @param useAsPoints  True if this should behave as a point chart
+     *                     for our dynamic set(s)
      */
-    MpaGraphLine(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, String[] dataSetNames, int[] colors) {
-        super(title, xAxisLabel, yAxisLabel, scrolling, dataSetNames, colors);
+    MpaGraphLine(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors, boolean useAsPoints) {
+        super(title, xAxisLabel, yAxisLabel, scrolling, refreshing, dataSetNames, colors);
+        this.useAsPoints = useAsPoints;
 
         // Prepare entries
         entries = new ArrayList[dataSetNames.length];
@@ -51,19 +60,31 @@ class MpaGraphLine extends MpaGraph {
         }
 
         // Prepare line data sets
-        resetLineDataSets();
+        /*combinedData = new CombinedData();
+        if (useAsPoints) {
+            graphDataSets = new ScatterDataSet[dataSetNames.length];
+            for (int i = 0; i < graphDataSets.length; i++) {
+                graphDataSets[i] = new ScatterDataSet(entries[i], dataSetNames[i]);
+                styleScatterDataSet((ScatterDataSet) graphDataSets[i], colors[i]);
+                combinedData.addDataSet(graphDataSets[i]);
+            }
+        } else {
+            graphDataSets = new LineDataSet[dataSetNames.length];
+            for (int i = 0; i < graphDataSets.length; i++) {
+                graphDataSets[i] = new LineDataSet(entries[i], dataSetNames[i]);
+                styleLineDataSet((LineDataSet) graphDataSets[i], colors[i]);
+                combinedData.addDataSet(graphDataSets[i]);
+            }
+        }*/
 
-        // Prepare graph data
-        lineData = new LineData(lineDataSets);
-    }
-
-    private void resetLineDataSets() {
+        lineData = new LineData();
         lineDataSets = new LineDataSet[dataSetNames.length];
         for (int i = 0; i < lineDataSets.length; i++) {
             lineDataSets[i] = new LineDataSet(entries[i], dataSetNames[i]);
-            lineDataSets[i].setColor(colors[i]);
-            lineDataSets[i].setDrawCircles(false);
+            styleLineDataSet(lineDataSets[i], colors[i]);
+            lineData.addDataSet(lineDataSets[i]);
         }
+
     }
 
     /**
@@ -77,6 +98,8 @@ class MpaGraphLine extends MpaGraph {
     Chart createChart(Context context) {
         chart = new LineChart(context);
         chart.setData(lineData);
+
+        styleChart();
         return chart;
     }
 
@@ -86,6 +109,10 @@ class MpaGraphLine extends MpaGraph {
      */
     @Override
     protected void resetChartData() {
+        /*for (IBarLineScatterCandleBubbleDataSet graphDataSet : graphDataSets) {
+            graphDataSet.clear();
+        }*/
+
         for (LineDataSet lineDataSet : lineDataSets) {
             lineDataSet.clear();
         }
@@ -101,23 +128,24 @@ class MpaGraphLine extends MpaGraph {
     @Override
     protected <T> void appendDataToEntries(ArrayList<DataPoint3D<T>> dataPoints3D) {
         for (DataPoint3D<T> dataPoint3D : dataPoints3D) {
-            for (int dimension = 0; dimension < dataSetNames.length; dimension++) {
-
+            for (int i = 0; i < entries.length; i++) {
+                // Create entry
                 Entry entry = new Entry(
                         dataPoint3D.xAxisValueAsFloat() / 1000,
-                        dataPoint3D.values[dimension]);
+                        dataPoint3D.values[i]);
 
                 // Failsafe for the ordering
-                /*if (entries[dimension].size() > 0) {
-                    float previousX = entries[dimension]
-                            .get(entries[dimension].size() - 1).getX();
+                if (entries[i].size() > 0) {
+                    float previousX = entries[i]
+                            .get(entries[i].size() - 1).getX();
                     if (entry.getX() < previousX) {
                         continue;
                     }
-                }*/
+                }
 
-                entries[dimension].add(entry);
-                //lineDataSets[dimension].addEntry(entry);
+                // Add entry to list, we don't add to line data set
+                // This might change later because realtime adding doesn't work
+                entries[i].add(entry);
             }
         }
     }
@@ -128,15 +156,47 @@ class MpaGraphLine extends MpaGraph {
      */
     @Override
     protected void pushToChart() {
-        //sortEntries();
-        //resetLineDataSets();
-        //chart.setData(lineData);
-        //chart.invalidate();
+        /*CombinedData combinedData = new CombinedData();
+
+        if (useAsPoints) {
+            for (int i = 0; i < entries.length; i++) {
+                graphDataSets[i] = new ScatterDataSet(entries[i], dataSetNames[i]);
+                styleScatterDataSet((ScatterDataSet) graphDataSets[i], colors[i]);
+                combinedData.addDataSet(graphDataSets[i]);
+            }
+        } else {
+            for (int i = 0; i < entries.length; i++) {
+                graphDataSets[i] = new LineDataSet(entries[i], dataSetNames[i]);
+                styleLineDataSet((LineDataSet) graphDataSets[i], colors[i]);
+                combinedData.addDataSet((LineDataSet) graphDataSets[i]);
+            }
+        }
+
+        chart.setData(combinedData);
+        chart.invalidate();*/
+        lineData = new LineData();
+        for (int i = 0; i < entries.length; i++) {
+            lineDataSets[i] = new LineDataSet(entries[i], dataSetNames[i]);
+            styleLineDataSet(lineDataSets[i], colors[i]);
+            lineData.addDataSet(lineDataSets[i]);
+        }
+
+
+        chart.setData(lineData);
+        chart.invalidate();
     }
 
-    private void sortEntries() {
-        for (ArrayList<Entry> list : entries) {
-            Collections.sort(list, new EntryXComparator());
-        }
+    private void styleLineDataSet(LineDataSet lineDataSet, int color) {
+        lineDataSet.setDrawCircles(false);
+        lineDataSet.setDrawCircleHole(false);
+        lineDataSet.setColor(color);
+        lineDataSet.setLineWidth(1);
     }
+
+    private void styleScatterDataSet(ScatterDataSet scatterDataSet, int color) {
+        scatterDataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
+        scatterDataSet.setColor(color);
+        scatterDataSet.setScatterShapeSize(3);
+    }
+
 }

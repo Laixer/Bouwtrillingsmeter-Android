@@ -32,13 +32,15 @@ class MpaGraphBar extends MpaGraph {
      * @param scrolling    If set to true we append data to the right,
      *                     if set to false we refresh the graph each
      *                     iteration
+     * @param refreshing   If set to true all data will be refreshed
+     *                     upon appending new data
      * @param dataSetNames The names of all data sets,
      *                     this also indicates their count
      * @param colors       The color integer for each
      *                     data set
      */
-    MpaGraphBar(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, String[] dataSetNames, int[] colors) {
-        super(title, xAxisLabel, yAxisLabel, scrolling, dataSetNames, colors);
+    MpaGraphBar(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors) {
+        super(title, xAxisLabel, yAxisLabel, refreshing, scrolling, dataSetNames, colors);
 
         entries = new ArrayList[dataSetNames.length];
         for (int i = 0; i < dataSetNames.length; i++) {
@@ -99,10 +101,17 @@ class MpaGraphBar extends MpaGraph {
         BarData barData = new BarData();
         for (int i = 0; i < barDataSets.length; i++) {
             barDataSets[i] = new BarDataSet(entries[i], dataSetNames[i]);
+            styleBarDataSet(barDataSets[i], colors[i]);
             barData.addDataSet(barDataSets[i]);
         }
 
         chart.setData(barData);
+        ((BarChart) chart).groupBars(0, 0.1f, 0.01f);
         chart.invalidate();
+    }
+
+    private void styleBarDataSet(BarDataSet barDataSet, int color) {
+        barDataSet.setColor(color);
+        barDataSet.setDrawValues(false);
     }
 }
