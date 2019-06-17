@@ -9,8 +9,10 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.EntryXComparator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
@@ -49,15 +51,19 @@ class MpaGraphLine extends MpaGraph {
         }
 
         // Prepare line data sets
+        resetLineDataSets();
+
+        // Prepare graph data
+        lineData = new LineData(lineDataSets);
+    }
+
+    private void resetLineDataSets() {
         lineDataSets = new LineDataSet[dataSetNames.length];
         for (int i = 0; i < lineDataSets.length; i++) {
             lineDataSets[i] = new LineDataSet(entries[i], dataSetNames[i]);
             lineDataSets[i].setColor(colors[i]);
             lineDataSets[i].setDrawCircles(false);
         }
-
-        // Prepare graph data
-        lineData = new LineData(lineDataSets);
     }
 
     /**
@@ -102,16 +108,16 @@ class MpaGraphLine extends MpaGraph {
                         dataPoint3D.values[dimension]);
 
                 // Failsafe for the ordering
-                if (entries[dimension].size() > 0) {
+                /*if (entries[dimension].size() > 0) {
                     float previousX = entries[dimension]
                             .get(entries[dimension].size() - 1).getX();
                     if (entry.getX() < previousX) {
                         continue;
                     }
-                }
+                }*/
 
                 entries[dimension].add(entry);
-                lineDataSets[dimension].addEntry(entry);
+                //lineDataSets[dimension].addEntry(entry);
             }
         }
     }
@@ -122,6 +128,15 @@ class MpaGraphLine extends MpaGraph {
      */
     @Override
     protected void pushToChart() {
-        chart.invalidate();
+        //sortEntries();
+        //resetLineDataSets();
+        //chart.setData(lineData);
+        //chart.invalidate();
+    }
+
+    private void sortEntries() {
+        for (ArrayList<Entry> list : entries) {
+            Collections.sort(list, new EntryXComparator());
+        }
     }
 }
