@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.Chart;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -63,6 +64,7 @@ class MpaGraphBar extends MpaGraph {
         styleChart();
 
         chart.setHorizontalScrollBarEnabled(true);
+        ((BarChart) chart).getAxisRight().setEnabled(false);
 
         return chart;
     }

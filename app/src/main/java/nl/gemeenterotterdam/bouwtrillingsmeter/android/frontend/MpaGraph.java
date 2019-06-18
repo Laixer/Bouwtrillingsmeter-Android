@@ -3,7 +3,9 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 import android.content.Context;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.Chart;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.ChartData;
@@ -204,16 +206,14 @@ abstract class MpaGraph {
 
     protected void styleScatterDataSet(ScatterDataSet scatterDataSet, int color) {
         scatterDataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
-        scatterDataSet.setColor(R.color.graph_series_color_x);
-        scatterDataSet.setHighLightColor(R.color.graph_series_color_x);
+        scatterDataSet.setColor(color);
+        scatterDataSet.setHighLightColor(color);
         scatterDataSet.setScatterShapeSize(10);
         scatterDataSet.setDrawValues(false);
     }
 
     protected void styleBarDataSet(BarDataSet barDataSet, int color) {
         barDataSet.setColor(color);
-        // barDataSet.setHighLightColor(color);
-        // barDataSet.setHighLightAlpha(160);
         barDataSet.setDrawValues(false);
     }
 

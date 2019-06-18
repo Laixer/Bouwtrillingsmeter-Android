@@ -2,6 +2,7 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Context;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.data.ChartData;
@@ -97,6 +98,7 @@ class MpaGraphCombined extends MpaGraph {
         chart.invalidate();
         styleChart();
 
+        ((CombinedChart) chart).getAxisRight().setEnabled(false);
         return chart;
     }
 
@@ -174,7 +176,7 @@ class MpaGraphCombined extends MpaGraph {
 
         // Add our constant lines
         for (LineDataSet lineDataSet : constantLineDataSets) {
-            styleLineDataSet(lineDataSet, R.color.graph_series_color_x);
+            styleLineDataSet(lineDataSet, lineDataSet.getColor());
             lineData.addDataSet(lineDataSet);
         }
 

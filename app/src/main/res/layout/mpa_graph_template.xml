@@ -21,12 +21,10 @@
 
         <TextView
             android:id="@+id/textViewMpaGraphTemplateAxisY"
-            android:layout_width="158dp"
-            android:layout_height="176dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:gravity="bottom"
-            android:rotation="90"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:gravity="center|center_horizontal|top"
+            android:rotation="270"
             android:text="@string/default_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,25 +36,27 @@
             android:id="@+id/textViewMpaGraphTemplateAxisX"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:text="@string/default_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
 
         <FrameLayout
             android:id="@+id/frameLayoutMpaGraphTemplate"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginBottom="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
 
         </FrameLayout>
     </android.support.constraint.ConstraintLayout>
