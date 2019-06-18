@@ -1,7 +1,5 @@
 Alpha:
 
-TODO Settings activity always on stack, fix this
-
 MainActivity
 DONE - Naam meting:      "Meting in Delft"
 DONE                      geen *stad*? "Meting op onbekende locatie"
@@ -53,9 +51,9 @@ DONE - Terug knop alleen bij Android, iOS heeft dat niet
 
 GraphsActivity
 TODO - Previews? --> vragen
-TODO - Dezelfde library
-TODO     ik zoek dit uit
-TODO     mpandroidchart vs charts (ios)?
+DONE - Dezelfde library
+DONE     ik zoek dit uit
+DONE     mpandroidchart vs charts (ios)?
 
 FinishedMeasurementActivity
 DONE - Naar details scherm instantly
