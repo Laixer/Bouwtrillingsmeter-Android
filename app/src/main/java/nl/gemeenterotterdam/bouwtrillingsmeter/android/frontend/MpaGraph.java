@@ -37,7 +37,7 @@ abstract class MpaGraph {
     protected float xMin;
     protected float xMax;
 
-    protected ArrayList<ChartData> chartDataConstant;
+    protected ArrayList<LineDataSet> constantLineDataSets;
     protected ArrayList<ChartData> chartDataVariable;
 
     protected TextView textViewTitle;
@@ -73,7 +73,7 @@ abstract class MpaGraph {
         this.refreshing = refreshing;
         this.xMultiplier = xMultiplier;
 
-        chartDataConstant = new ArrayList<>();
+        constantLineDataSets = new ArrayList<>();
         chartDataVariable = new ArrayList<>();
     }
 
@@ -110,15 +110,6 @@ abstract class MpaGraph {
      * @return The created chart
      */
     abstract Chart createChart(Context context);
-
-    /**
-     * Call this to add a constant line to the graph.
-     *
-     * @param chartData The chart data to add
-     */
-    void addConstantChartData(ChartData chartData) {
-        chartDataConstant.add(chartData);
-    }
 
     /**
      * This will append new data to the series. This will always
@@ -197,12 +188,14 @@ abstract class MpaGraph {
         lineDataSet.setDrawCircleHole(false);
         lineDataSet.setColor(color);
         lineDataSet.setLineWidth(1);
+        lineDataSet.setDrawValues(false);
     }
 
     protected void styleScatterDataSet(ScatterDataSet scatterDataSet, int color) {
         scatterDataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
         scatterDataSet.setColor(color);
-        scatterDataSet.setScatterShapeSize(3);
+        scatterDataSet.setScatterShapeSize(10);
+        scatterDataSet.setDrawValues(false);
     }
 
     protected void styleBarDataSet(BarDataSet barDataSet, int color) {

@@ -1,16 +1,10 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Context;
-import android.graphics.Color;
 
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.CombinedChart;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.charts.ScatterChart;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -18,8 +12,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.ScatterData;
 import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IBarLineScatterCandleBubbleDataSet;
-import com.github.mikephil.charting.renderer.LineChartRenderer;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 
@@ -105,6 +97,19 @@ class MpaGraphCombined extends MpaGraph {
     }
 
     /**
+     * This adds a constant line to our graph.
+     *
+     * @param entries The entries
+     * @param name    The name
+     * @param color   The color as resource int
+     */
+    void addConstantLine(ArrayList<Entry> entries, String name, int color) {
+        LineDataSet lineDataSet = new LineDataSet(entries, name);
+        styleLineDataSet(lineDataSet, color);
+        constantLineDataSets.add(lineDataSet);
+    }
+
+    /**
      * If we are not {@link #scrolling} then all chart data must
      * be reset to refresh the entire graph.
      */
@@ -148,6 +153,7 @@ class MpaGraphCombined extends MpaGraph {
         LineData lineData = new LineData();
         ScatterData scatterData = new ScatterData();
 
+        // Add our variable lines and scatters
         for (int i = 0; i < dataSetNames.length; i++) {
             if (useAsPoints) {
                 ScatterDataSet scatterDataSet = new ScatterDataSet(entries[i], dataSetNames[i]);
@@ -158,6 +164,11 @@ class MpaGraphCombined extends MpaGraph {
                 styleLineDataSet(lineDataSet, colors[i]);
                 lineData.addDataSet(lineDataSet);
             }
+        }
+
+        // Add our constant lines
+        for (LineDataSet lineDataSet : constantLineDataSets) {
+            lineData.addDataSet(lineDataSet);
         }
 
         combinedData.setData(scatterData);

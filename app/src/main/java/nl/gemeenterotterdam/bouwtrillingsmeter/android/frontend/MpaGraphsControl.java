@@ -4,6 +4,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataHandler;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataInterval;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClosedListener;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.LimitConstants;
 
 /**
  * This holds our graphs. This is separated because
@@ -64,7 +65,7 @@ class MpaGraphsControl implements DataIntervalClosedListener {
                 true, false, namesXYZ, colorsXYZ, 0.001f);
         graphs[2] = new MpaGraphBar(title[2], axisHorizontal[2], axisVertical[2],
                 true, false, namesXYZ, colorsXYZ, 0.001f);
-        graphs[3] = new MpaGraphLine(title[3], axisHorizontal[3], axisVertical[3],
+        graphs[3] = new MpaGraphCombined(title[3], axisHorizontal[3], axisVertical[3],
                 false, true, namesXYZ, colorsXYZ, false, 1);
         graphs[4] = new MpaGraphCombined(title[4], axisHorizontal[4], axisVertical[4],
                 false, false, namesDominant, colorsDominant, true, 1);
@@ -76,7 +77,12 @@ class MpaGraphsControl implements DataIntervalClosedListener {
         graphs[3].setSizeConstants(0, 0, 0, 100);
         graphs[4].setSizeConstants(0, 0, 0, 100);
 
-        // TODO Add constant line
+        // Add the constant line to our dominant frequency plot
+        ((MpaGraphCombined)graphs[4]).addConstantLine(
+                LimitConstants.getLimitAsEntries(),
+                Utility.resources.getString(R.string.graph_legend_limitline_name),
+                R.color.graph_dominant_constant_line
+        );
     }
 
     /**

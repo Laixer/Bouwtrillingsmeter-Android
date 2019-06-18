@@ -1,4 +1,5 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
+import com.github.mikephil.charting.data.Entry;
 import com.jjoe64.graphview.series.DataPoint;
 
 import java.util.ArrayList;
@@ -85,33 +86,29 @@ public class LimitConstants {
     }
 
     /**
-     * Gets our y-values corresponding to our settings file.
-     * The returned values correspond to the predefined frequency points.
+     * This function converts our current limits to an array
+     * list of {@link Entry} objects. This can be used to
+     * display a line on a {@link com.github.mikephil.charting.charts.Chart}.
      *
-     * @param settings The settings file
-     * @return The corresponding amplitude limit values.
+     * This function fetches the corresponding settings
+     * object by itself.
+     *
+     * @return The formatted entry array list
      */
-    private static float[] getLineBreakPointAmplitudesFromSettings(Settings settings) {
-        int vibrationIndex = settings.getVibrationCategory().ordinal();
-        int buildingIndex = settings.getBuildingCategory().ordinal();
+    public static ArrayList<Entry> getLimitAsEntries() {
+        // Get constants
+        Settings settings = MeasurementControl.getCurrentMeasurement().getSettings();
+        float[] amplitudes = getLineBreakPointAmplitudesFromSettings(settings);
+        float yt = getYvFromSettings(settings);
 
-        float[] amplitudes;
-        switch (vibrationIndex) {
-            case 1:
-                amplitudes = lineBreakPointsVibrationShort[buildingIndex - 1];
-                break;
-            case 2:
-                amplitudes = lineBreakPointsVibrationShortRepeated[buildingIndex - 1];
-                break;
-            case 3:
-                amplitudes = getLineBreakPointsVibrationContinuous[buildingIndex - 1];
-                break;
-            default:
-                System.out.println("Could not compute limit values");
-                return new float[0];
+        // Iterate through
+        ArrayList<Entry> result = new ArrayList<>();
+        for (int i = 0; i < lineBreakPointsFrequency.length; i++) {
+            result.add(new Entry(lineBreakPointsFrequency[i], amplitudes[i] * yt));
         }
 
-        return amplitudes;
+        // Return as prepared set of entries
+        return result;
     }
 
     /**
@@ -148,5 +145,35 @@ public class LimitConstants {
 
         }
         return new float[][]{lineBreakPointsFrequency, amplitudes};
+    }
+
+    /**
+     * Gets our y-values corresponding to our settings file.
+     * The returned values correspond to the predefined frequency points.
+     *
+     * @param settings The settings file
+     * @return The corresponding amplitude limit values.
+     */
+    private static float[] getLineBreakPointAmplitudesFromSettings(Settings settings) {
+        int vibrationIndex = settings.getVibrationCategory().ordinal();
+        int buildingIndex = settings.getBuildingCategory().ordinal();
+
+        float[] amplitudes;
+        switch (vibrationIndex) {
+            case 1:
+                amplitudes = lineBreakPointsVibrationShort[buildingIndex - 1];
+                break;
+            case 2:
+                amplitudes = lineBreakPointsVibrationShortRepeated[buildingIndex - 1];
+                break;
+            case 3:
+                amplitudes = getLineBreakPointsVibrationContinuous[buildingIndex - 1];
+                break;
+            default:
+                System.out.println("Could not compute limit values");
+                return new float[0];
+        }
+
+        return amplitudes;
     }
 }
