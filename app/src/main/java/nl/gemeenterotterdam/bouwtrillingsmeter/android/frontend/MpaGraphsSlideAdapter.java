@@ -7,12 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.charts.Chart;
-import com.jjoe64.graphview.GraphView;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
@@ -90,8 +86,10 @@ public class MpaGraphsSlideAdapter extends PagerAdapter {
         FrameLayout frameLayout = view.findViewById(
                 R.id.frameLayoutMpaGraphTemplate);
         frameLayout.addView(chart);
-        graph.onTextViewTitleCreated(view.findViewById(
-                R.id.textViewMpaGraphTemplateName));
+        graph.onTextViewsCreated(
+                view.findViewById(R.id.textViewMpaGraphTemplateName),
+                view.findViewById(R.id.textViewMpaGraphTemplateAxisX),
+                view.findViewById(R.id.textViewMpaGraphTemplateAxisY));
 
         // Add, push and return
         container.addView(view);

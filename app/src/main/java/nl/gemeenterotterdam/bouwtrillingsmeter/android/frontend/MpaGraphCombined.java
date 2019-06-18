@@ -12,9 +12,12 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.ScatterData;
 import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IBarLineScatterCandleBubbleDataSet;
+import com.github.mikephil.charting.utils.EntryXComparator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
 /**
@@ -26,6 +29,7 @@ class MpaGraphCombined extends MpaGraph {
     private IBarLineScatterCandleBubbleDataSet[] graphDataSets;
     private CombinedData combinedData;
     private boolean useAsPoints;
+    private int constantLineColor;
 
     /**
      * Creates an instance of a line graph.
@@ -104,6 +108,7 @@ class MpaGraphCombined extends MpaGraph {
      * @param color   The color as resource int
      */
     void addConstantLine(ArrayList<Entry> entries, String name, int color) {
+        constantLineColor = color;
         LineDataSet lineDataSet = new LineDataSet(entries, name);
         styleLineDataSet(lineDataSet, color);
         constantLineDataSets.add(lineDataSet);
@@ -157,6 +162,7 @@ class MpaGraphCombined extends MpaGraph {
         for (int i = 0; i < dataSetNames.length; i++) {
             if (useAsPoints) {
                 ScatterDataSet scatterDataSet = new ScatterDataSet(entries[i], dataSetNames[i]);
+                Collections.sort(entries[i], new EntryXComparator());
                 styleScatterDataSet(scatterDataSet, colors[i]);
                 scatterData.addDataSet(scatterDataSet);
             } else {
@@ -168,6 +174,7 @@ class MpaGraphCombined extends MpaGraph {
 
         // Add our constant lines
         for (LineDataSet lineDataSet : constantLineDataSets) {
+            styleLineDataSet(lineDataSet, R.color.graph_series_color_x);
             lineData.addDataSet(lineDataSet);
         }
 

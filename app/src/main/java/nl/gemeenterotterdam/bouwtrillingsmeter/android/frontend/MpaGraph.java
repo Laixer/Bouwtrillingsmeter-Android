@@ -15,6 +15,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
 
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
 /**
@@ -41,6 +42,8 @@ abstract class MpaGraph {
     protected ArrayList<ChartData> chartDataVariable;
 
     protected TextView textViewTitle;
+    protected TextView textViewAxisX;
+    protected TextView textViewAxisY;
     protected Chart chart;
 
     /**
@@ -97,9 +100,16 @@ abstract class MpaGraph {
      *
      * @param textViewTitle The text view
      */
-    void onTextViewTitleCreated(TextView textViewTitle) {
+    void onTextViewsCreated(TextView textViewTitle,
+                            TextView textViewAxisX,
+                            TextView textViewAxisY) {
         this.textViewTitle = textViewTitle;
+        this.textViewAxisX = textViewAxisX;
+        this.textViewAxisY = textViewAxisY;
+
         textViewTitle.setText(title);
+        textViewAxisX.setText(xAxisLabel);
+        textViewAxisY.setText(yAxisLabel);
     }
 
     /**
@@ -187,19 +197,23 @@ abstract class MpaGraph {
         lineDataSet.setDrawCircles(false);
         lineDataSet.setDrawCircleHole(false);
         lineDataSet.setColor(color);
+        lineDataSet.setHighLightColor(color);
         lineDataSet.setLineWidth(1);
         lineDataSet.setDrawValues(false);
     }
 
     protected void styleScatterDataSet(ScatterDataSet scatterDataSet, int color) {
         scatterDataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
-        scatterDataSet.setColor(color);
+        scatterDataSet.setColor(R.color.graph_series_color_x);
+        scatterDataSet.setHighLightColor(R.color.graph_series_color_x);
         scatterDataSet.setScatterShapeSize(10);
         scatterDataSet.setDrawValues(false);
     }
 
     protected void styleBarDataSet(BarDataSet barDataSet, int color) {
         barDataSet.setColor(color);
+        // barDataSet.setHighLightColor(color);
+        // barDataSet.setHighLightAlpha(160);
         barDataSet.setDrawValues(false);
     }
 
