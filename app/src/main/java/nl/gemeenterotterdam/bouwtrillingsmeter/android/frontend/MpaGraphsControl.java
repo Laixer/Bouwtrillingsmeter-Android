@@ -1,6 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataHandler;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataInterval;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClosedListener;
@@ -17,6 +18,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.LimitConstants;
  * Gaat automatisch? Check dit!
  */
 class MpaGraphsControl implements DataIntervalClosedListener {
+
 
     /**
      * All graphs.
@@ -126,6 +128,14 @@ class MpaGraphsControl implements DataIntervalClosedListener {
      */
     int getGraphsCount() {
         return graphs.length;
+    }
+
+    /**
+     * Kills this process.
+     */
+    void forceFinish() {
+        DataHandler.removeDataIntervalClosedListener(this);
+        graphs = null;
     }
 
 }

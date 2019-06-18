@@ -346,12 +346,17 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
      */
     @Override
     public void finish() {
-        GraphsActivity.forceFinish();
+        // Kill graphs activity
+        // GraphsActivity.forceFinish();
+        MpaGraphsActivity.forceFinish();
+
+        // Kill graphs control
+        mpaGraphsControl.forceFinish();
+        mpaGraphsControl = null;
+
+        // Reset and remove this
         isMeasuring = null;
         Backend.removeBackendStateListener(this);
-
-        // MpaGraphsControl gets deleted again
-        mpaGraphsControl = null;
 
         super.finish();
     }

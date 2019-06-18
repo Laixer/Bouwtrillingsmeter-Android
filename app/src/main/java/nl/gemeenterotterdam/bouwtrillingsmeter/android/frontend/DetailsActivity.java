@@ -181,4 +181,12 @@ public class DetailsActivity extends AppCompatActivity {
         imageViewMeasurementPhoto.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+        finish();
+    }
+
 }

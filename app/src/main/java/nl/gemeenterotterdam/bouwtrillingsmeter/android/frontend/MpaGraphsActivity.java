@@ -22,6 +22,8 @@ public class MpaGraphsActivity extends AppCompatActivity {
     private LinearLayout dotsLayout;
     private ImageView[] dots;
 
+    private static MpaGraphsActivity mpaGraphsActivity;
+
     /**
      * Called on creation.
      *
@@ -31,6 +33,9 @@ public class MpaGraphsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mpa_graphs);
+
+        // Static save
+        mpaGraphsActivity = this;
 
         // Setup dots
         dotsLayout = (LinearLayout) findViewById(R.id.linearLayoutMpaGraphsDots);
@@ -69,5 +74,17 @@ public class MpaGraphsActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), MeasuringActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
+    }
+
+    /**
+     * Force this activity to end. This does
+     * nothing if this activity was never
+     * started in the first place.
+     */
+    public static void forceFinish() {
+        if (mpaGraphsActivity != null) {
+            mpaGraphsActivity.finish();
+            mpaGraphsActivity = null;
+        }
     }
 }
