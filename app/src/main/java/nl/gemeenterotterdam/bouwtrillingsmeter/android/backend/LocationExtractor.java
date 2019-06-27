@@ -65,26 +65,26 @@ public class LocationExtractor {
             }
         };
 
-        // Separate thread because we need a looper.
+        // Separate thread because we need a looper
         Thread thread = new Thread(() -> {
-
-            // Only prepare the looper if we need to
-            if (Looper.myLooper() == null) {
-                Looper.prepare();
-            }
-
             try {
                 if (locationManager == null) {
                     System.out.println("Location manager is null!");
                 }
 
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
+                // Only prepare the looper if we need to
+                if (Looper.myLooper() == null) {
+                    Looper.prepare();
+                }
+                Looper looper = Looper.myLooper();
+
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                        1000, 1, locationListener, looper);
             } catch (SecurityException e) {
                 System.out.println("Security exception: " + e.getMessage());
             } catch (Exception e) {
                 System.out.println("Unexpected exception: " + e.getMessage());
             }
-
         });
 
         // Launch the thread
