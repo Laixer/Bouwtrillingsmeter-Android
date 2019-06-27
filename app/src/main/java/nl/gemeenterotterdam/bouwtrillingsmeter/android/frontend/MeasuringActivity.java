@@ -257,6 +257,9 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
      * This does not start a new activity if the activity is already open.
      */
     private void onClickShowGraphs() {
+        buttonStartStop.setEnabled(false);
+        buttonShowGraphs.setEnabled(false);
+
         Intent intent = new Intent(getApplicationContext(), MpaGraphsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
@@ -270,6 +273,8 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
             Backend.onReadyToStartMeasurement();
             onStartMeasuring();
         } else {
+            buttonStartStop.setEnabled(false);
+            buttonShowGraphs.setEnabled(false);
             Backend.onRequestEndMeasurement();
             onFinishMeasuring();
         }
@@ -359,6 +364,16 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
         Backend.removeBackendStateListener(this);
 
         super.finish();
+    }
+
+    /**
+     * Enables all our buttons again.
+     */
+    @Override
+    public void onResume() {
+        buttonStartStop.setEnabled(true);
+        buttonShowGraphs.setEnabled(true);
+        super.onResume();
     }
 
     /**

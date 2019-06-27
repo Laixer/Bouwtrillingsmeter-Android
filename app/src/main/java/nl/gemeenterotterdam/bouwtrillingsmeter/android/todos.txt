@@ -7,7 +7,7 @@ Details
 TODO How to deal with widget x memory clear-up deleting the settingspages page?
 TODO Google play services wordt helemaal gebruikt. Dit kan partial om ruimte te besparen.
 TODO Check build.gradle voor app --> error in versie.
-
+TODO Als je locatie weigert (en aangeeft: vraag dit niet meer) dan doet de play knop niets, er wordt dus geen feedback hierop gegeven
 
 
 
