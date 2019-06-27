@@ -22,6 +22,7 @@ import java.util.Locale;
 /**
  * This class extracts our current location.
  */
+@Deprecated
 public class LocationExtractor {
 
     private static LocationExtractor locationExtractor;
