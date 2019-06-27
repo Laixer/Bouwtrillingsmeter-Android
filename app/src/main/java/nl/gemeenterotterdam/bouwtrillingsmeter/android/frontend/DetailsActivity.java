@@ -82,10 +82,7 @@ public class DetailsActivity extends AppCompatActivity {
         // Click imageview to enlarge photo
         imageViewMeasurementPhoto = (ImageView) findViewById(R.id.imageViewDetailsMeasurementPhoto);
         imageViewMeasurementPhoto.setOnClickListener((view) -> onClickEnlargePicture());
-        updateImageVisibility(measurement.getBitmap() != null);
-        // TODO Remove
-        updateImageVisibility(true);
-        Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
+        updateImageView();
 
         // TODO Alpha
         if (Utility.isAlpha()) {
@@ -117,6 +114,16 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     /**
+     * Updates the image view of this activity.
+     * It disappears if no image is present.
+     */
+    private void updateImageView() {
+        boolean bitmapPresent = measurement.getBitmap() != null;
+        updateImageVisibility(bitmapPresent);
+        Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
+    }
+
+    /**
      * This gets called when we successfully take a picture.
      */
     @Override
@@ -144,7 +151,7 @@ public class DetailsActivity extends AppCompatActivity {
 
             // Write to measurement
             measurement.setBitmap(bitmap, imageName);
-            Utility.updateScaledPhoto(imageViewMeasurementPhoto, measurement.getBitmap());
+            updateImageView();
             return;
 
         } catch (StorageWriteException e) {
@@ -153,7 +160,6 @@ public class DetailsActivity extends AppCompatActivity {
 
         Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.alert_dialog_error_taking_picture);
     }
-
 
     /**
      * This will update all textviews containing the details about the measurement we are looking at

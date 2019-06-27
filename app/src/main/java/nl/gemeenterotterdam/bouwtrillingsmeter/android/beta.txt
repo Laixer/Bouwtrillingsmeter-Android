@@ -1,7 +1,6 @@
 Beta:
 
 Primair:
-- Alpha = false
 - Synchronisatie met de API & https
 - Roaming implementeren
 - Measurement details tab
@@ -10,12 +9,12 @@ Primair:
     - Image icon
 - Locatie
     - Achteraf toevoegen als je te snel gaat
-    - Google API?
+    - Google API
 
 
 
 Globaal:
-- Omschrijven tot API om te kunnen hergebruiken
+- Omschrijven tot library om te kunnen hergebruiken
 
 
 
@@ -26,6 +25,8 @@ Extra:
 - Locatie
     - In één keer aan zodra je op OK klikt
     - Na vinden locatie de locatie weer uitzetten
+
+
 
 
 Testing:

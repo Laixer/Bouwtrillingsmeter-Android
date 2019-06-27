@@ -114,12 +114,12 @@ class Utility {
 
     /**
      * Scales a bitmap and pushes it onto an imageview.
-     * TODO Remove missing photo bit here
      *
      * @param imageView The imageview to update
      * @param bitmap    The bitmap to scale
      */
     static void updateScaledPhoto(ImageView imageView, Bitmap bitmap) {
+
         // Get the width/height ratio as a value between 0 and 1
         double ratio = 0;
         if (Utility.isScreenInPortraitMode(applicationContext)) {
@@ -142,6 +142,7 @@ class Utility {
         } else {
             imageView.setImageBitmap(bitmap);
         }
+
     }
 
     /**
