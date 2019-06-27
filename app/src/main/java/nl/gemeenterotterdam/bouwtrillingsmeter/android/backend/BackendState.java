@@ -7,11 +7,11 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
  * This enum indicates the state of the backend.
  */
 public enum BackendState {
-    NONE,
+    INITIALIZING,
+    AWAITING_HARDWARE_VALIDATION,
     BROWSING_APP,
     PREPARING_MEASUREMENT,
-    AWAITING_PHONE_FLAT,
+    AWAITING_START,
     MEASURING,
-    FINISHED_MEASUREMENT,
     UNSUPPORTED_HARDWARE
 }

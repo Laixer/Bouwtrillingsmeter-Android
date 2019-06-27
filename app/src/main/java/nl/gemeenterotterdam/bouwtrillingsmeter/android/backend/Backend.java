@@ -31,6 +31,7 @@ public class Backend {
     private boolean currentMeasurementExceeded;
     private Date timeLastExceeding;
     private FlatPhoneDetector flatPhoneDetector;
+    private AccelerometerControl accelerometerControl;
 
     private Context context;
     private Resources resources;
@@ -39,7 +40,7 @@ public class Backend {
     /**
      * Creates a new Backend object for us to work with.
      * Call {@link #getInstance} to fetch as a singleton.
-     *
+     * <p>
      * TODO Doc the exception
      *
      * @param forceRefresh Set to true if you wish to
@@ -67,26 +68,7 @@ public class Backend {
      * @param resources          Application resources pointer
      */
     public void initialize(Context applicationContext, Resources resources) {
-        if (!initialized) {
 
-            PreferenceManager.fetchSharedPreferences();
-            generateOrFetchUserUID();
-
-            locationExtractor = new LocationExtractor();
-
-            StorageControl.initialize();
-
-            MeasurementControl.initialize();
-            AccelerometerControlOld.initialize();
-            DataHandler.initialize();
-            flatPhoneDetector = new FlatPhoneDetector();
-
-            SyncManager.initialize();
-
-            changeBackendState(BackendState.BROWSING_APP);
-
-            initialized = true;
-        }
     }
 
     /**
@@ -121,60 +103,82 @@ public class Backend {
         BackendState oldState = backendState;
         backendState = newState;
 
-        try {
-            switch (newState) {
-                case BROWSING_APP:
-                    break;
-
-                case PREPARING_MEASUREMENT:
-                    MeasurementControl.createNewMeasurement();
-                    break;
-
-                case AWAITING_PHONE_FLAT:
-                    flatPhoneDetector.forceFlatToFalse();
-                    break;
-
-                case MEASURING:
-                    // Edge cases
-                    if (MeasurementControl.getCurrentMeasurement() == null) {
-                        throw new IllegalStateException("No measurement object was present.");
-                    }
-
-                    if (MeasurementControl.getCurrentMeasurement().isClosed()) {
-                        throw new IllegalStateException("The current measurement object is already closed. No more data can be added.");
-                    }
-
-                    // Start the measurement
-                    currentMeasurementExceeded = false;
-                    Calculator.onStartMeasurementCalculations();
-                    MeasurementControl.getCurrentMeasurement().start();
-                    DataHandler.startMeasuring();
-                    SyncManager.onMeasurementStart(MeasurementControl.getCurrentMeasurement());
-                    locationExtractor.fetchCurrentLocation();
-                    break;
-
-                case FINISHED_MEASUREMENT:
-                    DataHandler.stopMeasuring();
-                    MeasurementControl.onFinishMeasurement();
-                    SyncManager.onMeasurementFinished(MeasurementControl.getCurrentMeasurement());
-                    break;
-
-                case UNSUPPORTED_HARDWARE:
-                    break;
-
-                default:
-                    throw new IllegalStateException("New backend state is not valid.");
-            }
-
-            // Call all the listeners.
-            for (IBackendListener listener : IBackendListeners) {
-                if (listener != null) {
-                    listener.onBackendStateChanged(newState);
+        switch (newState) {
+            case INITIALIZING:
+                if (initialized) {
+                    throw new RuntimeException("Backend is already initialized");
                 }
+
+                // Do the hardware first since this
+                // takes time to validate.
+                try {
+                    accelerometerControl = new AccelerometerControl();
+                } catch (UnsupportedHardwareException e) {
+                    changeBackendState(BackendState.UNSUPPORTED_HARDWARE);
+                }
+
+                PreferenceManager.fetchSharedPreferences();
+                generateOrFetchUserUID();
+                locationExtractor = new LocationExtractor();
+                StorageControl.initialize();
+                MeasurementControl.initialize();
+                DataHandler.initialize();
+                flatPhoneDetector = new FlatPhoneDetector();
+                SyncManager.initialize();
+                changeBackendState(BackendState.BROWSING_APP);
+
+
+                initialized = true;
+                break;
+
+            case BROWSING_APP:
+                break;
+
+            case PREPARING_MEASUREMENT:
+                MeasurementControl.createNewMeasurement();
+                break;
+
+            case AWAITING_START:
+                flatPhoneDetector.forceFlatToFalse();
+                break;
+
+            case MEASURING:
+                // Edge cases
+                if (MeasurementControl.getCurrentMeasurement() == null) {
+                    throw new IllegalStateException("No measurement object was present.");
+                }
+
+                if (MeasurementControl.getCurrentMeasurement().isClosed()) {
+                    throw new IllegalStateException("The current measurement object is already closed. No more data can be added.");
+                }
+
+                // Start the measurement
+                currentMeasurementExceeded = false;
+                Calculator.onStartMeasurementCalculations();
+                MeasurementControl.getCurrentMeasurement().start();
+                DataHandler.startMeasuring();
+                SyncManager.onMeasurementStart(MeasurementControl.getCurrentMeasurement());
+                locationExtractor.fetchCurrentLocation();
+                break;
+
+            case FINISHED_MEASUREMENT:
+                DataHandler.stopMeasuring();
+                MeasurementControl.onFinishMeasurement();
+                SyncManager.onMeasurementFinished(MeasurementControl.getCurrentMeasurement());
+                break;
+
+            case UNSUPPORTED_HARDWARE:
+                break;
+
+            default:
+                throw new IllegalStateException("New backend state is not valid.");
+        }
+
+        // Call all the listeners.
+        for (IBackendListener listener : IBackendListeners) {
+            if (listener != null) {
+                listener.onBackendStateChanged(newState);
             }
-        } catch (IllegalStateException | NullPointerException e) {
-            System.out.println("New backend state is not valid. Changing back to browsing app.");
-            changeBackendState(BackendState.BROWSING_APP);
         }
     }
 
@@ -344,10 +348,22 @@ public class Backend {
     }
 
     /**
-     * This triggers when we don't have sufficient hardware.
+     * This gets called by our {@link AccelerometerControl} after
+     * connecting to the phones sensors.
+     * It will then check if we can sample
+     * fast enough.
+     *
+     * @param valid True if we can sample
+     *              fast enough
      */
-    void onUnsupportedHardware() {
-        changeBackendState(BackendState.UNSUPPORTED_HARDWARE);
+    void onSensorsValidated(boolean valid) {
+        if (backendState == BackendState.AWAITING_HARDWARE_VALIDATION) {
+            if (valid) {
+                changeBackendState(BackendState.BROWSING_APP);
+            } else {
+                changeBackendState(BackendState.UNSUPPORTED_HARDWARE);
+            }
+        }
     }
 
     public String getUserUID() {

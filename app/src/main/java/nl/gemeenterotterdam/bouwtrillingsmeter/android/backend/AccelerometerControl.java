@@ -35,33 +35,51 @@ class AccelerometerControl implements SensorEventListener {
     private ArrayList<IAccelerometerListener> listeners;
 
     /**
+     * If our hardware is not sufficient enough this
+     * will become false.
+     */
+    private boolean valid;
+
+    /**
      * Constructor for this class. This is used as
      * a singleton.
+     *
+     * @throws UnsupportedHardwareException If we don't have
+     *                                      sufficient hardware
      */
-    AccelerometerControl() {
+    AccelerometerControl() throws UnsupportedHardwareException {
         if (accelerometerControl != null) {
             throw new RuntimeException("Cannot make two instances");
         }
 
         accelerometerControl = this;
         listeners = new ArrayList<>();
-        createAccelerometer();
-    }
 
-    /**
-     * Attempts to create a new link to our
-     * accelerometer sensor in our phone.
-     */
-    private void createAccelerometer() {
         Context context = Backend.getInstance().getContext();
-        SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        SensorManager sensorManager = (SensorManager) context.
+                getSystemService(Context.SENSOR_SERVICE);
         Sensor sensor = sensorManager.getDefaultSensor(SENSOR_TYPE);
 
         if (sensor != null) {
-            sensorManager.registerListener(this, sensor, SENSOR_DELAY);
+            sensorManager.registerListener(
+                    this, sensor, SENSOR_DELAY);
         } else {
-            Backend.getInstance().onUnsupportedHardware();
+            throw new UnsupportedHardwareException(
+                    "Device does not support hardware operations");
         }
+    }
+
+    /**
+     * This validates if our hardware is
+     * able to sample fast enough for our
+     * purposes.
+     *
+     * TODO Implement
+     */
+    private void validateSensor() {
+        System.out.println("Implement validating sensor.");
+
+        Backend.getInstance().onSensorsValidated(true);
     }
 
     /**
@@ -72,18 +90,6 @@ class AccelerometerControl implements SensorEventListener {
     public void addListener(IAccelerometerListener listener) {
         if (listener != null) {
             listeners.add(listener);
-        }
-    }
-
-    /**
-     * Gets called when the accelerometer class receives new values from the sensor.
-     * This will trigger all listeners.
-     */
-    public void onAccelerometerChanged(float x, float y, float z) {
-        for (IAccelerometerListener listener : listeners) {
-            if (listener != null) {
-                listener.onReceivedData(x, y, z);
-            }
         }
     }
 
@@ -124,7 +130,7 @@ class AccelerometerControl implements SensorEventListener {
      * <p>See the SENSOR_STATUS_* constants in
      * {@link SensorManager SensorManager} for details.
      *
-     * @param sensor The sensor that was called
+     * @param sensor   The sensor that was called
      * @param accuracy The new accuracy of this sensor, one of
      *                 {@code SensorManager.SENSOR_STATUS_*}
      */
@@ -134,9 +140,17 @@ class AccelerometerControl implements SensorEventListener {
     }
 
     /**
+     * @return True if our hardware is measured to be valid.
+     */
+    boolean isValid() {
+        return valid;
+    }
+
+    /**
      * @return The singleton instance of this class.
      */
     public static AccelerometerControl getInstance() {
         return accelerometerControl;
     }
+
 }
