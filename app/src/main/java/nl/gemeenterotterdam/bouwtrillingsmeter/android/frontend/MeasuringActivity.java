@@ -15,17 +15,16 @@ import java.util.LinkedList;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendState;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendListener;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.LocationExtractor;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.IBackendListener;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.PreferenceManager;
 
 /**
  * @author Thomas Beckers
  * @since 1.0
  * <p>
- * This activity gets called when we finish setting up our settings in the {@link SettingsPageActivity} page.
+ * This activity gets called when we finish setting up our settings in the {@link PreparationActivity} page.
  */
-public class MeasuringActivity extends AppCompatActivity implements BackendListener {
+public class MeasuringActivity extends AppCompatActivity implements IBackendListener {
 
     /**
      * The amount of ms we wait before displaying our next string message

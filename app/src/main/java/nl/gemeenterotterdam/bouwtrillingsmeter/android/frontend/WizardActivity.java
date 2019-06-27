@@ -1,7 +1,6 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Intent;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -20,7 +19,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory
 /**
  * This holds our settings wizard.
  */
-public class SettingsWizardActivity extends AppCompatActivity {
+public class WizardActivity extends AppCompatActivity {
 
     private ConstraintLayout layoutQuestion;
     private ConstraintLayout layoutFinish;
@@ -43,7 +42,7 @@ public class SettingsWizardActivity extends AppCompatActivity {
     private TextView textViewStaticVibrationCategory;
     private TextView textViewStaticVibrationSensitive;
 
-    private SettingsWizard settingsWizard;
+    private Wizard wizard;
     private Question currentQuestion;
 
     // Settings object and variables
@@ -69,7 +68,7 @@ public class SettingsWizardActivity extends AppCompatActivity {
         layoutFinish = (ConstraintLayout) findViewById(R.id.layoutWidgetCompleted);
         ((FloatingActionButton) findViewById(R.id.fabWizardConfirm)).setOnClickListener((View v) -> {
                 if (settings != null && settings.isValid()) {
-                    SettingsPageActivity.onWizardCreatedValidSettings(settings);
+                    PreparationActivity.onWizardCreatedValidSettings(settings);
                     finish();
                 }
         });
@@ -96,8 +95,8 @@ public class SettingsWizardActivity extends AppCompatActivity {
         textViewStaticVibrationSensitive = (TextView) findViewById(R.id.textViewWizardStaticVibrationSensitive);
 
         // Setup wizard
-        settingsWizard = createQuestionWizard();
-        currentQuestion = settingsWizard.getStartQuestion();
+        wizard = createQuestionWizard();
+        currentQuestion = wizard.getStartQuestion();
         buttonTryAgain = (Button) findViewById(R.id.buttonWizardTryAgain);
         buttonTryAgain.setOnClickListener((View v) -> {
                 onClickTryAgain();
@@ -111,7 +110,7 @@ public class SettingsWizardActivity extends AppCompatActivity {
     /**
      * This creates our question wizard based on our flowchart.
      */
-    private SettingsWizard createQuestionWizard() {
+    private Wizard createQuestionWizard() {
         // Create the questions
         Question[] questions = new Question[10];
         for (int i = 0; i < questions.length; i++) {
@@ -176,7 +175,7 @@ public class SettingsWizardActivity extends AppCompatActivity {
         outcomes[9].setNextQuestion(null);
         outcomes[10].setNextQuestion(null);
 
-        return new SettingsWizard(questions[0]);
+        return new Wizard(questions[0]);
     }
 
     /**
@@ -240,7 +239,7 @@ public class SettingsWizardActivity extends AppCompatActivity {
      * TODO Implement
      */
     private void onClickTryAgain() {
-        Intent intent = new Intent(getApplicationContext(), SettingsWizardActivity.class);
+        Intent intent = new Intent(getApplicationContext(), WizardActivity.class);
         startActivity(intent);
         finish();
     }

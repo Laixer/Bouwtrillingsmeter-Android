@@ -131,7 +131,7 @@ public class FirstVisitTutorialActivity extends AppCompatActivity {
         Backend.onClickCreateNewMeasurement();
 
         // Launch next intent
-        Intent intent = new Intent(getApplicationContext(), SettingsPageActivity.class);
+        Intent intent = new Intent(getApplicationContext(), PreparationActivity.class);
         startActivity(intent);
 
         // Remove this activity from the stack

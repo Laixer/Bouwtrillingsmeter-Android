@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * This represents an entire flowchart as a graph.
  */
-class SettingsWizard {
+class Wizard {
 
     private Question start;
 
@@ -16,7 +16,7 @@ class SettingsWizard {
      *
      * @param start The start question
      */
-    SettingsWizard(Question start) {
+    Wizard(Question start) {
         this.start = start;
     }
 

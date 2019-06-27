@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * TODO Implement shutdown serialize what we have not sent yet
  * TODO If we now push after measuring while disconnected, we send EVERYTHING at once.
  */
-class SyncManager implements DataIntervalClosedListener {
+class SyncManager implements IDataIntervalClosedListener {
 
     private static final String NAME_UNPUSHED_MEASUREMENTS_LIST = "unpushed_measurements";
     private static final String NAME_UNPUSHED_DATA_INTERVALS_LIST = "unpushed_data_intervals";

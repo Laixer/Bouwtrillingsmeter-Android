@@ -19,7 +19,7 @@ import android.widget.ListView;
 import me.toptas.fancyshowcase.FancyShowCaseView;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendListener;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.IBackendListener;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendState;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.PreferenceManager;
 
@@ -32,11 +32,11 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.PreferenceManager
  * <p>
  * Clicking an item in our activity list takes us to the {@link DetailsActivity}.
  * Clicking the '+ fab' on first visit takes us to the {@link FirstVisitTutorialActivity}.
- * Clicking the '+ fab' after that takes us to the {@link SettingsPageActivity}.
+ * Clicking the '+ fab' after that takes us to the {@link PreparationActivity}.
  * <p>
  * Our first visit will highlight the '+ fab' using the {@link #showcaseFirstVisit()} function.
  */
-public class MainActivity extends AppCompatActivity implements BackendListener {
+public class MainActivity extends AppCompatActivity implements IBackendListener {
 
     private static final boolean SHOW_FIRST_VISIT_TUTORIAL = false;
     private static final boolean SHOW_FIRST_VISIT_SHOWCASE = false;
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
         if (SHOW_FIRST_VISIT_TUTORIAL && !PreferenceManager.readBooleanPreference(R.string.pref_has_visited_before)) {
             intent = new Intent(getApplicationContext(), FirstVisitTutorialActivity.class);
         } else {
-            intent = new Intent(getApplicationContext(), SettingsPageActivity.class);
+            intent = new Intent(getApplicationContext(), PreparationActivity.class);
 
             // Tell the backend we are creating a new measurement
             Backend.onClickCreateNewMeasurement();

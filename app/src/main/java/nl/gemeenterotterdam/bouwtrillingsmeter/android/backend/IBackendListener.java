@@ -1,6 +1,6 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
-public interface BackendListener {
+public interface IBackendListener {
 
     /**
      * Gets called when the state of the backend changes.

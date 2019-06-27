@@ -1,10 +1,9 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataHandler;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataInterval;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClosedListener;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.IDataIntervalClosedListener;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.LimitConstants;
 
 /**
@@ -17,7 +16,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.LimitConstants;
  * TODO Setup a way to make this stop receiving data intervals when we are no longer measuring?
  * Gaat automatisch? Check dit!
  */
-class MpaGraphsControl implements DataIntervalClosedListener {
+class MpaGraphsControl implements IDataIntervalClosedListener {
 
 
     /**

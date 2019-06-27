@@ -35,11 +35,11 @@
         </activity>
         <activity android:name=".frontend.FinishedMeasurementActivity" />
         <activity android:name=".frontend.GraphsActivity" />
-        <activity android:name=".frontend.SettingsPageActivity" />
+        <activity android:name=".frontend.PreparationActivity" />
         <activity android:name=".frontend.MeasuringActivity" />
         <activity android:name=".frontend.FirstVisitTutorialActivity" />
         <activity android:name=".frontend.DetailsActivity" />
-        <activity android:name=".frontend.SettingsWizardActivity" />
+        <activity android:name=".frontend.WizardActivity" />
         <activity android:name=".frontend.SettingsAdvancedActivity" />
         <activity android:name=".frontend.SettingsActivity" />
     </application>

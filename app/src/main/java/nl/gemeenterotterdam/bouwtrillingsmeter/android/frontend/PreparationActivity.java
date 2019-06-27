@@ -25,7 +25,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.VibrationCategory
 /**
  * TODO Javadoc
  */
-public class SettingsPageActivity extends AppCompatActivity {
+public class PreparationActivity extends AppCompatActivity {
 
     private Spinner spinnerCategoryBuilding;
     private Spinner spinnerCategoryVibration;
@@ -176,7 +176,7 @@ public class SettingsPageActivity extends AppCompatActivity {
         // Temporarily disable button
         buttonIDontKnow.setEnabled(false);
 
-        Intent intent = new Intent(getApplicationContext(), SettingsWizardActivity.class);
+        Intent intent = new Intent(getApplicationContext(), WizardActivity.class);
         startActivity(intent);
     }
 
@@ -216,7 +216,7 @@ public class SettingsPageActivity extends AppCompatActivity {
      * @param settings The created and already validated settings file
      */
     public static void onWizardCreatedValidSettings(Settings settings) {
-        SettingsPageActivity.settings = settings;
+        PreparationActivity.settings = settings;
     }
 
     /**

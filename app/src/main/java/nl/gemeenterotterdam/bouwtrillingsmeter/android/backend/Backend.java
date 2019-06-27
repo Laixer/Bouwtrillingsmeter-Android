@@ -19,19 +19,42 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
  */
 public class Backend {
 
-    private static String userUID = "user_id";
+    /**
+     * Singleton instance of this class.
+     */
+    private static Backend backend;
+    private String userUID = "user_id";
 
-    private static BackendState backendState;
-    private static ArrayList<BackendListener> backendListeners = new ArrayList<BackendListener>();
-    private static boolean initialized = false;
-    private static boolean currentMeasurementExceeded;
-    private static Date timeLastExceeding;
-    private static FlatPhoneDetector flatPhoneDetector;
+    private BackendState backendState;
+    private ArrayList<IBackendListener> IBackendListeners = new ArrayList<IBackendListener>();
+    private boolean initialized = false;
+    private boolean currentMeasurementExceeded;
+    private Date timeLastExceeding;
+    private FlatPhoneDetector flatPhoneDetector;
 
-    protected static Context applicationContext;
-    protected static Resources resources;
+    private Context context;
+    private Resources resources;
+    private LocationExtractor locationExtractor;
 
-    private static LocationExtractor locationExtractor;
+    /**
+     * Creates a new Backend object for us to work with.
+     * Call {@link #getInstance} to fetch as a singleton.
+     *
+     * TODO Doc the exception
+     *
+     * @param forceRefresh Set to true if you wish to
+     *                     refresh the Backend singleton
+     * @param context      The context which creates this
+     */
+    public Backend(boolean forceRefresh, Context context) {
+        if (!forceRefresh && backend != null) {
+            throw new RuntimeException("Cannot overwrite Backend object unless" +
+                    "forceRefresh is set to true");
+        }
+        this.context = context;
+        this.resources = context.getResources();
+        backend = this;
+    }
 
     /**
      * Initialize the backend.
@@ -43,10 +66,8 @@ public class Backend {
      * @param applicationContext Application context pointer
      * @param resources          Application resources pointer
      */
-    public static void initialize(Context applicationContext, Resources resources) {
+    public void initialize(Context applicationContext, Resources resources) {
         if (!initialized) {
-            Backend.applicationContext = applicationContext;
-            Backend.resources = resources;
 
             PreferenceManager.fetchSharedPreferences();
             generateOrFetchUserUID();
@@ -56,7 +77,7 @@ public class Backend {
             StorageControl.initialize();
 
             MeasurementControl.initialize();
-            AccelerometerControl.initialize();
+            AccelerometerControlOld.initialize();
             DataHandler.initialize();
             flatPhoneDetector = new FlatPhoneDetector();
 
@@ -72,11 +93,11 @@ public class Backend {
      * Adds a backend state listener.
      * Do not forget to override the interface method!
      *
-     * @param backendListener The object that implements the {@link BackendListener} interface.
+     * @param IBackendListener The object that implements the {@link IBackendListener} interface.
      */
-    public static void addBackendStateListener(BackendListener backendListener) {
-        if (backendListener != null) {
-            backendListeners.add(backendListener);
+    public void addBackendStateListener(IBackendListener IBackendListener) {
+        if (IBackendListener != null) {
+            IBackendListeners.add(IBackendListener);
         }
     }
 
@@ -85,9 +106,9 @@ public class Backend {
      *
      * @param listener The listener
      */
-    public static void removeBackendStateListener(BackendListener listener) {
-        if (backendListeners.contains(listener)) {
-            backendListeners.remove(listener);
+    public void removeBackendStateListener(IBackendListener listener) {
+        if (IBackendListeners.contains(listener)) {
+            IBackendListeners.remove(listener);
         }
     }
 
@@ -96,7 +117,7 @@ public class Backend {
      *
      * @param newState The new state.
      */
-    private static void changeBackendState(BackendState newState) {
+    private void changeBackendState(BackendState newState) {
         BackendState oldState = backendState;
         backendState = newState;
 
@@ -146,7 +167,7 @@ public class Backend {
             }
 
             // Call all the listeners.
-            for (BackendListener listener : backendListeners) {
+            for (IBackendListener listener : IBackendListeners) {
                 if (listener != null) {
                     listener.onBackendStateChanged(newState);
                 }
@@ -160,7 +181,7 @@ public class Backend {
     /**
      * Makes sure that if we exit an acitivity we get returned to the proper state
      */
-    public static void onPressedBackButton() {
+    public void onPressedBackButton() {
         switch (backendState) {
             // We exited the settings menu
             // Go back to browsing the app
@@ -188,7 +209,7 @@ public class Backend {
     /**
      * Call this when the application shuts down
      */
-    public static void onApplicationShutdown() {
+    public void onApplicationShutdown() {
         MeasurementControl.onApplicationShutdown();
         SyncManager.onApplicationShutdown();
     }
@@ -196,7 +217,7 @@ public class Backend {
     /**
      * This gets called when we click a "create new measurement" button in the frontend.
      */
-    public static void onClickCreateNewMeasurement() {
+    public void onClickCreateNewMeasurement() {
         if (MeasurementControl.getCurrentMeasurement() != null && !MeasurementControl.getCurrentMeasurement().isClosed()) {
             System.out.println("Our current measurement object is still measuring! Creating a new measurement is not allowed.");
             return;
@@ -209,7 +230,7 @@ public class Backend {
      * This gets called when our frontend created a settings file.
      * We assume that this settings file is always valid.
      */
-    public static void onClickCompleteSettingsSetup() {
+    public void onClickCompleteSettingsSetup() {
         changeBackendState(BackendState.AWAITING_PHONE_FLAT);
     }
 
@@ -217,21 +238,21 @@ public class Backend {
      * Gets called when we are done with the aftermath of our measurement.
      * This basically allows us to return to the main screen again (if implemented in any frontend).
      */
-    public static void onDoneWithMeasurement() {
+    public void onDoneWithMeasurement() {
         changeBackendState(BackendState.BROWSING_APP);
     }
 
     /**
      * @return True if our current measurement has exceeded a limit.
      */
-    public static boolean isCurrentMeasurementExceeded() {
+    public boolean isCurrentMeasurementExceeded() {
         return currentMeasurementExceeded;
     }
 
     /**
      * @return The date object created during our last exceeding event.
      */
-    public static Date getTimeLastExceeding() {
+    public Date getTimeLastExceeding() {
         return timeLastExceeding;
     }
 
@@ -241,7 +262,7 @@ public class Backend {
      *
      * @return The known measurements list
      */
-    public static ArrayList<Measurement> getAllMeasurementsList() {
+    public ArrayList<Measurement> getAllMeasurementsList() {
         return MeasurementControl.getAllMeasurements();
     }
 
@@ -250,14 +271,14 @@ public class Backend {
      *
      * @return The current measurement
      */
-    public static Measurement getCurrentMeasurement() {
+    public Measurement getCurrentMeasurement() {
         return MeasurementControl.getCurrentMeasurement();
     }
 
     /**
      * @return The last measurement
      */
-    public static Measurement getLastMeasurement() {
+    public Measurement getLastMeasurement() {
         return MeasurementControl.getLastMeasurement();
     }
 
@@ -266,7 +287,7 @@ public class Backend {
      *
      * @param settings The settings object
      */
-    public static void onGeneratedNewSettings(Settings settings) {
+    public void onGeneratedNewSettings(Settings settings) {
         // If something went wrong with the setup
         if (settings.getBuildingCategory() == null ||
                 settings.getBuildingCategory() == BuildingCategory.NONE ||
@@ -295,11 +316,11 @@ public class Backend {
      * This gets called by the {@link DataHandler} if we exceed a limit.
      * The frontend should refer to this function in some way.
      */
-    protected static void onExceedLimit() {
+    protected void onExceedLimit() {
         currentMeasurementExceeded = true;
         timeLastExceeding = Calendar.getInstance().getTime();
 
-        for (BackendListener listener : backendListeners) {
+        for (IBackendListener listener : IBackendListeners) {
             listener.onExceededLimit();
         }
     }
@@ -307,7 +328,7 @@ public class Backend {
     /**
      * This is called by our {@link FlatPhoneDetector} when the phone is lying on the table.
      */
-    public static void onReadyToStartMeasurement() {
+    public void onReadyToStartMeasurement() {
         if (backendState == BackendState.AWAITING_PHONE_FLAT) {
             changeBackendState(BackendState.MEASURING);
         }
@@ -316,7 +337,7 @@ public class Backend {
     /**
      * This is called by our {@link FlatPhoneDetector} when the phone is picked up again.
      */
-    public static void onRequestEndMeasurement() {
+    public void onRequestEndMeasurement() {
         if (backendState == BackendState.MEASURING) {
             changeBackendState(BackendState.FINISHED_MEASUREMENT);
         }
@@ -325,11 +346,11 @@ public class Backend {
     /**
      * This triggers when we don't have sufficient hardware.
      */
-    static void onUnsupportedHardware() {
+    void onUnsupportedHardware() {
         changeBackendState(BackendState.UNSUPPORTED_HARDWARE);
     }
 
-    public static String getUserUID() {
+    public String getUserUID() {
         return userUID;
     }
 
@@ -337,7 +358,7 @@ public class Backend {
      * Used to load user UID.
      * If none is present, we create one.
      */
-    private static void generateOrFetchUserUID() {
+    private void generateOrFetchUserUID() {
         String storedUserUID = PreferenceManager.readStringPreference(R.string.pref_user_uid);
         if (storedUserUID == null) {
             userUID = UUID.randomUUID().toString();
@@ -345,5 +366,27 @@ public class Backend {
         } else {
             userUID = storedUserUID;
         }
+    }
+
+    /**
+     * @return A pointer to the resources
+     */
+    protected Resources getResources() {
+        return resources;
+    }
+
+    /**
+     * @return The application context which created
+     * our Backend singleton
+     */
+    protected Context getContext() {
+        return context;
+    }
+
+    /**
+     * @return The singleton Backend object
+     */
+    public static Backend getInstance() {
+        return backend;
     }
 }

@@ -13,7 +13,7 @@ import java.util.Calendar;
  * The collection and measurements are stored in a {@link DataInterval} object.
  * These intervals are stored within a {@link Measurement} object.
  */
-public class DataHandler implements AccelerometerListener {
+public class DataHandler implements IAccelerometerListener {
 
     private static boolean currentlyMeasuring;
     private static DataInterval currentDataInterval;
@@ -22,10 +22,10 @@ public class DataHandler implements AccelerometerListener {
     private static int lastExceedingIndex;
     private static ArrayList<Integer> indexesToBeCleared;
 
-    private static ArrayList<DataIntervalClosedListener> dataIntervalClosedListeners;
+    private static ArrayList<IDataIntervalClosedListener> IDataIntervalClosedListeners;
 
     /**
-     * This is used as a workaround to implement the {@link AccelerometerListener} interface
+     * This is used as a workaround to implement the {@link IAccelerometerListener} interface
      * in a static context.
      */
     private static DataHandler listenerInstance;
@@ -33,55 +33,55 @@ public class DataHandler implements AccelerometerListener {
     /**
      * Initializes this static class.
      * This adds this class as an accelerometer listener.
-     * Call {@link AccelerometerControl#initialize()} first!
+     * Call {@link AccelerometerControlOld#initialize()} first!
      */
     static void initialize() {
         currentlyMeasuring = false;
         currentDataInterval = null;
         listenerInstance = new DataHandler();
 
-        dataIntervalClosedListeners = new ArrayList<DataIntervalClosedListener>();
+        IDataIntervalClosedListeners = new ArrayList<IDataIntervalClosedListener>();
 
-        AccelerometerControl.addListener(listenerInstance);
+        AccelerometerControlOld.addListener(listenerInstance);
     }
 
     /**
-     * Adds a {@link DataIntervalClosedListener} listener.
+     * Adds a {@link IDataIntervalClosedListener} listener.
      * This will be called every time a data interval is closed.
      *
      * @param listener The listener object. Don't forget to @Override!
      */
-    public static void addDataIntervalClosedListener(DataIntervalClosedListener listener) {
+    public static void addDataIntervalClosedListener(IDataIntervalClosedListener listener) {
         if (listener == null) {
             System.out.println("Listener to be added to data interval closed listeners can not be null.");
             return;
         }
 
-        dataIntervalClosedListeners.add(listener);
+        IDataIntervalClosedListeners.add(listener);
     }
 
     /**
-     * This removes a {@link DataIntervalClosedListener} if it exists.
+     * This removes a {@link IDataIntervalClosedListener} if it exists.
      *
      * @param listener The listener object. Don't forget to @Override!
      */
-    public static void removeDataIntervalClosedListener(DataIntervalClosedListener listener) {
-        if (dataIntervalClosedListeners.contains(listener)) {
-            dataIntervalClosedListeners.remove(listener);
+    public static void removeDataIntervalClosedListener(IDataIntervalClosedListener listener) {
+        if (IDataIntervalClosedListeners.contains(listener)) {
+            IDataIntervalClosedListeners.remove(listener);
         }
     }
 
 
     /**
      * This triggers all listeners, which have the
-     * {@link DataIntervalClosedListener} interface.
+     * {@link IDataIntervalClosedListener} interface.
      * TODO First data interval is always null?? Why
      *
      * @param dataInterval The closed datainterval,
      *                     including all calculations
      */
     private static void triggerDataIntervalClosedEvent(DataInterval dataInterval) {
-        for (DataIntervalClosedListener listener : dataIntervalClosedListeners) {
+        for (IDataIntervalClosedListener listener : IDataIntervalClosedListeners) {
             if (listener != null) {
                 listener.onDataIntervalClosed(dataInterval);
             }

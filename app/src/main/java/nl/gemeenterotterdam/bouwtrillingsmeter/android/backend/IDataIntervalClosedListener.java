@@ -7,7 +7,7 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
  * This is used to implement a frontend listener for when a datainterval is closed.
  * This can be used to update graphs etc.
  */
-public interface DataIntervalClosedListener {
+public interface IDataIntervalClosedListener {
 
     /**
      * This gets called when the {@link DataInterval} is closed.
