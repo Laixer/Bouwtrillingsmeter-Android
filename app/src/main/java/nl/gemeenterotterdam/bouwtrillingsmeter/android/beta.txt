@@ -1,6 +1,7 @@
 Beta:
 
 Primair:
+- Overal van die terug pijltjes bovenin
 - Synchronisatie met de API & https
 - Roaming implementeren
 - Measurement details tab
