@@ -254,6 +254,9 @@ public class Backend {
         return MeasurementControl.getCurrentMeasurement();
     }
 
+    /**
+     * @return The last measurement
+     */
     public static Measurement getLastMeasurement() {
         return MeasurementControl.getLastMeasurement();
     }

@@ -2,6 +2,7 @@ Beta:
 
 Primair:
 - Overal van die terug pijltjes bovenin
+- Infinite length measurements mogelijk maken --> wrap data oid
 - Synchronisatie met de API & https
 - Roaming implementeren
 - Measurement details tab
@@ -11,6 +12,7 @@ Primair:
 - Locatie
     - Achteraf toevoegen als je te snel gaat
     - Google API
+
 
 
 
@@ -26,7 +28,7 @@ Extra:
 - Locatie
     - In één keer aan zodra je op OK klikt
     - Na vinden locatie de locatie weer uitzetten
-
+- Pickup strak
 
 
 
