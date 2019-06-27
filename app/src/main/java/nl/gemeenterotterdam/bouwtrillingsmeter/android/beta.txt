@@ -1,0 +1,32 @@
+Beta:
+
+Primair:
+- Alpha = false
+- Synchronisatie met de API & https
+- Roaming implementeren
+- Measurement details tab
+    - Alles kunnen editen
+    - Image strak
+    - Image icon
+- Locatie
+    - Achteraf toevoegen als je te snel gaat
+    - Google API?
+
+
+
+Globaal:
+- Omschrijven tot API om te kunnen hergebruiken
+
+
+Extra:
+- Highlight begin
+- Tutorial met design erbij
+- Locatie
+    - In één keer aan zodra je op OK klikt
+    - Na vinden locatie de locatie weer uitzetten
+
+
+Testing:
+- State machine
+- Unit tests
+- Mocking met DB
