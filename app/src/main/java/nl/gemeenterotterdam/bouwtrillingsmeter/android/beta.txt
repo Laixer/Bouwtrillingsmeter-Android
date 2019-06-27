@@ -18,6 +18,8 @@ Globaal:
 - Omschrijven tot API om te kunnen hergebruiken
 
 
+
+
 Extra:
 - Highlight begin
 - Tutorial met design erbij
