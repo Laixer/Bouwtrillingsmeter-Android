@@ -1,9 +1,7 @@
 Beta:
 
 Primair:
-- Overal van die terug pijltjes bovenin
 - Infinite length measurements mogelijk maken --> wrap data oid
-- Synchronisatie met de API & https
 - Roaming implementeren
 - Measurement details tab
     - Alles kunnen editen
@@ -12,6 +10,12 @@ Primair:
 - Locatie
     - Achteraf toevoegen als je te snel gaat
     - Google API
+
+
+Daarna:
+- Synchronisatie met de API & https
+- Overal van die terug pijltjes bovenin
+- Tijd niet meer als seconden maar als dagen oid? --> wordt een hele groot getal in [s]
 
 
 
