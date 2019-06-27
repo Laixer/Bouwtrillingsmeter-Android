@@ -9,7 +9,9 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v4.content.ContextCompat;
 
 import java.io.IOException;
@@ -62,16 +64,31 @@ public class LocationExtractor {
             public void onProviderDisabled(String provider) {
             }
         };
-        try {
-            if (locationManager == null) {
-                System.out.println("Location manager is null!");
+
+        // Separate thread because we need a looper.
+        Thread thread = new Thread(() -> {
+
+            // Only prepare the looper if we need to
+            if (Looper.myLooper() == null) {
+                Looper.prepare();
             }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
-        } catch (SecurityException e) {
-            System.out.println("Security exception: " + e.getMessage());
-        } catch (Exception e) {
-            System.out.println("Unexpected exception: " + e.getMessage());
-        }
+
+            try {
+                if (locationManager == null) {
+                    System.out.println("Location manager is null!");
+                }
+
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
+            } catch (SecurityException e) {
+                System.out.println("Security exception: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Unexpected exception: " + e.getMessage());
+            }
+
+        });
+
+        // Launch the thread
+        thread.start();
     }
 
     /**
@@ -148,4 +165,5 @@ public class LocationExtractor {
 
         return addresses.get(0);
     }
+
 }

@@ -16,6 +16,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendState;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.BackendListener;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.LocationExtractor;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.PreferenceManager;
 
 /**
