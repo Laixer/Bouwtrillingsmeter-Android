@@ -20,46 +20,21 @@ import java.util.Locale;
 /**
  * This class extracts our current location.
  */
-public class ConstantsLimits {
+public class LocationExtractor {
 
-    /**
-     * Static instance of the location manager.
-     */
-    private static LocationManager locationManager;
+    private static LocationExtractor locationExtractor;
 
-    private static Geocoder geocoder;
+    private LocationManager locationManager;
+
+    private Geocoder geocoder;
 
     /**
      * Loads the instance.
      */
-    ConstantsLimits() {
+    LocationExtractor() {
+        locationExtractor = this;
         locationManager = (LocationManager) Backend.applicationContext.getSystemService(Context.LOCATION_SERVICE);
         geocoder = new Geocoder(Backend.applicationContext, Locale.getDefault());
-    }
-
-    /**
-     * Check if we have the proper location permissions.
-     *
-     * @param activity The activity from which to check.
-     * @return True if we have
-     */
-    public static boolean hasPermissionToFetchLocation(Activity activity) {
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return false;
-        } else if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    /**
-     * Checks if GPS is enabled.
-     *
-     * @return True if enabled
-     */
-    public static boolean isLocationEnabled() {
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     /**
@@ -88,25 +63,70 @@ public class ConstantsLimits {
             }
         };
         try {
+            if (locationManager == null) {
+                System.out.println("Location manager is null!");
+            }
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
         } catch (SecurityException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Security exception: " + e.getMessage());
         } catch (Exception e) {
             System.out.println("Unexpected exception: " + e.getMessage());
         }
     }
 
     /**
+     * @return internal getter for the location manager.
+     */
+    private static LocationManager getLocationManager() {
+        return locationExtractor.locationManager;
+    }
+
+    /**
+     *
+     * @return internal getter for the geocoder.
+     */
+    private static Geocoder getGeocoder() {
+        return locationExtractor.geocoder;
+    }
+
+
+    /**
+     * Check if we have the proper location permissions.
+     *
+     * @param activity The activity from which to check.
+     * @return True if we have
+     */
+    public static boolean hasPermissionToFetchLocation(Activity activity) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        } else if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Checks if GPS is enabled.
+     *
+     * @return True if enabled
+     */
+    public static boolean isLocationEnabled() {
+        return getLocationManager().isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    /**
      * Converts a location to an address.
+     * TODO This should not return null values.
      *
      * @param longitude The longitude
      * @param latitude The latitude
      * @return The address. Null if error or none found
      */
-    public static Address coordinatesToAddress(double longitude, double latitude) {
+    static Address coordinatesToAddress(double longitude, double latitude) {
         List<Address> addresses = new ArrayList<Address>();
         try {
-            addresses = geocoder.getFromLocation(longitude, latitude, 1);
+            addresses = getGeocoder().getFromLocation(longitude, latitude, 1);
         } catch (IOException e) {
             System.out.println("Network / io problem: " + e.getMessage());
             return null;
@@ -114,6 +134,7 @@ public class ConstantsLimits {
             System.out.println("Our location object contains invalid values.");
             return null;
         }
+
 
         if (addresses == null) {
             System.out.println("No address list was created.");
@@ -125,7 +146,6 @@ public class ConstantsLimits {
             return null;
         }
 
-        Address address = addresses.get(0);
-        return address;
+        return addresses.get(0);
     }
 }

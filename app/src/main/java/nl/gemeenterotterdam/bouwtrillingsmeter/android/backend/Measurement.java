@@ -102,7 +102,7 @@ public class Measurement implements Serializable {
         closed = true;
 
         if (longitude < Double.MAX_VALUE) try {
-            address = ConstantsLimits.coordinatesToAddress(latitude, longitude);
+            address = LocationExtractor.coordinatesToAddress(latitude, longitude);
             String locality = address.getLocality();
             name = Backend.resources.getString(R.string.measurement_name_format, locality);
         } catch (NullPointerException e) {

@@ -31,7 +31,7 @@ public class Backend {
     protected static Context applicationContext;
     protected static Resources resources;
 
-    private static ConstantsLimits constantsLimits;
+    private static LocationExtractor locationExtractor;
 
     /**
      * Initialize the backend.
@@ -51,7 +51,7 @@ public class Backend {
             PreferenceManager.fetchSharedPreferences();
             generateOrFetchUserUID();
 
-            constantsLimits = new ConstantsLimits();
+            locationExtractor = new LocationExtractor();
 
             StorageControl.initialize();
 
@@ -129,7 +129,7 @@ public class Backend {
                     MeasurementControl.getCurrentMeasurement().start();
                     DataHandler.startMeasuring();
                     SyncManager.onMeasurementStart(MeasurementControl.getCurrentMeasurement());
-                    constantsLimits.fetchCurrentLocation();
+                    locationExtractor.fetchCurrentLocation();
                     break;
 
                 case FINISHED_MEASUREMENT:
