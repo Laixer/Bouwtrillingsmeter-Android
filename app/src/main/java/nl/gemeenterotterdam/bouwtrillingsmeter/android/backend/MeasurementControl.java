@@ -132,7 +132,7 @@ public class MeasurementControl {
      * data.
      */
     public static void onClearAllMeasurements() {
-        allMeasurements = new ArrayList<>();
+        allMeasurements.clear();
     }
 
 }
