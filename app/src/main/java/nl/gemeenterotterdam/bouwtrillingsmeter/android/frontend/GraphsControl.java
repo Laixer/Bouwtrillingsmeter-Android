@@ -108,7 +108,7 @@ class GraphsControl implements DataIntervalClosedListener {
         graphs[1].sendNewDataToChart(dataInterval.getVelocitiesAbsMaxAsDataPoints());
         graphs[2].sendNewDataToChart(dataInterval.getDominantFrequenciesAsDataPoints());
         graphs[3].sendNewDataToChart(dataInterval.getFrequencyAmplitudes());
-        graphs[4].sendNewDataToChart(dataInterval.getExceedingAsDataPoints());
+        graphs[4].sendNewDataToChart(dataInterval.getAllDominantFrequenciesAsDataPoints());
     }
 
     /**
