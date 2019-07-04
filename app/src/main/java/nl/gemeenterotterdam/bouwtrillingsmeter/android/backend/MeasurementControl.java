@@ -97,7 +97,8 @@ class MeasurementControl {
             SyncManager.onMeasurementAborted(currentMeasurement);
         }
 
-        currentMeasurement = null;
+        // TODO this is commented out now, might mess things up
+        // currentMeasurement = null;
     }
 
     /**
@@ -119,12 +120,21 @@ class MeasurementControl {
 
     /**
      * Saves our current location to the current measurement.
+     * If the measurement is already closed this will also
+     * link the location for future use.
      *
      * @param location The location
      */
     static void onNewLocationFetched(Location location) {
-        if (currentMeasurement != null && !currentMeasurement.isClosed() && currentMeasurement.getLocationLongitude() == Double.MAX_VALUE) {
-            currentMeasurement.setLocation(location);
+        if (currentMeasurement != null) {
+            if (!currentMeasurement.isClosed() &&
+                    currentMeasurement.getLocationLongitude() == Double.MAX_VALUE) {
+                currentMeasurement.setLocation(location);
+            } else if (currentMeasurement.isClosed() &&
+                    currentMeasurement.getLocationLongitude() == Double.MAX_VALUE) {
+                // Separate logic for closed measurements
+                currentMeasurement.setLocation(location);
+            }
         }
     }
 

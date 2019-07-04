@@ -141,7 +141,7 @@ public class LocationExtractor {
      * @return The address. Null if error or none found
      */
     static Address coordinatesToAddress(double longitude, double latitude) {
-        List<Address> addresses = new ArrayList<Address>();
+        List<Address> addresses;
         try {
             addresses = getGeocoder().getFromLocation(longitude, latitude, 1);
         } catch (IOException e) {

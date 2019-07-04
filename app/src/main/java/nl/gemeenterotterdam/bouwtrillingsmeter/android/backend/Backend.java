@@ -31,7 +31,7 @@ public class Backend {
     protected static Context applicationContext;
     protected static Resources resources;
 
-    private static LocationExtractor locationExtractor;
+    private static LocationExtractorGoogle locationExtractorGoogle;
 
     /**
      * Initialize the backend.
@@ -44,20 +44,20 @@ public class Backend {
      * @param resources          Application resources pointer
      */
     public static void initialize(Context applicationContext, Resources resources) {
-        if (!initialized) {
+        if (!initialized) try {
             Backend.applicationContext = applicationContext;
             Backend.resources = resources;
 
             PreferenceManager.fetchSharedPreferences();
             generateOrFetchUserUID();
 
-            locationExtractor = new LocationExtractor();
-
             StorageControl.initialize();
 
             MeasurementControl.initialize();
             AccelerometerControl.initialize();
             DataHandler.initialize();
+
+            locationExtractorGoogle = new LocationExtractorGoogle();
             flatPhoneDetector = new FlatPhoneDetector();
 
             SyncManager.initialize();
@@ -65,6 +65,8 @@ public class Backend {
             changeBackendState(BackendState.BROWSING_APP);
 
             initialized = true;
+        } catch (SecurityException e) {
+
         }
     }
 
@@ -129,7 +131,7 @@ public class Backend {
                     MeasurementControl.getCurrentMeasurement().start();
                     DataHandler.startMeasuring();
                     SyncManager.onMeasurementStart(MeasurementControl.getCurrentMeasurement());
-                    locationExtractor.fetchCurrentLocation();
+                    locationExtractorGoogle.callForLocation();
                     break;
 
                 case FINISHED_MEASUREMENT:
