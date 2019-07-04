@@ -28,7 +28,7 @@
     <color name="graph_series_color_y">#0000ff</color>
     <color name="graph_series_color_z">#00ff00</color>
     <color name="graph_series_color_point">#ff0000</color>
-    <color name="graph_dominant_constant_line">@color/colorPrimary</color>
+    <color name="graph_dominant_constant_line">@color/colorPrimaryDark</color>
 
     <!--Backgrounds-->
     <color name="background_listview_item">#efefef</color>

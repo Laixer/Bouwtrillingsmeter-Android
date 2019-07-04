@@ -56,7 +56,8 @@ class GraphsControl implements DataIntervalClosedListener {
 
         // Get legend names
         int[] colorsXYZ = Utility.getXYZColorsArray();
-        int[] colorsDominant = new int[]{R.color.graph_series_color_point};
+        int[] colorsDominant = new int[]{
+                Utility.resources.getColor(R.color.graph_series_color_point)};
 
         // Create graphs
         graphs = new Graph[5];
@@ -79,10 +80,10 @@ class GraphsControl implements DataIntervalClosedListener {
         graphs[4].setSizeConstants(0, 0, 0, 100);
 
         // Add the constant line to our dominant frequency plot
-        ((GraphCombined)graphs[4]).addConstantLine(
+        ((GraphCombined) graphs[4]).addConstantLine(
                 LimitConstants.getLimitAsEntries(),
                 Utility.resources.getString(R.string.graph_legend_limitline_name),
-                R.color.graph_dominant_constant_line
+                Utility.resources.getColor(R.color.graph_dominant_constant_line)
         );
     }
 

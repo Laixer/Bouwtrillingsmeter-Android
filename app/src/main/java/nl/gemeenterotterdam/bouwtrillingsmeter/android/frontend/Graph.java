@@ -202,21 +202,18 @@ abstract class Graph {
     protected void styleLineDataSet(LineDataSet lineDataSet, int color) {
         lineDataSet.setDrawCircles(false);
         lineDataSet.setDrawCircleHole(false);
-        lineDataSet.setColor(color);
-        lineDataSet.setHighLightColor(color);
         lineDataSet.setLineWidth(1);
         lineDataSet.setDrawValues(false);
+
+        lineDataSet.setColor(color);
+        lineDataSet.setHighLightColor(color);
     }
 
     protected void styleScatterDataSet(ScatterDataSet scatterDataSet, int color) {
         scatterDataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
         scatterDataSet.setScatterShapeSize(10);
 
-        Resources resources = MainActivity.getStaticResources();
-        String hex = resources.getString(color);
-        int colorFromHex = ColorTemplate.rgb(hex);
-
-        scatterDataSet.setColors(colorFromHex);
+        scatterDataSet.setColors(color);
         scatterDataSet.setDrawValues(false);
     }
 
