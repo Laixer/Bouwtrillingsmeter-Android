@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * It holds all saved {@link Measurement}s and triggers saving / loading.
  * Our {@link #currentMeasurement} is the {@link Measurement} object to which we are currently saving our data.
  */
-class MeasurementControl {
+public class MeasurementControl {
 
     private static LocationExtractor locationExtractor;
     private static Measurement currentMeasurement;
@@ -21,7 +21,7 @@ class MeasurementControl {
      * Initializes the class for static use.
      *
      * @param locationExtractor The used location
-     *                                extractor
+     *                          extractor
      */
     static void initialize(LocationExtractor locationExtractor) {
         try {
@@ -124,6 +124,15 @@ class MeasurementControl {
                 System.out.println(e.getMessage());
             }
         }
+    }
+
+    /**
+     * This clears all our existing measurements.
+     * This is called when we clear all our app
+     * data.
+     */
+    public static void onClearAllMeasurements() {
+        allMeasurements = new ArrayList<>();
     }
 
 }

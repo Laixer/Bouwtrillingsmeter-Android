@@ -10,6 +10,7 @@ import android.widget.Switch;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.MeasurementControl;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.PreferenceManager;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageControl;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.StorageWriteException;
@@ -93,6 +94,7 @@ public class SettingsAdvancedActivity extends AppCompatActivity {
     private void onClickClearApplicationData() {
         try {
             PreferenceManager.clearAllPreferences();
+            MeasurementControl.onClearAllMeasurements();
             StorageControl.removeAllInternalStorage();
             loadCurrentStoredSettings();
             Utility.showAndGetPopup(this, R.layout.alert_dialog_ok, R.string.settings_advanced_delete_application_data_alert_dialog_success);

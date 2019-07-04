@@ -52,17 +52,27 @@ public class DataPoint3D<X> implements Serializable {
      */
     public float xAxisValueAsFloat() {
         try {
-            Long value = (long) xAxisValue;
+            // Long value = (long) xAxisValue;
+            // double x = value;
+            // return (float) x;
+
+            Long value = (long) (Object) xAxisValue;
             double x = value;
             return (float) x;
+
         } catch (ClassCastException e) {
             /* Do nothing */
         }
 
         try {
-            Double value = (double) xAxisValue;
+            // Double value = (double) xAxisValue;
+            // double x = value;
+            // return (float) x;
+
+            Double value = (double) (Object) xAxisValue;
             double x = value;
             return (float) x;
+
         } catch (ClassCastException e) {
             /* Do nothing */
         }
