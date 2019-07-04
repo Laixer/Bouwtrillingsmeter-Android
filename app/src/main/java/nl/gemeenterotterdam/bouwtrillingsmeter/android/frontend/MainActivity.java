@@ -71,9 +71,6 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-                startActivity(intent);
-
                 onClickCreateNewMeasurementFab();
             }
         });
