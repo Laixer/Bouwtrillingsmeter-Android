@@ -46,6 +46,7 @@ public class DataPoint3D<X> implements Serializable {
     }
 
     /**
+     * TODO Might want to rethink the typecast stategy.
      * Converts our generic x axis value to a float.
      *
      * @return X axis  value as float
