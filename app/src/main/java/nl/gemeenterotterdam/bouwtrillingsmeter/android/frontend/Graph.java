@@ -23,7 +23,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 /**
  * Base for a graph.
  */
-abstract class MpaGraph {
+abstract class Graph {
 
     protected String title;
     protected String xAxisLabel;
@@ -65,9 +65,9 @@ abstract class MpaGraph {
      *                     data set
      * @param xMultiplier  The multiplier for the x values
      */
-    protected MpaGraph(String title, String xAxisLabel, String yAxisLabel,
-                       boolean scrolling, boolean refreshing, String[] dataSetNames,
-                       int[] colors, float xMultiplier) {
+    protected Graph(String title, String xAxisLabel, String yAxisLabel,
+                    boolean scrolling, boolean refreshing, String[] dataSetNames,
+                    int[] colors, float xMultiplier) {
         this.title = title;
         this.xAxisLabel = xAxisLabel;
         this.yAxisLabel = yAxisLabel;

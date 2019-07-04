@@ -1,7 +1,6 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataHandler;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataInterval;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataIntervalClosedListener;
@@ -17,19 +16,19 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.LimitConstants;
  * TODO Setup a way to make this stop receiving data intervals when we are no longer measuring?
  * Gaat automatisch? Check dit!
  */
-class MpaGraphsControl implements DataIntervalClosedListener {
+class GraphsControl implements DataIntervalClosedListener {
 
 
     /**
      * All graphs.
      */
-    private MpaGraph[] graphs;
+    private Graph[] graphs;
 
     /**
      * Constructor for this class.
      * This subscribes as listener.
      */
-    MpaGraphsControl() {
+    GraphsControl() {
         DataHandler.addDataIntervalClosedListener(this);
     }
 
@@ -60,16 +59,16 @@ class MpaGraphsControl implements DataIntervalClosedListener {
         int[] colorsDominant = new int[]{R.color.graph_series_color_point};
 
         // Create graphs
-        graphs = new MpaGraph[5];
-        graphs[0] = new MpaGraphCombined(title[0], axisHorizontal[0], axisVertical[0],
+        graphs = new Graph[5];
+        graphs[0] = new GraphCombined(title[0], axisHorizontal[0], axisVertical[0],
                 true, false, namesXYZ, colorsXYZ, false, 0.001f);
-        graphs[1] = new MpaGraphBar(title[1], axisHorizontal[1], axisVertical[1],
+        graphs[1] = new GraphBar(title[1], axisHorizontal[1], axisVertical[1],
                 true, false, namesXYZ, colorsXYZ, 0.001f);
-        graphs[2] = new MpaGraphBar(title[2], axisHorizontal[2], axisVertical[2],
+        graphs[2] = new GraphBar(title[2], axisHorizontal[2], axisVertical[2],
                 true, false, namesXYZ, colorsXYZ, 0.001f);
-        graphs[3] = new MpaGraphCombined(title[3], axisHorizontal[3], axisVertical[3],
+        graphs[3] = new GraphCombined(title[3], axisHorizontal[3], axisVertical[3],
                 false, true, namesXYZ, colorsXYZ, false, 1);
-        graphs[4] = new MpaGraphCombined(title[4], axisHorizontal[4], axisVertical[4],
+        graphs[4] = new GraphCombined(title[4], axisHorizontal[4], axisVertical[4],
                 false, false, namesDominant, colorsDominant, true, 1);
 
         // Set limits separately
@@ -80,7 +79,7 @@ class MpaGraphsControl implements DataIntervalClosedListener {
         graphs[4].setSizeConstants(0, 0, 0, 100);
 
         // Add the constant line to our dominant frequency plot
-        ((MpaGraphCombined)graphs[4]).addConstantLine(
+        ((GraphCombined)graphs[4]).addConstantLine(
                 LimitConstants.getLimitAsEntries(),
                 Utility.resources.getString(R.string.graph_legend_limitline_name),
                 R.color.graph_dominant_constant_line
@@ -117,7 +116,7 @@ class MpaGraphsControl implements DataIntervalClosedListener {
      *
      * @return All created graphs, null is possible
      */
-    MpaGraph[] getGraphs() {
+    Graph[] getGraphs() {
         return graphs;
     }
 
