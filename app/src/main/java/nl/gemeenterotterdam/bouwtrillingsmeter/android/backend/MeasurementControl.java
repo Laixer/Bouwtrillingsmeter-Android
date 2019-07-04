@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 class MeasurementControl {
 
-    private static LocationExtractorGoogle locationExtractorGoogle;
+    private static LocationExtractor locationExtractor;
     private static Measurement currentMeasurement;
     private static Measurement lastMeasurement;
     private static ArrayList<Measurement> allMeasurements;
@@ -20,10 +20,10 @@ class MeasurementControl {
     /**
      * Initializes the class for static use.
      *
-     * @param locationExtractorGoogle The used location
+     * @param locationExtractor The used location
      *                                extractor
      */
-    static void initialize(LocationExtractorGoogle locationExtractorGoogle) {
+    static void initialize(LocationExtractor locationExtractor) {
         try {
             allMeasurements = StorageControl.retrieveAllSavedMeasurements();
         } catch (StorageReadException e) {
@@ -32,7 +32,7 @@ class MeasurementControl {
             System.out.println(e.getMessage());
         }
 
-        MeasurementControl.locationExtractorGoogle = locationExtractorGoogle;
+        MeasurementControl.locationExtractor = locationExtractor;
     }
 
     /**
@@ -71,7 +71,7 @@ class MeasurementControl {
      */
     static void createNewMeasurement() {
         currentMeasurement = new Measurement();
-        locationExtractorGoogle.subscribeForLocation(currentMeasurement);
+        locationExtractor.subscribeForLocation(currentMeasurement);
     }
 
     /**

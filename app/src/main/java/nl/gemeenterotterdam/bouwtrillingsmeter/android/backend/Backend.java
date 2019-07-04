@@ -31,7 +31,7 @@ public class Backend {
     protected static Context applicationContext;
     protected static Resources resources;
 
-    private static LocationExtractorGoogle locationExtractorGoogle;
+    private static LocationExtractor locationExtractor;
 
     /**
      * TODO This has to be cleaned up, messy atm.
@@ -57,8 +57,8 @@ public class Backend {
             AccelerometerControl.initialize();
             DataHandler.initialize();
 
-            locationExtractorGoogle = new LocationExtractorGoogle();
-            MeasurementControl.initialize(locationExtractorGoogle);
+            locationExtractor = new LocationExtractor();
+            MeasurementControl.initialize(locationExtractor);
 
             flatPhoneDetector = new FlatPhoneDetector();
 
@@ -133,7 +133,7 @@ public class Backend {
                     MeasurementControl.getCurrentMeasurement().start();
                     DataHandler.startMeasuring();
                     SyncManager.onMeasurementStart(MeasurementControl.getCurrentMeasurement());
-                    locationExtractorGoogle.callForLocation();
+                    locationExtractor.callForLocation();
                     break;
 
                 case FINISHED_MEASUREMENT:
