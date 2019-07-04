@@ -12,12 +12,12 @@ import com.github.mikephil.charting.charts.Chart;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
-public class MpaGraphsSlideAdapter extends PagerAdapter {
+public class GraphsSlideAdapter extends PagerAdapter {
 
     /**
      * Our graphs.
      */
-    private MpaGraph[] graphs;
+    private Graph[] graphs;
 
     /**
      * Our layout inflater.
@@ -35,7 +35,7 @@ public class MpaGraphsSlideAdapter extends PagerAdapter {
      * @param context The context
      * @param graphs  The graphs to display
      */
-    MpaGraphsSlideAdapter(Context context, MpaGraph[] graphs) {
+    GraphsSlideAdapter(Context context, Graph[] graphs) {
         this.graphs = graphs;
         this.context = context;
         mLayoutInflater = (LayoutInflater) context.getSystemService(
@@ -79,7 +79,7 @@ public class MpaGraphsSlideAdapter extends PagerAdapter {
                 container, false);
 
         // Get graph
-        MpaGraph graph = graphs[position];
+        Graph graph = graphs[position];
 
         // Create our chart and push it to the UI
         Chart chart = graph.createChart(context);

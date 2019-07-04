@@ -2,10 +2,8 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Context;
 
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.CombinedChart;
-import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -18,13 +16,12 @@ import com.github.mikephil.charting.utils.EntryXComparator;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
 /**
  * Instance of a line graph.
  */
-class MpaGraphCombined extends MpaGraph {
+class GraphCombined extends Graph {
 
     private ArrayList<Entry>[] entries;
     private IBarLineScatterCandleBubbleDataSet[] graphDataSets;
@@ -50,7 +47,7 @@ class MpaGraphCombined extends MpaGraph {
      * @param useAsPoints  True if this should behave as a point chart
      *                     for our dynamic set(s)
      */
-    MpaGraphCombined(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors, boolean useAsPoints, float xMultiplier) {
+    GraphCombined(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors, boolean useAsPoints, float xMultiplier) {
         super(title, xAxisLabel, yAxisLabel, scrolling, refreshing, dataSetNames, colors, xMultiplier);
         this.useAsPoints = useAsPoints;
 

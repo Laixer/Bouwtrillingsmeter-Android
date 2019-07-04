@@ -126,8 +126,10 @@ public class DataInterval implements Serializable {
 
     /**
      * This transforms our exceeding frequencies into datapoints.
+     * <p>
      * This is a workaround to conserve the graph abstract methods.
-     * If a dimension does not exceed any limits we set its x and y value to -1.
+     * If a dimension does not exceed any limits we set its x and
+     * y value to -1.
      * TODO Maybe implement a non-workaround method.
      *
      * @return An arraylist containing these datapoints.
@@ -145,7 +147,33 @@ public class DataInterval implements Serializable {
                 velocities[0] = dominantFrequencies.getVelocities()[dimension];
             }
 
-            result.add(new DataPoint3D<Double>(frequency, velocities));
+            result.add(new DataPoint3D<>(frequency, velocities));
+        }
+
+        // Return result
+        return result;
+    }
+
+    /**
+     * This transforms dominant frequencies into datapoints,
+     * also those that do not exceed any limits.
+     * <p>
+     * This is a workaround to conserve the graph abstract methods.
+     * If a dimension does not exceed any limits we set its x and y
+     * value to -1.
+     * TODO Maybe implement a non-workaround method.
+     *
+     * @return An arraylist containing these datapoints.
+     */
+    public ArrayList<DataPoint3D<Double>> getAllDominantFrequenciesAsDataPoints() {
+        ArrayList<DataPoint3D<Double>> result = new ArrayList<DataPoint3D<Double>>();
+
+        for (int dimension = 0; dimension < 3; dimension++) {
+            double frequency = -1;
+            float[] velocities = new float[]{-1, -1, -1};
+            frequency = dominantFrequencies.getFrequencies()[dimension];
+            velocities[0] = dominantFrequencies.getVelocities()[dimension];
+            result.add(new DataPoint3D<>(frequency, velocities));
         }
 
         // Return result
