@@ -1,6 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -14,10 +15,13 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
+import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
 /**
@@ -206,9 +210,13 @@ abstract class Graph {
 
     protected void styleScatterDataSet(ScatterDataSet scatterDataSet, int color) {
         scatterDataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
-        scatterDataSet.setColor(color);
-        scatterDataSet.setHighLightColor(color);
         scatterDataSet.setScatterShapeSize(10);
+
+        Resources resources = MainActivity.getStaticResources();
+        String hex = resources.getString(color);
+        int colorFromHex = ColorTemplate.rgb(hex);
+
+        scatterDataSet.setColors(colorFromHex);
         scatterDataSet.setDrawValues(false);
     }
 
