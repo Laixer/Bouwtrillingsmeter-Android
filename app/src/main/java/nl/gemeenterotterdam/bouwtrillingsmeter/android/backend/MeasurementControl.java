@@ -1,7 +1,5 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
-import android.location.Location;
-
 import java.util.ArrayList;
 
 /**
@@ -14,14 +12,18 @@ import java.util.ArrayList;
  */
 class MeasurementControl {
 
+    private static LocationExtractorGoogle locationExtractorGoogle;
     private static Measurement currentMeasurement;
     private static Measurement lastMeasurement;
     private static ArrayList<Measurement> allMeasurements;
 
     /**
-     * initializes the class for static use
+     * Initializes the class for static use.
+     *
+     * @param locationExtractorGoogle The used location
+     *                                extractor
      */
-    static void initialize() {
+    static void initialize(LocationExtractorGoogle locationExtractorGoogle) {
         try {
             allMeasurements = StorageControl.retrieveAllSavedMeasurements();
         } catch (StorageReadException e) {
@@ -29,6 +31,8 @@ class MeasurementControl {
             System.out.println("Could not import saved measurements. Handle this");
             System.out.println(e.getMessage());
         }
+
+        MeasurementControl.locationExtractorGoogle = locationExtractorGoogle;
     }
 
     /**
@@ -59,12 +63,15 @@ class MeasurementControl {
     }
 
     /**
-     * This creates a new measurement
-     * The UID for this measurement is created by the measuremetn class
-     * Also sets this measurement as currentMeasurement
+     * This creates a new measurement. The UID for this
+     * measurement is created by the measurement class.
+     * Also sets this measurement as currentMeasurement.
+     * Also subscribes this measurement with the location
+     * extractor.
      */
     static void createNewMeasurement() {
         currentMeasurement = new Measurement();
+        locationExtractorGoogle.subscribeForLocation(currentMeasurement);
     }
 
     /**
@@ -114,26 +121,6 @@ class MeasurementControl {
                 // TODO Handle
                 System.out.println("Could not write measurements on application shutdown, handle this");
                 System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    /**
-     * Saves our current location to the current measurement.
-     * If the measurement is already closed this will also
-     * link the location for future use.
-     *
-     * @param location The location
-     */
-    static void onNewLocationFetched(Location location) {
-        if (currentMeasurement != null) {
-            if (!currentMeasurement.isClosed() &&
-                    currentMeasurement.getLocationLongitude() == Double.MAX_VALUE) {
-                currentMeasurement.setLocation(location);
-            } else if (currentMeasurement.isClosed() &&
-                    currentMeasurement.getLocationLongitude() == Double.MAX_VALUE) {
-                // Separate logic for closed measurements
-                currentMeasurement.setLocation(location);
             }
         }
     }

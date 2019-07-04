@@ -24,7 +24,7 @@ import java.util.Locale;
 @Deprecated
 public class LocationExtractor {
 
-    private static LocationExtractor locationExtractor;
+    private static LocationExtractor ylocationExtractor;
 
     private LocationManager locationManager;
 
@@ -37,58 +37,6 @@ public class LocationExtractor {
         locationExtractor = this;
         locationManager = (LocationManager) Backend.applicationContext.getSystemService(Context.LOCATION_SERVICE);
         geocoder = new Geocoder(Backend.applicationContext, Locale.getDefault());
-    }
-
-    /**
-     * This gets our current device location using the GPS.
-     * TODO Implement exception handling.
-     */
-    void fetchCurrentLocation() {
-        LocationListener locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                if (location != null) {
-                    MeasurementControl.onNewLocationFetched(location);
-                }
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-            }
-        };
-
-        // Separate thread because we need a looper
-        Thread thread = new Thread(() -> {
-            try {
-                if (locationManager == null) {
-                    System.out.println("Location manager is null!");
-                }
-
-                // Only prepare the looper if we need to
-                if (Looper.myLooper() == null) {
-                    Looper.prepare();
-                }
-                Looper looper = Looper.myLooper();
-
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                        1000, 1, locationListener, looper);
-            } catch (SecurityException e) {
-                System.out.println("Security exception: " + e.getMessage());
-            } catch (Exception e) {
-                System.out.println("Unexpected exception: " + e.getMessage());
-            }
-        });
-
-        // Launch the thread
-        thread.start();
     }
 
     /**
@@ -105,7 +53,6 @@ public class LocationExtractor {
     private static Geocoder getGeocoder() {
         return locationExtractor.geocoder;
     }
-
 
     /**
      * Check if we have the proper location permissions.

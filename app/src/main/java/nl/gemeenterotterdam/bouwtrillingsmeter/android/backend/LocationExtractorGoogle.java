@@ -22,20 +22,13 @@ public class LocationExtractorGoogle {
     public LocationExtractorGoogle() throws SecurityException {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(Backend.applicationContext);
 
-        try {
-            fusedLocationProviderClient.getLastLocation()
-                    .addOnSuccessListener((Location location) -> {
-                        if (location != null) {
-                            onLocationFetched(location);
-                        }
-                    });
-        } catch (SecurityException e) {
-            System.out.println(e);
-        }
+
     }
 
     /**
-     * This attempts to fetch the location.
+     * This attempts to fetch the location. Any
+     * subscribed measurements will receive a
+     * call.
      */
     public void callForLocation() {
         try {
@@ -46,15 +39,34 @@ public class LocationExtractorGoogle {
     }
 
     /**
-     * This gets called when we find our location.
-     * This will call our measurement control.
+     * Subscribe a measurement to be assigned the next
+     * discovered location.
      *
-     * @param location The discovered location
+     * @param measurement The measurement
      */
-    private void onLocationFetched(Location location) {
-        assert location != null;
+    public void subscribeForLocation(Measurement measurement) {
+        try {
+            fusedLocationProviderClient.getLastLocation()
+                    .addOnSuccessListener((Location location) -> {
+                        if (location != null) {
+                            onLocationFetched(location, measurement);
+                        }
+                    });
+        } catch (SecurityException e) {
+            System.out.println(e);
+        }
+    }
 
-        MeasurementControl.onNewLocationFetched(location);
+    /**
+     * This gets called when we find our location.
+     *
+     * @param location    The location
+     * @param measurement The measurement to which the
+     *                    location must be saved
+     */
+    private void onLocationFetched(Location location, Measurement measurement) {
+        assert location != null;
+        measurement.setLocation(location);
     }
 
 }

@@ -65,6 +65,7 @@ public class Measurement implements Serializable {
         dataIntervals = new ArrayList<>();
 
         // Set booleans
+
         open = false;
         closed = false;
     }
@@ -189,7 +190,17 @@ public class Measurement implements Serializable {
         onMetadataChanged();
     }
 
+    /**
+     * This sets the location if it has not
+     * been set before, else this does nothing.
+     *
+     * @param location The location
+     */
     void setLocation(Location location) {
+        if (longitude == Double.MAX_VALUE) {
+            return;
+        }
+
         longitude = location.getLongitude();
         latitude = location.getLatitude();
         locationAccuracy = location.getAccuracy();

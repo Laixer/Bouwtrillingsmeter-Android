@@ -34,6 +34,7 @@ public class Backend {
     private static LocationExtractorGoogle locationExtractorGoogle;
 
     /**
+     * TODO This has to be cleaned up, messy atm.
      * Initialize the backend.
      * This has a failsafe so that we can only call this once.
      * The only way this might happen is if our {@link nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend.MainActivity} gets dropped from memory
@@ -53,11 +54,12 @@ public class Backend {
 
             StorageControl.initialize();
 
-            MeasurementControl.initialize();
             AccelerometerControl.initialize();
             DataHandler.initialize();
 
             locationExtractorGoogle = new LocationExtractorGoogle();
+            MeasurementControl.initialize(locationExtractorGoogle);
+
             flatPhoneDetector = new FlatPhoneDetector();
 
             SyncManager.initialize();
