@@ -1,5 +1,6 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -73,9 +74,6 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-                startActivity(intent);
-
                 onClickCreateNewMeasurementFab();
             }
         });
@@ -103,6 +101,13 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
             showcaseFirstVisit();
         }
 
+        debugClearStack();
+    }
+
+    /**
+     * TODO Remove this or move this.
+     */
+    private void debugClearStack() {
     }
 
     /**
