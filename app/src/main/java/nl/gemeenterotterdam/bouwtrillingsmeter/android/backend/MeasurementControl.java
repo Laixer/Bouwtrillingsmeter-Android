@@ -72,6 +72,7 @@ class MeasurementControl {
     static void createNewMeasurement() {
         currentMeasurement = new Measurement();
         locationExtractor.subscribeForLocation(currentMeasurement);
+        locationExtractor.callForLocation();
     }
 
     /**

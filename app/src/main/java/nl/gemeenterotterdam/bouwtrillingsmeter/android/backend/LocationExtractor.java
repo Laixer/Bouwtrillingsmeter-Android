@@ -9,7 +9,7 @@ import com.google.android.gms.location.LocationServices;
  * Uses the Google location API to extract
  * the location of the device.
  */
-public class LocationExtractor {
+class LocationExtractor {
 
     private FusedLocationProviderClient fusedLocationProviderClient;
 
@@ -19,10 +19,22 @@ public class LocationExtractor {
      * Throws an exception if we can't access the
      * fused location provider client.
      */
-    public LocationExtractor() throws SecurityException {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(Backend.applicationContext);
+    LocationExtractor() throws SecurityException {
+        fusedLocationProviderClient = LocationServices
+                .getFusedLocationProviderClient(Backend.applicationContext);
+        try {
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener((Location location) -> {
+               /* Do nothing */
+            });
+            fusedLocationProviderClient.getLastLocation();
+            return;
 
+        } catch (SecurityException e) {
+            /* Do nothing */
+        }
 
+        throw new SecurityException("Error while calling required " +
+                "methods for FusedLocationProvider");
     }
 
     /**
@@ -30,7 +42,7 @@ public class LocationExtractor {
      * subscribed measurements will receive a
      * call.
      */
-    public void callForLocation() {
+    void callForLocation() {
         try {
             fusedLocationProviderClient.getLastLocation();
         } catch (SecurityException e) {
@@ -44,7 +56,9 @@ public class LocationExtractor {
      *
      * @param measurement The measurement
      */
-    public void subscribeForLocation(Measurement measurement) {
+    void subscribeForLocation(Measurement measurement) {
+        assert measurement != null;
+
         try {
             fusedLocationProviderClient.getLastLocation()
                     .addOnSuccessListener((Location location) -> {
@@ -66,6 +80,7 @@ public class LocationExtractor {
      */
     private void onLocationFetched(Location location, Measurement measurement) {
         assert location != null;
+        assert measurement != null;
         measurement.setLocation(location);
     }
 

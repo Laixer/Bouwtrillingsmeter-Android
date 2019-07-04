@@ -15,39 +15,34 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * This class extracts our current location.
+ * This class is used for location utility purposes.
  */
-@Deprecated
 public class LocationUtility {
 
-    private static LocationUtility ylocationUtility;
-
-    private LocationManager locationManager;
-
-    private Geocoder geocoder;
-
-    /**
-     * Loads the instance.
-     */
-    LocationUtility() {
-        // locationExtractor = this;
-        locationManager = (LocationManager) Backend.applicationContext.getSystemService(Context.LOCATION_SERVICE);
-        geocoder = new Geocoder(Backend.applicationContext, Locale.getDefault());
-    }
+    private static LocationManager locationManager;
+    private static Geocoder geocoder;
 
     /**
      * @return internal getter for the location manager.
      */
     private static LocationManager getLocationManager() {
-        return locationExtractor.locationManager;
+        if (locationManager == null) {
+            locationManager = (LocationManager) Backend.applicationContext.getSystemService(Context.LOCATION_SERVICE);
+        }
+
+        return locationManager;
     }
 
     /**
-     *
      * @return internal getter for the geocoder.
      */
     private static Geocoder getGeocoder() {
-        return locationExtractor.geocoder;
+        if (geocoder == null) {
+            geocoder = new Geocoder(Backend.applicationContext, Locale.getDefault());
+
+        }
+
+        return geocoder;
     }
 
     /**
@@ -80,7 +75,7 @@ public class LocationUtility {
      * TODO This should not return null values.
      *
      * @param longitude The longitude
-     * @param latitude The latitude
+     * @param latitude  The latitude
      * @return The address. Null if error or none found
      */
     static Address coordinatesToAddress(double longitude, double latitude) {

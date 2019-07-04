@@ -15,5 +15,5 @@
     <integer name="double_touch_ms_max">300</integer>
 
     <!--Version control-->
-    <bool name="alpha">false</bool>
+    <bool name="alpha">true</bool>
 </resources>

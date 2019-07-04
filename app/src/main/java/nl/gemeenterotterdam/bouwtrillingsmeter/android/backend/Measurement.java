@@ -197,7 +197,8 @@ public class Measurement implements Serializable {
      * @param location The location
      */
     void setLocation(Location location) {
-        if (longitude == Double.MAX_VALUE) {
+        assert location != null;
+        if (longitude != Double.MAX_VALUE) {
             return;
         }
 
