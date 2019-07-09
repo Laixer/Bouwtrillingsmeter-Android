@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.github.mikephil.charting.utils.Utils;
+
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 
 /**
@@ -21,6 +23,10 @@ public class GraphsActivity extends AppCompatActivity {
     private LinearLayout dotsLayout;
     private ImageView[] dots;
 
+    /**
+     * Static singleton reference.
+     * TODO This is a memory leak.
+     */
     private static GraphsActivity graphsActivity;
 
     /**

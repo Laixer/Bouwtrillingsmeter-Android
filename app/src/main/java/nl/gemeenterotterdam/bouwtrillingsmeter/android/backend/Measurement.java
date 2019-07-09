@@ -199,7 +199,9 @@ public class Measurement implements Serializable {
     void setLocation(Location location) {
         assert location != null;
         if (longitude != Double.MAX_VALUE) {
-            return;
+            if (!location.hasAccuracy() || location.getAccuracy() < locationAccuracy) {
+                return;
+            }
         }
 
         longitude = location.getLongitude();
