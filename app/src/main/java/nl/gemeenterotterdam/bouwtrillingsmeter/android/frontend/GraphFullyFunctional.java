@@ -293,14 +293,9 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
         }
     }
 
-    <T> void appendDataScatter(ArrayList<DataPoint3D<T>> dataPoints3D) {
-        for (DataPoint3D<T> dataPoint3D : dataPoints3D) {
-            for (int i = 0; i < entriesScatter.size(); i++) {
-                Entry entry = new Entry(
-                        dataPoint3D.xAxisValueAsFloat() * xMultiplier,
-                        dataPoint3D.values[i]);
-                entriesScatter.get(i).add(entry);
-            }
+    void appendDataScatter(ArrayList<Entry> preMadeEntries) {
+        for (int i = 0; i < entriesScatter.size(); i++) {
+            entriesScatter.get(i).add(preMadeEntries.get(i));
         }
 
         // Sort, else we get a bug in the MPAndroidChart library
@@ -388,28 +383,28 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
                 hasFoundData = true;
                 min = Math.min(min, entriesLine.get(0).get(0).getX());
                 max = Math.max(max, entriesLine.get(0).get(
-                        entriesLine.get(0).size()  -1).getX());
+                        entriesLine.get(0).size() - 1).getX());
             }
 
             if (entriesLineConstant.size() > 0) {
                 hasFoundData = true;
                 min = Math.min(min, entriesLineConstant.get(0).get(0).getX());
                 max = Math.max(max, entriesLineConstant.get(0).get(
-                        entriesLineConstant.get(0).size()  -1).getX());
+                        entriesLineConstant.get(0).size() - 1).getX());
             }
 
             if (entriesScatter.size() > 0) {
                 hasFoundData = true;
                 min = Math.min(min, entriesScatter.get(0).get(0).getX());
                 max = Math.max(max, entriesScatter.get(0).get(
-                        entriesScatter.get(0).size()  -1).getX());
+                        entriesScatter.get(0).size() - 1).getX());
             }
 
             if (entriesBar.size() > 0) {
                 hasFoundData = true;
                 min = Math.min(min, entriesBar.get(0).get(0).getX());
                 max = Math.max(max, entriesBar.get(0).get(
-                        entriesBar.get(0).size()  -1).getX());
+                        entriesBar.get(0).size() - 1).getX());
             }
 
             if (hasFoundData) {

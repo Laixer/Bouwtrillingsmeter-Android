@@ -134,7 +134,7 @@ class GraphsControl implements DataIntervalClosedListener {
         graphs[1].appendDataBar(dataInterval.getVelocitiesAbsMaxAsDataPoints());
         graphs[2].appendDataBar(dataInterval.getDominantFrequenciesAsDataPoints());
         graphs[3].appendDataLines(dataInterval.getFrequencyAmplitudes());
-        graphs[4].appendDataScatter(dataInterval.getAllDominantFrequenciesAsDataPoints());
+        graphs[4].appendDataScatter(dataInterval.getAllDominantFrequenciesAsEntries());
 
         afterAppendingData();
     }
