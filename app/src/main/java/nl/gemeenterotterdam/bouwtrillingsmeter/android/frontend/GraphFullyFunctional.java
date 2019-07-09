@@ -27,30 +27,35 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 /**
  * Base for a graph.
  */
-abstract class Graph {
+abstract class GraphFullyFunctional {
 
+    // Styling
+    protected TextView textViewTitle;
+    protected TextView textViewAxisX;
+    protected TextView textViewAxisY;
+    protected Chart chart;
     protected String title;
     protected String xAxisLabel;
     protected String yAxisLabel;
-    protected String[] dataSetNames;
-    protected int[] colors;
 
+    // Scrolling properties
     protected boolean scrolling;
     protected boolean refreshing;
     protected float xMultiplier;
-
     protected float minimumWidth;
     protected float maximumWidth;
     protected float xMin;
     protected float xMax;
 
+    // Entries
+    protected ArrayList<Entry>[] entriesLine;
+    protected ArrayList<Entry>[] entriesLineConstant;
+    protected ArrayList<Entry>[] entriesBar;
+    protected ArrayList<Entry>[] entriesScatter;
+
+    // DataSets
     protected ArrayList<LineDataSet> constantLineDataSets;
     protected ArrayList<ChartData> chartDataVariable;
-
-    protected TextView textViewTitle;
-    protected TextView textViewAxisX;
-    protected TextView textViewAxisY;
-    protected Chart chart;
 
     /**
      * Constructor, call by calling super().
@@ -69,14 +74,13 @@ abstract class Graph {
      *                     data set
      * @param xMultiplier  The multiplier for the x values
      */
-    protected Graph(String title, String xAxisLabel, String yAxisLabel,
+    protected GraphFullyFunctional(String title, String xAxisLabel, String yAxisLabel,
                     boolean scrolling, boolean refreshing, String[] dataSetNames,
                     int[] colors, float xMultiplier) {
+
         this.title = title;
         this.xAxisLabel = xAxisLabel;
         this.yAxisLabel = yAxisLabel;
-        this.dataSetNames = dataSetNames;
-        this.colors = colors;
 
         this.scrolling = scrolling;
         this.refreshing = refreshing;
@@ -84,6 +88,7 @@ abstract class Graph {
 
         constantLineDataSets = new ArrayList<>();
         chartDataVariable = new ArrayList<>();
+
     }
 
     /**
