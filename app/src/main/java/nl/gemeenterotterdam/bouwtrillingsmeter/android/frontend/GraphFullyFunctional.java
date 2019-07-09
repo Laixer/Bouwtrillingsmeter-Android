@@ -25,21 +25,17 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 /**
  * Base for a graph.
  */
-abstract class GraphFullyFunctional {
+class GraphFullyFunctional extends GraphFullyFunctionalBase {
 
     // Styling
-    private TextView textViewTitle;
-    private TextView textViewAxisX;
-    private TextView textViewAxisY;
     private CombinedChart chart;
-    private String title;
-    private String xAxisLabel;
-    private String yAxisLabel;
+    private final String title;
+    private final String xAxisLabel;
+    private final String yAxisLabel;
 
     // Scrolling properties
-    private boolean scrolling;
-    private boolean refreshing;
-    private float xMultiplier;
+    private final boolean scrolling;
+    private final float xMultiplier;
     private float minimumWidth;
     private float maximumWidth;
     private float xMin;
@@ -72,19 +68,16 @@ abstract class GraphFullyFunctional {
      * @param scrolling   If set to true we append data to the right,
      *                    if set to false we refresh the graph each
      *                    iteration
-     * @param refreshing  If set to true all data will be refreshed
-     *                    upon appending new data
      * @param xMultiplier The multiplier for the x values
      */
     GraphFullyFunctional(String title, String xAxisLabel, String yAxisLabel,
-                                   boolean scrolling, boolean refreshing, float xMultiplier) {
+                                   boolean scrolling, float xMultiplier) {
 
         // Assign all variables
         this.title = title;
         this.xAxisLabel = xAxisLabel;
         this.yAxisLabel = yAxisLabel;
         this.scrolling = scrolling;
-        this.refreshing = refreshing;
         this.xMultiplier = xMultiplier;
 
         // Initialize all our array lists
@@ -148,10 +141,6 @@ abstract class GraphFullyFunctional {
     void onTextViewsCreated(TextView textViewTitle,
                             TextView textViewAxisX,
                             TextView textViewAxisY) {
-        this.textViewTitle = textViewTitle;
-        this.textViewAxisX = textViewAxisX;
-        this.textViewAxisY = textViewAxisY;
-
         textViewTitle.setText(title);
         textViewAxisX.setText(xAxisLabel);
         textViewAxisY.setText(yAxisLabel);
@@ -197,6 +186,7 @@ abstract class GraphFullyFunctional {
             dataSetsLine.add(new LineDataSet(
                     new ArrayList<>(), names[i]));
             colorsLine.add(colors[i]);
+            entriesLine.add(new ArrayList<>());
         }
     }
 
@@ -205,6 +195,7 @@ abstract class GraphFullyFunctional {
             dataSetsLineConstant.add(new LineDataSet(
                     new ArrayList<>(), names[i]));
             colorsLineConstant.add(colors[i]);
+            entriesLineConstant.add(new ArrayList<>());
         }
     }
 
@@ -213,6 +204,7 @@ abstract class GraphFullyFunctional {
             dataSetsScatter.add(new ScatterDataSet(
                     new ArrayList<>(), names[i]));
             colorsScatter.add(colors[i]);
+            entriesScatter.add(new ArrayList<>());
         }
     }
 
@@ -221,7 +213,22 @@ abstract class GraphFullyFunctional {
             dataSetsBar.add(new BarDataSet(
                     new ArrayList<>(), names[i]));
             colorsBar.add(colors[i]);
+            entriesBar.add(new ArrayList<>());
         }
+    }
+
+    /**
+     * This adds a constant line to our graph.
+     *
+     * @param entries The entries
+     * @param name    The name
+     * @param color   The color as resource int
+     */
+    void addConstantLine(ArrayList<Entry> entries, String name, int color) {
+        LineDataSet lineDataSet = new LineDataSet(entries, name);
+        colorsLineConstant.add(color);
+        styleLineDataSet(lineDataSet, color);
+        dataSetsLineConstant.add(lineDataSet);
     }
 
     /**
@@ -340,7 +347,7 @@ abstract class GraphFullyFunctional {
     /**
      * This triggers the styling of our chart.
      */
-    protected void styleChart() {
+    private void styleChart() {
         chart.setDescription(null);
 
         if (!scrolling) {

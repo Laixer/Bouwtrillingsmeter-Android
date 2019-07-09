@@ -18,11 +18,12 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.LimitConstants;
  */
 class GraphsControl implements DataIntervalClosedListener {
 
+    private static final float MULTIPLIER_MS_TO_S = 0.001f;
 
     /**
      * All graphs.
      */
-    private Graph[] graphs;
+    private GraphFullyFunctional[] graphs;
 
     /**
      * Constructor for this class.
@@ -43,7 +44,7 @@ class GraphsControl implements DataIntervalClosedListener {
      */
     void createAllGraphs() {
         // Get constants
-        String[] title = Utility.resources.
+        String[] titles = Utility.resources.
                 getStringArray(R.array.graph_title);
         String[] axisHorizontal = Utility.resources.
                 getStringArray(R.array.graph_axis_horizontal);
@@ -51,8 +52,6 @@ class GraphsControl implements DataIntervalClosedListener {
                 getStringArray(R.array.graph_axis_vertical);
         String[] namesXYZ = Utility.resources.
                 getStringArray(R.array.graph_legend_xyz_names);
-        String[] namesDominant = new String[]{
-                Utility.resources.getString(R.string.graph_legend_exceeding_name)};
 
         // Get legend names
         int[] colorsXYZ = Utility.getXYZColorsArray();
@@ -60,17 +59,18 @@ class GraphsControl implements DataIntervalClosedListener {
                 Utility.resources.getColor(R.color.graph_series_color_point)};
 
         // Create graphs
-        graphs = new Graph[5];
-        graphs[0] = new GraphCombined(title[0], axisHorizontal[0], axisVertical[0],
-                true, false, namesXYZ, colorsXYZ, false, 0.001f);
-        graphs[1] = new GraphBar(title[1], axisHorizontal[1], axisVertical[1],
-                true, false, namesXYZ, colorsXYZ, 0.001f);
-        graphs[2] = new GraphBar(title[2], axisHorizontal[2], axisVertical[2],
-                true, false, namesXYZ, colorsXYZ, 0.001f);
-        graphs[3] = new GraphCombined(title[3], axisHorizontal[3], axisVertical[3],
-                false, true, namesXYZ, colorsXYZ, false, 1);
-        graphs[4] = new GraphCombined(title[4], axisHorizontal[4], axisVertical[4],
-                false, false, namesDominant, colorsDominant, true, 1);
+        graphs = new GraphFullyFunctional[5];
+
+        graphs[0] = new GraphFullyFunctional(titles[0], axisHorizontal[0], axisVertical[0],
+                false, MULTIPLIER_MS_TO_S);
+        graphs[1] = new GraphFullyFunctional(titles[1], axisHorizontal[1], axisVertical[1],
+                true, MULTIPLIER_MS_TO_S);
+        graphs[2] = new GraphFullyFunctional(titles[2], axisHorizontal[2], axisVertical[2],
+                true, MULTIPLIER_MS_TO_S);
+        graphs[3] = new GraphFullyFunctional(titles[3], axisHorizontal[3], axisVertical[3],
+                false, 1);
+        graphs[4] = new GraphFullyFunctional(titles[4], axisHorizontal[4], axisVertical[4],
+                false, 1);
 
         // Set limits separately
         graphs[0].setSizeConstants(3, 5, 0, 0);
@@ -80,11 +80,29 @@ class GraphsControl implements DataIntervalClosedListener {
         graphs[4].setSizeConstants(0, 0, 0, 100);
 
         // Add the constant line to our dominant frequency plot
-        ((GraphCombined) graphs[4]).addConstantLine(
+        graphs[4].addConstantLine(
                 LimitConstants.getLimitAsEntries(),
                 Utility.resources.getString(R.string.graph_legend_limitline_name),
                 Utility.resources.getColor(R.color.graph_dominant_constant_line)
         );
+    }
+
+    /**
+     * Triggers all before functions.
+     */
+    void beforeAppendingData() {
+        for (GraphFullyFunctional graphFullyFunctional : graphs) {
+            graphFullyFunctional.beforeAppendingData();
+        }
+    }
+
+    /**
+     * Triggers all after functions.
+     */
+    void afterAppendingData() {
+        for (GraphFullyFunctional graphFullyFunctional : graphs) {
+            graphFullyFunctional.afterAppendingData();
+        }
     }
 
     /**
@@ -98,6 +116,8 @@ class GraphsControl implements DataIntervalClosedListener {
             return;
         }
 
+        beforeAppendingData();
+
         /*
          * Graph 1: Acceleration // time (line)
          * Graph 2: Highest velocity // time (block)
@@ -110,6 +130,8 @@ class GraphsControl implements DataIntervalClosedListener {
         graphs[2].sendNewDataToChart(dataInterval.getDominantFrequenciesAsDataPoints());
         graphs[3].sendNewDataToChart(dataInterval.getFrequencyAmplitudes());
         graphs[4].sendNewDataToChart(dataInterval.getAllDominantFrequenciesAsDataPoints());
+
+        afterAppendingData();
     }
 
     /**
