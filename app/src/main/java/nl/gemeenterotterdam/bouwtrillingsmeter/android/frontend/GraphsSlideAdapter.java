@@ -17,7 +17,7 @@ public class GraphsSlideAdapter extends PagerAdapter {
     /**
      * Our graphs.
      */
-    private Graph[] graphs;
+    private GraphFullyFunctional[] graphs;
 
     /**
      * Our layout inflater.
@@ -35,7 +35,7 @@ public class GraphsSlideAdapter extends PagerAdapter {
      * @param context The context
      * @param graphs  The graphs to display
      */
-    GraphsSlideAdapter(Context context, Graph[] graphs) {
+    GraphsSlideAdapter(Context context, GraphFullyFunctional[] graphs) {
         this.graphs = graphs;
         this.context = context;
         mLayoutInflater = (LayoutInflater) context.getSystemService(
@@ -79,7 +79,7 @@ public class GraphsSlideAdapter extends PagerAdapter {
                 container, false);
 
         // Get graph
-        Graph graph = graphs[position];
+        GraphFullyFunctional graph = graphs[position];
 
         // Create our chart and push it to the UI
         Chart chart = graph.createChart(context);
@@ -93,7 +93,7 @@ public class GraphsSlideAdapter extends PagerAdapter {
 
         // Add, push and return
         container.addView(view);
-        graph.pushToChart();
+        graph.pushAllToChart();
         return view;
     }
 

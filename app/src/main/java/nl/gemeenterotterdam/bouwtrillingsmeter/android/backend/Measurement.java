@@ -197,7 +197,9 @@ public class Measurement implements Serializable {
      * @param location The location
      */
     void setLocation(Location location) {
+
         assert location != null;
+
         if (longitude != Double.MAX_VALUE) {
             if (!location.hasAccuracy() || location.getAccuracy() < locationAccuracy) {
                 return;
@@ -207,6 +209,23 @@ public class Measurement implements Serializable {
         longitude = location.getLongitude();
         latitude = location.getLatitude();
         locationAccuracy = location.getAccuracy();
+
+        tryGetAddress();
+    }
+
+    /**
+     * This attempts to call the geocoder in
+     * a separate thread.
+     */
+    public void tryGetAddress() {
+        if (address != null) {
+            return;
+        }
+
+        Thread thread = new Thread(() -> {
+            address = LocationUtility.coordinatesToAddress(latitude, longitude);
+        });
+        thread.start();
     }
 
     public void setDescription(String description) {

@@ -26,6 +26,9 @@ public class MeasurementControl {
     static void initialize(LocationExtractor locationExtractor) {
         try {
             allMeasurements = StorageControl.retrieveAllSavedMeasurements();
+            for (Measurement measurement : allMeasurements) {
+                measurement.tryGetAddress();
+            }
         } catch (StorageReadException e) {
             // TODO Handle
             System.out.println("Could not import saved measurements. Handle this");

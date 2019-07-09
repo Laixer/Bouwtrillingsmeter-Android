@@ -1,5 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
+import com.github.mikephil.charting.data.Entry;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -165,18 +167,15 @@ public class DataInterval implements Serializable {
      *
      * @return An arraylist containing these datapoints.
      */
-    public ArrayList<DataPoint3D<Double>> getAllDominantFrequenciesAsDataPoints() {
-        ArrayList<DataPoint3D<Double>> result = new ArrayList<DataPoint3D<Double>>();
+    public ArrayList<Entry> getAllDominantFrequenciesAsEntries() {
+        ArrayList<Entry> result = new ArrayList<>();
 
+        float[] frequencies = dominantFrequencies.getFrequencies();
+        float[] velocities = dominantFrequencies.getVelocities();
         for (int dimension = 0; dimension < 3; dimension++) {
-            double frequency = -1;
-            float[] velocities = new float[]{-1, -1, -1};
-            frequency = dominantFrequencies.getFrequencies()[dimension];
-            velocities[0] = dominantFrequencies.getVelocities()[dimension];
-            result.add(new DataPoint3D<>(frequency, velocities));
+            result.add(new Entry(frequencies[dimension], velocities[dimension]));
         }
 
-        // Return result
         return result;
     }
 
