@@ -3,6 +3,7 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 import android.content.Context;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.data.BarData;
@@ -355,6 +356,11 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
             LineDataSet lineDataSet = lineDataSetsConstant.get(i);
             styleLineDataSet(lineDataSet, colorsLineConstant.get(i));
             lineData.addDataSet(lineDataSet);
+        }
+
+        // Group bar data
+        if (barData.getDataSetCount() > 1) {
+            barData.groupBars(0, 0.1f, 0.01f);
         }
 
         // Push to graph
