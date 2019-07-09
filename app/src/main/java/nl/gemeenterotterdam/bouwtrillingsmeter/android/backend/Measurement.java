@@ -197,7 +197,9 @@ public class Measurement implements Serializable {
      * @param location The location
      */
     void setLocation(Location location) {
+
         assert location != null;
+
         if (longitude != Double.MAX_VALUE) {
             if (!location.hasAccuracy() || location.getAccuracy() < locationAccuracy) {
                 return;
@@ -207,6 +209,7 @@ public class Measurement implements Serializable {
         longitude = location.getLongitude();
         latitude = location.getLatitude();
         locationAccuracy = location.getAccuracy();
+        address = LocationUtility.coordinatesToAddress(latitude, longitude);
     }
 
     public void setDescription(String description) {

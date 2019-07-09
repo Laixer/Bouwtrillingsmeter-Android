@@ -42,10 +42,8 @@ public class DetailsActivity extends AppCompatActivity {
     public static Measurement measurement;
 
     /**
-     * Gets called when this activity is launched
-     * TODO Reconsider measurement calling structure
-     *
-     * @param savedInstanceState
+     * Gets called when this activity is launched.
+     * TODO Reconsider measurement calling structure.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +58,7 @@ public class DetailsActivity extends AppCompatActivity {
         textViewLocation = (TextView) findViewById(R.id.textViewDetailsMeasurementLocation);
         textViewDescription = (TextView) findViewById(R.id.textViewListMeasurementDescription);
 
-        // Update all textviews at once
+        // Update all text views at once
         onUpdateMeasurementTexts();
 
         // Click FAB to take new picture
