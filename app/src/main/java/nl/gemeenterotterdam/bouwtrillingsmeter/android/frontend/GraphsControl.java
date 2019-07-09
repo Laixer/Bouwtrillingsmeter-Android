@@ -60,7 +60,6 @@ class GraphsControl implements DataIntervalClosedListener {
 
         // Create graphs
         graphs = new GraphFullyFunctional[5];
-
         graphs[0] = new GraphFullyFunctional(titles[0], axisHorizontal[0], axisVertical[0],
                 false, MULTIPLIER_MS_TO_S);
         graphs[1] = new GraphFullyFunctional(titles[1], axisHorizontal[1], axisVertical[1],
@@ -72,6 +71,18 @@ class GraphsControl implements DataIntervalClosedListener {
         graphs[4] = new GraphFullyFunctional(titles[4], axisHorizontal[4], axisVertical[4],
                 false, 1);
 
+        // Add all the lines, scatters and bars
+        graphs[0].createLines(namesXYZ, colorsXYZ);
+        graphs[1].createBars(namesXYZ, colorsXYZ);
+        graphs[2].createBars(namesXYZ, colorsXYZ);
+        graphs[3].createLines(namesXYZ, colorsXYZ);
+        graphs[4].createScatters(namesXYZ, colorsXYZ);
+        graphs[4].addConstantLine(
+                LimitConstants.getLimitAsEntries(),
+                Utility.resources.getString(R.string.graph_legend_limitline_name),
+                Utility.resources.getColor(R.color.graph_dominant_constant_line)
+        );
+
         // Set limits separately
         graphs[0].setSizeConstants(3, 5, 0, 0);
         graphs[1].setSizeConstants(30, 500, 0, 0);
@@ -79,18 +90,12 @@ class GraphsControl implements DataIntervalClosedListener {
         graphs[3].setSizeConstants(0, 0, 0, 100);
         graphs[4].setSizeConstants(0, 0, 0, 100);
 
-        // Add the constant line to our dominant frequency plot
-        graphs[4].addConstantLine(
-                LimitConstants.getLimitAsEntries(),
-                Utility.resources.getString(R.string.graph_legend_limitline_name),
-                Utility.resources.getColor(R.color.graph_dominant_constant_line)
-        );
     }
 
     /**
      * Triggers all before functions.
      */
-    void beforeAppendingData() {
+    private void beforeAppendingData() {
         for (GraphFullyFunctional graphFullyFunctional : graphs) {
             graphFullyFunctional.beforeAppendingData();
         }
@@ -99,7 +104,7 @@ class GraphsControl implements DataIntervalClosedListener {
     /**
      * Triggers all after functions.
      */
-    void afterAppendingData() {
+    private void afterAppendingData() {
         for (GraphFullyFunctional graphFullyFunctional : graphs) {
             graphFullyFunctional.afterAppendingData();
         }
@@ -125,21 +130,21 @@ class GraphsControl implements DataIntervalClosedListener {
          * Graph 4: Amplitude // frequency (line)
          * Graph 5: Dominant frequency // frequency (point)
          */
-        graphs[0].sendNewDataToChart(dataInterval.getDataPoints3DAcceleration());
-        graphs[1].sendNewDataToChart(dataInterval.getVelocitiesAbsMaxAsDataPoints());
-        graphs[2].sendNewDataToChart(dataInterval.getDominantFrequenciesAsDataPoints());
-        graphs[3].sendNewDataToChart(dataInterval.getFrequencyAmplitudes());
-        graphs[4].sendNewDataToChart(dataInterval.getAllDominantFrequenciesAsDataPoints());
+        graphs[0].appendDataLines(dataInterval.getDataPoints3DAcceleration());
+        graphs[1].appendDataBar(dataInterval.getVelocitiesAbsMaxAsDataPoints());
+        graphs[2].appendDataBar(dataInterval.getDominantFrequenciesAsDataPoints());
+        graphs[3].appendDataLines(dataInterval.getFrequencyAmplitudes());
+        graphs[4].appendDataScatter(dataInterval.getAllDominantFrequenciesAsDataPoints());
 
         afterAppendingData();
     }
 
     /**
-     * Return all graphs
+     * Return all graphs.
      *
      * @return All created graphs, null is possible
      */
-    Graph[] getGraphs() {
+    GraphFullyFunctional[] getGraphs() {
         return graphs;
     }
 

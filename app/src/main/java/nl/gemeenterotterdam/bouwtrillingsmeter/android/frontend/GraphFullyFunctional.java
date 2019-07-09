@@ -3,7 +3,6 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 import android.content.Context;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.data.BarData;
@@ -48,10 +47,10 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
     private List<List<BarEntry>> entriesBar;
 
     // DataSets
-    private List<LineDataSet> dataSetsLine;
-    private List<LineDataSet> dataSetsLineConstant;
-    private List<ScatterDataSet> dataSetsScatter;
-    private List<BarDataSet> dataSetsBar;
+    private List<LineDataSet> lineDataSets;
+    private List<LineDataSet> lineDataSetsConstant;
+    private List<ScatterDataSet> scatterDataSets;
+    private List<BarDataSet> barDataSets;
 
     // Colors
     private List<Integer> colorsLine;
@@ -71,7 +70,7 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
      * @param xMultiplier The multiplier for the x values
      */
     GraphFullyFunctional(String title, String xAxisLabel, String yAxisLabel,
-                                   boolean scrolling, float xMultiplier) {
+                         boolean scrolling, float xMultiplier) {
 
         // Assign all variables
         this.title = title;
@@ -80,14 +79,14 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
         this.scrolling = scrolling;
         this.xMultiplier = xMultiplier;
 
+        // Data sets
+        lineDataSets = new ArrayList<>();
+        lineDataSetsConstant = new ArrayList<>();
+        scatterDataSets = new ArrayList<>();
+        barDataSets = new ArrayList<>();
+
         // Initialize all our array lists
         initializeEntryLists(true);
-
-        // Data sets
-        dataSetsLine = new ArrayList<>();
-        dataSetsLineConstant = new ArrayList<>();
-        dataSetsBar = new ArrayList<>();
-        dataSetsScatter = new ArrayList<>();
 
         // Colors
         colorsLine = new ArrayList<>();
@@ -152,9 +151,9 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
     private void resetAllChartData() {
 
         ArrayList<IBarLineScatterCandleBubbleDataSet> dataSets = new ArrayList<>();
-        dataSets.addAll(dataSetsLine);
-        dataSets.addAll(dataSetsBar);
-        dataSets.addAll(dataSetsScatter);
+        dataSets.addAll(lineDataSets);
+        dataSets.addAll(scatterDataSets);
+        dataSets.addAll(barDataSets);
 
         for (IBarLineScatterCandleBubbleDataSet dataSet : dataSets) {
             dataSet.clear();
@@ -173,17 +172,31 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
      */
     private void initializeEntryLists(boolean clearConstant) {
         entriesLine = new ArrayList<>();
+        for (LineDataSet lineDataSet : lineDataSets) {
+            entriesLine.add(new ArrayList<>());
+        }
+
         entriesBar = new ArrayList<>();
+        for (BarDataSet barDataSet : barDataSets) {
+            entriesBar.add(new ArrayList<>());
+        }
+
         entriesScatter = new ArrayList<>();
+        for (ScatterDataSet scatterDataSet : scatterDataSets) {
+            entriesScatter.add(new ArrayList<>());
+        }
 
         if (clearConstant) {
             entriesLineConstant = new ArrayList<>();
+            for (LineDataSet lineDataSet : lineDataSetsConstant) {
+                entriesLineConstant.add(new ArrayList<>());
+            }
         }
     }
 
     void createLines(String[] names, int[] colors) {
         for (int i = 0; i < names.length; i++) {
-            dataSetsLine.add(new LineDataSet(
+            lineDataSets.add(new LineDataSet(
                     new ArrayList<>(), names[i]));
             colorsLine.add(colors[i]);
             entriesLine.add(new ArrayList<>());
@@ -192,7 +205,7 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
 
     void createLinesConstant(String[] names, int[] colors) {
         for (int i = 0; i < names.length; i++) {
-            dataSetsLineConstant.add(new LineDataSet(
+            lineDataSetsConstant.add(new LineDataSet(
                     new ArrayList<>(), names[i]));
             colorsLineConstant.add(colors[i]);
             entriesLineConstant.add(new ArrayList<>());
@@ -201,7 +214,7 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
 
     void createScatters(String[] names, int[] colors) {
         for (int i = 0; i < names.length; i++) {
-            dataSetsScatter.add(new ScatterDataSet(
+            scatterDataSets.add(new ScatterDataSet(
                     new ArrayList<>(), names[i]));
             colorsScatter.add(colors[i]);
             entriesScatter.add(new ArrayList<>());
@@ -210,7 +223,7 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
 
     void createBars(String[] names, int[] colors) {
         for (int i = 0; i < names.length; i++) {
-            dataSetsBar.add(new BarDataSet(
+            barDataSets.add(new BarDataSet(
                     new ArrayList<>(), names[i]));
             colorsBar.add(colors[i]);
             entriesBar.add(new ArrayList<>());
@@ -228,7 +241,7 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
         LineDataSet lineDataSet = new LineDataSet(entries, name);
         colorsLineConstant.add(color);
         styleLineDataSet(lineDataSet, color);
-        dataSetsLineConstant.add(lineDataSet);
+        lineDataSetsConstant.add(lineDataSet);
     }
 
     /**
@@ -296,40 +309,53 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
     /**
      * This pushes all our data sets to the chart.
      */
-    private void pushAllToChart() {
+    void pushAllToChart() {
         CombinedData combinedData = new CombinedData();
         LineData lineData = new LineData();
         ScatterData scatterData = new ScatterData();
         BarData barData = new BarData();
 
         // Add variable data sets
-        for (int i = 0; i < dataSetsLine.size(); i++) {
-            dataSetsLine.set(i, new LineDataSet(
-                    entriesLine.get(i), dataSetsLine.get(i).getLabel()));
-            styleLineDataSet(dataSetsLine.get(i), colorsLine.get(i));
-            lineData.addDataSet(dataSetsLine.get(i));
+        for (int i = 0; i < lineDataSets.size(); i++) {
+            lineDataSets.set(i, new LineDataSet(
+                    entriesLine.get(i), lineDataSets.get(i).getLabel()));
+            styleLineDataSet(lineDataSets.get(i), colorsLine.get(i));
+            lineData.addDataSet(lineDataSets.get(i));
         }
 
-        for (int i = 0; i < dataSetsBar.size(); i++) {
-            dataSetsBar.set(i, new BarDataSet(
-                    entriesBar.get(i), dataSetsBar.get(i).getLabel()));
-            styleBarDataSet(dataSetsBar.get(i), colorsBar.get(i));
-            barData.addDataSet(dataSetsBar.get(i));
+        for (int i = 0; i < scatterDataSets.size(); i++) {
+            scatterDataSets.set(i, new ScatterDataSet(
+                    entriesScatter.get(i), scatterDataSets.get(i).getLabel()));
+            styleScatterDataSet(scatterDataSets.get(i), colorsScatter.get(i));
+            scatterData.addDataSet(scatterDataSets.get(i));
         }
 
-        for (int i = 0; i < dataSetsScatter.size(); i++) {
-            dataSetsScatter.set(i, new ScatterDataSet(
-                    entriesScatter.get(i), dataSetsScatter.get(i).getLabel()));
-            styleScatterDataSet(dataSetsScatter.get(i), colorsScatter.get(i));
-            scatterData.addDataSet(dataSetsScatter.get(i));
+        for (int i = 0; i < barDataSets.size(); i++) {
+            barDataSets.set(i, new BarDataSet(
+                    entriesBar.get(i), barDataSets.get(i).getLabel()));
+            styleBarDataSet(barDataSets.get(i), colorsBar.get(i));
+            barData.addDataSet(barDataSets.get(i));
         }
+
 
         // Add constant data sets
-        for (int i = 0; i < dataSetsLineConstant.size(); i++) {
-            LineDataSet lineDataSet = dataSetsLineConstant.get(i);
+        for (int i = 0; i < lineDataSetsConstant.size(); i++) {
+            LineDataSet lineDataSet = lineDataSetsConstant.get(i);
             styleLineDataSet(lineDataSet, colorsLineConstant.get(i));
             lineData.addDataSet(lineDataSet);
         }
+
+        // Push to graph
+        combinedData.setData(lineData);
+        combinedData.setData(scatterData);
+        combinedData.setData(barData);
+        chart.setData(combinedData);
+        chart.invalidate();
+
+        /* if (entries[0].size() > 0) {
+            forceAxisMinMax(entries[0].get(0).getX(),
+                    entries[0].get(entries[0].size() - 1).getX());
+        } */
     }
 
     /**
