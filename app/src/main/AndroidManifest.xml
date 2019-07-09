@@ -21,12 +21,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".frontend.SplashScreenActivity">
-            <intent-filter>
+        <activity android:name=".frontend.SplashScreenActivity"
+            android:noHistory="true">
+        <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            android:noHistory="true"
         </activity>
         <activity
             android:name=".frontend.MainActivity"

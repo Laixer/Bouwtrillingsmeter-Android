@@ -209,7 +209,23 @@ public class Measurement implements Serializable {
         longitude = location.getLongitude();
         latitude = location.getLatitude();
         locationAccuracy = location.getAccuracy();
-        address = LocationUtility.coordinatesToAddress(latitude, longitude);
+
+        tryGetAddress();
+    }
+
+    /**
+     * This attempts to call the geocoder in
+     * a separate thread.
+     */
+    public void tryGetAddress() {
+        if (address != null) {
+            return;
+        }
+
+        Thread thread = new Thread(() -> {
+            address = LocationUtility.coordinatesToAddress(latitude, longitude);
+        });
+        thread.start();
     }
 
     public void setDescription(String description) {
