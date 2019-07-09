@@ -1,27 +1,25 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.Chart;
-import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.ScatterChart;
+import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.ChartData;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.ScatterData;
 import com.github.mikephil.charting.data.ScatterDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.interfaces.datasets.IBarLineScatterCandleBubbleDataSet;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
-import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.Backend;
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 
 /**
@@ -30,65 +28,79 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 abstract class GraphFullyFunctional {
 
     // Styling
-    protected TextView textViewTitle;
-    protected TextView textViewAxisX;
-    protected TextView textViewAxisY;
-    protected Chart chart;
-    protected String title;
-    protected String xAxisLabel;
-    protected String yAxisLabel;
+    private TextView textViewTitle;
+    private TextView textViewAxisX;
+    private TextView textViewAxisY;
+    private CombinedChart chart;
+    private String title;
+    private String xAxisLabel;
+    private String yAxisLabel;
 
     // Scrolling properties
-    protected boolean scrolling;
-    protected boolean refreshing;
-    protected float xMultiplier;
-    protected float minimumWidth;
-    protected float maximumWidth;
-    protected float xMin;
-    protected float xMax;
+    private boolean scrolling;
+    private boolean refreshing;
+    private float xMultiplier;
+    private float minimumWidth;
+    private float maximumWidth;
+    private float xMin;
+    private float xMax;
 
     // Entries
-    protected ArrayList<Entry>[] entriesLine;
-    protected ArrayList<Entry>[] entriesLineConstant;
-    protected ArrayList<Entry>[] entriesBar;
-    protected ArrayList<Entry>[] entriesScatter;
+    private List<List<Entry>> entriesLine;
+    private List<List<Entry>> entriesLineConstant;
+    private List<List<Entry>> entriesScatter;
+    private List<List<BarEntry>> entriesBar;
 
     // DataSets
-    protected ArrayList<LineDataSet> constantLineDataSets;
-    protected ArrayList<ChartData> chartDataVariable;
+    private List<LineDataSet> dataSetsLine;
+    private List<LineDataSet> dataSetsLineConstant;
+    private List<ScatterDataSet> dataSetsScatter;
+    private List<BarDataSet> dataSetsBar;
+
+    // Colors
+    private List<Integer> colorsLine;
+    private List<Integer> colorsLineConstant;
+    private List<Integer> colorsScatter;
+    private List<Integer> colorsBar;
 
     /**
      * Constructor, call by calling super().
      *
-     * @param title        The graph title
-     * @param xAxisLabel   The x axis label
-     * @param yAxisLabel   The y axis label
-     * @param scrolling    If set to true we append data to the right,
-     *                     if set to false we refresh the graph each
-     *                     iteration
-     * @param refreshing   If set to true all data will be refreshed
-     *                     upon appending new data
-     * @param dataSetNames The names of all data sets,
-     *                     this also indicates their count
-     * @param colors       The color integer for each
-     *                     data set
-     * @param xMultiplier  The multiplier for the x values
+     * @param title       The graph title
+     * @param xAxisLabel  The x axis label
+     * @param yAxisLabel  The y axis label
+     * @param scrolling   If set to true we append data to the right,
+     *                    if set to false we refresh the graph each
+     *                    iteration
+     * @param refreshing  If set to true all data will be refreshed
+     *                    upon appending new data
+     * @param xMultiplier The multiplier for the x values
      */
-    protected GraphFullyFunctional(String title, String xAxisLabel, String yAxisLabel,
-                    boolean scrolling, boolean refreshing, String[] dataSetNames,
-                    int[] colors, float xMultiplier) {
+    GraphFullyFunctional(String title, String xAxisLabel, String yAxisLabel,
+                                   boolean scrolling, boolean refreshing, float xMultiplier) {
 
+        // Assign all variables
         this.title = title;
         this.xAxisLabel = xAxisLabel;
         this.yAxisLabel = yAxisLabel;
-
         this.scrolling = scrolling;
         this.refreshing = refreshing;
         this.xMultiplier = xMultiplier;
 
-        constantLineDataSets = new ArrayList<>();
-        chartDataVariable = new ArrayList<>();
+        // Initialize all our array lists
+        initializeEntryLists(true);
 
+        // Data sets
+        dataSetsLine = new ArrayList<>();
+        dataSetsLineConstant = new ArrayList<>();
+        dataSetsBar = new ArrayList<>();
+        dataSetsScatter = new ArrayList<>();
+
+        // Colors
+        colorsLine = new ArrayList<>();
+        colorsLineConstant = new ArrayList<>();
+        colorsScatter = new ArrayList<>();
+        colorsBar = new ArrayList<>();
     }
 
     /**
@@ -104,6 +116,28 @@ abstract class GraphFullyFunctional {
         this.maximumWidth = maximumWidth;
         this.xMin = xMin;
         this.xMax = xMax;
+    }
+
+    /**
+     * This creates a chart that fits to the type.
+     * Manually add this to a container.
+     *
+     * @param context The context from which we call this
+     * @return The created chart
+     */
+    CombinedChart createChart(Context context) {
+        chart = new CombinedChart(context);
+        chart.setData(new CombinedData());
+        chart.setDrawOrder(new CombinedChart.DrawOrder[]{
+                CombinedChart.DrawOrder.LINE,
+                CombinedChart.DrawOrder.SCATTER,
+                CombinedChart.DrawOrder.BAR
+        });
+        chart.invalidate();
+        styleChart();
+
+        chart.getAxisRight().setEnabled(false);
+        return chart;
     }
 
     /**
@@ -124,57 +158,172 @@ abstract class GraphFullyFunctional {
     }
 
     /**
-     * This creates a chart that fits to the type.
-     * Manually add this to a container.
-     *
-     * @param context The context from which we call this
-     * @return The created chart
+     * This clears all non-constant data sets.
      */
-    abstract Chart createChart(Context context);
+    private void resetAllChartData() {
 
-    /**
-     * This will append new data to the series. This will always
-     * push to the data set but will not always update to the view.
-     *
-     * @param dataPoints3D The datapoints to add
-     * @param <T>          The type of datapoint
-     */
-    <T> void sendNewDataToChart(ArrayList<DataPoint3D<T>> dataPoints3D) {
-        // If we are not scrolling we should reset our view
-        if (refreshing) {
-            resetChartData();
+        ArrayList<IBarLineScatterCandleBubbleDataSet> dataSets = new ArrayList<>();
+        dataSets.addAll(dataSetsLine);
+        dataSets.addAll(dataSetsBar);
+        dataSets.addAll(dataSetsScatter);
+
+        for (IBarLineScatterCandleBubbleDataSet dataSet : dataSets) {
+            dataSet.clear();
         }
 
-        // Append the data
-        appendDataToEntries(dataPoints3D);
+        initializeEntryLists(false);
 
-        // Push if we should
-        if (shouldRender()) {
-            pushToChart();
+    }
+
+    /**
+     * This clears all entry array lists by initializing
+     * them.
+     *
+     * @param clearConstant Set to true if this should also
+     *                      initialize constant entry lists
+     */
+    private void initializeEntryLists(boolean clearConstant) {
+        entriesLine = new ArrayList<>();
+        entriesBar = new ArrayList<>();
+        entriesScatter = new ArrayList<>();
+
+        if (clearConstant) {
+            entriesLineConstant = new ArrayList<>();
+        }
+    }
+
+    void createLines(String[] names, int[] colors) {
+        for (int i = 0; i < names.length; i++) {
+            dataSetsLine.add(new LineDataSet(
+                    new ArrayList<>(), names[i]));
+            colorsLine.add(colors[i]);
+        }
+    }
+
+    void createLinesConstant(String[] names, int[] colors) {
+        for (int i = 0; i < names.length; i++) {
+            dataSetsLineConstant.add(new LineDataSet(
+                    new ArrayList<>(), names[i]));
+            colorsLineConstant.add(colors[i]);
+        }
+    }
+
+    void createScatters(String[] names, int[] colors) {
+        for (int i = 0; i < names.length; i++) {
+            dataSetsScatter.add(new ScatterDataSet(
+                    new ArrayList<>(), names[i]));
+            colorsScatter.add(colors[i]);
+        }
+    }
+
+    void createBars(String[] names, int[] colors) {
+        for (int i = 0; i < names.length; i++) {
+            dataSetsBar.add(new BarDataSet(
+                    new ArrayList<>(), names[i]));
+            colorsBar.add(colors[i]);
         }
     }
 
     /**
-     * If we are not {@link #scrolling} then all chart data must
-     * be reset to refresh the entire graph.
+     * This should be called before we append new data.
      */
-    protected abstract void resetChartData();
+    void beforeAppendingData() {
+        if (!scrolling) {
+            resetAllChartData();
+        }
+    }
+
+    <T> void appendDataLines(ArrayList<DataPoint3D<T>> dataPoints3D) {
+        for (DataPoint3D<T> dataPoint3D : dataPoints3D) {
+            for (int i = 0; i < entriesLine.size(); i++) {
+                Entry entry = new Entry(
+                        dataPoint3D.xAxisValueAsFloat() * xMultiplier,
+                        dataPoint3D.values[i]);
+                entriesLine.get(i).add(entry);
+            }
+        }
+    }
+
+    <T> void appendDataLinesConstant(ArrayList<DataPoint3D<T>> dataPoints3D) {
+        for (DataPoint3D<T> dataPoint3D : dataPoints3D) {
+            for (int i = 0; i < entriesLineConstant.size(); i++) {
+                Entry entry = new Entry(
+                        dataPoint3D.xAxisValueAsFloat() * xMultiplier,
+                        dataPoint3D.values[i]);
+                entriesLineConstant.get(i).add(entry);
+            }
+        }
+    }
+
+    <T> void appendDataBar(ArrayList<DataPoint3D<T>> dataPoints3D) {
+        for (DataPoint3D<T> dataPoint3D : dataPoints3D) {
+            for (int i = 0; i < entriesBar.size(); i++) {
+                BarEntry barEntry = new BarEntry(
+                        dataPoint3D.xAxisValueAsFloat() * xMultiplier,
+                        dataPoint3D.values[i]);
+                entriesBar.get(i).add(barEntry);
+            }
+        }
+    }
+
+    <T> void appendDataScatter(ArrayList<DataPoint3D<T>> dataPoints3D) {
+        for (DataPoint3D<T> dataPoint3D : dataPoints3D) {
+            for (int i = 0; i < entriesScatter.size(); i++) {
+                Entry entry = new Entry(
+                        dataPoint3D.xAxisValueAsFloat() * xMultiplier,
+                        dataPoint3D.values[i]);
+                entriesScatter.get(i).add(entry);
+            }
+        }
+    }
 
     /**
-     * This appends the data points to our entry lists. This is
-     * abstract because we have to implement this differently for
-     * bar and line graphs.
-     *
-     * @param dataPoints3D The data to append
-     * @param <T>          The type of datapoint
+     * This should be called after we append new data.
      */
-    protected abstract <T> void appendDataToEntries(ArrayList<DataPoint3D<T>> dataPoints3D);
+    void afterAppendingData() {
+        if (shouldRender()) {
+            pushAllToChart();
+        }
+    }
 
     /**
-     * This appends our entry to the graph. This is done differently
-     * for bar and line graphs.
+     * This pushes all our data sets to the chart.
      */
-    protected abstract void pushToChart();
+    private void pushAllToChart() {
+        CombinedData combinedData = new CombinedData();
+        LineData lineData = new LineData();
+        ScatterData scatterData = new ScatterData();
+        BarData barData = new BarData();
+
+        // Add variable data sets
+        for (int i = 0; i < dataSetsLine.size(); i++) {
+            dataSetsLine.set(i, new LineDataSet(
+                    entriesLine.get(i), dataSetsLine.get(i).getLabel()));
+            styleLineDataSet(dataSetsLine.get(i), colorsLine.get(i));
+            lineData.addDataSet(dataSetsLine.get(i));
+        }
+
+        for (int i = 0; i < dataSetsBar.size(); i++) {
+            dataSetsBar.set(i, new BarDataSet(
+                    entriesBar.get(i), dataSetsBar.get(i).getLabel()));
+            styleBarDataSet(dataSetsBar.get(i), colorsBar.get(i));
+            barData.addDataSet(dataSetsBar.get(i));
+        }
+
+        for (int i = 0; i < dataSetsScatter.size(); i++) {
+            dataSetsScatter.set(i, new ScatterDataSet(
+                    entriesScatter.get(i), dataSetsScatter.get(i).getLabel()));
+            styleScatterDataSet(dataSetsScatter.get(i), colorsScatter.get(i));
+            scatterData.addDataSet(dataSetsScatter.get(i));
+        }
+
+        // Add constant data sets
+        for (int i = 0; i < dataSetsLineConstant.size(); i++) {
+            LineDataSet lineDataSet = dataSetsLineConstant.get(i);
+            styleLineDataSet(lineDataSet, colorsLineConstant.get(i));
+            lineData.addDataSet(lineDataSet);
+        }
+    }
 
     /**
      * This determines whether or not our UI should attempt to
@@ -188,6 +337,9 @@ abstract class GraphFullyFunctional {
         return chart != null;
     }
 
+    /**
+     * This triggers the styling of our chart.
+     */
     protected void styleChart() {
         chart.setDescription(null);
 
@@ -197,6 +349,13 @@ abstract class GraphFullyFunctional {
         }
     }
 
+    /**
+     * This assigns a lowest and highest value
+     * to our axis.
+     *
+     * @param xLowest  The lowest value
+     * @param xHighest The highest value
+     */
     protected void forceAxisMinMax(float xLowest, float xHighest) {
         if (scrolling) {
             chart.getXAxis().setAxisMinimum(Math.max(xLowest, xHighest - maximumWidth));
@@ -204,7 +363,13 @@ abstract class GraphFullyFunctional {
         }
     }
 
-    protected void styleLineDataSet(LineDataSet lineDataSet, int color) {
+    /**
+     * Styles a line data set.
+     *
+     * @param lineDataSet The line data set
+     * @param color       The color as hex
+     */
+    private void styleLineDataSet(LineDataSet lineDataSet, int color) {
         lineDataSet.setDrawCircles(false);
         lineDataSet.setDrawCircleHole(false);
         lineDataSet.setLineWidth(1);
@@ -214,7 +379,13 @@ abstract class GraphFullyFunctional {
         lineDataSet.setHighLightColor(color);
     }
 
-    protected void styleScatterDataSet(ScatterDataSet scatterDataSet, int color) {
+    /**
+     * Styles a scatter data set.
+     *
+     * @param scatterDataSet The scatter data set
+     * @param color          The color as hex
+     */
+    private void styleScatterDataSet(ScatterDataSet scatterDataSet, int color) {
         scatterDataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
         scatterDataSet.setScatterShapeSize(10);
 
@@ -222,7 +393,13 @@ abstract class GraphFullyFunctional {
         scatterDataSet.setDrawValues(false);
     }
 
-    protected void styleBarDataSet(BarDataSet barDataSet, int color) {
+    /**
+     * Styles a bar data set.
+     *
+     * @param barDataSet The bar data set
+     * @param color      The color as hex
+     */
+    private void styleBarDataSet(BarDataSet barDataSet, int color) {
         barDataSet.setColor(color);
         barDataSet.setDrawValues(false);
     }
