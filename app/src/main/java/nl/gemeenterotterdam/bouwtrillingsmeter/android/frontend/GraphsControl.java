@@ -18,6 +18,9 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.LimitConstants;
  */
 class GraphsControl implements DataIntervalClosedListener {
 
+    /**
+     * Used to convert ms to s.
+     */
     private static final float MULTIPLIER_MS_TO_S = 0.001f;
 
     /**
@@ -43,6 +46,7 @@ class GraphsControl implements DataIntervalClosedListener {
      * Graph 5: Dominant frequency // frequency (point)
      */
     void createAllGraphs() {
+
         // Get constants
         String[] titles = Utility.resources.
                 getStringArray(R.array.graph_title);
@@ -55,8 +59,6 @@ class GraphsControl implements DataIntervalClosedListener {
 
         // Get legend names
         int[] colorsXYZ = Utility.getXYZColorsArray();
-        int[] colorsDominant = new int[]{
-                Utility.resources.getColor(R.color.graph_series_color_point)};
 
         // Create graphs
         graphs = new GraphFullyFunctional[5];
@@ -117,6 +119,7 @@ class GraphsControl implements DataIntervalClosedListener {
      */
     @Override
     public void onDataIntervalClosed(DataInterval dataInterval) {
+
         if (graphs == null || dataInterval == null) {
             return;
         }

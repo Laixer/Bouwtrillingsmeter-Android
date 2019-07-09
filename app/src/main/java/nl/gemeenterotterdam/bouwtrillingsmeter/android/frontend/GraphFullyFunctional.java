@@ -3,7 +3,6 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 import android.content.Context;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.data.BarData;
@@ -27,7 +26,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 /**
  * Base for a graph.
  */
-class GraphFullyFunctional extends GraphFullyFunctionalBase {
+class GraphFullyFunctional {
 
     // Styling
     private CombinedChart chart;
@@ -136,6 +135,7 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
         styleChart();
 
         chart.getAxisRight().setEnabled(false);
+
         return chart;
     }
 
@@ -407,6 +407,11 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
                         entriesBar.get(0).size() - 1).getX());
             }
 
+            // TODO This is a hacky fix! This must be removed
+            if (min > 1) {
+                min = 0;
+            }
+
             if (hasFoundData) {
                 forceAxisMinMax(min, max);
             }
@@ -444,7 +449,7 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
      * @param xLowest  The lowest value
      * @param xHighest The highest value
      */
-    protected void forceAxisMinMax(float xLowest, float xHighest) {
+    private void forceAxisMinMax(float xLowest, float xHighest) {
         if (scrolling) {
             chart.getXAxis().setAxisMinimum(Math.max(xLowest, xHighest - maximumWidth));
             chart.getXAxis().setAxisMaximum(xHighest);
