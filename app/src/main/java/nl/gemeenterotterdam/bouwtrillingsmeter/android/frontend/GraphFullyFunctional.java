@@ -15,8 +15,10 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.ScatterData;
 import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IBarLineScatterCandleBubbleDataSet;
+import com.github.mikephil.charting.utils.EntryXComparator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
@@ -34,6 +36,7 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
 
     // Scrolling properties
     private final boolean scrolling;
+    private final boolean refreshing;
     private final float xMultiplier;
     private float minimumWidth;
     private float maximumWidth;
@@ -67,16 +70,19 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
      * @param scrolling   If set to true we append data to the right,
      *                    if set to false we refresh the graph each
      *                    iteration
+     * @param refreshing  If set to true we refresh all our data sets
+     *                    that are not constant on each iteration
      * @param xMultiplier The multiplier for the x values
      */
     GraphFullyFunctional(String title, String xAxisLabel, String yAxisLabel,
-                         boolean scrolling, float xMultiplier) {
+                         boolean scrolling, boolean refreshing, float xMultiplier) {
 
         // Assign all variables
         this.title = title;
         this.xAxisLabel = xAxisLabel;
         this.yAxisLabel = yAxisLabel;
         this.scrolling = scrolling;
+        this.refreshing = refreshing;
         this.xMultiplier = xMultiplier;
 
         // Data sets
@@ -248,7 +254,7 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
      * This should be called before we append new data.
      */
     void beforeAppendingData() {
-        if (!scrolling) {
+        if (refreshing) {
             resetAllChartData();
         }
     }
@@ -295,6 +301,11 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
                 entriesScatter.get(i).add(entry);
             }
         }
+
+        // Sort, else we get a bug in the MPAndroidChart library
+        for (List<Entry> entries : entriesScatter) {
+            Collections.sort(entries, new EntryXComparator());
+        }
     }
 
     /**
@@ -303,6 +314,7 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
     void afterAppendingData() {
         if (shouldRender()) {
             pushAllToChart();
+            applyScrollingMinMax();
         }
     }
 
@@ -352,10 +364,52 @@ class GraphFullyFunctional extends GraphFullyFunctionalBase {
         chart.setData(combinedData);
         chart.invalidate();
 
-        /* if (entries[0].size() > 0) {
-            forceAxisMinMax(entries[0].get(0).getX(),
-                    entries[0].get(entries[0].size() - 1).getX());
-        } */
+    }
+
+    /**
+     * This checks all our entries to see where our min
+     * and max lies. Then this function checks if we are
+     * within our scrolling bounds or not, and handles
+     * accordingly.
+     */
+    private void applyScrollingMinMax() {
+        if (scrolling) {
+            boolean hasFoundData = false;
+            float min = Float.MAX_VALUE;
+            float max = Float.MIN_VALUE;
+
+            if (entriesLine.size() > 0) {
+                hasFoundData = true;
+                min = Math.min(min, entriesLine.get(0).get(0).getX());
+                max = Math.max(max, entriesLine.get(0).get(
+                        entriesLine.get(0).size()  -1).getX());
+            }
+
+            if (entriesLineConstant.size() > 0) {
+                hasFoundData = true;
+                min = Math.min(min, entriesLineConstant.get(0).get(0).getX());
+                max = Math.max(max, entriesLineConstant.get(0).get(
+                        entriesLineConstant.get(0).size()  -1).getX());
+            }
+
+            if (entriesScatter.size() > 0) {
+                hasFoundData = true;
+                min = Math.min(min, entriesScatter.get(0).get(0).getX());
+                max = Math.max(max, entriesScatter.get(0).get(
+                        entriesScatter.get(0).size()  -1).getX());
+            }
+
+            if (entriesBar.size() > 0) {
+                hasFoundData = true;
+                min = Math.min(min, entriesBar.get(0).get(0).getX());
+                max = Math.max(max, entriesBar.get(0).get(
+                        entriesBar.get(0).size()  -1).getX());
+            }
+
+            if (hasFoundData) {
+                forceAxisMinMax(min, max);
+            }
+        }
     }
 
     /**

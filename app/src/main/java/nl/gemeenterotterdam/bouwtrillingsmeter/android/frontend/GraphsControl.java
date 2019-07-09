@@ -61,15 +61,15 @@ class GraphsControl implements DataIntervalClosedListener {
         // Create graphs
         graphs = new GraphFullyFunctional[5];
         graphs[0] = new GraphFullyFunctional(titles[0], axisHorizontal[0], axisVertical[0],
-                false, MULTIPLIER_MS_TO_S);
+                true, false, MULTIPLIER_MS_TO_S);
         graphs[1] = new GraphFullyFunctional(titles[1], axisHorizontal[1], axisVertical[1],
-                true, MULTIPLIER_MS_TO_S);
+                true, false, MULTIPLIER_MS_TO_S);
         graphs[2] = new GraphFullyFunctional(titles[2], axisHorizontal[2], axisVertical[2],
-                true, MULTIPLIER_MS_TO_S);
+                true, false, MULTIPLIER_MS_TO_S);
         graphs[3] = new GraphFullyFunctional(titles[3], axisHorizontal[3], axisVertical[3],
-                false, 1);
+                false, true, 1);
         graphs[4] = new GraphFullyFunctional(titles[4], axisHorizontal[4], axisVertical[4],
-                false, 1);
+                false, false, 1);
 
         // Add all the lines, scatters and bars
         graphs[0].createLines(namesXYZ, colorsXYZ);
