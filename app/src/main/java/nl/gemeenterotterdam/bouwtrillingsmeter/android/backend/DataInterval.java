@@ -1,5 +1,7 @@
 package nl.gemeenterotterdam.bouwtrillingsmeter.android.backend;
 
+import com.github.mikephil.charting.data.Entry;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -126,8 +128,10 @@ public class DataInterval implements Serializable {
 
     /**
      * This transforms our exceeding frequencies into datapoints.
+     * <p>
      * This is a workaround to conserve the graph abstract methods.
-     * If a dimension does not exceed any limits we set its x and y value to -1.
+     * If a dimension does not exceed any limits we set its x and
+     * y value to -1.
      * TODO Maybe implement a non-workaround method.
      *
      * @return An arraylist containing these datapoints.
@@ -145,10 +149,33 @@ public class DataInterval implements Serializable {
                 velocities[0] = dominantFrequencies.getVelocities()[dimension];
             }
 
-            result.add(new DataPoint3D<Double>(frequency, velocities));
+            result.add(new DataPoint3D<>(frequency, velocities));
         }
 
         // Return result
+        return result;
+    }
+
+    /**
+     * This transforms dominant frequencies into datapoints,
+     * also those that do not exceed any limits.
+     * <p>
+     * This is a workaround to conserve the graph abstract methods.
+     * If a dimension does not exceed any limits we set its x and y
+     * value to -1.
+     * TODO Maybe implement a non-workaround method.
+     *
+     * @return An arraylist containing these datapoints.
+     */
+    public ArrayList<Entry> getAllDominantFrequenciesAsEntries() {
+        ArrayList<Entry> result = new ArrayList<>();
+
+        float[] frequencies = dominantFrequencies.getFrequencies();
+        float[] velocities = dominantFrequencies.getVelocities();
+        for (int dimension = 0; dimension < 3; dimension++) {
+            result.add(new Entry(frequencies[dimension], velocities[dimension]));
+        }
+
         return result;
     }
 

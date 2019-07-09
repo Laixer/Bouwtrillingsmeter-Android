@@ -12,16 +12,16 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
 /**
  * This holds our graphs including their viewpager.
  * This does not create any graphs, only passes them
- * through to the {@link MpaGraphsSlideAdapter}.
+ * through to the {@link GraphsSlideAdapter}.
  */
-public class MpaGraphsActivity extends AppCompatActivity {
+public class GraphsActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
-    private MpaGraphsSlideAdapter adapter;
+    private GraphsSlideAdapter adapter;
     private LinearLayout dotsLayout;
     private ImageView[] dots;
 
-    private static MpaGraphsActivity mpaGraphsActivity;
+    private static GraphsActivity graphsActivity;
 
     /**
      * Called on creation.
@@ -34,16 +34,16 @@ public class MpaGraphsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mpa_graphs);
 
         // Static save
-        mpaGraphsActivity = this;
+        graphsActivity = this;
 
         // Setup dots
         dotsLayout = (LinearLayout) findViewById(R.id.linearLayoutMpaGraphsDots);
         Utility.setIndicatorDots(this, dotsLayout, 0,
-                MeasuringActivity.getMpaGraphsControl().getGraphsCount());
+                MeasuringActivity.getGraphsControl().getGraphsCount());
 
         // Setup viewpager
-        adapter = new MpaGraphsSlideAdapter(this,
-                MeasuringActivity.getMpaGraphsControl().getGraphs());
+        adapter = new GraphsSlideAdapter(this,
+                MeasuringActivity.getGraphsControl().getGraphs());
         viewPager = (ViewPager) findViewById(R.id.viewPagerMpaGraphs);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(10);
@@ -55,7 +55,7 @@ public class MpaGraphsActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int i) {
                 Utility.setIndicatorDots(getApplicationContext(), dotsLayout, i,
-                        MeasuringActivity.getMpaGraphsControl().getGraphsCount());
+                        MeasuringActivity.getGraphsControl().getGraphsCount());
             }
 
             @Override
@@ -81,9 +81,9 @@ public class MpaGraphsActivity extends AppCompatActivity {
      * started in the first place.
      */
     public static void forceFinish() {
-        if (mpaGraphsActivity != null) {
-            mpaGraphsActivity.finish();
-            mpaGraphsActivity = null;
+        if (graphsActivity != null) {
+            graphsActivity.finish();
+            graphsActivity = null;
         }
     }
 }

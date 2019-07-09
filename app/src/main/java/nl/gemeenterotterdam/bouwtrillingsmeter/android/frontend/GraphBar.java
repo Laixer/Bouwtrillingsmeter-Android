@@ -4,13 +4,9 @@ import android.content.Context;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.Chart;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.BaseEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineDataSet;
 
 import java.util.ArrayList;
 
@@ -19,7 +15,7 @@ import nl.gemeenterotterdam.bouwtrillingsmeter.android.backend.DataPoint3D;
 /**
  * Instance of a bar graph.
  */
-class MpaGraphBar extends MpaGraph {
+class GraphBar extends Graph {
 
     private ArrayList<BarEntry>[] entries;
     private BarDataSet[] barDataSets;
@@ -40,7 +36,7 @@ class MpaGraphBar extends MpaGraph {
      * @param colors       The color integer for each
      *                     data set
      */
-    MpaGraphBar(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors, float xMultiplier) {
+    GraphBar(String title, String xAxisLabel, String yAxisLabel, boolean scrolling, boolean refreshing, String[] dataSetNames, int[] colors, float xMultiplier) {
         super(title, xAxisLabel, yAxisLabel, scrolling, refreshing, dataSetNames, colors, xMultiplier);
 
         entries = new ArrayList[dataSetNames.length];
@@ -121,7 +117,7 @@ class MpaGraphBar extends MpaGraph {
         chart.invalidate();
 
         if (entries[0].size() > 0) {
-            forceAxisMinMAx(entries[0].get(0).getX(),
+            forceAxisMinMax(entries[0].get(0).getX(),
                     entries[0].get(entries[0].size() - 1).getX());
         }
     }

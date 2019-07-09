@@ -48,7 +48,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     private static Deque<String> strings;
 
     // Graph holder
-    private static MpaGraphsControl mpaGraphsControl;
+    private static GraphsControl graphsControl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +78,9 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
         updatePageState();
 
         // Graph creation
-        if (mpaGraphsControl == null) {
-            mpaGraphsControl = new MpaGraphsControl();
-            mpaGraphsControl.createAllGraphs();
+        if (graphsControl == null) {
+            graphsControl = new GraphsControl();
+            graphsControl.createAllGraphs();
         }
     }
 
@@ -260,7 +260,7 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
         buttonStartStop.setEnabled(false);
         buttonShowGraphs.setEnabled(false);
 
-        Intent intent = new Intent(getApplicationContext(), MpaGraphsActivity.class);
+        Intent intent = new Intent(getApplicationContext(), GraphsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
@@ -353,11 +353,11 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
     public void finish() {
         // Kill graphs activity
         // GraphsActivity.forceFinish();
-        MpaGraphsActivity.forceFinish();
+        GraphsActivity.forceFinish();
 
         // Kill graphs control
-        mpaGraphsControl.forceFinish();
-        mpaGraphsControl = null;
+        graphsControl.forceFinish();
+        graphsControl = null;
 
         // Reset and remove this
         isMeasuring = null;
@@ -378,9 +378,9 @@ public class MeasuringActivity extends AppCompatActivity implements BackendListe
 
     /**
      * Gets our static instance of the graphs control.
-     * Used by {@link MpaGraphsActivity}.
+     * Used by {@link GraphsActivity}.
      */
-    static MpaGraphsControl getMpaGraphsControl() {
-        return mpaGraphsControl;
+    static GraphsControl getGraphsControl() {
+        return graphsControl;
     }
 }
