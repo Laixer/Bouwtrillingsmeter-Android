@@ -19,7 +19,7 @@ public class DataPoint3D<X> implements Serializable {
     public float[] values;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param xAxisValue The xAxisValue. Long is used for time. Int or int[] is used for frequency.
      * @param values     The corresponding data values
@@ -29,7 +29,7 @@ public class DataPoint3D<X> implements Serializable {
     }
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param xAxisValue The xAxisValue, being of type a Date (time xAxisValue) or float[x, y, z] (frequency xAxisValue)
      * @param x          Data x

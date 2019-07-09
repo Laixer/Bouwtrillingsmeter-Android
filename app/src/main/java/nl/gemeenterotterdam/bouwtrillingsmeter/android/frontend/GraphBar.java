@@ -117,7 +117,7 @@ class GraphBar extends Graph {
         chart.invalidate();
 
         if (entries[0].size() > 0) {
-            forceAxisMinMAx(entries[0].get(0).getX(),
+            forceAxisMinMax(entries[0].get(0).getX(),
                     entries[0].get(entries[0].size() - 1).getX());
         }
     }

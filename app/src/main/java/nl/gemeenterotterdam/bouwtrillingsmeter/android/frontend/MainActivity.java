@@ -2,7 +2,9 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
 
     private static final boolean SHOW_FIRST_VISIT_TUTORIAL = false;
     private static final boolean SHOW_FIRST_VISIT_SHOWCASE = false;
+    private static Resources resources;
 
     Toolbar toolbar;
     ListView listViewMeasurements;
@@ -48,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        resources = getResources();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -236,6 +242,14 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
         System.out.println("Assuming that our application is closing in onDestroy()....");
         Backend.onApplicationShutdown();
         super.onDestroy();
+    }
+
+    /**
+     * Gets our resources.
+     * TODO Rethink this
+     */
+    public static Resources getStaticResources() {
+        return resources;
     }
 
 }
