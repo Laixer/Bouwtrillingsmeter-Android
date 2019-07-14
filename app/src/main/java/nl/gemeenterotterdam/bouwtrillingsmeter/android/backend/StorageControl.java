@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
 
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -48,6 +50,7 @@ public class StorageControl {
      */
     private static final String DIRECTORY_DATA_INTERVALS = "data_intervals";
 
+    /* All package used functions */
 
     /**
      * Initializes our folder structure.

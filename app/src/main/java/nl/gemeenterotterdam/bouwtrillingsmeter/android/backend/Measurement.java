@@ -32,7 +32,7 @@ public class Measurement implements Serializable {
     private double longitude;
     private double latitude;
     private double locationAccuracy;
-    private transient Address address;
+    private byte[] addressAsBytes;
     private String description;
     private Settings settings;
     private int dataIntervalCount;
@@ -41,6 +41,7 @@ public class Measurement implements Serializable {
     private transient Bitmap bitmap;
 
     // Dit gaat niet mee naar de server
+    private transient Address address;
     private Date dateStartObject;
     private boolean open;
     private boolean closed;
@@ -214,16 +215,21 @@ public class Measurement implements Serializable {
     }
 
     /**
-     * This attempts to call the geocoder in
+     * This attempts to call the {@link android.location.Geocoder} in
      * a separate thread.
      */
-    public void tryGetAddress() {
+    void tryGetAddress() {
         if (address != null) {
             return;
         }
 
         Thread thread = new Thread(() -> {
-            address = LocationUtility.coordinatesToAddress(latitude, longitude);
+            try {
+                address = LocationUtility.coordinatesToAddress(latitude, longitude);
+                addressAsBytes = ByteConverter.addressToBytes(address);
+            } catch (ByteConverterException e) {
+                System.out.println(e.toString());
+            }
         });
         thread.start();
     }
