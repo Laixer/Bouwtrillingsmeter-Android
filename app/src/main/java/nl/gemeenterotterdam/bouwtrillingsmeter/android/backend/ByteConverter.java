@@ -12,7 +12,7 @@ import java.io.ObjectOutputStream;
  * Used to handle converting objects to byte arrays
  * and back.
  */
-public class ByteConverter {
+class ByteConverter {
 
     /**
      * Converts an {@link Address} object to a byte array.
@@ -21,7 +21,11 @@ public class ByteConverter {
      * @return The byte array
      * @throws ByteConverterException If we fail
      */
-    public static byte[] addressToBytes(Address address) throws ByteConverterException {
+    static byte[] addressToBytes(Address address) throws ByteConverterException {
+
+        if (address == null) {
+            return new byte[0];
+        }
 
         ByteArrayOutputStream byteStream = null;
         ObjectOutputStream objectStream = null;
@@ -61,7 +65,7 @@ public class ByteConverter {
      * @return The Address
      * @throws ByteConverterException If we fail
      */
-    public static Address bytesToAddress(byte[] byteArray) throws ByteConverterException {
+    static Address bytesToAddress(byte[] byteArray) throws ByteConverterException {
 
         ByteArrayInputStream byteStream = null;
         ObjectInputStream objectStream = null;

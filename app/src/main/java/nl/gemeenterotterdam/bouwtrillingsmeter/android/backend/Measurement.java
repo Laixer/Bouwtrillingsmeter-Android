@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 import nl.gemeenterotterdam.bouwtrillingsmeter.android.R;
@@ -226,6 +227,7 @@ public class Measurement implements Serializable {
         Thread thread = new Thread(() -> {
             try {
                 address = LocationUtility.coordinatesToAddress(latitude, longitude);
+                address = new Address(new Locale("NL", "NL"));
                 addressAsBytes = ByteConverter.addressToBytes(address);
             } catch (ByteConverterException e) {
                 System.out.println(e.toString());
