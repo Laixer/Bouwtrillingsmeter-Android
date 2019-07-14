@@ -351,7 +351,7 @@ public class StorageControl {
             return;
 
         } catch (IOException e) {
-            /* Do nothing */
+            System.out.println(e.toString());
         } finally {
             if (fileOutputStream != null) try {
                 fileOutputStream.close();
