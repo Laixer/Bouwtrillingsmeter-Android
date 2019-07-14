@@ -119,17 +119,17 @@ public class SettingsWizardActivity extends AppCompatActivity {
 
         // Create the outcomes
         Outcome[] outcomes = new Outcome[11];
-        outcomes[0] = new Outcome<BuildingCategory>(0, BuildingCategory.class, BuildingCategory.NONE);
-        outcomes[1] = new Outcome<BuildingCategory>(1, BuildingCategory.class, BuildingCategory.CATEGORY_3);
-        outcomes[2] = new Outcome<BuildingCategory>(2, BuildingCategory.class, BuildingCategory.NONE);
-        outcomes[3] = new Outcome<BuildingCategory>(3, BuildingCategory.class, BuildingCategory.CATEGORY_1);
-        outcomes[4] = new Outcome<BuildingCategory>(4, BuildingCategory.class, BuildingCategory.CATEGORY_2);
-        outcomes[5] = new Outcome<VibrationCategory>(5, VibrationCategory.class, VibrationCategory.NONE);
-        outcomes[6] = new Outcome<VibrationCategory>(6, VibrationCategory.class, VibrationCategory.SHORT);
-        outcomes[7] = new Outcome<VibrationCategory>(7, VibrationCategory.class, VibrationCategory.SHORT_REPEATED);
-        outcomes[8] = new Outcome<VibrationCategory>(8, VibrationCategory.class, VibrationCategory.CONTINUOUS);
-        outcomes[9] = new Outcome<Boolean>(9, Boolean.class, false);
-        outcomes[10] = new Outcome<Boolean>(10, Boolean.class, true);
+        outcomes[0] = new Outcome<>(0, BuildingCategory.class, BuildingCategory.NONE);
+        outcomes[1] = new Outcome<>(1, BuildingCategory.class, BuildingCategory.CATEGORY_3);
+        outcomes[2] = new Outcome<>(2, BuildingCategory.class, BuildingCategory.NONE);
+        outcomes[3] = new Outcome<>(3, BuildingCategory.class, BuildingCategory.CATEGORY_1);
+        outcomes[4] = new Outcome<>(4, BuildingCategory.class, BuildingCategory.CATEGORY_2);
+        outcomes[5] = new Outcome<>(5, VibrationCategory.class, VibrationCategory.NONE);
+        outcomes[6] = new Outcome<>(6, VibrationCategory.class, VibrationCategory.SHORT);
+        outcomes[7] = new Outcome<>(7, VibrationCategory.class, VibrationCategory.SHORT_REPEATED);
+        outcomes[8] = new Outcome<>(8, VibrationCategory.class, VibrationCategory.CONTINUOUS);
+        outcomes[9] = new Outcome<>(9, Boolean.class, false);
+        outcomes[10] = new Outcome<>(10, Boolean.class, true);
 
         // Create all the edges, first all questions
         questions[0].addEdge(new Edge(true, questions[0], questions[3]));
