@@ -2,9 +2,13 @@ package nl.gemeenterotterdam.bouwtrillingsmeter.android.frontend;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -67,10 +71,12 @@ public class SettingsWizardActivity extends AppCompatActivity {
         layoutQuestion = (ConstraintLayout) findViewById(R.id.layoutWidgetQuestions);
         layoutFinish = (ConstraintLayout) findViewById(R.id.layoutWidgetCompleted);
         ((FloatingActionButton) findViewById(R.id.fabWizardConfirm)).setOnClickListener((View v) -> {
-                if (settings != null && settings.isValid()) {
-                    SettingsPageActivity.onWizardCreatedValidSettings(settings);
-                    finish();
-                }
+            if (settings != null && settings.isValid()) {
+                SettingsPageActivity.onWizardCreatedValidSettings(settings);
+                finish();
+            } else {
+                finish();
+            }
         });
 
         // Question
@@ -78,11 +84,11 @@ public class SettingsWizardActivity extends AppCompatActivity {
         textViewExtra = (TextView) findViewById(R.id.textViewWizardExtra);
         buttonYes = (Button) findViewById(R.id.buttonWizardYes);
         buttonYes.setOnClickListener((View v) -> {
-                onAnswered(true);
+            onAnswered(true);
         });
         buttonNo = (Button) findViewById(R.id.buttonWizardNo);
         buttonNo.setOnClickListener((View v) -> {
-                onAnswered(false);
+            onAnswered(false);
         });
 
         // Finish
@@ -99,7 +105,7 @@ public class SettingsWizardActivity extends AppCompatActivity {
         currentQuestion = settingsWizard.getStartQuestion();
         buttonTryAgain = (Button) findViewById(R.id.buttonWizardTryAgain);
         buttonTryAgain.setOnClickListener((View v) -> {
-                onClickTryAgain();
+            onClickTryAgain();
         });
 
         // Change layout
@@ -180,6 +186,7 @@ public class SettingsWizardActivity extends AppCompatActivity {
 
     /**
      * Either shows the question layout or the finish layout.
+     *
      * @param finished True if we are in the finish tab.
      */
     private void switchLayout(boolean finished) {
@@ -262,29 +269,37 @@ public class SettingsWizardActivity extends AppCompatActivity {
 
     /**
      * Gets called when we reach an endpoint in the flowchart.
+     *
      * @param outcome The outcome
      */
     private void onReachedWizardFinish(Outcome outcome) {
         switchLayout(true);
 
-        settings = new Settings(buildingCategory, vibrationCategory, vibrationSensitive);
+        if (buildingCategory != null
+                && vibrationCategory != null
+                && vibrationSensitive != null) {
 
-        if (settings.isValid()) {
-            setFinishTextViewsVisibilities(true);
-            findViewById(R.id.buttonWizardTryAgain).setVisibility(View.GONE);
-            textViewTop.setText(getResources().getString(R.string.widget_final_top_success));
-            textViewBuildingCategory.setText(getResources().getStringArray(R.array.category_dropdown_building)[settings.getBuildingCategory().ordinal()]);
-            textViewVibrationCategory.setText(getResources().getStringArray(R.array.category_dropdown_vibration)[settings.getVibrationCategory().ordinal()]);
-            textViewVibrationSensitive.setText(settings.isVibrationSensitive() ? getResources().getString(R.string.default_yes) : getResources().getString(R.string.default_no));
-        } else {
-            setFinishTextViewsVisibilities(false);
-            textViewTop.setText(getResources().getStringArray(R.array.wizard_outcome_text)[outcome.getIndex()]);
-            findViewById(R.id.buttonWizardTryAgain).setVisibility(View.VISIBLE);
+            settings = new Settings(buildingCategory, vibrationCategory, vibrationSensitive);
+            if (settings.isValid()) {
+                setFinishTextViewsVisibilities(true);
+                findViewById(R.id.buttonWizardTryAgain).setVisibility(View.GONE);
+                textViewTop.setText(getResources().getString(R.string.widget_final_top_success));
+                textViewBuildingCategory.setText(getResources().getStringArray(R.array.category_dropdown_building)[settings.getBuildingCategory().ordinal()]);
+                textViewVibrationCategory.setText(getResources().getStringArray(R.array.category_dropdown_vibration)[settings.getVibrationCategory().ordinal()]);
+                textViewVibrationSensitive.setText(settings.isVibrationSensitive() ? getResources().getString(R.string.default_yes) : getResources().getString(R.string.default_no));
+                return;
+            }
         }
+
+        // If we reach this point we don't have a valid settings outcome.
+        setFinishTextViewsVisibilities(false);
+        textViewTop.setText(getResources().getStringArray(R.array.wizard_outcome_text)[outcome.getIndex()]);
+        findViewById(R.id.buttonWizardTryAgain).setVisibility(View.VISIBLE);
     }
 
     /**
      * Changes our outcome text visibility.
+     *
      * @param visible True if visible, false if not
      */
     private void setFinishTextViewsVisibilities(boolean visible) {
