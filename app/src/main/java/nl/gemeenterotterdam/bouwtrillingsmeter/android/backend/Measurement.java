@@ -276,7 +276,24 @@ public class Measurement implements Serializable {
         return this.locationAccuracy;
     }
 
+    /**
+     * Gets the address object of this instance. If the
+     * address has been stored in the byte array before,
+     * this will attempt to reconstruct the original
+     * address object. If this fails, the address object
+     * remains null.
+     *
+     * @return The address object
+     */
     public Address getAddress() {
+
+        if (address == null && addressAsBytes != null && addressAsBytes.length > 0) try {
+            address = ByteConverter.bytesToAddress(addressAsBytes);
+        } catch (ByteConverterException e) {
+            System.out.println(e.toString());
+        }
+
+
         return address;
     }
 
