@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".frontend.SettingsWizardActivity">
+    tools:context="gemeenterotterdam.trillingmeterapp.frontend.SettingsWizardActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutWidgetQuestions"
@@ -79,7 +79,7 @@
         android:id="@+id/layoutWidgetCompleted"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".frontend.zSettingsWidgetFinalActivity"
+        tools:context="gemeenterotterdam.trillingmeterapp.frontend.zSettingsWidgetFinalActivity"
         tools:visibility="visible">
 
         <TextView

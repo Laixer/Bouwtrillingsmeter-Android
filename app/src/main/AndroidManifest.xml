@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="nl.gemeenterotterdam.bouwtrillingsmeter.android">
+    package="gemeenterotterdam.trillingmeterapp">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".frontend.SplashScreenActivity"
+        <activity android:name="gemeenterotterdam.trillingmeterapp.frontend.SplashScreenActivity"
             android:noHistory="true">
         <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,17 +29,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".frontend.MainActivity"
+            android:name="gemeenterotterdam.trillingmeterapp.frontend.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".frontend.GraphsActivity" />
-        <activity android:name=".frontend.SettingsPageActivity" />
-        <activity android:name=".frontend.MeasuringActivity" />
-        <activity android:name=".frontend.FirstVisitTutorialActivity" />
-        <activity android:name=".frontend.DetailsActivity" />
-        <activity android:name=".frontend.SettingsWizardActivity" />
-        <activity android:name=".frontend.SettingsAdvancedActivity" />
-        <activity android:name=".frontend.SettingsActivity" />
+        <activity android:name="gemeenterotterdam.trillingmeterapp.frontend.GraphsActivity" />
+        <activity android:name="gemeenterotterdam.trillingmeterapp.frontend.SettingsPageActivity" />
+        <activity android:name="gemeenterotterdam.trillingmeterapp.frontend.MeasuringActivity" />
+        <activity android:name="gemeenterotterdam.trillingmeterapp.frontend.FirstVisitTutorialActivity" />
+        <activity android:name="gemeenterotterdam.trillingmeterapp.frontend.DetailsActivity" />
+        <activity android:name="gemeenterotterdam.trillingmeterapp.frontend.SettingsWizardActivity" />
+        <activity android:name="gemeenterotterdam.trillingmeterapp.frontend.SettingsAdvancedActivity" />
+        <activity android:name="gemeenterotterdam.trillingmeterapp.frontend.SettingsActivity" />
     </application>
 
 </manifest>

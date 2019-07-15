@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_listview_item"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".frontend.MainActivity"
+    tools:context="gemeenterotterdam.trillingmeterapp.frontend.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
