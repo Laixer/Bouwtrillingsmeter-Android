@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements BackendListener {
             Intent intentShowMeasurementDetails = new Intent(getApplicationContext(), DetailsActivity.class);
 
             // TODO Reconsider measurement linking structure
-//              intentShowMeasuremenstDetails.putExtra("nl.gemeenterotterdam.bouwtrillingsmeter.android.MEASUREMENT_INDEX", position);
             DetailsActivity.measurement = Backend.getAllMeasurementsList().get(position);
 
             startActivity(intentShowMeasurementDetails);
